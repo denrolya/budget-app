@@ -1,0 +1,18 @@
+{
+    "entry":            [
+        "src/index.js",
+        "src/**/*.{js,jsx}"
+    ],
+    "extensions":       [
+        ".js",
+        ".jsx"
+    ],
+    "ignorePatterns":   [
+        "**/node_modules/**"
+    ],
+    "moduleDirectory":  ["node_modules","src"],
+    "rootDir":          "src",
+    "ignoreUnresolved": [],
+    "ignoreUnimported": [],
+    "ignoreUnused":     []
+}

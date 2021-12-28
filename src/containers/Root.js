@@ -1,11 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { Navigate, Route, Routes, Outlet, useRoutes } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
 import 'src/assets/scss/black-dashboard-react.scss';
 import AuthRequiredRoute from 'src/components/AuthRequiredRoute';
-import { ROUTE_DASHBOARD, ROUTE_LOGIN } from 'src/constants/routes';
+import { ROUTE_LOGIN } from 'src/constants/routes';
 import 'src/middlewares/axios';
 import 'src/middlewares/toastr';
 import { assertAuthorization } from 'src/store/actions/auth';

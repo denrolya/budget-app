@@ -6,7 +6,7 @@ import reducer from 'src/store/reducer';
 
 const middlewares = [thunkMiddleware];
 const composeEnhancers = composeWithDevTools({
-  trace:      true,
+  trace: true,
   traceLimit: 25,
 });
 
