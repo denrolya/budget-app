@@ -1,0 +1,46 @@
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  border-radius: .25rem;
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0 .6875rem;
+  margin-left: -.0625rem;
+  line-height: 1.25;
+  color: #fff;
+  background-color: transparent;
+  border: .0625rem solid #e3e3e3;
+}
+
+.pagination .page-item .page-link {
+  border: 0;
+  border-radius: 30px !important;
+  transition: all .3s;
+  margin: 0 3px;
+  min-width: 30px;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.pagination .page-item.active > .page-link, .pagination .page-item.active > .page-link:focus, .pagination .page-item.active > .page-link:hover {
+  background: $primary;
+  background-image: linear-gradient(to bottom left, $primary, $primary-states, $primary);
+  background-size: 210% 210%;
+  background-position: 100% 0;
+  color: #fff;
+}
+
+.pagination.pagination-warning .page-item.active > .page-link, .pagination.pagination-warning .page-item.active > .page-link:focus, .pagination.pagination-warning .page-item.active > .page-link:hover {
+  background: $warning;
+  background-image: linear-gradient(to bottom left, $warning, $warning-states, $warning);
+  background-size: 210% 210%;
+  background-position: 100% 0;
+}

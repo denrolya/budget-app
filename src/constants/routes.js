@@ -1,0 +1,12 @@
+export const ROUTE_LOGIN = '/login';
+export const ROUTE_DASHBOARD = '/dashboard';
+export const ROUTE_TRANSACTIONS = '/transactions';
+export const ROUTE_TRANSACTIONS_CALENDAR = '/transactions-calendar';
+export const ROUTE_ACCOUNTS = '/accounts';
+export const ROUTE_TEST_PAGE = '/test-page';
+export const ROUTE_DEBTS = '/debts';
+export const ROUTE_REPORT = '/report';
+export const ROUTE_TRANSFERS = '/transfers';
+export const ROUTE_CATEGORIES = '/categories';
+export const ROUTE_PROFILE = '/profile';
+export const ROUTE_CURRENCY_CONVERTER = '/currency-converter';

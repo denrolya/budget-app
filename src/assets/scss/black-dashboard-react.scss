@@ -1,0 +1,713 @@
+/*
+ =========================================================
+ * Black Dashboard React v1.0.0 based on Black Dashboard - v1.0.0
+ =========================================================
+
+ * Product Page: https://www.creative-tim.com/product/black-dashboard-react
+ * Copyright 2018 Creative Tim (http://www.creative-tim.com)
+
+
+ =========================================================
+
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ */
+// Core
+@import 'black-dashboard-react/custom/functions';
+@import 'black-dashboard-react/bootstrap/functions';
+//@import 'black-dashboard-react/custom/variables';
+
+// Openbase theme
+@import 'black-dashboard-react/theme/openbase/variables';
+
+@import 'black-dashboard-react/bootstrap/variables';
+@import 'black-dashboard-react/custom/mixins';
+@import 'black-dashboard-react/bootstrap/mixins';
+@import 'black-dashboard-react/custom/utilities/helper';
+// Bootstrap components
+@import 'black-dashboard-react/bootstrap/root';
+@import 'black-dashboard-react/bootstrap/reboot';
+@import 'black-dashboard-react/bootstrap/type';
+@import 'black-dashboard-react/bootstrap/images';
+@import 'black-dashboard-react/bootstrap/code';
+@import 'black-dashboard-react/bootstrap/grid';
+@import 'black-dashboard-react/bootstrap/tables';
+@import 'black-dashboard-react/bootstrap/forms';
+@import 'black-dashboard-react/bootstrap/buttons';
+@import 'black-dashboard-react/bootstrap/transitions';
+@import 'black-dashboard-react/bootstrap/dropdown';
+@import 'black-dashboard-react/bootstrap/button-group';
+@import 'black-dashboard-react/bootstrap/input-group';
+@import 'black-dashboard-react/bootstrap/custom-forms';
+@import 'black-dashboard-react/bootstrap/nav';
+@import 'black-dashboard-react/bootstrap/navbar';
+@import 'black-dashboard-react/bootstrap/card';
+@import 'black-dashboard-react/bootstrap/breadcrumb';
+@import 'black-dashboard-react/bootstrap/pagination';
+@import 'black-dashboard-react/bootstrap/badge';
+@import 'black-dashboard-react/bootstrap/jumbotron';
+@import 'black-dashboard-react/bootstrap/alert';
+@import 'black-dashboard-react/bootstrap/progress';
+@import 'black-dashboard-react/bootstrap/media';
+@import 'black-dashboard-react/bootstrap/list-group';
+@import 'black-dashboard-react/bootstrap/close';
+@import 'black-dashboard-react/bootstrap/modal';
+@import 'black-dashboard-react/bootstrap/tooltip';
+@import 'black-dashboard-react/bootstrap/popover';
+@import 'black-dashboard-react/bootstrap/carousel';
+@import 'black-dashboard-react/bootstrap/utilities';
+@import 'black-dashboard-react/bootstrap/print';
+// Custom components
+@import 'black-dashboard-react/custom/alerts';
+@import 'black-dashboard-react/custom/badges';
+@import 'black-dashboard-react/custom/buttons';
+@import 'black-dashboard-react/custom/dropdown';
+@import 'black-dashboard-react/custom/footer';
+@import 'black-dashboard-react/custom/forms';
+@import 'black-dashboard-react/custom/images';
+@import 'black-dashboard-react/custom/modal';
+@import 'black-dashboard-react/custom/navbar';
+@import 'black-dashboard-react/custom/type';
+@import 'black-dashboard-react/custom/tables';
+@import 'black-dashboard-react/custom/checkboxes-radio';
+@import 'black-dashboard-react/custom/fixed-plugin';
+@import 'black-dashboard-react/custom/sidebar-and-main-panel';
+@import 'black-dashboard-react/custom/misc';
+@import 'black-dashboard-react/custom/rtl';
+@import 'black-dashboard-react/custom/input-group';
+@import 'black-dashboard-react/custom/pagination';
+// Vendor / Plugins
+@import 'black-dashboard-react/custom/vendor/plugin-perfect-scrollbar';
+@import 'black-dashboard-react/custom/vendor/plugin-react-notification-alert';
+@import 'black-dashboard-react/custom/plugin_react_sweetalert';
+@import 'black-dashboard-react/custom/plugin-react-datetime';
+@import 'black-dashboard-react/custom/plugin-react-bootstrap-daterangepicker';
+// light mode
+
+@import 'black-dashboard-react/custom/white-content';
+
+// Cards
+@import 'black-dashboard-react/custom/card';
+@import 'black-dashboard-react/custom/cards/card-register';
+@import 'black-dashboard-react/custom/cards/card-stats';
+@import 'black-dashboard-react/custom/cards/card-chart';
+@import 'black-dashboard-react/custom/cards/card-map';
+@import 'black-dashboard-react/custom/cards/card-user';
+@import 'black-dashboard-react/custom/cards/card-task';
+@import 'black-dashboard-react/custom/cards/card-transaction';
+@import 'black-dashboard-react/custom/cards/card-plain';
+@import 'black-dashboard-react/custom/cards/card-collapse';
+@import 'black-dashboard-react/custom/pills';
+
+// Dependencies
+@import '../fonts/nucleo/nucleo-icons';
+@import '~font-awesome/css/font-awesome.css';
+@import '~react-bootstrap-typeahead/css/Typeahead.css';
+@import 'black-dashboard-react/custom/vendor/toastr';
+@import '~bootstrap-daterangepicker/daterangepicker.css';
+@import '~@mdi/font/scss/materialdesignicons';
+@import '~open-iconic/font/css/open-iconic-bootstrap';
+@import '~react-big-calendar/lib/sass/styles';
+@import '~react-big-calendar/lib/addons/dragAndDrop/styles';
+@import 'black-dashboard-react/plugins/react-sortable-tree';
+@import '~ionicons/dist/css/ionicons';
+
+// if using DnD
+@import 'black-dashboard-react/custom/plugin-react-big-calendar';
+
+.content-preview {
+  max-height: 350px;
+  position: relative;
+  margin: 9px auto 0;
+  background-color: $body-bg;
+  border-radius: $border-radius-lg;
+  border: 1px solid $default;
+  overflow: hidden;
+  z-index: 1;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 50;
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0) 90%);
+  }
+}
+
+.rbt-input-multi.focus {
+  border-color: $info;
+  box-shadow: none;
+  outline: 0;
+}
+
+.rbt-token {
+  background-color: $info-states;
+  color: $body-color;
+}
+
+.card-login {
+  border-radius: $border-radius-lg;
+  padding-bottom: $padding-base-horizontal;
+
+  .card-header {
+    padding: 0 0 100px;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+    }
+
+    .card-title {
+      position: relative;
+      font-size: 5em;
+      font-weight: 900;
+      color: $black;
+      text-transform: lowercase;
+      margin-left: -5px;
+      z-index: 1;
+    }
+  }
+
+  .btn-wd {
+    min-width: 180px;
+  }
+
+  .logo-container {
+    width: 65px;
+    margin: 0 auto 55px auto;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .input-group:last-child {
+    margin-bottom: 40px;
+  }
+
+  &.card-plain {
+    @include input-coloured-bg(
+                    $opacity-5,
+                    $white,
+                    $white,
+                    $transparent-bg,
+                    $opacity-1,
+                    $opacity-2
+    );
+
+    .input-group-addon,
+    .form-group.no-border .input-group-addon,
+    .input-group.no-border .input-group-addon {
+      color: $opacity-8;
+    }
+  }
+
+  &.card-white {
+    background: $white;
+
+    .card-header {
+      .card-title {
+        color: $white;
+      }
+    }
+
+    @include form-control-placeholder(rgba($black, 0.4), 1);
+
+    .has-danger {
+      .form-control,
+      .input-group-prepend .input-group-text {
+        border-color: $danger-states;
+      }
+    }
+
+    .input-group-prepend .input-group-text {
+      border-color: rgba($black-states, 0.2);
+      color: $black-states;
+    }
+
+    .form-control {
+      color: $black;
+      border-color: rgba($black-states, 0.2);
+
+      ~ .input-group-prepend .input-group-text {
+        border-color: $primary;
+      }
+
+      &:focus {
+        border-color: $primary;
+      }
+    }
+
+    .form-group.no-border,
+    .input-group.no-border {
+      .form-control,
+      .form-control + .input-group-prepend .input-group-text,
+      .form-control + .input-group-append .input-group-text,
+      .input-group-prepend .input-group-text,
+      .input-group-append .input-group-text {
+        background-color: $opacity-gray-3;
+
+        &:focus,
+        &:active,
+        &:active {
+          background-color: $primary;
+        }
+      }
+
+      .form-control {
+        &:focus {
+          & + .input-group-prepend .input-group-text,
+          & + .input-group-append .input-group-text {
+            background-color: $transparent-bg;
+          }
+        }
+      }
+    }
+
+    .input-group[disabled] {
+      .input-group-prepend .input-group-text,
+      .input-group-append .input-group-text {
+        background-color: $black;
+      }
+    }
+
+    .form-control[disabled],
+    .form-control[readonly],
+    fieldset[disabled] .form-control {
+      background: $light-gray;
+      border-color: rgba($black-states, 0.3);
+    }
+
+    .input-group-focus {
+      .input-group-prepend .input-group-text,
+      .input-group-append .input-group-text,
+      .form-control {
+        background-color: $white;
+        border-color: $primary;
+      }
+
+      &.no-border {
+        .input-group-prepend .input-group-text,
+        .input-group-append .input-group-text {
+          background-color: $opacity-gray-5;
+        }
+      }
+    }
+
+    .input-group-prepend .input-group-text {
+      border-right: none;
+    }
+
+    .input-group-append .input-group-text {
+      border-left: none;
+    }
+
+    .has-danger .form-control:focus,
+    .has-success.input-group-focus .input-group-append .input-group-text,
+    .has-success.input-group-focus .input-group-prepend .input-group-text {
+      border-color: $danger-states;
+    }
+
+    .has-success .form-control:focus,
+    .has-success.input-group-focus .input-group-append .input-group-text,
+    .has-success.input-group-focus .input-group-prepend .input-group-text {
+      border-color: darken($success, 10%);
+    }
+  }
+
+  .link {
+    font-size: 10px;
+    text-decoration: none;
+  }
+
+  .card-black {
+    .link {
+      color: $white;
+    }
+  }
+}
+
+.full-page {
+  & > .content,
+  & > .footer {
+    position: relative;
+    z-index: 4;
+  }
+
+  & > .content {
+    padding-bottom: 150px;
+    padding-top: 150px;
+  }
+
+  .footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding-left: 48px;
+    padding-right: 48px;
+
+    .container {
+      color: $white;
+    }
+  }
+
+  .full-page-background {
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    display: block;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center center;
+  }
+
+  &.pricing-page {
+    .description {
+      margin-bottom: 65px;
+      color: rgba($white, 0.7);
+    }
+  }
+
+  &.register-page {
+    .info-horizontal {
+      padding: 0 0 20px;
+    }
+
+    .info-horizontal {
+      text-align: left !important;
+
+      .icon {
+        margin-top: 0;
+
+        > i {
+          font-size: 2em;
+        }
+
+        &.icon-circle {
+          width: 65px;
+          height: 65px;
+          max-width: 65px;
+          margin-top: 8px;
+
+          i {
+            display: table;
+            margin: 0 auto;
+            line-height: 3.5;
+            font-size: 1.9em;
+          }
+        }
+      }
+
+      .description {
+        overflow: hidden;
+
+        .info-title {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+
+  &.pricing-page,
+  &.login-page,
+  &.lock-page,
+  &.register-page {
+    min-height: 100vh;
+    background: radial-gradient($background-black, $background-states-black);
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .landing-page .section-story-overview .image-container:nth-child(2) {
+    margin-left: 0;
+    margin-bottom: 30px;
+  }
+
+  .login-page .card-login .card-header img {
+    width: 70%;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  .register-page .full-page > .content {
+    padding-top: 50px;
+  }
+
+  .page-header {
+    .container h6.category-absolute {
+      width: 90%;
+    }
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+  .pricing-page,
+  .register-page,
+  .login-page,
+  .lock-page {
+    .navbar .navbar-toggle .navbar-toggler {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+  .register-page .full-page .content {
+    .card-register {
+      margin-top: 3rem !important;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .lock-page,
+  .login-page,
+  .pricing-page,
+  .register-page {
+    .navbar {
+      .navbar-wrapper .navbar-toggle {
+        display: none !important;
+      }
+    }
+  }
+}
+
+.table-responsive {
+  overflow: auto;
+}
+
+.wrapper:not(.white-content) .card-expense-categories {
+  a {
+    color: rgba(255, 255, 255, 0.7) !important;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+  }
+}
+
+.card-expense-categories {
+  .table-responsive {
+    //height: 250px;
+  }
+
+  .breadcrumb {
+    &-item {
+      &.active {
+        color: $text-muted;
+      }
+
+      &:not(.active) {
+        cursor: pointer;
+        color: $primary-states;
+
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  .progress {
+    height: 0.1rem;
+  }
+}
+
+.accounts-column {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-link {
+  margin-left: 0;
+  cursor: pointer;
+
+  &:hover {
+    background: #27293db0;
+  }
+
+  &:active {
+    background: #272955;
+  }
+}
+
+.transaction-filters {
+  .rbt-input-multi.form-control.rbt-input input {
+    color: white
+  }
+}
+
+.expense-category-percentage {
+  color: pink;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.cursor-copy {
+  cursor: copy !important;
+}
+
+.cursor-info {
+  cursor: help !important;
+}
+
+.display-5 {
+  font-size: 1.075rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.account-balance {
+  font-weight: 900 !important;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-rounded {
+  border-radius: 0.2857rem !important;
+
+  ._loading_overlay_overlay {
+    border-radius: 0.2857rem !important;
+  }
+}
+
+.tab-white {
+  .nav-link.active, .nav-item.show .nav-link {
+    background-color: $white;
+    border: none;
+    font-weight: bolder;
+  }
+
+  .nav-item {
+    color: grey;
+  }
+}
+
+.currency-icon {
+  font-size: 35px;
+  color: $white;
+}
+
+.text-currency {
+  @extend .text-nowrap;
+  @extend .d-inline-block;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.w-50px {
+  width: 50px;
+}
+
+.w-100px {
+  width: 100px;
+}
+
+.w-130px {
+  width: 130px;
+}
+
+.w-150px {
+  width: 150px;
+}
+
+.w-200px {
+  width: 200px;
+}
+
+.font-size-smaller {
+  font-size: smaller;
+}
+
+.font-size-larger {
+  font-size: larger;
+}
+
+.form-control-typeahead ~ .invalid-feedback,
+.is-invalid ~ .invalid-feedback {
+  display: block
+}
+
+.tooltip-inner {
+  white-space: pre-wrap;
+}
+
+.card-chart.card-chart-170 .chart-area {
+  height: 170px;
+  min-width: 800px;
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.w-25px {
+  width: 25px;
+}
+
+.w-30px {
+  width: 30px;
+}
+
+.my-masonry-grid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  margin-left: -30px; /* gutter size offset */
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 30px; /* gutter size */
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_column > div {
+  margin-bottom: 30px;
+}
+
+.font-10px {
+  font-size: 10px;
+}
+
+.font-11px {
+  font-size: 11px;
+}
+
+.font-13px {
+  font-size: 13px;
+}
+
+.font-14px {
+  font-size: 14px;
+}
+
+.font-15px {
+  font-size: 15px;
+}
+
+.font-22px {
+  font-size: 22px;
+}
+
+.smaller {
+  font-size: $smaller-font-size;
+}
+
+// DEVEXTREME OVERRIDES
+.table-active, .table-active > td, .table-active > th {
+  background-color: transparent !important;
+}
+
+
+hr {
+  border-top: 1px solid rgba($white, 0.1);
+}
