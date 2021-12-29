@@ -3,7 +3,9 @@ import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { CardBody, CardFooter, Nav, NavItem, NavLink, TabContent, Table, TabPane } from 'reactstrap';
+import {
+  CardBody, CardFooter, Nav, NavItem, NavLink, TabContent, Table, TabPane,
+} from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
 import MoneyValue from 'src/components/MoneyValue';
@@ -22,15 +24,16 @@ const AssetsCard = ({ isLoading, accounts, debts }) => {
     <Table size="sm">
       <tbody>
         {orderBy(accounts, 'name').map(
-          ({ name, balance, value, values, currency }) =>
-            Math.abs(value) >= 0.5 && (
-              <tr key={`account-${name}`}>
-                <td className="text-nowrap">{name}</td>
-                <td className="text-right text-white text-nowrap">
-                  <MoneyValue currency={currency} amount={balance} values={values} />
-                </td>
-              </tr>
-            ),
+          ({
+            name, balance, value, values, currency,
+          }) => Math.abs(value) >= 0.5 && (
+            <tr key={`account-${name}`}>
+              <td className="text-nowrap">{name}</td>
+              <td className="text-right text-white text-nowrap">
+                <MoneyValue currency={currency} amount={balance} values={values} />
+              </td>
+            </tr>
+          ),
         )}
       </tbody>
     </Table>
@@ -39,7 +42,9 @@ const AssetsCard = ({ isLoading, accounts, debts }) => {
   const DebtsTable = () => (
     <Table size="sm">
       <tbody>
-        {debts.map(({ id, debtor, currency, balance, values }) => (
+        {debts.map(({
+          id, debtor, currency, balance, values,
+        }) => (
           <tr key={`debt-${id}`}>
             <td>{debtor}</td>
             <td className="text-right text-white text-nowrap">
@@ -89,7 +94,9 @@ const AssetsCard = ({ isLoading, accounts, debts }) => {
           <tfoot>
             <tr>
               <td colSpan="2" className="text-right text-white font-weight-bold">
-                {symbol} <span>{activeTab === 'assets' ? totalAssetsValue.toFixed(2) : totalDebtValue.toFixed(2)}</span>
+                {symbol}
+                {' '}
+                <span>{activeTab === 'assets' ? totalAssetsValue.toFixed(2) : totalDebtValue.toFixed(2)}</span>
               </td>
             </tr>
           </tfoot>

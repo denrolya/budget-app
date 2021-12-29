@@ -2,16 +2,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button } from 'reactstrap';
 
-const AddNewButton = ({ onClick, text, size, color }) => (
+const AddNewButton = ({
+  onClick, text, size, color,
+}) => (
   <Button className="btn-round btn-icon" size={size} color={color} onClick={onClick}>
     {text}
   </Button>
 );
 
 AddNewButton.defaultProps = {
-  text: <i className="tim-icons icon-simple-add" />,
-  size: 'md',
   color: 'primary',
+  size: 'md',
+  text: <i className="tim-icons icon-simple-add" />,
 };
 
 AddNewButton.propTypes = {

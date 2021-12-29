@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import React, { useRef, useLayoutEffect, useEffect } from 'react';
 import LoadingOverlay from 'react-loading-overlay';
 import { connect } from 'react-redux';
-import { Card, CardBody, CardFooter, CardHeader, CardTitle, Col, Form, FormGroup, Row } from 'reactstrap';
+import {
+  Card, CardBody, CardFooter, CardHeader, CardTitle, Col, Form, FormGroup, Row,
+} from 'reactstrap';
 
 import AddNewButton from 'src/components/AddNewButton';
 import DateRange from 'src/components/forms/fields/DateRange';
@@ -56,8 +58,7 @@ const TransferList = ({
     fetchList();
   }, [pagination.page, pagination.perPage, pagination.filters]);
 
-  const applyDateRangeFilter = (event, { startDate, endDate }) =>
-    setFilters(pagination.filters.setFromTo(startDate, endDate));
+  const applyDateRangeFilter = (event, { startDate, endDate }) => setFilters(pagination.filters.setFromTo(startDate, endDate));
 
   return (
     <Card>

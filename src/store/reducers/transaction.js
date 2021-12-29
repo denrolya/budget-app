@@ -4,8 +4,6 @@ import { initializeList as initializeTransactionsList } from 'src/services/trans
 import { Types } from 'src/store/actions/transaction';
 import Pagination from 'src/models/Pagination';
 import TransactionFilters from 'src/models/TransactionFilters';
-import { ROUTE_TRANSACTIONS } from 'src/constants/routes';
-import { getTransactionListQueryParams } from 'src/services/routing';
 
 const INITIAL_STATE = {
   data: [],
@@ -66,27 +64,6 @@ const resetFiltersHandler = (state = INITIAL_STATE) => ({
     count: 0,
   }),
 });
-
-// TODO: Implement using hooks
-const locationChangeListener = (state = INITIAL_STATE, action) => {
-  const { pathname, search } = action.payload.location;
-  const { page, perPage, ...filters } = getTransactionListQueryParams(search);
-
-  const newPagination = new Pagination({
-    page,
-    perPage,
-    filters: new TransactionFilters(filters),
-  });
-
-  if (pathname !== ROUTE_TRANSACTIONS || (search && state.pagination.isEqual(newPagination))) {
-    return { ...state };
-  }
-
-  return {
-    ...state,
-    pagination: newPagination,
-  };
-};
 
 const HANDLERS = {
   [Types.FETCH_LIST_SUCCESS]: fetchListSuccessHandler,

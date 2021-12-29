@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useMemo, useEffect } from 'react';
 import sumBy from 'lodash/sumBy';
 import { connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { CardBody, Col, Row } from 'reactstrap';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
@@ -18,12 +17,7 @@ import { setStatistics, updateDashboard, updateDashboardInterval } from 'src/sto
 import MoneyValue from 'src/components/MoneyValue';
 
 const Dashboard = ({
-  ui,
-  userSettings,
-  statistics,
-  updateDashboard,
-  updateDashboardInterval,
-  setStatistics,
+  ui, userSettings, statistics, updateDashboard, updateDashboardInterval, setStatistics,
 }) => {
   const { dashboardStatistics: dashboard } = userSettings;
 
@@ -32,13 +26,13 @@ const Dashboard = ({
   }, []);
   const { symbol } = useBaseCurrency();
 
-  const isStatisticsActionLoading = (statisticsName) =>
-    isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
+  const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
 
   const totalIncome = useMemo(() => sumBy(statistics.moneyFlow.data, 'income'), [statistics.moneyFlow.data]);
-  const totalExpense = useMemo(() => Math.abs(sumBy(statistics.moneyFlow.data, 'expense')), [
-    statistics.moneyFlow.data,
-  ]);
+  const totalExpense = useMemo(
+    () => Math.abs(sumBy(statistics.moneyFlow.data, 'expense')),
+    [statistics.moneyFlow.data],
+  );
 
   return (
     <div className="dashboard">
@@ -73,7 +67,10 @@ const Dashboard = ({
           >
             <CardBody>
               <span className="text-nowrap text-success">
-                <sup>{symbol} </sup>
+                <sup>
+                  {symbol}
+                  {' '}
+                </sup>
                 <span className="h2">
                   <MoneyValue showSymbol={false} amount={totalIncome} maximumFractionDigits={0} />
                 </span>
@@ -88,7 +85,10 @@ const Dashboard = ({
           >
             <CardBody>
               <span className="text-nowrap text-danger">
-                <sup>{symbol} </sup>
+                <sup>
+                  {symbol}
+                  {' '}
+                </sup>
                 <span className="h2">
                   <MoneyValue showSymbol={false} amount={totalExpense} maximumFractionDigits={0} />
                 </span>

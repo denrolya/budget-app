@@ -5,11 +5,17 @@ import { Button, Col, Row } from 'reactstrap';
 
 import Pagination from 'src/models/Pagination';
 
-const PaginationRow = ({ model, setPage, setPerPage }) => (
+const PaginationRow = ({ model, setPage }) => (
   <Row>
     <Col className="align-items-center">
       <p className="text-nowrap">
-        <span className="d-none d-sm-inline">Page</span> {model.page} / {model.countPages()}
+        <span className="d-none d-sm-inline">Page</span>
+        {' '}
+        {model.page}
+        {' '}
+        /
+        {' '}
+        {model.countPages()}
       </p>
     </Col>
     <Col className="text-right align-items-center text-nowrap">
@@ -42,7 +48,6 @@ const PaginationRow = ({ model, setPage, setPerPage }) => (
 PaginationRow.propTypes = {
   model: PropTypes.instanceOf(Pagination).isRequired,
   setPage: PropTypes.func.isRequired,
-  setPerPage: PropTypes.func,
 };
 
 export default memo(PaginationRow);

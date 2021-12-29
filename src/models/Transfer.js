@@ -21,14 +21,18 @@ const DEFAULT_VALUES = {
 
 class Transfer extends Record(DEFAULT_VALUES) {
   constructor(data) {
-    if (data) {
-      data.executedAt = moment(data.executedAt);
-      data.from = data.from && new Account(data.from);
-      data.to = data.to && new Account(data.to);
-      data.feeExpense = data.feeExpense && new Transaction(data.feeExpense);
+    const constructorProps = {
+      ...data,
+    };
+
+    if (constructorProps) {
+      constructorProps.executedAt = moment(constructorProps.executedAt);
+      constructorProps.from = constructorProps.from && new Account(constructorProps.from);
+      constructorProps.to = constructorProps.to && new Account(constructorProps.to);
+      constructorProps.feeExpense = constructorProps.feeExpense && new Transaction(constructorProps.feeExpense);
     }
 
-    super(data);
+    super(constructorProps);
   }
 
   setCategoryFromTypeahead(selected, field = 'category') {

@@ -1,12 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-
-const prettierOptions = JSON.parse(fs.readFileSync(path.resolve(__dirname, '.prettierrc'), 'utf8'));
-
 module.exports = {
   parser: '@babel/eslint-parser',
-  extends: ['airbnb', 'plugin:prettier/recommended'],
-  plugins: ['prettier', 'react', 'react-hooks', 'jsx-a11y'],
+  extends: ['airbnb'],
+  plugins: ['react', 'react-hooks', 'jsx-a11y'],
   env: {
     browser: true,
     es6: true,
@@ -18,16 +13,16 @@ module.exports = {
       jsx: true,
     },
   },
+  ignorePatterns: ['scripts/*.js'],
   rules: {
-    'prettier/prettier': ['error', prettierOptions],
-    'arrow-body-style': [2, 'as-needed'],
+    'arrow-body-style': [1, 'as-needed'],
     'class-methods-use-this': 0,
     'import/imports-first': 0,
     'import/newline-after-import': 0,
     'import/no-dynamic-require': 0,
     'import/no-extraneous-dependencies': 0,
     'import/no-named-as-default': 0,
-    'import/no-unresolved': 'off',
+    'import/no-unresolved': 0,
     'import/no-webpack-loader-syntax': 0,
     'import/prefer-default-export': 0,
 
@@ -40,6 +35,7 @@ module.exports = {
     ],
     'jsx-a11y/aria-props': 2,
     'jsx-a11y/heading-has-content': 0,
+    'jsx-a11y/no-noninteractive-element-interactions': 1,
     'jsx-a11y/label-has-associated-control': [
       2,
       {
@@ -50,9 +46,12 @@ module.exports = {
       },
     ],
     'jsx-a11y/label-has-for': 0,
-    'jsx-a11y/mouse-events-have-key-events': 2,
+    'jsx-a11y/mouse-events-have-key-events': 1,
+    'jsx-a11y/click-events-have-key-events': 1,
+    'jsx-a11y/no-static-element-interactions': 1,
     'jsx-a11y/role-has-required-aria-props': 2,
     'jsx-a11y/role-supports-aria-props': 2,
+    'default-param-last': 1,
     'max-len': 0,
     'newline-per-chained-call': 0,
     'no-confusing-arrow': 0,
@@ -61,6 +60,7 @@ module.exports = {
     'no-shadow': 0,
     'no-use-before-define': 0,
     'prefer-template': 2,
+    'react/function-component-definition': 0,
     'react/destructuring-assignment': 0,
     'react-hooks/rules-of-hooks': 'error',
     'react/jsx-closing-tag-location': 0,
@@ -68,13 +68,13 @@ module.exports = {
     'react/jsx-first-prop-new-line': [2, 'multiline'],
     'react/jsx-filename-extension': 0,
     'react/jsx-no-target-blank': 0,
-    'react/jsx-uses-vars': 2,
-    'react/require-default-props': 2,
+    'react/jsx-uses-vars': 1,
+    'react/require-default-props': 1,
     'react/require-extension': 0,
     'react/self-closing-comp': 0,
     'react/sort-comp': 0,
     'react/sort-prop-types': [
-      2,
+      1,
       {
         callbacksLast: true,
         ignoreCase: true,
@@ -84,7 +84,7 @@ module.exports = {
       },
     ],
     'react/jsx-sort-default-props': [
-      2,
+      1,
       {
         ignoreCase: true,
       },

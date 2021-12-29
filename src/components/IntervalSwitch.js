@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 
-const IntervalSwitch = ({ selected, from, to, onIntervalSwitch }) => (
+const IntervalSwitch = ({
+  selected, from, to, onIntervalSwitch,
+}) => (
   <ButtonGroup>
     <Button
       size="sm"

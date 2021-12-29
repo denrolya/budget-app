@@ -11,7 +11,7 @@ export const { Types, Creators } = createActions(
   { prefix: 'EXCHANGE_RATES_' },
 );
 
-export const fetch = (date = null) => async (dispatch) => {
+export const fetch = () => async (dispatch) => {
   dispatch(Creators.fetchRequest());
 
   const { data } = await axios.get(Routing.generate('api_v1_currency_rates'));

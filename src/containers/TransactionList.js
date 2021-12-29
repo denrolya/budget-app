@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useEffect, useLayoutEffect, useRef, useState,
+} from 'react';
 import { connect } from 'react-redux';
-import { Button, Card, CardHeader, CardBody, Row, Collapse, Col } from 'reactstrap';
+import {
+  Button, Card, CardHeader, CardBody, Row, Collapse, Col,
+} from 'reactstrap';
 
 import TransactionFilters from 'src/components/TransactionFilters';
 import TransactionModalForm from 'src/components/forms/TransactionModalForm';
@@ -66,8 +70,7 @@ const TransactionList = ({
     setEditModalOpened(!isEditModalOpened);
   };
 
-  const handleTransactionEdition = (transaction) =>
-    editTransaction(transaction.id, transaction.type, formatTransactionToFormType(transaction));
+  const handleTransactionEdition = (transaction) => editTransaction(transaction.id, transaction.type, formatTransactionToFormType(transaction));
 
   return (
     <>
@@ -75,60 +78,30 @@ const TransactionList = ({
         <Col xs={12} sm={12} md={8} lg={9}>
           <LoadingCard inverse isLoading={isLoading} className="card-transactions card-table mb-0">
             <CardBody className="p-0">
-              {window.isDev && (
-                <>
-                  {isGridSelected ? (
-                    <TransactionsGrid
-                      data={data}
-                      pagination={pagination}
-                      totalValue={totalValue}
-                      setPage={setPage}
-                      setPerPage={setPerPage}
-                      setFilters={setFilters}
-                      editTransaction={toggleTransactionEdition}
-                      deleteTransaction={deleteTransaction}
-                    />
-                  ) : (
-                    <TransactionsTable
-                      data={data}
-                      pagination={pagination}
-                      totalValue={totalValue}
-                      setPage={setPage}
-                      setPerPage={setPerPage}
-                      setFilters={setFilters}
-                      editTransaction={toggleTransactionEdition}
-                      deleteTransaction={deleteTransaction}
-                    />
-                  )}
-                </>
-              )}
+              { ((window.isDev && isGridSelected) || (!window.isDev && window.isMobile)) && (
+                <TransactionsGrid
+                  data={data}
+                  pagination={pagination}
+                  totalValue={totalValue}
+                  setPage={setPage}
+                  setPerPage={setPerPage}
+                  setFilters={setFilters}
+                  editTransaction={toggleTransactionEdition}
+                  deleteTransaction={deleteTransaction}
+                />
+              ) }
 
-              {!window.isDev && (
-                <>
-                  {window.isMobile ? (
-                    <TransactionsTable
-                      data={data}
-                      pagination={pagination}
-                      totalValue={totalValue}
-                      setPage={setPage}
-                      setPerPage={setPerPage}
-                      setFilters={setFilters}
-                      editTransaction={toggleTransactionEdition}
-                      deleteTransaction={deleteTransaction}
-                    />
-                  ) : (
-                    <TransactionsGrid
-                      data={data}
-                      pagination={pagination}
-                      totalValue={totalValue}
-                      setPage={setPage}
-                      setPerPage={setPerPage}
-                      setFilters={setFilters}
-                      editTransaction={toggleTransactionEdition}
-                      deleteTransaction={deleteTransaction}
-                    />
-                  )}
-                </>
+              { ((window.isDev && !isGridSelected) || (!window.isDev && !window.isMobile)) && (
+                <TransactionsTable
+                  data={data}
+                  pagination={pagination}
+                  totalValue={totalValue}
+                  setPage={setPage}
+                  setPerPage={setPerPage}
+                  setFilters={setFilters}
+                  editTransaction={toggleTransactionEdition}
+                  deleteTransaction={deleteTransaction}
+                />
               )}
 
               {window.isDev && (
@@ -150,7 +123,9 @@ const TransactionList = ({
           <Card>
             <CardHeader>
               <h5 className="card-category cursor-pointer" onClick={() => setIsFiltersOpen(!isFiltersOpen)}>
-                <i className="ion-ios-funnel" aria-hidden /> Filters
+                <i className="ion-ios-funnel" aria-hidden />
+                {' '}
+                Filters
               </h5>
             </CardHeader>
             <Collapse isOpen={isFiltersOpen}>
@@ -202,10 +177,10 @@ const mapStateToProps = ({ ui, account, transaction }) => ({
   ...transaction,
   accounts: account,
   isLoading:
-    isActionLoading(ui.TRANSACTION_FETCH_LIST) ||
-    isActionLoading(ui.TRANSACTION_REGISTER) ||
-    isActionLoading(ui.TRANSACTION_DELETE) ||
-    isActionLoading(ui.TRANSACTION_EDIT),
+    isActionLoading(ui.TRANSACTION_FETCH_LIST)
+    || isActionLoading(ui.TRANSACTION_REGISTER)
+    || isActionLoading(ui.TRANSACTION_DELETE)
+    || isActionLoading(ui.TRANSACTION_EDIT),
   isTransactionEditInProgress: isActionLoading(ui.TRANSACTION_EDIT),
 });
 

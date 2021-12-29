@@ -44,6 +44,5 @@ PercentageSpentFromIncomeCard.propTypes = {
 
 export default memo(
   PercentageSpentFromIncomeCard,
-  (prevProps, nextProps) =>
-    isEqual(prevProps.percentage, nextProps.percentage) && isEqual(prevProps.isLoading, nextProps.isLoading),
+  (prevProps, nextProps) => isEqual(prevProps.percentage, nextProps.percentage) && isEqual(prevProps.isLoading, nextProps.isLoading),
 );

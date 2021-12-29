@@ -26,7 +26,9 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
     let finalValues = { ...props };
 
     if (finalValues) {
-      const { types, from, to, categories, accounts, withCanceled, onlyDrafts } = finalValues;
+      const {
+        types, from, to, categories, accounts, withCanceled, onlyDrafts,
+      } = finalValues;
 
       finalValues = {
         types: TransactionFilters.normalize('types', types),

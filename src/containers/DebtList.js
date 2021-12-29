@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import moment from 'moment-timezone/index';
-import PropTypes  from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import {
@@ -105,7 +105,9 @@ const DebtList = ({
           })}
         >
           {debts.map((debt) => {
-            const { id, debtor, balance, values, currency, createdAt, closedAt, transactions, note } = debt;
+            const {
+              id, debtor, balance, values, currency, createdAt, closedAt, transactions, note,
+            } = debt;
 
             return (
               <Row className="mb-2" key={`debt-${id}`}>
@@ -124,7 +126,8 @@ const DebtList = ({
                     <strong className="d-none d-sm-inline">
                       {balance >= 0 ? `${debtor}'s Debt` : `My debt to ${debtor}`}
                     </strong>
-                    <strong className="d-xs-inline d-sm-none">{debtor}</strong>{' '}
+                    <strong className="d-xs-inline d-sm-none">{debtor}</strong>
+                    {' '}
                     {note && (
                       <sup>
                         <span className="text-warning">
@@ -137,7 +140,9 @@ const DebtList = ({
                     )}
                   </p>
                   <small className="d-block text-muted">
-                    from {moment(createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
+                    from
+                    {' '}
+                    {moment(createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
                   </small>
                 </Col>
 

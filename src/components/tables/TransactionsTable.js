@@ -33,12 +33,11 @@ const TransactionsTable = ({
     <>
       {dates.map((date) => {
         const transactions = data.filter(({ executedAt }) => executedAt.clone().startOf('day').isSame(date));
-        const sum =
-          sumBy(
-            transactions.filter((t) => !isExpense(t)),
-            ({ values }) => values[code],
-          ) -
-          sumBy(
+        const sum = sumBy(
+          transactions.filter((t) => !isExpense(t)),
+          ({ values }) => values[code],
+        )
+          - sumBy(
             transactions.filter((t) => isExpense(t)),
             ({ values }) => values[code],
           );
@@ -58,10 +57,13 @@ const TransactionsTable = ({
                   'text-success': isYesterday(date),
                 })}
               >
-                <i className="ion-md-calendar" aria-hidden /> {isToday(date) && 'Today'}
+                <i className="ion-md-calendar" aria-hidden />
+                {' '}
+                {isToday(date) && 'Today'}
                 {isYesterday(date) && 'Yesterday'}
                 {!isToday(date) && !isYesterday(date) && date.format(MOMENT_VIEW_DATE_FORMAT)}
-              </span>{' '}
+              </span>
+              {' '}
               <Badge pill color={sum > 0 ? 'success' : 'danger'} className="float-right">
                 <MoneyValue amount={sum} />
               </Badge>
@@ -89,7 +91,10 @@ const TransactionsTable = ({
           <PaginationRow model={pagination} setPage={setPage} setPerPage={setPerPage} />
 
           <p className="text-muted text-right text-nowrap small">
-            <strong>{pagination.count}</strong> transactions of total value:{' '}
+            <strong>{pagination.count}</strong>
+            {' '}
+            transactions of total value:
+            {' '}
             <span
               className={cn({
                 'text-success': totalValue >= 0,

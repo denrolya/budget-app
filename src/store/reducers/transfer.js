@@ -5,8 +5,6 @@ import Transfer from 'src/models/Transfer';
 import { Types } from 'src/store/actions/transfer';
 import TransferFilters from 'src/models/TransferFilters';
 import Pagination from 'src/models/Pagination';
-import { ROUTE_TRANSFERS } from 'src/constants/routes';
-import { getTransferListQueryParams } from 'src/services/routing';
 
 const INITIAL_STATE = {
   data: new List(),
@@ -65,27 +63,6 @@ const resetFiltersHandler = (state = INITIAL_STATE) => ({
     count: 0,
   }),
 });
-
-// TOOO: Implement using hooks
-const locationChangeListener = (state = INITIAL_STATE, action) => {
-  const { pathname, search } = action.payload.location;
-  const { page, perPage, ...filters } = getTransferListQueryParams(search);
-
-  const newPagination = new Pagination({
-    page,
-    perPage,
-    filters: new TransferFilters(filters),
-  });
-
-  if (pathname !== ROUTE_TRANSFERS || (search && state.pagination.isEqual(newPagination))) {
-    return { ...state };
-  }
-
-  return {
-    ...state,
-    pagination: newPagination,
-  };
-};
 
 const HANDLERS = {
   [Types.FETCH_LIST_SUCCESS]: fetchListSuccessHandler,

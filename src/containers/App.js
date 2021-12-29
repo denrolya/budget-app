@@ -15,7 +15,11 @@ const App = ({ isAuthenticated, baseCurrency }) => {
   return (
     <>
       <Helmet>
-        <title>{getBrandText(pathname)} | Budget</title>
+        <title>
+          {getBrandText(pathname)}
+          {' '}
+          | Budget
+        </title>
       </Helmet>
 
       <BaseCurrencyContext.Provider value={CURRENCIES[baseCurrency]}>

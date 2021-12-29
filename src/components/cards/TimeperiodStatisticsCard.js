@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { Row, Col, CardHeader, CardBody } from 'reactstrap';
+import {
+  Row, Col, CardHeader, CardBody,
+} from 'reactstrap';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
@@ -24,13 +26,12 @@ const TimeperiodStatisticsCard = ({
 }) => {
   const { from, to, interval } = model;
 
-  const onPeriodChange = (event, { startDate, endDate }) =>
-    onUpdate(
-      model.merge({
-        from: startDate,
-        to: endDate,
-      }),
-    );
+  const onPeriodChange = (event, { startDate, endDate }) => onUpdate(
+    model.merge({
+      from: startDate,
+      to: endDate,
+    }),
+  );
 
   const onIntervalChange = (interval) => onUpdate(model.set('interval', interval));
 

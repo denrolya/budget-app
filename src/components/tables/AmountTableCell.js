@@ -5,7 +5,9 @@ import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import transactionsTypeType from 'src/types/transactionsType';
 
-const AmountTableCell = ({ id, amount, type, currencySymbol, value }) => {
+const AmountTableCell = ({
+  id, amount, type, currencySymbol, value,
+}) => {
   const { symbol } = useBaseCurrency();
   const isExpense = type === EXPENSE_TYPE;
 
@@ -18,11 +20,17 @@ const AmountTableCell = ({ id, amount, type, currencySymbol, value }) => {
       })}
     >
       <span className="d-block text-currency font-weight-bold">
-        {isExpense ? '-' : '+'} {currencySymbol} {amount}
+        {isExpense ? '-' : '+'}
+        {' '}
+        {currencySymbol}
+        {' '}
+        {amount}
       </span>
       {currencySymbol !== symbol && (
         <small className="d-block text-currency">
-          {symbol} {value.toFixed(2)}
+          {symbol}
+          {' '}
+          {value.toFixed(2)}
         </small>
       )}
     </td>

@@ -16,14 +16,14 @@ import exchangeRatesReducer from 'src/store/reducers/exchangeRates';
 const resettable = resettableReducer(RESET_ACTION);
 
 export default combineReducers({
-  auth:          authReducer,
+  auth: authReducer,
   exchangeRates: resettable(exchangeRatesReducer),
-  dashboard:     resettable(dashboardReducer),
-  account:       resettable(accountReducer),
-  category:      resettable(categoryReducer),
-  debt:          resettable(debtReducer),
-  ui:            resettable(uiReducer),
-  transaction:   resettable(transactionReducer),
-  transfer:      resettable(transferReducer),
-  report:        resettable(reportReducer),
+  dashboard: resettable(dashboardReducer),
+  account: resettable(accountReducer),
+  category: resettable(categoryReducer),
+  debt: resettable(debtReducer),
+  ui: resettable(uiReducer),
+  transaction: resettable(transactionReducer),
+  transfer: resettable(transferReducer),
+  report: resettable(reportReducer),
 });

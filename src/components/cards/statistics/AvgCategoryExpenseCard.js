@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import IconStatisticsCard from 'src/components/cards/statistics/IconStatisticsCard';
 import MoneyValue from 'src/components/MoneyValue';
 
-const AvgCategoryExpenseCard = ({ categoryName, amount, icon, ...rest }) => (
+const AvgCategoryExpenseCard = ({
+  categoryName, amount, icon, ...rest
+}) => (
   <IconStatisticsCard
     icon={icon}
     color="info"

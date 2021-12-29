@@ -16,7 +16,9 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import AccountName from 'src/components/AccountName';
 import { CURRENCIES } from 'src/constants/currency';
 
-const Sidebar = ({ accounts, debts, loading, onCurrencySwitch, updateDashboard }) => {
+const Sidebar = ({
+  accounts, debts, loading, onCurrencySwitch, updateDashboard,
+}) => {
   const { pathname } = useLocation();
   const { symbol, code } = useBaseCurrency();
   const totalDebt = useMemo(() => sumBy(debts, ({ values }) => values[code], [debts]));
@@ -92,7 +94,8 @@ const Sidebar = ({ accounts, debts, loading, onCurrencySwitch, updateDashboard }
             <NavLink className="nav-link text-white" activeClassName="active" to={ROUTE_DEBTS}>
               <i aria-hidden className="ion-ios-bookmarks" />
               <p className="text-capitalize">
-                Debts{' '}
+                Debts
+                {' '}
                 {!loading && (
                   <span
                     style={{ fontSize: 'larger' }}

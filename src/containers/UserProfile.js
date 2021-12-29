@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import filter from 'lodash/filter';
-import { Button, Card, CardBody, CardFooter, CardHeader, CardText, Col, Row } from 'reactstrap';
+import {
+  Button, Card, CardBody, CardFooter, CardHeader, CardText, Col, Row,
+} from 'reactstrap';
 import Swal from 'sweetalert2';
 
 import { switchBaseCurrency } from 'src/store/actions/user';
@@ -57,7 +59,7 @@ const UserProfile = ({ availableCurrencies, switchBaseCurrency }) => {
                 <div className="block block-two" />
                 <div className="block block-three" />
                 <div className="block block-four" />
-                <a href="#">
+                <a href="#test">
                   <img alt="..." className="avatar" src={avatar} />
                   <h5 className="title">Mike Andrew</h5>
                 </a>

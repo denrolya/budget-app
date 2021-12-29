@@ -17,16 +17,16 @@ const Root = () => {
   store.dispatch(assertAuthorization());
 
   return (
-      <Provider store={ store }>
-        <BrowserRouter history={ history }>
-          <Routes>
-            <Route path="/" element={ <AuthRequiredRoute /> }>
-              <Route path="/*" element={ <App /> } />
-            </Route>
-            <Route exact path={ ROUTE_LOGIN } element={ <Login /> } />
-          </Routes>
-        </BrowserRouter>
-      </Provider>
+    <Provider store={store}>
+      <BrowserRouter history={history}>
+        <Routes>
+          <Route path="/" element={<AuthRequiredRoute />}>
+            <Route path="/*" element={<App />} />
+          </Route>
+          <Route exact path={ROUTE_LOGIN} element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 };
 

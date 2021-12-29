@@ -6,7 +6,9 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TransactionCategoriesComparison from 'src/components/charts/recharts/TransactionCategoriesComparison';
 
-const ExpenseCategoriesReviewCard = ({ isLoading, height, model, onUpdate }) => {
+const ExpenseCategoriesReviewCard = ({
+  isLoading, model, onUpdate,
+}) => {
   const { data, from } = model;
 
   return (
@@ -24,14 +26,12 @@ const ExpenseCategoriesReviewCard = ({ isLoading, height, model, onUpdate }) => 
 };
 
 ExpenseCategoriesReviewCard.defaultProps = {
-  height: 300,
   isLoading: false,
 };
 
 ExpenseCategoriesReviewCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
   onUpdate: PropTypes.func.isRequired,
-  height: PropTypes.number,
   isLoading: PropTypes.bool,
 };
 

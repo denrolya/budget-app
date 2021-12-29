@@ -4,7 +4,9 @@ import get from 'lodash/get';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { Button, ButtonGroup, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Button, ButtonGroup, Col, Form, FormGroup, Input, Label,
+} from 'reactstrap';
 import * as Yup from 'yup';
 
 import LoadingButton from 'src/components/LoadingButton';
@@ -19,7 +21,9 @@ import {
 import { fetchTypeaheadList as fetchAccounts } from 'src/store/actions/account';
 import { fetchCategories } from 'src/store/actions/category';
 
-const TransactionForm = ({ isLoading, modelData, onSubmit, toggleModal }) => {
+const TransactionForm = ({
+  isLoading, modelData, onSubmit, toggleModal,
+}) => {
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [form, setForm] = useState({
@@ -96,8 +100,12 @@ const TransactionForm = ({ isLoading, modelData, onSubmit, toggleModal }) => {
   return (
     <Formik enableReinitialize initialValues={form.initialValues} validationSchema={form.validationSchema}>
       {(model) => {
-        const { values, touched, errors, handleBlur, setFieldValue } = model;
-        const { type, category, amount, account, note, executedAt, compensations, isDraft } = values;
+        const {
+          values, touched, errors, handleBlur, setFieldValue,
+        } = model;
+        const {
+          type, category, amount, account, note, executedAt, compensations, isDraft,
+        } = values;
         const newCompensation = () => ({
           account: '',
           amount: 0,
@@ -242,8 +250,8 @@ const TransactionForm = ({ isLoading, modelData, onSubmit, toggleModal }) => {
 
                 <hr />
 
-                {compensations &&
-                  compensations.map((compensation, key) => {
+                {compensations
+                  && compensations.map((compensation, key) => {
                     const amountKey = `compensations.${key}.amount`;
                     const accountKey = `compensations.${key}.account`;
                     const executedAtKey = `compensations.${key}.executedAt`;

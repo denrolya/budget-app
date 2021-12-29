@@ -16,12 +16,17 @@ import { isExpense } from 'src/services/common';
 import TransactionCategory from 'src/components/TransactionCategory';
 
 const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
-  const { id, account, amount, values, note, category, executedAt, canceledAt } = transaction;
+  const {
+    id, account, amount, values, note, category, executedAt, canceledAt,
+  } = transaction;
 
   return (
     <tr>
       <td className="fit text-nowrap d-none d-md-table-cell">
-        <code className="mr-2">#{id}</code>
+        <code className="mr-2">
+          #
+          {id}
+        </code>
       </td>
 
       <td
@@ -59,7 +64,8 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
             'text-success': !isExpense(transaction),
           })}
         >
-          {isExpense(transaction) ? '-' : '+'}{' '}
+          {isExpense(transaction) ? '-' : '+'}
+          {' '}
           <MoneyValue currency={account.currency} amount={amount} values={values} />
         </span>
 
@@ -79,7 +85,11 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
               <i className="tim-icons icon-settings-gear-63" aria-hidden />
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem header>Actions [#{transaction.id}]</DropdownItem>
+              <DropdownItem header>
+                Actions [#
+                {transaction.id}
+                ]
+              </DropdownItem>
               {handleEdit && (
                 <DropdownItem disabled={!!canceledAt} onClick={() => handleEdit(transaction)}>
                   Edit

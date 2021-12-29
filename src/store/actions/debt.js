@@ -117,45 +117,46 @@ export const fetchTransactionsList = (id) => (dispatch) => {
     });
 };
 
-export const closeDebt = ({ id, debtor, currency, balance }) => (dispatch) =>
-  /* eslint-disable consistent-return */
-  Swal.fire({
-    title: 'Close this debt',
-    text: `Are you sure you want to close ${debtor}'s debt?(${currency.symbol} ${balance})`,
-    showCancelButton: true,
-    confirmButtonText: 'Yes, close this debt!',
-    cancelButtonText: 'No, keep it',
-    confirmButtonClass: 'btn btn-danger',
-    cancelButtonClass: 'btn btn-success',
-    reverseButtons: false,
-    buttonsStyling: false,
-  }).then(({ value }) => {
-    if (value) {
-      dispatch(Creators.deleteDebtRequest());
+export const closeDebt = ({
+  id, debtor, currency, balance,
+}) => (dispatch) => Swal.fire({
+  title: 'Close this debt',
+  text: `Are you sure you want to close ${debtor}'s debt?(${currency.symbol} ${balance})`,
+  showCancelButton: true,
+  confirmButtonText: 'Yes, close this debt!',
+  cancelButtonText: 'No, keep it',
+  confirmButtonClass: 'btn btn-danger',
+  cancelButtonClass: 'btn btn-success',
+  reverseButtons: false,
+  buttonsStyling: false,
+}).then(({ value }) => {
+  if (!value) {
+    return {};
+  }
+  dispatch(Creators.deleteDebtRequest());
 
-      return axios
-        .delete(Routing.generate('api_v1_debt_delete', { id }))
-        .then(() => {
-          dispatch(Creators.deleteDebtSuccess({ id }));
-          notify('success', 'Debt successfully closed!', 'Closed');
+  return axios
+    .delete(Routing.generate('api_v1_debt_delete', { id }))
+    .then(() => {
+      dispatch(Creators.deleteDebtSuccess({ id }));
+      notify('success', 'Debt successfully closed!', 'Closed');
 
-          if (isOnPath(ROUTE_DEBTS)) {
-            dispatch(fetchList());
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-          dispatch(Creators.deleteDebtFailure(e.message));
-        });
-    }
-  });
+      if (isOnPath(ROUTE_DEBTS)) {
+        dispatch(fetchList());
+      }
+    })
+    .catch((e) => {
+      console.error(e);
+      dispatch(Creators.deleteDebtFailure(e.message));
+    });
+});
 
 export const registerDebtTransaction = (debtId, type, transaction, shouldCloseDebt) => (dispatch) => {
   dispatch(Creators.registerDebtTransactionRequest());
 
   return axios
     .post(
-      Routing.generate(`api_v1_debt_transaction_new`, {
+      Routing.generate('api_v1_debt_transaction_new', {
         type,
         id: debtId,
       }),
@@ -182,7 +183,7 @@ export const editDebtTransaction = (debt, transaction) => (dispatch) => {
 
   return axios
     .put(
-      Routing.generate(`api_v1_debt_transaction_edit`, {
+      Routing.generate('api_v1_debt_transaction_edit', {
         id: debt.id,
         transactionId: transaction.id,
       }),
@@ -202,33 +203,33 @@ export const editDebtTransaction = (debt, transaction) => (dispatch) => {
     });
 };
 
-export const deleteDebtTransaction = (debt, transaction) => (dispatch) =>
-  /* eslint-disable consistent-return */
-  confirmTransactionDeletion(transaction).then((result) => {
-    if (result.value) {
-      dispatch(Creators.deleteTransactionRequest());
+export const deleteDebtTransaction = (debt, transaction) => (dispatch) => confirmTransactionDeletion(transaction).then(({ value }) => {
+  if (!value) {
+    return {};
+  }
 
-      return axios
-        .delete(
-          Routing.generate(`api_v1_debt_transaction_delete`, {
-            id: debt.id,
-            transactionId: transaction.id,
-          }),
-        )
-        .then(() => {
-          dispatch(Creators.deleteTransactionSuccess(transaction.id));
-          notify('success', 'Transaction deleted!', 'Deleted');
+  dispatch(Creators.deleteTransactionRequest());
 
-          if (isOnPath(ROUTE_DEBTS)) {
-            dispatch(fetchList());
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-          dispatch(Creators.deleteTransactionFailure(e.message));
-        });
-    }
-  });
+  return axios
+    .delete(
+      Routing.generate('api_v1_debt_transaction_delete', {
+        id: debt.id,
+        transactionId: transaction.id,
+      }),
+    )
+    .then(() => {
+      dispatch(Creators.deleteTransactionSuccess(transaction.id));
+      notify('success', 'Transaction deleted!', 'Deleted');
+
+      if (isOnPath(ROUTE_DEBTS)) {
+        dispatch(fetchList());
+      }
+    })
+    .catch((e) => {
+      console.error(e);
+      dispatch(Creators.deleteTransactionFailure(e.message));
+    });
+});
 
 export const toggleWithClosedFilter = () => (dispatch) => {
   dispatch(Creators.toggleWithClosedFilter());

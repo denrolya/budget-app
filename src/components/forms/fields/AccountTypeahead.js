@@ -5,7 +5,9 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { randomInt } from 'src/services/common';
 import { fetchTypeaheadList as fetchAccountsTypeahead } from 'src/store/actions/account';
 
-const AccountTypeahead = ({ autoFocus, onChange, multiple, placeholder, allowNew, selected, ref }) => {
+const AccountTypeahead = ({
+  autoFocus, onChange, multiple, placeholder, allowNew, selected, ref,
+}) => {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {

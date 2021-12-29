@@ -8,26 +8,24 @@ import AccountTypeahead from 'src/components/forms/fields/AccountTypeahead';
 
 const AccountWithNoteTypeProvider = (props) => (
   <DataTypeProvider
-    formatterComponent={({ row, value }) =>
-      row ? (
-        <div
-          id={`transaction-account-cell-${row.id}`}
-          className={cn({
-            'text-muted': !row.note,
-            'text-white cursor-info': row.note,
-          })}
-        >
-          <AccountName account={value} />
-          {row.note && (
-            <UncontrolledTooltip placement="right" target={`transaction-account-cell-${row.id}`}>
-              {row.note}
-            </UncontrolledTooltip>
-          )}
-        </div>
-      ) : (
-        value
-      )
-    }
+    formatterComponent={({ row, value }) => row ? (
+      <div
+        id={`transaction-account-cell-${row.id}`}
+        className={cn({
+          'text-muted': !row.note,
+          'text-white cursor-info': row.note,
+        })}
+      >
+        <AccountName account={value} />
+        {row.note && (
+          <UncontrolledTooltip placement="right" target={`transaction-account-cell-${row.id}`}>
+            {row.note}
+          </UncontrolledTooltip>
+        )}
+      </div>
+    ) : (
+      value
+    )}
     editorComponent={({ value, onValueChange }) => (
       <AccountTypeahead
         allowNew

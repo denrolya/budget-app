@@ -12,12 +12,18 @@ const TransfersTable = ({ data, deleteTransfer }) => (
         {data.map((transfer) => (
           <tr key={transfer.id}>
             <td className="fit text-nowrap d-none d-md-table-cell">
-              <code className="mr-2">#{transfer.id}</code>
+              <code className="mr-2">
+                #
+                {transfer.id}
+              </code>
             </td>
             <td id={`transfer-desc-${transfer.id}`}>
               <span className="d-block">
                 <strong className="text-nowrap">
-                  From: <AccountName account={transfer.from} />{' '}
+                  From:
+                  {' '}
+                  <AccountName account={transfer.from} />
+                  {' '}
                 </strong>
                 {transfer.note && (
                   <sup className="text-warning">
@@ -31,7 +37,9 @@ const TransfersTable = ({ data, deleteTransfer }) => (
               </span>
 
               <span className="d-block">
-                To: <AccountName account={transfer.to} />
+                To:
+                {' '}
+                <AccountName account={transfer.to} />
               </span>
 
               <small className="text-muted">
@@ -42,7 +50,9 @@ const TransfersTable = ({ data, deleteTransfer }) => (
             <td id={`transfer-rate-${transfer.id}`} className="text-right">
               <span className="text-currency">
                 <strong className="d-block">
-                  {transfer.from.currency.symbol} {transfer.amount}
+                  {transfer.from.currency.symbol}
+                  {' '}
+                  {transfer.amount}
                 </strong>
 
                 <var className="d-block">
@@ -53,7 +63,12 @@ const TransfersTable = ({ data, deleteTransfer }) => (
                 <small className="text-muted">
                   {transfer.feeExpense && (
                     <span className="text-warning">
-                      {transfer.feeExpense.account.currency.symbol} {transfer.feeExpense.amount} fee paid from{' '}
+                      {transfer.feeExpense.account.currency.symbol}
+                      {' '}
+                      {transfer.feeExpense.amount}
+                      {' '}
+                      fee paid from
+                      {' '}
                       {transfer.feeExpense.account.name}
                     </span>
                   )}

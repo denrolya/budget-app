@@ -1,22 +1,35 @@
-import React  from 'react';
+import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { Row, Col, Button, UncontrolledPopover, PopoverBody } from 'reactstrap';
+import {
+  Row, Col, Button, UncontrolledPopover, PopoverBody,
+} from 'reactstrap';
 
 import AccountBalance from 'src/components/charts/recharts/AccountBalance';
 import MoneyValue from 'src/components/MoneyValue';
 import { convert, generateExchangeRatesStatistics } from 'src/services/currency';
 import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import TransactionCategoriesRadial from 'src/components/charts/recharts/TransactionCategoriesRadial';
-import { ACCOUNT_TYPE_BANK_CARD } from 'src/constants/account';
+import {
+  ACCOUNT_TYPE_BANK_CARD,
+  ACCOUNT_TYPE_BASIC,
+  ACCOUNT_TYPE_CASH,
+  ACCOUNT_TYPE_INTERNET,
+} from 'src/constants/account';
 import AccountNameForm from 'src/components/forms/AccountNameForm';
 import AccountColorForm from 'src/components/forms/AccountColorForm';
 import { copyToClipboard } from 'src/services/common';
 
-const AccountDetails = ({ data, exchangeRates, onArchive, onRestore, onNameChange, onColorChange }) => {
-  const { account, totalIncome, totalExpense, topExpenseCategories, topIncomeCategories } = data;
-  const { balance, color, icon, name, type, archivedAt, currency } = account;
+const AccountDetails = ({
+  data, exchangeRates, onArchive, onRestore, onNameChange, onColorChange,
+}) => {
+  const {
+    account, totalIncome, totalExpense, topExpenseCategories, topIncomeCategories,
+  } = data;
+  const {
+    balance, color, icon, name, type, archivedAt, currency,
+  } = account;
 
   const exchangeData = generateExchangeRatesStatistics(currency);
 
@@ -64,7 +77,10 @@ const AccountDetails = ({ data, exchangeRates, onArchive, onRestore, onNameChang
             )}
 
             <h5 className="mb-1">
-              <i aria-hidden className="ion-ios-calendar" /> Created:{' '}
+              <i aria-hidden className="ion-ios-calendar" />
+              {' '}
+              Created:
+              {' '}
               {moment(account.createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
             </h5>
           </Col>
@@ -108,7 +124,8 @@ const AccountDetails = ({ data, exchangeRates, onArchive, onRestore, onNameChang
         <Row>
           <Col xs={12} md={6}>
             <h3 className="mb-1">
-              Expenses:{' '}
+              Expenses:
+              {' '}
               <span className="text-danger">
                 <MoneyValue amount={totalExpense} />
               </span>
@@ -119,12 +136,15 @@ const AccountDetails = ({ data, exchangeRates, onArchive, onRestore, onNameChang
           </Col>
           <Col xs={12} md={6}>
             <h3 className="mb-1">
-              Incomes:{' '}
+              Incomes:
+              {' '}
               <span className="text-success">
                 <MoneyValue amount={totalIncome} />
               </span>
             </h3>
-            {totalIncome > 0 && <TransactionCategoriesRadial legend="left" account={account} data={topIncomeCategories} />}
+            {totalIncome > 0 && (
+              <TransactionCategoriesRadial legend="left" account={account} data={topIncomeCategories} />
+            )}
           </Col>
         </Row>
 
@@ -134,7 +154,9 @@ const AccountDetails = ({ data, exchangeRates, onArchive, onRestore, onNameChang
       {type === ACCOUNT_TYPE_BANK_CARD && account.monobankId && (
         <section>
           <p className="cursor-copy" onClick={() => copyToClipboard(account.monobankId)}>
-            MonoBank ID: {account.monobankId}
+            MonoBank ID:
+            {' '}
+            {account.monobankId}
           </p>
           <hr />
         </section>
@@ -168,9 +190,24 @@ AccountDetails.defaultProps = {
 AccountDetails.propTypes = {
   data: PropTypes.shape({
     account: PropTypes.shape({
+      balance: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
+      icon: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      // todo. ...
+      type: PropTypes.oneOf([ACCOUNT_TYPE_BANK_CARD, ACCOUNT_TYPE_INTERNET, ACCOUNT_TYPE_CASH, ACCOUNT_TYPE_BASIC])
+        .isRequired,
+      archivedAt: PropTypes.string,
+      logs: PropTypes.array,
+      createdAt: PropTypes.string.isRequired,
+      currency: PropTypes.string.isRequired,
+      monobankId: PropTypes.string,
+      iban: PropTypes.string,
+      cardNumber: PropTypes.string,
     }),
+    totalIncome: PropTypes.number.isRequired,
+    totalExpense: PropTypes.number.isRequired,
+    topExpenseCategories: PropTypes.array.isRequired,
+    topIncomeCategories: PropTypes.array.isRequired,
   }).isRequired,
   onArchive: PropTypes.func.isRequired,
   onRestore: PropTypes.func.isRequired,

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import {
+  Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/charts';
@@ -16,13 +18,27 @@ const CustomTooltip = ({ active, payload, selectedYear }) => {
     <Card body className="px-3 py-2">
       <h5 className="mb-1">{payload[0].payload.name}</h5>
       <p className="text-default mb-0">
-        {selectedYear - 1}: <MoneyValue bold amount={payload?.[0]?.value} maximumFractionDigits={0} />
+        {selectedYear - 1}
+        :
+        <MoneyValue bold amount={payload?.[0]?.value} maximumFractionDigits={0} />
       </p>
       <p className="text-info mb-0">
-        {selectedYear}: <MoneyValue bold amount={Math.abs(payload?.[1]?.value)} maximumFractionDigits={0} />
+        {selectedYear}
+        :
+        <MoneyValue bold amount={Math.abs(payload?.[1]?.value)} maximumFractionDigits={0} />
       </p>
     </Card>
   );
+};
+
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  payload: PropTypes.array.isRequired,
+  selectedYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  active: PropTypes.bool,
 };
 
 const TransactionCategoriesComparison = ({ data, selectedYear }) => {

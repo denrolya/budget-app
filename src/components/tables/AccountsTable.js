@@ -3,7 +3,9 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Table, UncontrolledButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import {
+  Table, UncontrolledButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle,
+} from 'reactstrap';
 
 import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
@@ -24,7 +26,10 @@ const AccountsTable = ({ accounts, handleArchivation }) => (
           })}
         >
           <td className="fit text-nowrap d-none d-md-table-cell text-center">
-            <code>#{account.id}</code>
+            <code>
+              #
+              {account.id}
+            </code>
           </td>
 
           <td className="fit text-nowrap">
@@ -45,7 +50,8 @@ const AccountsTable = ({ accounts, handleArchivation }) => (
               <MoneyValue showSign currency={account.currency} amount={account.balance} values={account.values} />
             </span>
             <span className="text-muted">
-              <i aria-hidden className="ion-ios-create" />{' '}
+              <i aria-hidden className="ion-ios-create" />
+              {' '}
               <span className="">
                 <TransactionDate showTime date={moment(account.lastTransactionAt, MOMENT_DATETIME_FORMAT)} />
               </span>

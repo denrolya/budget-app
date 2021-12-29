@@ -2,7 +2,9 @@ import cn from 'classnames';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { CardBody, Col, Row, Table } from 'reactstrap';
+import {
+  CardBody, Col, Row, Table,
+} from 'reactstrap';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { revenueExpenseRatioColor } from 'src/services/common';
@@ -31,11 +33,18 @@ const MonthExpenseCard = ({ monthExpenseStats, isLoading }) => {
             <h5 className="text-muted mb-0 card-category text-capitalized">
               {`${mode} expenses: ${moment().startOf('month').format('MMMM')}`}
               <span className={cn('pull-right', 'd-xs-inline', 'd-sm-none', `text-${ratioColor}`)}>
-                {selectedRatio}%
+                {selectedRatio}
+                %
               </span>
             </h5>
-            <sup className="text-white">{symbol} </sup>
-            <span className="h2 text-white">{selectedStats} </span>
+            <sup className="text-white">
+              {symbol}
+              {' '}
+            </sup>
+            <span className="h2 text-white">
+              {selectedStats}
+              {' '}
+            </span>
 
             <Table borderless size="sm" className="mt-3 mb-0">
               <tbody>

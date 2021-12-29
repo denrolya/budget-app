@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {
+  Formik, Form, Field, ErrorMessage,
+} from 'formik';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
-import { Button, Col, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Button, Col, FormGroup, Input, Label,
+} from 'reactstrap';
 import { CirclePicker } from 'react-color';
 import * as Yup from 'yup';
 
@@ -20,7 +24,7 @@ import { CURRENCIES } from 'src/constants/currency';
 
 const AccountForm = ({ isLoading, toggleModal, createAccount }) => {
   const typeaheadsRefs = [];
-  const [form, setForm] = useState({
+  const [form] = useState({
     initialValues: {
       name: '',
       currency: '',
@@ -55,7 +59,9 @@ const AccountForm = ({ isLoading, toggleModal, createAccount }) => {
       validationSchema={form.validationSchema}
       onSubmit={submitAccount}
     >
-      {({ values, errors, touched, setFieldValue, handleBlur, isValid }) => (
+      {({
+        values, errors, touched, setFieldValue, handleBlur, isValid,
+      }) => (
         <Form role="form">
           <FormGroup row>
             <Col>
@@ -86,9 +92,7 @@ const AccountForm = ({ isLoading, toggleModal, createAccount }) => {
                   labelKey="name"
                   selected={values.currency ? [CURRENCIES[values.currency]] : []}
                   onBlur={handleBlur}
-                  onChange={(selected) =>
-                    setFieldValue('currency', selected.length > 0 ? selected[0].code : undefined, true)
-                  }
+                  onChange={(selected) => setFieldValue('currency', selected.length > 0 ? selected[0].code : undefined, true)}
                   options={Object.values(CURRENCIES)}
                 />
                 <ErrorMessage component="div" name="currency" className="invalid-feedback" />
@@ -158,55 +162,53 @@ const AccountForm = ({ isLoading, toggleModal, createAccount }) => {
           </FormGroup>
 
           {values.type === ACCOUNT_TYPE_BANK_CARD && (
-            <>
-              <FormGroup row>
-                <Col>
-                  <FormGroup>
-                    <Label for="iban">IBAN</Label>
-                    <Field
-                      autoFocus
-                      id="iban"
-                      name="iban"
-                      type="text"
-                      as={Input}
-                      invalid={touched.iban && !!errors.iban}
-                      value={values.iban}
-                    />
-                    <ErrorMessage component="div" name="iban" className="invalid-feedback" />
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <FormGroup>
-                    <Label for="cardNumber">Card Number</Label>
-                    <Field
-                      autoFocus
-                      id="cardNumber"
-                      name="cardNumber"
-                      type="text"
-                      as={Input}
-                      invalid={touched.cardNumber && !!errors.cardNumber}
-                      value={values.cardNumber}
-                    />
-                    <ErrorMessage component="div" name="cardNumber" className="invalid-feedback" />
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <FormGroup>
-                    <Label for="iban">Monobank ID</Label>
-                    <Field
-                      autoFocus
-                      id="monobankId"
-                      name="monobankId"
-                      type="text"
-                      as={Input}
-                      invalid={touched.monobankId && !!errors.monobankId}
-                      value={values.monobankId}
-                    />
-                    <ErrorMessage component="div" name="monobankId" className="invalid-feedback" />
-                  </FormGroup>
-                </Col>
-              </FormGroup>
-            </>
+            <FormGroup row>
+              <Col>
+                <FormGroup>
+                  <Label for="iban">IBAN</Label>
+                  <Field
+                    autoFocus
+                    id="iban"
+                    name="iban"
+                    type="text"
+                    as={Input}
+                    invalid={touched.iban && !!errors.iban}
+                    value={values.iban}
+                  />
+                  <ErrorMessage component="div" name="iban" className="invalid-feedback" />
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="cardNumber">Card Number</Label>
+                  <Field
+                    autoFocus
+                    id="cardNumber"
+                    name="cardNumber"
+                    type="text"
+                    as={Input}
+                    invalid={touched.cardNumber && !!errors.cardNumber}
+                    value={values.cardNumber}
+                  />
+                  <ErrorMessage component="div" name="cardNumber" className="invalid-feedback" />
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="iban">Monobank ID</Label>
+                  <Field
+                    autoFocus
+                    id="monobankId"
+                    name="monobankId"
+                    type="text"
+                    as={Input}
+                    invalid={touched.monobankId && !!errors.monobankId}
+                    value={values.monobankId}
+                  />
+                  <ErrorMessage component="div" name="monobankId" className="invalid-feedback" />
+                </FormGroup>
+              </Col>
+            </FormGroup>
           )}
 
           <FormGroup check row>

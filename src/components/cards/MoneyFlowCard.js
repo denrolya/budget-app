@@ -28,14 +28,16 @@ const MoneyFlowCard = ({ isLoading, model, onUpdate }) => {
     >
       <div className="d-none d-md-flex justify-content-between px-2">
         <span className="text-nowrap text-success">
-          <sup>{symbol}</sup>{' '}
+          <sup>{symbol}</sup>
+          {' '}
           <span className="h2">
             <MoneyValue maximumFractionDigits={0} showSymbol={false} amount={totalRevenue} />
           </span>
         </span>
 
         <div className="text-nowrap text-right text-danger">
-          <sup>{symbol}</sup>{' '}
+          <sup>{symbol}</sup>
+          {' '}
           <span className="h2">
             <MoneyValue maximumFractionDigits={0} showSymbol={false} amount={totalExpense} />
           </span>
@@ -58,10 +60,9 @@ MoneyFlowCard.propTypes = {
 
 export default memo(
   MoneyFlowCard,
-  (pp, np) =>
-    isEqual(pp.model.data, np.model.data) &&
-    pp.isLoading === np.isLoading &&
-    pp.model.from.isSame(np.model.from) &&
-    pp.model.to.isSame(np.model.to) &&
-    pp.model.interval === np.model.interval,
+  (pp, np) => isEqual(pp.model.data, np.model.data)
+    && pp.isLoading === np.isLoading
+    && pp.model.from.isSame(np.model.from)
+    && pp.model.to.isSame(np.model.to)
+    && pp.model.interval === np.model.interval,
 );

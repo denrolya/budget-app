@@ -5,10 +5,14 @@ import PropTypes from 'prop-types';
 
 import { ROUTE_LOGIN } from 'src/constants/routes';
 
-const AuthRequiredRoute = ({ isAuthenticated, ...rest }) => isAuthenticated ? <Outlet /> : <Navigate to={ {
-  pathname: ROUTE_LOGIN,
-  state:    { from: '/accounts' },
-} } />;
+const AuthRequiredRoute = ({ isAuthenticated }) => isAuthenticated ? <Outlet /> : (
+  <Navigate
+    to={{
+      pathname: ROUTE_LOGIN,
+      state: { from: '/accounts' },
+    }}
+  />
+);
 
 AuthRequiredRoute.defaultProps = {
   isAuthenticated: false,

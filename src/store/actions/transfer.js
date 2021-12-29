@@ -100,40 +100,39 @@ export const registerTransfer = (transfer) => (dispatch) => {
     .catch(({ message }) => dispatch(Creators.registerFailure(message)));
 };
 
-export const deleteTransfer = ({ id }) => (dispatch) =>
-  Swal.fire({
-    title: 'Delete transfer',
-    text: `Are you sure you want to delete transfer #${id}?`,
-    showCancelButton: true,
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Cancel',
-    confirmButtonClass: 'btn btn-danger',
-    cancelButtonClass: 'btn btn-success',
-    reverseButtons: true,
-    buttonsStyling: false,
-  }).then(({ value }) => {
-    if (!value) {
-      return;
-    }
+export const deleteTransfer = ({ id }) => (dispatch) => Swal.fire({
+  title: 'Delete transfer',
+  text: `Are you sure you want to delete transfer #${id}?`,
+  showCancelButton: true,
+  confirmButtonText: 'Delete',
+  cancelButtonText: 'Cancel',
+  confirmButtonClass: 'btn btn-danger',
+  cancelButtonClass: 'btn btn-success',
+  reverseButtons: true,
+  buttonsStyling: false,
+}).then(({ value }) => {
+  if (!value) {
+    return {};
+  }
 
-    dispatch(Creators.deleteRequest());
+  dispatch(Creators.deleteRequest());
 
-    return axios
-      .delete(Routing.generate('api_v1_transfer_delete', { id }))
-      .then(() => {
-        dispatch(Creators.deleteSuccess(id));
-        notify('success', 'Transfer deleted!', 'Deleted');
+  return axios
+    .delete(Routing.generate('api_v1_transfer_delete', { id }))
+    .then(() => {
+      dispatch(Creators.deleteSuccess(id));
+      notify('success', 'Transfer deleted!', 'Deleted');
 
-        if (isOnDashboardPage()) {
-          dispatch(updateDashboard());
-        }
+      if (isOnDashboardPage()) {
+        dispatch(updateDashboard());
+      }
 
-        if (isOnTransfersPage()) {
-          dispatch(fetchList());
-        }
-      })
-      .catch(({ message }) => dispatch(Creators.deleteFailure(message)));
-  });
+      if (isOnTransfersPage()) {
+        dispatch(fetchList());
+      }
+    })
+    .catch(({ message }) => dispatch(Creators.deleteFailure(message)));
+});
 
 export const setPagination = (model) => (dispatch) => {
   dispatch(Creators.setPagination(model));

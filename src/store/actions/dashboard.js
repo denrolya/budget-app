@@ -47,7 +47,7 @@ export const fetchStatistics = (name) => (dispatch, getState) => {
     requestParams.interval = state.interval;
   }
 
-  axios
+  return axios
     .get(Routing.generate(`api_v1_statistics_${snakeCase(name)}`, requestParams))
     .then(({ data }) => dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data)))
     .catch((e) => {
@@ -109,10 +109,10 @@ const customHandlers = {
           );
         }),
       );
-      // .catch((e) => {
-      //   console.error(e);
-      //   dispatch(Creators.fetchStatisticsExpenseCategoriesTreeFailure(e.message));
-      // });
+    // .catch((e) => {
+    //   console.error(e);
+    //   dispatch(Creators.fetchStatisticsExpenseCategoriesTreeFailure(e.message));
+    // });
   },
 };
 

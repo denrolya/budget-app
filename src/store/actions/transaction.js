@@ -41,7 +41,7 @@ export const { Types, Creators } = createActions(
   { prefix: 'TRANSACTION_' },
 );
 
-export const initializeList = () => (dispatch, getState) => {
+export const initializeList = () => (dispatch) => {
   const { page, perPage, ...filters } = getTransactionListQueryParams(history.location.search);
 
   dispatch(
@@ -59,7 +59,9 @@ export const fetchList = () => (dispatch, getState) => {
   const {
     perPage,
     page,
-    filters: { from, to, accounts, categories, withCanceled, onlyDrafts, types },
+    filters: {
+      from, to, accounts, categories, withCanceled, onlyDrafts, types,
+    },
   } = getState().transaction.pagination;
 
   dispatch(Creators.fetchListRequest());
@@ -77,7 +79,7 @@ export const fetchList = () => (dispatch, getState) => {
   };
 
   return axios
-    .get(Routing.generate(`api_v1_transaction_list`, queryParams))
+    .get(Routing.generate('api_v1_transaction_list', queryParams))
     .then(({ data: { list, totalValue, count } }) => {
       dispatch(Creators.fetchListSuccess(list, count, totalValue));
     })
@@ -88,7 +90,7 @@ export const registerTransaction = (type, transaction) => (dispatch, getState) =
   dispatch(Creators.registerRequest());
 
   return axios
-    .post(Routing.generate(`api_v1_transaction_new`, { type }), {
+    .post(Routing.generate('api_v1_transaction_new', { type }), {
       [type]: transaction,
     })
     .then(() => {
@@ -115,7 +117,7 @@ export const editTransaction = (id, type, transaction) => (dispatch, getState) =
   dispatch(Creators.editRequest());
 
   return axios
-    .put(Routing.generate(`api_v1_transaction_edit`, { id }), {
+    .put(Routing.generate('api_v1_transaction_edit', { id }), {
       [type]: transaction,
     })
     .then(() => {
@@ -149,7 +151,7 @@ export const deleteTransaction = (transaction) => (dispatch, getState) => {
     dispatch(Creators.deleteRequest());
 
     axios
-      .delete(Routing.generate(`api_v1_transaction_delete`, { id: transaction.id }))
+      .delete(Routing.generate('api_v1_transaction_delete', { id: transaction.id }))
       .then(() => {
         dispatch(Creators.deleteSuccess(transaction.id));
 

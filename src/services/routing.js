@@ -31,7 +31,7 @@ import { isDev } from 'src/services/common';
 import TestPage from 'src/containers/TestPage';
 
 import apiRoutes from 'src/fos_js_routes.json';
-import Routing from 'src/services/router.js';
+import Routing from 'src/services/router';
 
 Routing.setRoutingData(apiRoutes);
 
@@ -177,8 +177,7 @@ export const generateLinkToTransactionPage = (types, from, to, accounts, categor
   return `${ROUTE_TRANSACTIONS}?${queryParams}`;
 };
 
-export const generateLinkToAccountTransactionsPage = (account) =>
-  generateLinkToTransactionPage([], null, null, [account], []);
+export const generateLinkToAccountTransactionsPage = (account) => generateLinkToTransactionPage([], null, null, [account], []);
 
 /**
  * @param {string=} from
@@ -186,7 +185,6 @@ export const generateLinkToAccountTransactionsPage = (account) =>
  * @param {array=} accounts
  * @param {array=} categories
  */
-export const generateLinkToExpenses = (from, to, accounts, categories) =>
-  generateLinkToTransactionPage([EXPENSE_TYPE], from, to, accounts, categories);
+export const generateLinkToExpenses = (from, to, accounts, categories) => generateLinkToTransactionPage([EXPENSE_TYPE], from, to, accounts, categories);
 
 export default Routing;

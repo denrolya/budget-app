@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
+import {
+  PieChart, Pie, Sector, ResponsiveContainer,
+} from 'recharts';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { HEX_COLORS } from 'src/constants/charts';
@@ -19,7 +21,9 @@ const renderActiveShape = ({
 }) => (
   <g>
     <text x={cx} y={cy} dy={-5} dx={-5} fontSize="30" textAnchor="middle" fill={HEX_COLORS.text}>
-      {symbol} {value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+      {symbol}
+      {' '}
+      {value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
     </text>
     <text x={cx} y={cy} dy={20} fontSize="16" textAnchor="middle" fill={HEX_COLORS.default}>
       {payload.name}

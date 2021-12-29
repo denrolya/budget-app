@@ -1,6 +1,4 @@
-import sortBy from 'lodash/sortBy';
-import sumBy from 'lodash/sumBy';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Card } from 'reactstrap';
 import PropTypes from 'prop-types';
 import {
@@ -11,12 +9,10 @@ import {
   Tooltip,
   PolarRadiusAxis,
   PolarAngleAxis,
-  Cell,
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/charts';
-import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active) {
@@ -43,6 +39,15 @@ const CustomTooltip = ({ active, payload }) => {
       </p>
     </Card>
   );
+};
+
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array.isRequired,
 };
 
 const AccountsExpenseDistribution = ({ data }) => (

@@ -223,18 +223,14 @@ const generateXAxisGridLineColor = (interval, dates) => {
       });
       break;
     case 'week':
-      xAxisGridLineColor = dates.map((date) =>
-        moment(date, MOMENT_DEFAULT_DATE_FORMAT).isoWeek() === moment().isoWeek()
-          ? generateRGBA(COLORS.warning, 0.7)
-          : 'transparent',
-      );
+      xAxisGridLineColor = dates.map((date) => moment(date, MOMENT_DEFAULT_DATE_FORMAT).isoWeek() === moment().isoWeek()
+        ? generateRGBA(COLORS.warning, 0.7)
+        : 'transparent');
       break;
     case 'month':
-      xAxisGridLineColor = dates.map((date) =>
-        moment(date, MOMENT_DEFAULT_DATE_FORMAT).month() === moment().month()
-          ? generateRGBA(COLORS.warning, 0.7)
-          : 'transparent',
-      );
+      xAxisGridLineColor = dates.map((date) => moment(date, MOMENT_DEFAULT_DATE_FORMAT).month() === moment().month()
+        ? generateRGBA(COLORS.warning, 0.7)
+        : 'transparent');
       break;
   }
 

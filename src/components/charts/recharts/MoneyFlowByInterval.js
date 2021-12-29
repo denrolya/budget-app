@@ -3,7 +3,9 @@ import xor from 'lodash/xor';
 import React, { useState, useEffect } from 'react';
 import { Card } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import {
+  Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis,
+} from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
@@ -36,9 +38,20 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  payload: PropTypes.array.isRequired,
+};
+
 /**
  * TODO: Format ticks & tooltips by interval
  */
+/* eslint-disable no-unused-vars */
 const MoneyFlowByInterval = ({ data, height, interval }) => {
   const [chartData, setChartData] = useState([]);
   const [displayValues, setDisplayValues] = useState(TRANSACTION_TYPES);
@@ -55,56 +68,52 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
     );
   }, [data]);
 
-  return (
-    <>
-      {chartData.length > 0 && (
-        <ResponsiveContainer width="100%" height={height}>
-          <BarChart stackOffset="sign" data={chartData}>
-            <defs>
-              <linearGradient id="income-gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={HEX_COLORS.info} stopOpacity={0.4} />
-                <stop offset="90%" stopColor={`${HEX_COLORS.info}11`} stopOpacity={0.2} />
-              </linearGradient>
-              <linearGradient id="expense-gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={HEX_COLORS.primary} stopOpacity={0.4} />
-                <stop offset="90%" stopColor={`${HEX_COLORS.primary}11`} stopOpacity={0.2} />
-              </linearGradient>
-            </defs>
+  return chartData.length > 0 && (
+    <ResponsiveContainer width="100%" height={height}>
+      <BarChart stackOffset="sign" data={chartData}>
+        <defs>
+          <linearGradient id="income-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={HEX_COLORS.info} stopOpacity={0.4} />
+            <stop offset="90%" stopColor={`${HEX_COLORS.info}11`} stopOpacity={0.2} />
+          </linearGradient>
+          <linearGradient id="expense-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={HEX_COLORS.primary} stopOpacity={0.4} />
+            <stop offset="90%" stopColor={`${HEX_COLORS.primary}11`} stopOpacity={0.2} />
+          </linearGradient>
+        </defs>
 
-            <Bar
-              stackId="1"
-              hide={!displayValues.includes(EXPENSE_TYPE)}
-              dataKey="expense"
-              stroke={HEX_COLORS.primary}
-              strokeWidth={2}
-              dot={false}
-              fill="url(#expense-gradient)"
-            />
-            <Bar
-              stackId="1"
-              hide={!displayValues.includes(INCOME_TYPE)}
-              dataKey="income"
-              stroke={HEX_COLORS.info}
-              strokeWidth={2}
-              dot={false}
-              fill="url(#income-gradient)"
-            />
+        <Bar
+          stackId="1"
+          hide={!displayValues.includes(EXPENSE_TYPE)}
+          dataKey="expense"
+          stroke={HEX_COLORS.primary}
+          strokeWidth={2}
+          dot={false}
+          fill="url(#expense-gradient)"
+        />
+        <Bar
+          stackId="1"
+          hide={!displayValues.includes(INCOME_TYPE)}
+          dataKey="income"
+          stroke={HEX_COLORS.info}
+          strokeWidth={2}
+          dot={false}
+          fill="url(#income-gradient)"
+        />
 
-            <XAxis
-              dataKey="date"
-              axisLine={false}
-              tickLine={false}
-              stroke={HEX_COLORS.text}
-              tickFormatter={xTickFormatter}
-            />
+        <XAxis
+          dataKey="date"
+          axisLine={false}
+          tickLine={false}
+          stroke={HEX_COLORS.text}
+          tickFormatter={xTickFormatter}
+        />
 
-            <CartesianGrid opacity={0.1} vertical={false} stroke={HEX_COLORS.text} />
-            <Legend onClick={({ value }) => toggleDisplayType(value)} />
-            <Tooltip cursor={false} content={<CustomTooltip displayValues={displayValues} />} />
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-    </>
+        <CartesianGrid opacity={0.1} vertical={false} stroke={HEX_COLORS.text} />
+        <Legend onClick={({ value }) => toggleDisplayType(value)} />
+        <Tooltip cursor={false} content={<CustomTooltip displayValues={displayValues} />} />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

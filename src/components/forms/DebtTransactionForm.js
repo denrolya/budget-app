@@ -4,11 +4,15 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
-import { Button, ButtonGroup, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Button, ButtonGroup, Col, Form, FormGroup, Input, Label,
+} from 'reactstrap';
 import * as Yup from 'yup';
 
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
-import { DEBT_TRANSACTION_CATEGORY_NAME, EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
+import {
+  DEBT_TRANSACTION_CATEGORY_NAME, EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES,
+} from 'src/constants/transactions';
 import { formatTransactionToFormType } from 'src/services/transaction';
 import { fetchTypeaheadList as fetchAccounts } from 'src/store/actions/account';
 import { fetchCategories } from 'src/store/actions/category';
@@ -16,7 +20,9 @@ import { registerDebtTransaction } from 'src/store/actions/debt';
 import debtType from 'src/types/debt';
 import transactionType from 'src/types/transaction';
 
-const DebtTransactionForm = ({ modelData, debt, registerDebtTransaction, toggleModal }) => {
+const DebtTransactionForm = ({
+  modelData, debt, registerDebtTransaction, toggleModal,
+}) => {
   // Initialize state
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
@@ -38,12 +44,12 @@ const DebtTransactionForm = ({ modelData, debt, registerDebtTransaction, toggleM
     : {
       type: EXPENSE_TYPE,
       account: '',
-        amount: 0,
+      amount: 0,
       category: {
-          name: DEBT_TRANSACTION_CATEGORY_NAME,
+        name: DEBT_TRANSACTION_CATEGORY_NAME,
       },
-        createdAt: moment().format(MOMENT_DATETIME_FORMAT),
-        note: '',
+      createdAt: moment().format(MOMENT_DATETIME_FORMAT),
+      note: '',
       compensations: [],
     };
   const validationSchema = Yup.object({
@@ -68,8 +74,12 @@ const DebtTransactionForm = ({ modelData, debt, registerDebtTransaction, toggleM
   return (
     <Formik enableReinitialize initialValues={initialData} validationSchema={validationSchema} onSubmit={onSubmit}>
       {(model) => {
-        const { values, touched, errors, handleSubmit, handleBlur, setFieldValue } = model;
-        const { type, category, amount, account, note, createdAt } = values;
+        const {
+          values, touched, errors, handleSubmit, handleBlur, setFieldValue,
+        } = model;
+        const {
+          type, category, amount, account, note, createdAt,
+        } = values;
 
         return (
           <Form onSubmit={handleSubmit}>
@@ -83,7 +93,10 @@ const DebtTransactionForm = ({ modelData, debt, registerDebtTransaction, toggleM
                     onClick={() => setFieldValue('type', t)}
                     active={type === t}
                   >
-                    <span className="d-sm-block d-md-block d-lg-block d-xl-block text-capitalize">{t} </span>
+                    <span className="d-sm-block d-md-block d-lg-block d-xl-block text-capitalize">
+                      {t}
+                      {' '}
+                    </span>
                   </Button>
                 ))}
               </ButtonGroup>
@@ -180,7 +193,9 @@ const DebtTransactionForm = ({ modelData, debt, registerDebtTransaction, toggleM
             <FormGroup check>
               <Label check>
                 <Input type="checkbox" checked={closeDebt} onChange={toggleCloseDebt} />
-                <span className="form-check-sign" /> Close debt
+                <span className="form-check-sign" />
+                {' '}
+                Close debt
               </Label>
               <Button className="pull-right" color="primary" type="submit">
                 Submit

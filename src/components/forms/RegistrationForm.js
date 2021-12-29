@@ -44,7 +44,10 @@ class RegistrationForm extends Component {
               <div className="text-left form-check">
                 <label className="form-check-label">
                   <input type="checkbox" className="form-check-input" />
-                  <span className="form-check-sign" />I agree to the <a href="#pablo">terms and conditions</a>.
+                  <span className="form-check-sign" />
+                  I agree to the
+                  <a href="#pablo">terms and conditions</a>
+                  .
                 </label>
               </div>
             </form>

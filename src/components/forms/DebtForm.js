@@ -4,18 +4,23 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
-import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Button, Col, Form, FormGroup, Input, Label,
+} from 'reactstrap';
 import * as Yup from 'yup';
 
 import { CURRENCIES } from 'src/constants/currency';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { createDebt, editDebt } from 'src/store/actions/debt';
 
-const DebtForm = ({ data, toggleModal, createDebt, editDebt }) => {
+const DebtForm = ({
+  data, toggleModal, createDebt, editDebt,
+}) => {
   const typeaheadsRefs = [];
 
   const initialValues = data
-    ? Object.assign({}, data, {
+    ? ({
+      ...data,
       createdAt: moment(data.createdAt).format(MOMENT_DATETIME_FORMAT),
       closedAt: data.closedAt ? moment(data.closedAt).format(MOMENT_DATETIME_FORMAT) : '',
     })
@@ -45,7 +50,9 @@ const DebtForm = ({ data, toggleModal, createDebt, editDebt }) => {
 
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-      {({ values, errors, touched, handleSubmit, setFieldValue, handleBlur }) => (
+      {({
+        values, errors, touched, handleSubmit, setFieldValue, handleBlur,
+      }) => (
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label for="debtor">Debtor*</Label>
@@ -89,9 +96,7 @@ const DebtForm = ({ data, toggleModal, createDebt, editDebt }) => {
                   labelKey="name"
                   selected={values.currency ? [CURRENCIES[values.currency]] : []}
                   onBlur={handleBlur}
-                  onChange={(selected) =>
-                    setFieldValue('currency', selected.length > 0 ? selected[0].code : undefined, true)
-                  }
+                  onChange={(selected) => setFieldValue('currency', selected.length > 0 ? selected[0].code : undefined, true)}
                   options={Object.values(CURRENCIES)}
                 />
                 <ErrorMessage component="div" name="currency" className="invalid-feedback" />

@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'reactstrap';
 import cn from 'classnames';
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import {
+  Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from 'recharts';
 
 import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import MoneyValue from 'src/components/MoneyValue';
@@ -29,9 +31,20 @@ const CustomTooltip = ({ active, payload, account }) => {
   );
 };
 
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array.isRequired,
+  account: PropTypes.shape({
+    currency: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 const AccountBalance = ({ account }) => {
-  const yAxisTickFormatter = (val) =>
-    `${CURRENCIES[account.currency].symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  const yAxisTickFormatter = (val) => `${CURRENCIES[account.currency].symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
   return (
     <ResponsiveContainer width="100%" height={80}>
@@ -72,6 +85,8 @@ const AccountBalance = ({ account }) => {
 
 AccountBalance.propTypes = {
   account: PropTypes.shape({
+    currency: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     logs: PropTypes.arrayOf(
       PropTypes.shape({

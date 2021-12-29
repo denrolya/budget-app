@@ -8,7 +8,9 @@ import { amountInPercentage } from 'src/services/common';
 import { COLORS } from 'src/constants/charts';
 import { generateRGBA } from 'src/services/chart';
 
-const ExpenseCategoriesPieChart = ({ data, selectedCategory, height, onClick }) => {
+const ExpenseCategoriesPieChart = ({
+  data, selectedCategory, height, onClick,
+}) => {
   const { symbol } = useBaseCurrency();
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 
@@ -49,7 +51,7 @@ const ExpenseCategoriesPieChart = ({ data, selectedCategory, height, onClick }) 
 
     selectedSubtree.children
       .map((node) => node.model)
-      .map(({ name, total, previous }) => {
+      .forEach(({ name, total, previous }) => {
         chartData.current.push(total);
         chartData.previous.push(previous);
         labels.push(name === selectedCategory ? 'Uncategorized' : name);
@@ -58,11 +60,11 @@ const ExpenseCategoriesPieChart = ({ data, selectedCategory, height, onClick }) 
 
         let color = 'success';
 
-        if (amountToPreviousPeriodRatio != 0 && amountToPreviousPeriodRatio < 90) {
+        if (!!amountToPreviousPeriodRatio && amountToPreviousPeriodRatio < 90) {
           color = 'success';
         } else if (
-          amountToPreviousPeriodRatio == 0 ||
-          (amountToPreviousPeriodRatio >= 90 && amountToPreviousPeriodRatio < 110)
+          !amountToPreviousPeriodRatio
+          || (amountToPreviousPeriodRatio >= 90 && amountToPreviousPeriodRatio < 110)
         ) {
           color = 'default';
         } else if (amountToPreviousPeriodRatio >= 110 && amountToPreviousPeriodRatio <= 165) {
@@ -176,6 +178,5 @@ ExpenseCategoriesPieChart.propTypes = {
 
 export default memo(
   ExpenseCategoriesPieChart,
-  (prevProps, nextProps) =>
-    isEqual(prevProps.selectedCategory, nextProps.selectedCategory) && isEqual(prevProps.data, nextProps.data),
+  (prevProps, nextProps) => isEqual(prevProps.selectedCategory, nextProps.selectedCategory) && isEqual(prevProps.data, nextProps.data),
 );

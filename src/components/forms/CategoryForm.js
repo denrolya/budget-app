@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { Button, ButtonGroup, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Button, ButtonGroup, Col, Form, FormGroup, Input, Label,
+} from 'reactstrap';
 import * as Yup from 'yup';
 
 import LoadingButton from 'src/components/LoadingButton';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 
-const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
-  const [tags, setTags] = useState([]);
+const CategoryForm = ({
+  isLoading, modelData, handleSubmit, toggleModal,
+}) => {
+  const [tags] = useState([]);
   const isEditMode = !!modelData;
   const initialData = isEditMode
     ? modelData
@@ -49,8 +53,12 @@ const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
 
   return (
     <Formik enableReinitialize initialValues={initialData} validationSchema={validationSchema} onSubmit={onSubmit}>
-      {({ values, touched, errors, handleSubmit, setFieldValue, handleBlur }) => {
-        const { type, name, icon, isAffectingProfit, isTechnical, isFixed } = values;
+      {({
+        values, touched, errors, handleSubmit, setFieldValue, handleBlur,
+      }) => {
+        const {
+          type, name, icon, isAffectingProfit, isTechnical, isFixed,
+        } = values;
 
         return (
           <Form onSubmit={handleSubmit}>
@@ -64,7 +72,10 @@ const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
                     onClick={() => setFieldValue('type', t)}
                     active={type === t}
                   >
-                    <span className="d-sm-block d-md-block d-lg-block d-xl-block text-capitalize">{t} </span>
+                    <span className="d-sm-block d-md-block d-lg-block d-xl-block text-capitalize">
+                      {t}
+                      {' '}
+                    </span>
                   </Button>
                 ))}
               </ButtonGroup>
@@ -74,7 +85,9 @@ const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
               <Col md={6}>
                 <FormGroup>
                   <Label for="name">
-                    Name* <i className={icon} aria-hidden />
+                    Name*
+                    {' '}
+                    <i className={icon} aria-hidden />
                   </Label>
                   <Field
                     id="name"
@@ -118,12 +131,10 @@ const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
                 labelKey="name"
                 selected={values.tags}
                 onBlur={handleBlur}
-                onChange={(s) =>
-                  setFieldValue(
-                    'tags',
-                    s.map(({ name }) => ({ name })),
-                  )
-                }
+                onChange={(s) => setFieldValue(
+                  'tags',
+                  s.map(({ name }) => ({ name })),
+                )}
                 options={tags}
               />
               <ErrorMessage component="div" name="tags" className="invalid-feedback" />
@@ -144,7 +155,9 @@ const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
                   checked={isAffectingProfit}
                   invalid={touched.isAffectingProfit && !!errors.isAffectingProfit}
                 />
-                <span className="form-check-sign" /> Is affecting global profit
+                <span className="form-check-sign" />
+                {' '}
+                Is affecting global profit
               </Label>
               <ErrorMessage component="div" name="isAffectingProfit" className="invalid-feedback" />
             </FormGroup>
@@ -165,7 +178,9 @@ const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
                     checked={isFixed}
                     invalid={touched.isFixed && !!errors.isFixed}
                   />
-                  <span className="form-check-sign" /> Is it a fixed expense category?
+                  <span className="form-check-sign" />
+                  {' '}
+                  Is it a fixed expense category?
                 </Label>
                 <ErrorMessage component="div" name="isFixed" className="invalid-feedback" />
               </FormGroup>
@@ -186,7 +201,9 @@ const CategoryForm = ({ isLoading, modelData, handleSubmit, toggleModal }) => {
                   checked={isTechnical}
                   invalid={touched.isTechnical && !!errors.isTechnical}
                 />
-                <span className="form-check-sign" /> Is technical
+                <span className="form-check-sign" />
+                {' '}
+                Is technical
               </Label>
               <ErrorMessage component="div" name="isTechnical" className="invalid-feedback" />
             </FormGroup>

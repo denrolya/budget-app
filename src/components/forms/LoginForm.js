@@ -16,7 +16,7 @@ import {
 } from 'reactstrap';
 import * as Yup from 'yup';
 
-import loginCardBg from 'src/assets/img/login-card.png'
+import loginCardBg from 'src/assets/img/login-card.png';
 
 const LoginForm = ({ isLoading, logIn }) => {
   const [selected, selectField] = useState();
@@ -47,9 +47,9 @@ const LoginForm = ({ isLoading, logIn }) => {
                     'input-group-focus': selected === 'username',
                   })}
                 >
-                    <InputGroupText>
-                      <i className="fa fa-user" aria-hidden />
-                    </InputGroupText>
+                  <InputGroupText>
+                    <i className="fa fa-user" aria-hidden />
+                  </InputGroupText>
                   <Field
                     autoFocus
                     as={Input}
@@ -71,9 +71,9 @@ const LoginForm = ({ isLoading, logIn }) => {
                     'input-group-focus': selected === 'password',
                   })}
                 >
-                    <InputGroupText>
-                      <i className="fa fa-lock" aria-hidden />
-                    </InputGroupText>
+                  <InputGroupText>
+                    <i className="fa fa-lock" aria-hidden />
+                  </InputGroupText>
                   <Field
                     as={Input}
                     type="password"

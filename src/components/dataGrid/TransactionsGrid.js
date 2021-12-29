@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading, react/no-unstable-nested-components */
+
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
@@ -148,8 +150,7 @@ const TransactionsGrid = ({
 
   // TODO: Refactor to useCallback ?
   const summaryCalculator = useMemo(
-    () => (type, rows, getValue) =>
-      type === 'total' ? totalValue : IntegratedSummary.defaultCalculator(type, rows, getValue),
+    () => (type, rows, getValue) => type === 'total' ? totalValue : IntegratedSummary.defaultCalculator(type, rows, getValue),
     [totalValue],
   );
 

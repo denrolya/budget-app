@@ -2,7 +2,9 @@ import cn from 'classnames';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, FormGroup, Input, Label, UncontrolledCollapse, Table, UncontrolledTooltip } from 'reactstrap';
+import {
+  Button, FormGroup, Input, Label, UncontrolledCollapse, Table, UncontrolledTooltip,
+} from 'reactstrap';
 
 import TransactionRow from 'src/components/tables/TransactionRow';
 import MoneyValue from 'src/components/MoneyValue';
@@ -10,11 +12,15 @@ import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import debtType from 'src/types/debt';
 
-const DebtsTable = ({ debts, toggleEdit, closeDebt, toggleDebtTransactionModal }) => {
+const DebtsTable = ({
+  debts, toggleEdit, closeDebt, toggleDebtTransactionModal,
+}) => {
   const { symbol } = useBaseCurrency();
 
   return debts.map((debt) => {
-    const { id, debtor, balance, value, currency, createdAt, closedAt, transactions, note } = debt;
+    const {
+      id, debtor, balance, value, currency, createdAt, closedAt, transactions, note,
+    } = debt;
 
     return (
       <>
@@ -41,7 +47,8 @@ const DebtsTable = ({ debts, toggleEdit, closeDebt, toggleDebtTransactionModal }
               <strong className="d-none d-sm-inline">
                 {balance >= 0 ? `${debtor}'s Debt` : `My debt to ${debtor}`}
               </strong>
-              <strong className="d-xs-inline d-sm-none">{debtor}</strong>{' '}
+              <strong className="d-xs-inline d-sm-none">{debtor}</strong>
+              {' '}
               {note && (
                 <sup>
                   <span className="text-warning">
@@ -51,12 +58,18 @@ const DebtsTable = ({ debts, toggleEdit, closeDebt, toggleDebtTransactionModal }
                 </sup>
               )}
             </div>
-            <small className="text-muted">from {moment(createdAt).format(MOMENT_DATE_FORMAT)}</small>
+            <small className="text-muted">
+              from
+              {moment(createdAt).format(MOMENT_DATE_FORMAT)}
+            </small>
           </div>
           <div id={`debt-balance-${id}`} className="text-right text-danger text-currency text-nowrap font-weight-bold">
             <span className="d-block text-currency font-weight-bold">
-              {currency.symbol} {Math.abs(balance.toFixed(2))}
-            </span>{' '}
+              {currency.symbol}
+              {' '}
+              {Math.abs(balance.toFixed(2))}
+            </span>
+            {' '}
             {currency.symbol !== symbol && (
               <small className="d-block text-currency">
                 <MoneyValue amount={value} />

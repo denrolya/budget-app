@@ -29,7 +29,10 @@ const NewExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
                 </td>
                 <td>{name}</td>
                 <td>
-                  <small className="d-block">{percentage > 1 ? percentage.toFixed() : percentage.toFixed(1)}%</small>
+                  <small className="d-block">
+                    {percentage > 1 ? percentage.toFixed() : percentage.toFixed(1)}
+                    %
+                  </small>
                   <Progress striped value={percentage} color="danger" />
                 </td>
               </tr>
@@ -53,6 +56,5 @@ NewExpenseCategoriesCard.propTypes = {
 
 export default memo(
   NewExpenseCategoriesCard,
-  (prevProps, nextProps) =>
-    isEqual(prevProps.model.data, nextProps.model.data) && isEqual(prevProps.isLoading, nextProps.isLoading),
+  (prevProps, nextProps) => isEqual(prevProps.model.data, nextProps.model.data) && isEqual(prevProps.isLoading, nextProps.isLoading),
 );

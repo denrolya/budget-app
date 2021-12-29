@@ -10,7 +10,10 @@ const TotalAssetsCard = ({ amount }) => (
     <CardFooter>
       <hr />
       <div className="stats">
-        <i className="tim-icons icon-money-coins" /> € {amount.toFixed(2)}
+        <i className="tim-icons icon-money-coins" />
+        {' '}
+        €
+        {amount.toFixed(2)}
       </div>
     </CardFooter>
   </Card>

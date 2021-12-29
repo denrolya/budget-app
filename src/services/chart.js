@@ -11,8 +11,7 @@ export const extractRGBfromRGBA = (rgbaString) => {
   return { r, g, b };
 };
 
-export const generateRGBA = (color = 'info', opacity = 1) =>
-  `rgba(${COLORS[color] ? COLORS[color] : color}, ${opacity})`;
+export const generateRGBA = (color = 'info', opacity = 1) => `rgba(${COLORS[color] ? COLORS[color] : color}, ${opacity})`;
 
 export const generateGradient = (canvas, color = 'info') => {
   const gradientStroke = canvas.getContext('2d').createLinearGradient(0, 230, 0, 50);
@@ -28,9 +27,7 @@ export const convertDateLabelsToHumanReadableByInterval = (labels, interval) => 
   let newLabels = [];
   switch (interval) {
     case 'day':
-      newLabels = labels.map((el) =>
-        moment(el, MOMENT_DEFAULT_DATE_FORMAT).isSame(moment(), 'day') ? 'Today' : moment(el).format('ddd'),
-      );
+      newLabels = labels.map((el) => moment(el, MOMENT_DEFAULT_DATE_FORMAT).isSame(moment(), 'day') ? 'Today' : moment(el).format('ddd'));
       break;
     case 'week':
       newLabels = labels.map((el) => (moment(el).isSame(moment(), 'isoWeek') ? 'Current' : moment(el).isoWeek()));

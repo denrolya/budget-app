@@ -1,5 +1,7 @@
 import React from 'react';
-import { Container, Nav, NavItem, NavLink } from 'reactstrap';
+import {
+  Container, Nav, NavItem, NavLink,
+} from 'reactstrap';
 
 const Footer = (props) => (
   <footer className="footer">
@@ -16,10 +18,20 @@ const Footer = (props) => (
         </NavItem>
       </Nav>
       <div className="copyright">
-        © {new Date().getFullYear()} made with <i className="tim-icons icon-heart-2" /> by{' '}
+        ©
+        {' '}
+        {new Date().getFullYear()}
+        {' '}
+        made with
+        {' '}
+        <i className="tim-icons icon-heart-2" />
+        {' '}
+        by
+        {' '}
         <a href="javascript:void(0)" rel="noopener noreferrer" target="_blank">
           Creative Tim
-        </a>{' '}
+        </a>
+        {' '}
         for a better web.
       </div>
     </Container>

@@ -33,13 +33,14 @@ import IconStatisticsCard from 'src/components/cards/statistics/IconStatisticsCa
  * TODO: Expenses by season should be calculated taken from moneyflow
  * TODO: Go through each card and see if can be reduced
  */
-const Report = ({ ui, statistics, updateReport, setStatistics, setPeriod }) => {
+const Report = ({
+  ui, statistics, updateReport, setStatistics, setPeriod,
+}) => {
   useEffect(() => {
     updateReport();
   }, []);
 
-  const isStatisticsActionLoading = (statisticsName) =>
-    isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
+  const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
 
   const { from, to } = statistics.mainExpenseCategoriesReview;
   const diffInDays = statistics.mainExpenseCategoriesReview.diffIn('days');
@@ -89,14 +90,14 @@ const Report = ({ ui, statistics, updateReport, setStatistics, setPeriod }) => {
             content={
               <MoneyValue bold maximumFractionDigits={0} amount={statistics.totalIncomeExpense.data.current.income} />
             }
-            footer={
+            footer={(
               <AmountSinceLastPeriodMessage
                 invertedColors
                 period={`last year(${previousYear})`}
                 previous={statistics.totalIncomeExpense.data.previous.income}
                 current={statistics.totalIncomeExpense.data.current.income}
               />
-            }
+            )}
           />
 
           {statistics.mainIncomeSource.data && (
@@ -113,21 +114,21 @@ const Report = ({ ui, statistics, updateReport, setStatistics, setPeriod }) => {
           <SimpleStatisticsCard
             isLoading={isStatisticsActionLoading('totalIncomeExpense')}
             title="Daily income"
-            content={
+            content={(
               <MoneyValue
                 bold
                 maximumFractionDigits={0}
                 amount={statistics.totalIncomeExpense.data.current.income / diffInDays}
               />
-            }
-            footer={
+            )}
+            footer={(
               <AmountSinceLastPeriodMessage
                 invertedColors
                 period={`last year(${previousYear})`}
                 previous={statistics.totalIncomeExpense.data.previous.income / diffInDays}
                 current={statistics.totalIncomeExpense.data.current.income / diffInDays}
               />
-            }
+            )}
           />
         </Masonry>
         <NewIncomeCategoriesCard
@@ -157,13 +158,13 @@ const Report = ({ ui, statistics, updateReport, setStatistics, setPeriod }) => {
             content={
               <MoneyValue bold maximumFractionDigits={0} amount={statistics.totalIncomeExpense.data.current.expense} />
             }
-            footer={
+            footer={(
               <AmountSinceLastPeriodMessage
                 period={`last year(${previousYear})`}
                 previous={statistics.totalIncomeExpense.data.previous.expense}
                 current={statistics.totalIncomeExpense.data.current.expense}
               />
-            }
+            )}
           />
 
           <TotalExpensesByIntervalCard
@@ -224,33 +225,33 @@ const Report = ({ ui, statistics, updateReport, setStatistics, setPeriod }) => {
               title="Food expenses"
               isLoading={isStatisticsActionLoading('foodExpenses')}
               content={<MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpenses.data.current} />}
-              footer={
+              footer={(
                 <AmountSinceLastPeriodMessage
                   period={`last year(${previousYear})`}
                   previous={statistics.foodExpenses.data.previous}
                   current={statistics.foodExpenses.data.current}
                 />
-              }
+              )}
             />
           </Col>
           <Col xs={12} md={6} lg={3}>
             <SimpleStatisticsCard
               title="Minimum & Maximum"
               isLoading={isStatisticsActionLoading('foodExpensesMinMax')}
-              content={
+              content={(
                 <>
                   <MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpensesMinMax.data.min.value} />
                   {' - '}
                   <MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpensesMinMax.data.max.value} />
                 </>
-              }
-              footer={
+              )}
+              footer={(
                 <>
                   {moment(statistics.foodExpensesMinMax.data.min.when).format('MMMM')}
                   {' - '}
                   {moment(statistics.foodExpensesMinMax.data.max.when).format('MMMM')}
                 </>
-              }
+              )}
             />
           </Col>
           {statistics.groceriesAverage.data && (
@@ -261,7 +262,12 @@ const Report = ({ ui, statistics, updateReport, setStatistics, setPeriod }) => {
                 content={
                   <MoneyValue bold maximumFractionDigits={0} amount={statistics.groceriesAverage.data.average} />
                 }
-                footer={<>Mostly on {moment().isoWeekday(statistics.groceriesAverage.data.dayOfWeek).format('dddd')}</>}
+                footer={(
+                  <>
+                    Mostly on
+                    {moment().isoWeekday(statistics.groceriesAverage.data.dayOfWeek).format('dddd')}
+                  </>
+                )}
               />
             </Col>
           )}
@@ -272,13 +278,13 @@ const Report = ({ ui, statistics, updateReport, setStatistics, setPeriod }) => {
               content={
                 <MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpenses.data.current / diffInDays} />
               }
-              footer={
+              footer={(
                 <AmountSinceLastPeriodMessage
                   period={`last year(${previousYear})`}
                   previous={statistics.foodExpenses.data.previous / diffInDays}
                   current={statistics.foodExpenses.data.current / diffInDays}
                 />
-              }
+              )}
             />
           </Col>
         </Row>

@@ -7,7 +7,9 @@ import { Input, InputGroup, InputGroupText } from 'reactstrap';
 import { rangeToString } from 'src/services/common';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 
-const DateRange = ({ from, to, onApply, ranges, size }) => {
+const DateRange = ({
+  from, to, onApply, ranges, size,
+}) => {
   const handleDateRangeFilters = ({ target: { value } }) => {
     let [startDate, endDate] = value.split(' - ');
     startDate = moment(startDate, MOMENT_DATE_FORMAT, true);
@@ -34,9 +36,9 @@ const DateRange = ({ from, to, onApply, ranges, size }) => {
       onApply={onApply}
     >
       <InputGroup size={size} className="m-0">
-          <InputGroupText>
-            <i className="ion-md-calendar" aria-hidden />
-          </InputGroupText>
+        <InputGroupText>
+          <i className="ion-md-calendar" aria-hidden />
+        </InputGroupText>
         <Input
           type="text"
           value={rangeToString(moment(from, MOMENT_DATE_FORMAT), moment(to, MOMENT_DATE_FORMAT))}

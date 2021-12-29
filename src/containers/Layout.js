@@ -82,8 +82,7 @@ const Layout = ({
     preventDefaultTouchmoveEvent: false,
   });
 
-  const handleTransactionSubmission = (transaction) =>
-    registerTransaction(transaction.type, formatTransactionToFormType(transaction));
+  const handleTransactionSubmission = (transaction) => registerTransaction(transaction.type, formatTransactionToFormType(transaction));
 
   useEffect(() => {
     fetchAccounts();
@@ -97,6 +96,7 @@ const Layout = ({
     notify('info', 'Copied to clipboard');
   };
 
+  /* eslint-disable react/jsx-props-no-spreading */
   return (
     <>
       <Hotkeys keyName="shift+t" onKeyUp={toggleTransactionModal} />
@@ -124,7 +124,7 @@ const Layout = ({
           updateDashboard={updateDashboard}
         />
 
-        <div className="main-panel" data-color={colorScheme} onClick={() => isSidebarOpened && toggleSidebar()}>
+        <div className="main-panel" role="main" data-color={colorScheme} onClick={() => isSidebarOpened && toggleSidebar()}>
           <Header
             onCurrencySwitch={switchBaseCurrency}
             onTokenCopyClick={copyTokenToClipboard}
@@ -170,13 +170,14 @@ const Layout = ({
 
       <div className="fixed-plugin">
         <div className="dropdown show-dropdown">
-          <div onClick={window.isMobile ? toggleDraftExpenseModal : toggleTransactionModal}>
+          <button type="button" onClick={window.isMobile ? toggleDraftExpenseModal : toggleTransactionModal}>
             <i aria-hidden className="fa fa-plus fa-2x" />
-          </div>
+          </button>
         </div>
       </div>
     </>
   );
+  /* eslint-enable react/jsx-props-no-spreading */
 };
 
 Layout.defaultProps = {

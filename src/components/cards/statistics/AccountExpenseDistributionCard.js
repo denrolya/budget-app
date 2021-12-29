@@ -10,7 +10,9 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import { amountInPercentage } from 'src/services/common';
 
-const AccountDistributionCard = ({ isLoading, height, model, onUpdate }) => {
+const AccountDistributionCard = ({
+  isLoading, height, model, onUpdate,
+}) => {
   const data = useMemo(() => sortBy(model.data, 'value').reverse(), [model.data]);
 
   const total = useMemo(() => sumBy(data, 'value'), [model.data]);
@@ -107,6 +109,5 @@ AccountDistributionCard.propTypes = {
 
 export default memo(
   AccountDistributionCard,
-  (prevProps, nextProps) =>
-    isEqual(prevProps.model.data, nextProps.model.data) && isEqual(prevProps.isLoading, nextProps.isLoading),
+  (prevProps, nextProps) => isEqual(prevProps.model.data, nextProps.model.data) && isEqual(prevProps.isLoading, nextProps.isLoading),
 );

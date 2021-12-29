@@ -12,7 +12,9 @@ const RentExpensesCard = ({ amount, ...rest }) => (
     content={<MoneyValue amount={amount} />}
     {...rest}
   >
-    <i className="tim-icons icon-refresh-01" /> Update Now
+    <i className="tim-icons icon-refresh-01" />
+    {' '}
+    Update Now
   </IconStatisticsCard>
 );
 

@@ -7,7 +7,9 @@ import { Radar } from 'react-chartjs-2';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { amountInPercentage } from 'src/services/common';
 
-const ExpenseCategoriesRadarChart = ({ data, selectedCategory, height, currentMonthRevenue, onClick }) => {
+const ExpenseCategoriesRadarChart = ({
+  data, selectedCategory, height, currentMonthRevenue, onClick,
+}) => {
   const { symbol } = useBaseCurrency();
   const chartData = () => ({
     labels: data.map(({ name }) => (name === selectedCategory ? 'General' : name)),
@@ -121,6 +123,5 @@ ExpenseCategoriesRadarChart.propTypes = {
 
 export default memo(
   ExpenseCategoriesRadarChart,
-  (prevProps, nextProps) =>
-    isEqual(prevProps.data, nextProps.data) && isEqual(prevProps.currentMonthRevenue, nextProps.currentMonthRevenue),
+  (prevProps, nextProps) => isEqual(prevProps.data, nextProps.data) && isEqual(prevProps.currentMonthRevenue, nextProps.currentMonthRevenue),
 );

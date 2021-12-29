@@ -16,6 +16,7 @@ const SimpleStatisticsCard = ({
   footerPadding,
   ...rest
 }) => {
+  /* eslint-disable react/jsx-props-no-spreading */
   const component = (
     <LoadingCard
       isLoading={isLoading}
@@ -43,6 +44,7 @@ const SimpleStatisticsCard = ({
       </CardBody>
     </LoadingCard>
   );
+  /* eslint-enable react/jsx-props-no-spreading */
 
   if (link) {
     return <Link to={link}>{component}</Link>;

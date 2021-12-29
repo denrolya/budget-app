@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import ModalForm from 'src/components/forms/ModalForm';
 import TransactionForm from 'src/components/forms/TransactionForm';
 
-const TransactionModalForm = ({ isLoading, model, title, isOpen, onSubmit, toggleTransactionModal }) => (
+const TransactionModalForm = ({
+  isLoading, model, title, isOpen, onSubmit, toggleTransactionModal,
+}) => (
   <ModalForm title={title} isOpen={isOpen} toggleModal={toggleTransactionModal}>
     <TransactionForm modelData={model} isLoading={isLoading} onSubmit={onSubmit} />
   </ModalForm>

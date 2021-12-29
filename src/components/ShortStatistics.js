@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import { Carousel, CarouselIndicators, CarouselItem, Row, Col } from 'reactstrap';
+import {
+  Carousel, CarouselIndicators, CarouselItem, Row, Col,
+} from 'reactstrap';
 
 import SimpleStatisticsCard from 'src/components/cards/statistics/SimpleStatisticsCard';
 import MoneyValue from 'src/components/MoneyValue';
@@ -24,6 +26,7 @@ const ShortStatistics = ({ isLoading, model, onUpdate }) => {
     setItems([
       {
         key: 0,
+        // eslint-disable-next-line react/no-unstable-nested-components
         Item: () => (
           <SimpleStatisticsCard
             isLoading={isLoading}
@@ -36,6 +39,7 @@ const ShortStatistics = ({ isLoading, model, onUpdate }) => {
       },
       {
         key: 1,
+        // eslint-disable-next-line react/no-unstable-nested-components
         Item: () => (
           <SimpleStatisticsCard
             title="Food expenses"
@@ -53,6 +57,7 @@ const ShortStatistics = ({ isLoading, model, onUpdate }) => {
       },
       {
         key: 2,
+        // eslint-disable-next-line react/no-unstable-nested-components
         Item: () => (
           <SimpleStatisticsCard
             title="Rent & Utilities"
@@ -70,6 +75,7 @@ const ShortStatistics = ({ isLoading, model, onUpdate }) => {
       },
       {
         key: 3,
+        // eslint-disable-next-line react/no-unstable-nested-components
         Item: () => (
           <SimpleStatisticsCard
             title="Daily expenses"
@@ -112,6 +118,7 @@ const ShortStatistics = ({ isLoading, model, onUpdate }) => {
     preventDefaultTouchmoveEvent: false,
   });
 
+  /* eslint-disable react/jsx-props-no-spreading */
   return (
     <TimeperiodStatisticsCard
       transparent
@@ -149,6 +156,7 @@ const ShortStatistics = ({ isLoading, model, onUpdate }) => {
       </Row>
     </TimeperiodStatisticsCard>
   );
+  /* eslint-enable react/jsx-props-no-spreading */
 };
 
 ShortStatistics.defaultProps = {

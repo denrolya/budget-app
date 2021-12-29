@@ -17,7 +17,9 @@ const AccountSelector = ({ accounts, selected, onChange }) => (
     >
       {accounts.map(({ id, name, archivedAt }) => (
         <option key={`account-option-${id}`} value={id}>
-          {name} {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+          {name}
+          {' '}
+          {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
         </option>
       ))}
     </Input>

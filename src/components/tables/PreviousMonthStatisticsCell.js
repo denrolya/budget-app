@@ -9,8 +9,7 @@ import { amountInPercentage } from 'src/services/common';
 
 const PreviousMonthStatisticsCell = ({ currentMonthValue, previousMonthValue, numberOfMonthAgo }) => {
   const { symbol } = useBaseCurrency();
-  const percentageRatio =
-    currentMonthValue > 0 ? amountInPercentage(previousMonthValue, currentMonthValue) - 100 : -100;
+  const percentageRatio = currentMonthValue > 0 ? amountInPercentage(previousMonthValue, currentMonthValue) - 100 : -100;
 
   if (!percentageRatio) {
     return null;
@@ -33,13 +32,19 @@ const PreviousMonthStatisticsCell = ({ currentMonthValue, previousMonthValue, nu
               'ion-md-arrow-dropdown': percentageRatio < 0,
               'ion-md-arrow-dropup': percentageRatio >= 0,
             })}
-          />{' '}
-          {Math.abs(percentageRatio).toFixed()}%
+          />
+          {' '}
+          {Math.abs(percentageRatio).toFixed()}
+          %
         </span>
         <UncontrolledTooltip target={`month-ago-${numberOfMonthAgo}`}>
-          {month.format('MMMM')}:{' '}
+          {month.format('MMMM')}
+          :
+          {' '}
           <strong>
-            {symbol} {previousMonthValue}
+            {symbol}
+            {' '}
+            {previousMonthValue}
           </strong>
         </UncontrolledTooltip>
       </span>

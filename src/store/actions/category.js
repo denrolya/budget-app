@@ -38,17 +38,16 @@ export const { Types, Creators } = createActions(
   { prefix: 'CATEGORY_' },
 );
 
-export const fetchCategories = (type) =>
-  axios
-    .get(
-      Routing.generate(
-        'api_v1_category_list',
-        type && {
-          types: [type],
-        },
-      ),
-    )
-    .then((response) => uniqBy(response.data, 'name'));
+export const fetchCategories = (type) => axios
+  .get(
+    Routing.generate(
+      'api_v1_category_list',
+      type && {
+        types: [type],
+      },
+    ),
+  )
+  .then((response) => uniqBy(response.data, 'name'));
 
 export const fetchList = (types) => (dispatch) => {
   dispatch(Creators.fetchListRequest());
@@ -94,14 +93,13 @@ export const setParent = (category, parentCategory) => (dispatch) => {
     });
 };
 
-export const updateTree = (categoryType, treeData) => (dispatch) =>
-  dispatch(Creators.updateTree(categoryType, treeData));
+export const updateTree = (categoryType, treeData) => (dispatch) => dispatch(Creators.updateTree(categoryType, treeData));
 
 export const create = (type, category) => (dispatch) => {
   dispatch(Creators.createRequest());
 
   return axios
-    .post(Routing.generate(`api_v1_category_new`, { type }), {
+    .post(Routing.generate('api_v1_category_new', { type }), {
       [`${type}_category`]: category,
     })
     .then(() => {
@@ -117,7 +115,7 @@ export const edit = (id, type, category) => (dispatch) => {
   dispatch(Creators.editRequest());
 
   return axios
-    .put(Routing.generate(`api_v1_category_edit`, { id }), {
+    .put(Routing.generate('api_v1_category_edit', { id }), {
       [`${type}_category`]: category,
     })
     .then(() => {
@@ -129,23 +127,22 @@ export const edit = (id, type, category) => (dispatch) => {
     .catch(({ message }) => dispatch(Creators.editFailure(message)));
 };
 
-export const remove = (category, categoryType, treeData) => (dispatch) =>
-  confirmCategoryRemoval(category).then(({ value }) => {
-    if (!value) {
-      return;
-    }
+export const remove = (category, categoryType, treeData) => (dispatch) => confirmCategoryRemoval(category).then(({ value }) => {
+  if (!value) {
+    return {};
+  }
 
-    dispatch(Creators.removeRequest());
+  dispatch(Creators.removeRequest());
 
-    return axios
-      .delete(Routing.generate('api_v1_category_remove', { id: category.id }))
-      .then(() => {
-        dispatch(Creators.removeSuccess());
-        dispatch(updateTree(categoryType, treeData));
-        notify('warning', `Category '${category.name}' and it's transactions were removed`);
-      })
-      .catch(({ message }) => {
-        dispatch(Creators.removeFailure(message));
-        console.error('Error: ', message);
-      });
-  });
+  return axios
+    .delete(Routing.generate('api_v1_category_remove', { id: category.id }))
+    .then(() => {
+      dispatch(Creators.removeSuccess());
+      dispatch(updateTree(categoryType, treeData));
+      notify('warning', `Category '${category.name}' and it's transactions were removed`);
+    })
+    .catch(({ message }) => {
+      dispatch(Creators.removeFailure(message));
+      console.error('Error: ', message);
+    });
+});

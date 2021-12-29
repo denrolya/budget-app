@@ -18,14 +18,22 @@ const DailyExpenseCard = ({ forToday, previousMonthDailyAverage }) => {
       <CardHeader>
         <h5 className="card-title">
           Today's Expenses
-          <span className={`pull-right text-${percentageInColor}`}>{percentage}%</span>
+          <span className={`pull-right text-${percentageInColor}`}>
+            {percentage}
+            %
+          </span>
         </h5>
       </CardHeader>
       <CardFooter>
         <hr />
         <div className="stats clearfix">
           <div className="float-left">
-            <i className="tim-icons icon-money-coins" />€ {forToday} / € {previousMonthDailyAverage}
+            <i className="tim-icons icon-money-coins" />
+            €
+            {forToday}
+            {' '}
+            / €
+            {previousMonthDailyAverage}
           </div>
           <div className="float-right" />
         </div>

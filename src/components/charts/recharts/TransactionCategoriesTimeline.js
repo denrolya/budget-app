@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { ResponsiveContainer, LineChart, Line, Tooltip, YAxis, XAxis, CartesianGrid, Legend } from 'recharts';
+import {
+  ResponsiveContainer, LineChart, Line, Tooltip, YAxis, XAxis, CartesianGrid, Legend,
+} from 'recharts';
 import color from 'randomcolor';
 import { Card } from 'reactstrap';
 
@@ -22,7 +24,9 @@ const CustomTooltip = ({ active, payload }) => {
       <h4 className="mb-1 text-white">{moment.unix(date).format('MMMM')}</h4>
       {categories.map((category) => (
         <p className="mb-0" key={category}>
-          {category}:{' '}
+          {category}
+          :
+          {' '}
           <span
             style={{
               color: color({
@@ -38,6 +42,15 @@ const CustomTooltip = ({ active, payload }) => {
       ))}
     </Card>
   );
+};
+
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  payload: PropTypes.array.isRequired,
+  active: PropTypes.bool,
 };
 
 const TransactionCategoriesTimeline = ({ data }) => {

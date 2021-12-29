@@ -14,7 +14,9 @@ const TransactionCategory = ({ category: { fullPath, icon } }) => {
         </span>
       )}
       <span>
-        {icon && <i className={icon} aria-hidden />} {lastCategory}
+        {icon && <i className={icon} aria-hidden />}
+        {' '}
+        {lastCategory}
       </span>
     </span>
   );

@@ -31,8 +31,7 @@ export const TransactionCategoriesTimelineCard = ({ isLoading, model, onUpdate }
     );
   };
 
-  const setCategoriesFromPresets = (presetCategoriesIds) =>
-    selectCategories(presetCategoriesIds.map((id) => categoriesOptions.find((c) => c.id === id)));
+  const setCategoriesFromPresets = (presetCategoriesIds) => selectCategories(presetCategoriesIds.map((id) => categoriesOptions.find((c) => c.id === id)));
 
   useEffect(() => {
     if (categoriesOptions.length > 0) {

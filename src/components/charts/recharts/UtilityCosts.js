@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { CartesianGrid, Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from 'recharts';
+import {
+  CartesianGrid, Area, AreaChart, ResponsiveContainer, Tooltip, YAxis,
+} from 'recharts';
 import { Card } from 'reactstrap';
 import color from 'randomcolor';
 import PropTypes from 'prop-types';
@@ -24,6 +26,15 @@ const CustomTooltip = ({ active, payload }) => {
       </p>
     </Card>
   );
+};
+
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array,
 };
 
 const UtilityCosts = ({ data, name, color }) => {
@@ -86,6 +97,7 @@ UtilityCosts.defaultProps = {
 };
 
 UtilityCosts.propTypes = {
+  name: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.number),
   color: PropTypes.string,
 };

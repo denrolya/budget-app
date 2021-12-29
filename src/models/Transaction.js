@@ -21,14 +21,18 @@ const DEFAULT_VALUES = {
 
 class Transaction extends Record(DEFAULT_VALUES) {
   constructor(data) {
-    if (data) {
-      data.executedAt = moment(data.executedAt);
-      data.canceledAt = data.canceledAt ? moment(data.canceledAt) : null;
-      data.account = data.account && new Account(data.account);
-      data.category = data.category && new Category(data.category);
+    const constructorProps = {
+      ...data,
+    };
+
+    if (constructorProps) {
+      constructorProps.executedAt = moment(constructorProps.executedAt);
+      constructorProps.canceledAt = constructorProps.canceledAt ? moment(constructorProps.canceledAt) : null;
+      constructorProps.account = constructorProps.account && new Account(constructorProps.account);
+      constructorProps.category = constructorProps.category && new Category(constructorProps.category);
     }
 
-    super(data);
+    super(constructorProps);
   }
 
   setCategoryFromTypeahead(selected, field = 'category') {

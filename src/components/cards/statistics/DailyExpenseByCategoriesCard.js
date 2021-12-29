@@ -28,7 +28,9 @@ const DailyExpenseByCategoriesCard = ({ isLoading, model, onUpdate }) => {
       onUpdate={onUpdate}
     >
       <CardTitle tag="h3">
-        <i className="ion-ios-calendar text-primary" aria-hidden /> <MoneyValue amount={dailyExpense} />
+        <i className="ion-ios-calendar text-primary" aria-hidden />
+        {' '}
+        <MoneyValue amount={dailyExpense} />
       </CardTitle>
 
       <Table borderless size="sm">

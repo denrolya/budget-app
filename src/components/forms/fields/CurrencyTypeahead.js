@@ -6,7 +6,9 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { randomInt } from 'src/services/common';
 import Routing from 'src/services/routing';
 
-const CurrencyTypeahead = ({ id, className, name, autoFocus, onChange, value, multiple, ...rest }) => {
+const CurrencyTypeahead = ({
+  id, className, name, autoFocus, onChange, value, multiple, ...rest
+}) => {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {

@@ -2,7 +2,9 @@ import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Button, CardBody, Col, Row } from 'reactstrap';
+import {
+  Button, CardBody, Col, Row,
+} from 'reactstrap';
 import SortableTree, { removeNodeAtPath } from 'react-sortable-tree';
 
 import AddNewButton from 'src/components/AddNewButton';
@@ -10,7 +12,9 @@ import CategoryForm from 'src/components/forms/CategoryForm';
 import ModalForm from 'src/components/forms/ModalForm';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import { isActionLoading } from 'src/services/common';
-import { create, edit, fetchTree, remove, setParent, updateTree } from 'src/store/actions/category';
+import {
+  create, edit, fetchTree, remove, setParent, updateTree,
+} from 'src/store/actions/category';
 import LoadingCard from 'src/components/cards/LoadingCard';
 
 import 'react-sortable-tree/style.css';
@@ -43,7 +47,9 @@ const CategoryList = ({
     fetchTree(INCOME_TYPE);
   }, []);
 
-  const reorderNodes = ({ node, nextParentNode, prevPath, nextPath }) => {
+  const reorderNodes = ({
+    node, nextParentNode, prevPath, nextPath,
+  }) => {
     if (isEqual(prevPath, nextPath)) {
       return;
     }
@@ -54,56 +60,62 @@ const CategoryList = ({
   return (
     <>
       <Row>
-        {TRANSACTION_TYPES.map((type) => (
-          <Col xs={12} md={6} key={type}>
-            <h4 className="mb-2 text-capitalize">{type} Categories</h4>
-            <LoadingCard isLoading={isLoading}>
-              <CardBody>
-                <div className="pull-right position-relative" style={{ zIndex: 2 }}>
-                  <AddNewButton onClick={toggleForm} />
-                </div>
-                <div style={{ height: 600, zIndex: 1 }}>
-                  <SortableTree
-                    shouldCopyOnOutsideDrop
-                    treeData={categoriesTree[type]}
-                    onMoveNode={reorderNodes}
-                    onChange={(treeData) => updateTree(type, treeData)}
-                    generateNodeProps={({ node, path }) => ({
-                      buttons: [
-                        <Button
-                          size="sm"
-                          color="warning"
-                          className="btn-link px-2"
-                          onClick={() => toggleCategoryEdition(node)}
-                        >
-                          <i aria-hidden className="tim-icons icon-pencil" />
-                        </Button>,
-                        <Button
-                          size="sm"
-                          color="danger"
-                          className="btn-link px-2"
-                          onClick={() =>
-                            remove(
-                              node,
-                              type,
-                              removeNodeAtPath({
-                                path,
-                                treeData: categoriesTree[type],
-                                getNodeKey: ({ treeIndex }) => treeIndex,
-                              }),
-                            )
-                          }
-                        >
-                          <i aria-hidden className="tim-icons icon-trash-simple" />
-                        </Button>,
-                      ],
-                    })}
-                  />
-                </div>
-              </CardBody>
-            </LoadingCard>
-          </Col>
-        ))}
+        {TRANSACTION_TYPES.map((type) => {
+          const generateNodeProps = ({ node, path }) => ({
+            buttons: [
+              <Button
+                size="sm"
+                color="warning"
+                className="btn-link px-2"
+                onClick={() => toggleCategoryEdition(node)}
+              >
+                <i aria-hidden className="tim-icons icon-pencil" />
+              </Button>,
+              <Button
+                size="sm"
+                color="danger"
+                className="btn-link px-2"
+                onClick={() => remove(
+                  node,
+                  type,
+                  removeNodeAtPath({
+                    path,
+                    treeData: categoriesTree[type],
+                    getNodeKey: ({ treeIndex }) => treeIndex,
+                  }),
+                )}
+              >
+                <i aria-hidden className="tim-icons icon-trash-simple" />
+              </Button>,
+            ],
+          });
+
+          return (
+            <Col xs={12} md={6} key={type}>
+              <h4 className="mb-2 text-capitalize">
+                {type}
+                {' '}
+                Categories
+              </h4>
+              <LoadingCard isLoading={isLoading}>
+                <CardBody>
+                  <div className="pull-right position-relative" style={{ zIndex: 2 }}>
+                    <AddNewButton onClick={toggleForm} />
+                  </div>
+                  <div style={{ height: 600, zIndex: 1 }}>
+                    <SortableTree
+                      shouldCopyOnOutsideDrop
+                      treeData={categoriesTree[type]}
+                      onMoveNode={reorderNodes}
+                      onChange={(treeData) => updateTree(type, treeData)}
+                      generateNodeProps={generateNodeProps}
+                    />
+                  </div>
+                </CardBody>
+              </LoadingCard>
+            </Col>
+          );
+        })}
       </Row>
 
       <ModalForm

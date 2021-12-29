@@ -4,7 +4,10 @@ import { Card } from 'reactstrap';
 import cn from 'classnames';
 import LoadingOverlay from 'react-loading-overlay';
 
-const LoadingCard = ({ isLoading, transparent, className, children, ...rest }) => (
+/* eslint-disable react/jsx-props-no-spreading */
+const LoadingCard = ({
+  isLoading, transparent, className, children, ...rest
+}) => (
   <Card
     className={cn(className, {
       'card--transparent': transparent,
@@ -17,6 +20,7 @@ const LoadingCard = ({ isLoading, transparent, className, children, ...rest }) =
     </LoadingOverlay>
   </Card>
 );
+/* eslint-enable react/jsx-props-no-spreading */
 
 LoadingCard.propTypes = {
   isLoading: false,

@@ -61,7 +61,9 @@ const TasksCard = () => (
                   <i className="tim-icons icon-pencil" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip636901683" placement="right">
-                  {'>'} Edit Task
+                  {'>'}
+                  {' '}
+                  Edit Task
                 </UncontrolledTooltip>
               </td>
             </tr>
@@ -88,7 +90,9 @@ const TasksCard = () => (
                   <i className="tim-icons icon-pencil" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip457194718" placement="right">
-                  {'>'} Edit Task
+                  {'>'}
+                  {' '}
+                  Edit Task
                 </UncontrolledTooltip>
               </td>
             </tr>
@@ -114,7 +118,9 @@ const TasksCard = () => (
                   <i className="tim-icons icon-pencil" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip362404923" placement="right">
-                  {'>'} Edit Task
+                  {'>'}
+                  {' '}
+                  Edit Task
                 </UncontrolledTooltip>
               </td>
             </tr>
@@ -138,7 +144,9 @@ const TasksCard = () => (
                   <i className="tim-icons icon-pencil" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip818217463" placement="right">
-                  {'>'} Edit Task
+                  {'>'}
+                  {' '}
+                  Edit Task
                 </UncontrolledTooltip>
               </td>
             </tr>
@@ -165,7 +173,9 @@ const TasksCard = () => (
                   <i className="tim-icons icon-pencil" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip831835125" placement="right">
-                  {'>'} Edit Task
+                  {'>'}
+                  {' '}
+                  Edit Task
                 </UncontrolledTooltip>
               </td>
             </tr>
@@ -189,7 +199,9 @@ const TasksCard = () => (
                   <i className="tim-icons icon-pencil" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip217595172" placement="right">
-                  {'>'} Edit Task
+                  {'>'}
+                  {' '}
+                  Edit Task
                 </UncontrolledTooltip>
               </td>
             </tr>

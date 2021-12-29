@@ -1,4 +1,6 @@
-import { arrayOf, number, shape, string } from 'prop-types';
+import {
+  arrayOf, number, shape, string,
+} from 'prop-types';
 
 const expenseCategoriesStatisticsType = {
   from: string.isRequired,

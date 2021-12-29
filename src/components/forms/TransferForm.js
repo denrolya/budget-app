@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
-import { Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Col, Form, FormGroup, Input, Label,
+} from 'reactstrap';
 import * as Yup from 'yup';
 
 import LoadingButton from 'src/components/LoadingButton';
@@ -12,7 +14,6 @@ import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { formatTransferToFormType } from 'src/services/transaction';
 import { fetchTypeaheadList as fetchAccounts } from 'src/store/actions/account';
 import { registerTransfer } from 'src/store/actions/transfer';
-import transferType from 'src/types/transfer';
 
 const TransferForm = ({ isLoading, registerTransfer, toggleModal }) => {
   const [accounts, setAccounts] = useState([]);
@@ -48,8 +49,12 @@ const TransferForm = ({ isLoading, registerTransfer, toggleModal }) => {
   return (
     <Formik initialValues={initialData} validationSchema={validationSchema} onSubmit={submitTransfer}>
       {(model) => {
-        const { values, touched, errors, handleSubmit, handleBlur, setFieldValue } = model;
-        const { from, to, amount, rate, fee, feeAccount, executedAt, note } = values;
+        const {
+          values, touched, errors, handleSubmit, handleBlur, setFieldValue,
+        } = model;
+        const {
+          from, to, amount, rate, fee, feeAccount, executedAt, note,
+        } = values;
 
         return (
           <Form onSubmit={handleSubmit}>
@@ -241,7 +246,6 @@ TransferForm.defaultProps = {
 
 TransferForm.propTypes = {
   registerTransfer: PropTypes.func.isRequired,
-  model: transferType,
   isLoading: PropTypes.bool,
   toggleModal: PropTypes.func,
 };

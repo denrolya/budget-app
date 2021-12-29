@@ -1,11 +1,14 @@
 import cn from 'classnames';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Card } from 'reactstrap';
-import { RadialBarChart, RadialBar, Legend, ResponsiveContainer, Tooltip, PolarAngleAxis } from 'recharts';
+import {
+  RadialBarChart, RadialBar, Legend, ResponsiveContainer, Tooltip, PolarAngleAxis,
+} from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload }) => {
   if (!active) {
     return null;
   }
@@ -20,10 +23,18 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-const TransactionCategoriesRadial = ({ account, data, legend }) => {
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  payload: PropTypes.array.isRequired,
+  active: PropTypes.bool,
+};
+
+const TransactionCategoriesRadial = ({ data }) => {
   const [chartData, setChartData] = useState([]);
   const [showLegend, setShowLegend] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState();
 
   useEffect(() => {
     if (window.innerWidth >= 768) {
@@ -62,6 +73,14 @@ const TransactionCategoriesRadial = ({ account, data, legend }) => {
       </RadialBarChart>
     </ResponsiveContainer>
   );
+};
+
+TransactionCategoriesRadial.defaultProps = {
+  data: [],
+};
+
+TransactionCategoriesRadial.propTypes = {
+  data: PropTypes.array,
 };
 
 export default TransactionCategoriesRadial;

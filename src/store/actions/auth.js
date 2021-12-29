@@ -1,7 +1,7 @@
 import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 
-import { ROUTE_DASHBOARD, ROUTE_LOGIN } from 'src/constants/routes';
+import { ROUTE_LOGIN } from 'src/constants/routes';
 import { getToken, isTokenPresentAndValid, parseJWT } from 'src/services/auth';
 import Routing from 'src/services/routing';
 import { RESET_ACTION } from 'src/store/actions/global';

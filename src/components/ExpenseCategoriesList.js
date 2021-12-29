@@ -18,12 +18,16 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { amountInPercentage, arrowIcon, expenseRatioColor, ratio } from 'src/services/common';
+import {
+  amountInPercentage, arrowIcon, expenseRatioColor, ratio,
+} from 'src/services/common';
 import { generateLinkToExpenses } from 'src/services/routing';
 import { COLORS } from 'src/constants/charts';
 import { generateRGBA } from 'src/services/chart';
 
-const ExpenseCategoriesList = ({ data, selectedCategory, onCategorySelect, from, to }) => {
+const ExpenseCategoriesList = ({
+  data, selectedCategory, onCategorySelect, from, to,
+}) => {
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 
   const previousPeriodToCurrentRatio = useMemo(() => amountInPercentage(data.model.previous, data.model.total, 0), [
@@ -40,18 +44,21 @@ const ExpenseCategoriesList = ({ data, selectedCategory, onCategorySelect, from,
     <>
       <div className="table-responsive" style={{ height: 575 }}>
         <ListGroup flush>
-          {selectedSubtree.children.map(({ model: { name, icon, total, previous } }, key) => {
+          {selectedSubtree.children.map(({
+            model: {
+              name, icon, total, previous,
+            },
+          }, key) => {
             const amountToPreviousPeriodRatio = amountInPercentage(previous, total, 0);
             const percentageInTotalSum = amountInPercentage(data.model.total, total, 2);
             const toPreviousRatioColor = expenseRatioColor(amountToPreviousPeriodRatio);
             const isTotalAndPreviousZero = total === 0 && previous === 0;
 
-            const rotation =
-              key !== 0
-                ? selectedSubtree.children
-                  .slice(0, key)
-                  .reduce((acc, el) => acc + amountInPercentage(data.model.total, el.model.total, 2) / 100, 1)
-                : 1;
+            const rotation = key !== 0
+              ? selectedSubtree.children
+                .slice(0, key)
+                .reduce((acc, el) => acc + amountInPercentage(data.model.total, el.model.total, 2) / 100, 1)
+              : 1;
 
             return (
               <ListGroupItem className="p-1" key={name}>
@@ -121,8 +128,10 @@ const ExpenseCategoriesList = ({ data, selectedCategory, onCategorySelect, from,
                           <td>Previous period:</td>
                           <td className="text-right">
                             <span className={cn('mr-2', `text-${toPreviousRatioColor}`)}>
-                              <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />{' '}
-                              {ratio(amountToPreviousPeriodRatio)}%
+                              <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />
+                              {' '}
+                              {ratio(amountToPreviousPeriodRatio)}
+                              %
                             </span>
                             <MoneyValue maximumFractionDigits={0} amount={previous} />
                           </td>
@@ -141,7 +150,11 @@ const ExpenseCategoriesList = ({ data, selectedCategory, onCategorySelect, from,
                         return (
                           diff > 1 && (
                             <tr key={`${title}-expenses`}>
-                              <td>{title} expense:</td>
+                              <td>
+                                {title}
+                                {' '}
+                                expense:
+                              </td>
                               <td className="text-right">
                                 <MoneyValue amount={total / diff} />
                               </td>
@@ -215,7 +228,8 @@ const ExpenseCategoriesList = ({ data, selectedCategory, onCategorySelect, from,
                     color={expenseRatioColor(percentageFromTotal)}
                   />
                   <UncontrolledTooltip target="percentageFromTotal">
-                    {percentageFromTotal.toFixed()}% from total expenses
+                    {percentageFromTotal.toFixed()}
+                    % from total expenses
                   </UncontrolledTooltip>
                 </div>
               </td>
@@ -239,9 +253,8 @@ ExpenseCategoriesList.propTypes = {
 
 export default memo(
   ExpenseCategoriesList,
-  (pp, np) =>
-    isEqual(pp.selectedCategory, np.selectedCategory) &&
-    isEqual(pp.data, np.data) &&
-    isEqual(pp.from, np.from) &&
-    isEqual(pp.to, np.to),
+  (pp, np) => isEqual(pp.selectedCategory, np.selectedCategory)
+    && isEqual(pp.data, np.data)
+    && isEqual(pp.from, np.from)
+    && isEqual(pp.to, np.to),
 );

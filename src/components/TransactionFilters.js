@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import uniqBy from 'lodash/uniqBy';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { Form, FormGroup, Label, Input } from 'reactstrap';
+import {
+  Form, FormGroup, Label, Input,
+} from 'reactstrap';
 
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import { fetchCategories } from 'src/store/actions/category';
@@ -33,7 +35,9 @@ const TransactionFilters = ({ accounts, onModelChange, model }) => {
                 checked={model.onlyDrafts}
                 onChange={() => onModelChange(model.set('onlyDrafts', !model.onlyDrafts))}
               />
-              <span className="form-check-sign" /> Drafts
+              <span className="form-check-sign" />
+              {' '}
+              Drafts
             </Label>
           </FormGroup>
         </div>
@@ -45,7 +49,9 @@ const TransactionFilters = ({ accounts, onModelChange, model }) => {
                 checked={model.withCanceled}
                 onChange={() => onModelChange(model.set('withCanceled', !model.withCanceled))}
               />
-              <span className="form-check-sign" /> With canceled
+              <span className="form-check-sign" />
+              {' '}
+              With canceled
             </Label>
           </FormGroup>
         </div>
@@ -68,7 +74,9 @@ const TransactionFilters = ({ accounts, onModelChange, model }) => {
                     checked={model.hasType(type)}
                     onChange={() => onModelChange(model.toggleType(type))}
                   />
-                  <span className="form-check-sign" /> <span className="text-capitalize">{type}</span>
+                  <span className="form-check-sign" />
+                  {' '}
+                  <span className="text-capitalize">{type}</span>
                 </Label>
               </FormGroup>
             </li>
@@ -108,7 +116,9 @@ const TransactionFilters = ({ accounts, onModelChange, model }) => {
                           checked={model.hasAccount(account)}
                           onChange={() => onModelChange(model.toggleAccount(account))}
                         />
-                        <span className="form-check-sign" /> <AccountName account={account} />
+                        <span className="form-check-sign" />
+                        {' '}
+                        <AccountName account={account} />
                       </Label>
                     </FormGroup>
                   </li>

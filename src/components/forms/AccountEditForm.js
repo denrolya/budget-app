@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
+import {
+  Button, Col, Form, FormGroup, Input, Label, Row,
+} from 'reactstrap';
 
 import { editAccount } from 'src/store/actions/account';
 import accountType from 'src/types/account';

@@ -4,9 +4,6 @@ import compact from 'lodash/compact';
 import { stringify } from 'query-string';
 import isEqual from 'lodash/isEqual';
 
-import { getTransactionListQueryParams } from 'src/services/routing';
-import TransactionFilters from 'src/models/TransactionFilters';
-
 export const DEFAULT_VALUES = {
   page: 1,
   perPage: 20,
@@ -20,7 +17,9 @@ class Pagination extends Record(DEFAULT_VALUES) {
     let finalValues = { ...props };
 
     if (finalValues) {
-      const { page, perPage, perPageOptions, count, filters } = finalValues;
+      const {
+        page, perPage, perPageOptions, count, filters,
+      } = finalValues;
 
       finalValues = {
         filters,

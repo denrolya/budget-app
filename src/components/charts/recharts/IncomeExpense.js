@@ -1,9 +1,12 @@
+import PropTypes from 'prop-types';
 import axios from 'src/services/http';
 import moment from 'moment-timezone';
 import xor from 'lodash/xor';
 import React, { useEffect, useState } from 'react';
 import { Card, Button } from 'reactstrap';
-import { Bar, BarChart, Brush, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import {
+  Bar, BarChart, Brush, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis,
+} from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
@@ -40,6 +43,16 @@ const CustomTooltip = ({ active, payload, label }) => {
       </p>
     </Card>
   );
+};
+
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  payload: PropTypes.array.isRequired,
 };
 
 /**

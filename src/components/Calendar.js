@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 
 const localizer = momentLocalizer(moment);
 
+/* eslint-disable react/jsx-props-no-spreading */
 const Calendar = ({
   events,
   startAccessor,
@@ -30,6 +31,7 @@ const Calendar = ({
     {...rest}
   />
 );
+/* eslint-enable react/jsx-props-no-spreading */
 
 Calendar.defaultProps = {
   startAccessor: 'start',

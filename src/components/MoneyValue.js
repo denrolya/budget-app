@@ -6,7 +6,9 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { CURRENCIES } from 'src/constants/currency';
 
 /* eslint-disable no-param-reassign */
-const MoneyValue = ({ currency, amount, values, showSymbol, showSign, maximumFractionDigits, className, bold }) => {
+const MoneyValue = ({
+  currency, amount, values, showSymbol, showSign, maximumFractionDigits, className, bold,
+}) => {
   const baseCurrency = useBaseCurrency();
   const symbol = currency ? CURRENCIES[currency].symbol : baseCurrency.symbol;
   const value = values?.[baseCurrency.code];
@@ -14,9 +16,8 @@ const MoneyValue = ({ currency, amount, values, showSymbol, showSign, maximumFra
   const absAmount = Math.abs(amount).toLocaleString(undefined, { maximumFractionDigits });
 
   const amountString = `${amount < 0 ? ' - ' : ''} ${showSymbol ? symbol : ''} ${absAmount}`;
-  const valueString =
-    !!value &&
-    `${value < 0 ? ' - ' : ''} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, {
+  const valueString = !!value
+    && `${value < 0 ? ' - ' : ''} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, {
       maximumFractionDigits,
     })}`;
 
@@ -28,7 +29,14 @@ const MoneyValue = ({ currency, amount, values, showSymbol, showSign, maximumFra
       })}
     >
       {showSign && amount !== 0 && (amount > 0 ? ' + ' : ' - ')}
-      {amountString} {!!value && symbol !== baseCurrency.symbol && <small>| {valueString}</small>}
+      {amountString}
+      {' '}
+      {!!value && symbol !== baseCurrency.symbol && (
+        <small>
+          |
+          {valueString}
+        </small>
+      )}
     </span>
   );
 };

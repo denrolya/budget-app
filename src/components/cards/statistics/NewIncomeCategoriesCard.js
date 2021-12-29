@@ -27,7 +27,10 @@ const NewIncomeCategoriesCard = ({ isLoading, model, onUpdate }) => {
                 </td>
                 <td>{name}</td>
                 <td>
-                  <small className="d-block">{percentage > 1 ? percentage.toFixed() : percentage.toFixed(1)}%</small>
+                  <small className="d-block">
+                    {percentage > 1 ? percentage.toFixed() : percentage.toFixed(1)}
+                    %
+                  </small>
                   <Progress striped value={percentage} color="success" />
                 </td>
               </tr>
@@ -51,6 +54,5 @@ NewIncomeCategoriesCard.propTypes = {
 
 export default memo(
   NewIncomeCategoriesCard,
-  (prevProps, nextProps) =>
-    isEqual(prevProps.model.data, nextProps.model.data) && isEqual(prevProps.isLoading, nextProps.isLoading),
+  (prevProps, nextProps) => isEqual(prevProps.model.data, nextProps.model.data) && isEqual(prevProps.isLoading, nextProps.isLoading),
 );

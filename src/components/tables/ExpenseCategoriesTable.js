@@ -4,13 +4,17 @@ import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Progress, Button, Table, UncontrolledTooltip } from 'reactstrap';
+import {
+  Progress, Button, Table, UncontrolledTooltip,
+} from 'reactstrap';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { amountInPercentage, arrowIcon, expenseRatioColor, ratio } from 'src/services/common';
+import {
+  amountInPercentage, arrowIcon, expenseRatioColor, ratio,
+} from 'src/services/common';
 import { generateLinkToExpenses } from 'src/services/routing';
 
 const ExpenseCategoriesTable = ({
@@ -39,7 +43,11 @@ const ExpenseCategoriesTable = ({
       <div className="table-responsive" style={{ height: 400 }}>
         <Table size="sm" className="table--border-top-0">
           <tbody>
-            {selectedSubtree.children.map(({ model: { name, icon, total, previous } }, key) => {
+            {selectedSubtree.children.map(({
+              model: {
+                name, icon, total, previous,
+              },
+            }, key) => {
               const amountToPreviousPeriodRatio = amountInPercentage(previous, total, 0);
               const percentageInTotalSum = amountInPercentage(data.model.total, total, 2);
               const toPreviousRatioColor = expenseRatioColor(amountToPreviousPeriodRatio);
@@ -88,7 +96,10 @@ const ExpenseCategoriesTable = ({
                           {' | '}
                           <MoneyValue amount={total / moment().dayOfYear()} />
                           <UncontrolledTooltip target={`dailyExpense-${key}`}>
-                            Daily expense in {name}:
+                            Daily expense in
+                            {' '}
+                            {name}
+                            :
                             <MoneyValue amount={total / moment().dayOfYear()} />
                           </UncontrolledTooltip>
                         </small>
@@ -112,15 +123,21 @@ const ExpenseCategoriesTable = ({
                             <dd className="d-flex justify-content-between">
                               <MoneyValue maximumFractionDigits={0} amount={previous} />
                               <span className={cn(`text-${toPreviousRatioColor}`)}>
-                                <i className={cn(arrowIcon(amountToPreviousPeriodRatio))} aria-hidden />{' '}
-                                {ratio(amountToPreviousPeriodRatio)}%
+                                <i className={cn(arrowIcon(amountToPreviousPeriodRatio))} aria-hidden />
+                                {' '}
+                                {ratio(amountToPreviousPeriodRatio)}
+                                %
                               </span>
                             </dd>
                           </>
                         )}
                         {showDailyAnnual && (
                           <>
-                            <dt>Daily expense in {name}:</dt>
+                            <dt>
+                              Daily expense in
+                              {name}
+                              :
+                            </dt>
                             <dd>
                               <MoneyValue amount={total / moment().dayOfYear()} />
                             </dd>
@@ -128,7 +145,11 @@ const ExpenseCategoriesTable = ({
                         )}
                         {showDailyMonthly && (
                           <>
-                            <dt>Daily expense in {name}:</dt>
+                            <dt>
+                              Daily expense in
+                              {name}
+                              :
+                            </dt>
                             <dd>
                               <MoneyValue amount={total / moment().date()} />
                             </dd>
@@ -195,7 +216,7 @@ const ExpenseCategoriesTable = ({
                   <i className={cn(arrowIcon(previousPeriodToCurrentRatio))} aria-hidden />
                   {` ${ratio(previousPeriodToCurrentRatio)}% `}
                   <small>
-                    {` | `}
+                    {' | '}
                     <MoneyValue maximumFractionDigits={0} amount={selectedSubtree.model.previous} />
                   </small>
                 </small>
@@ -212,7 +233,8 @@ const ExpenseCategoriesTable = ({
                     color={expenseRatioColor(percentageFromTotal)}
                   />
                   <UncontrolledTooltip target="percentageFromTotal">
-                    {percentageFromTotal.toFixed()}% from total expenses
+                    {percentageFromTotal.toFixed()}
+                    % from total expenses
                   </UncontrolledTooltip>
                 </div>
               </td>
@@ -241,9 +263,8 @@ ExpenseCategoriesTable.propTypes = {
 
 export default memo(
   ExpenseCategoriesTable,
-  (pp, np) =>
-    isEqual(pp.selectedCategory, np.selectedCategory) &&
-    isEqual(pp.data, np.data) &&
-    isEqual(pp.from, np.from) &&
-    isEqual(pp.to, np.to),
+  (pp, np) => isEqual(pp.selectedCategory, np.selectedCategory)
+    && isEqual(pp.data, np.data)
+    && isEqual(pp.from, np.from)
+    && isEqual(pp.to, np.to),
 );

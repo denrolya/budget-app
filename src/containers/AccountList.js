@@ -6,14 +6,18 @@ import { Row, Col, CardBody } from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
 import { confirmAccountArchivation, confirmAccountNameChange, confirmAccountRestoration } from 'src/services/common';
-import { toggleArchived, fetchDetail, updateName, updateColor } from 'src/store/actions/account';
+import {
+  toggleArchived, fetchDetail, updateName, updateColor,
+} from 'src/store/actions/account';
 import AccountDetails from 'src/components/AccountDetails';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { formatDetails } from 'src/services/account';
 import AccountSelector from 'src/components/AccountSelector';
 import AccountTransactionsDetails from 'src/components/AccountTransactionsDetails';
 
-const AccountList = ({ list, exchangeRates, updateName, updateColor, toggleArchived }) => {
+const AccountList = ({
+  list, exchangeRates, updateName, updateColor, toggleArchived,
+}) => {
   const { code } = useBaseCurrency();
   const [selectedAccount, setSelectedAccount] = useState();
   const [accountDetails, setAccountDetails] = useState();
@@ -40,29 +44,26 @@ const AccountList = ({ list, exchangeRates, updateName, updateColor, toggleArchi
     }
   }, [selectedAccount]);
 
-  const onArchiveClick = (account) =>
-    confirmAccountArchivation(account).then(async ({ value }) => {
-      if (value) {
-        await toggleArchived(account.id);
-        await fetchAccountDetails(account.id);
-      }
-    });
+  const onArchiveClick = (account) => confirmAccountArchivation(account).then(async ({ value }) => {
+    if (value) {
+      await toggleArchived(account.id);
+      await fetchAccountDetails(account.id);
+    }
+  });
 
-  const onRestoreClick = (account) =>
-    confirmAccountRestoration(account).then(async ({ value }) => {
-      if (value) {
-        await toggleArchived(account.id);
-        await fetchAccountDetails(account.id);
-      }
-    });
+  const onRestoreClick = (account) => confirmAccountRestoration(account).then(async ({ value }) => {
+    if (value) {
+      await toggleArchived(account.id);
+      await fetchAccountDetails(account.id);
+    }
+  });
 
-  const onNameChange = (account, newName) =>
-    confirmAccountNameChange(account, newName).then(async ({ value }) => {
-      if (value) {
-        await updateName(account, newName);
-        await fetchAccountDetails(account.id);
-      }
-    });
+  const onNameChange = (account, newName) => confirmAccountNameChange(account, newName).then(async ({ value }) => {
+    if (value) {
+      await updateName(account, newName);
+      await fetchAccountDetails(account.id);
+    }
+  });
 
   const onColorChange = async (account, newColor) => {
     await updateColor(account, newColor);

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar } from 'recharts';
+import {
+  ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar,
+} from 'recharts';
 import { Card } from 'reactstrap';
 
 import { HEX_COLORS } from 'src/constants/charts';
@@ -13,10 +15,22 @@ const CustomTooltip = ({ active, payload }) => {
   return (
     <Card body className="px-3 py-2">
       <p className="mb-0">
-        {payload[0].value} transactions in {payload[0].payload.date.format('MMMM')}
+        {payload[0].value}
+        {' '}
+        transactions in
+        {payload[0].payload.date.format('MMMM')}
       </p>
     </Card>
   );
+};
+
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  payload: PropTypes.array.isRequired,
+  active: PropTypes.bool,
 };
 
 const TransactionsCountByMonth = ({ height, width, data }) => (

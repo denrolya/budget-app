@@ -106,11 +106,10 @@ export const fetchList = () => (dispatch) => {
 };
 export const fetchDetail = (id) => axios.get(Routing.generate('api_v1_account_detail', { id }));
 
-export const fetchTypeaheadList = () =>
-  axios
-    .get(Routing.generate('api_v1_account_typeahead_list'))
-    .then(({ data }) => data)
-    .catch((e) => console.error(e));
+export const fetchTypeaheadList = () => axios
+  .get(Routing.generate('api_v1_account_typeahead_list'))
+  .then(({ data }) => data)
+  .catch((e) => console.error(e));
 
 export const toggleArchived = (id) => (dispatch) => {
   dispatch(Creators.archiveRequest());
@@ -119,7 +118,7 @@ export const toggleArchived = (id) => (dispatch) => {
     .delete(Routing.generate('api_v1_account_archive', { id }))
     .then(() => {
       dispatch(Creators.archiveSuccess());
-      notify('success', `Account was archived/restored`);
+      notify('success', 'Account was archived/restored');
     })
     .catch((e) => {
       console.error(e);

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Card, CardBody, CardTitle, Col, Row } from 'reactstrap';
+import {
+  Card, CardBody, CardTitle, Col, Row,
+} from 'reactstrap';
 
 import accountType from 'src/types/account';
 import { CurrencyIcon } from 'src/components/CurrencyIcon';

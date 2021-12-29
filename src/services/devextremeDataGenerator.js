@@ -154,11 +154,10 @@ const generateDate = ({
   )}`;
 };
 
-const generatePhone = () =>
-  Math.random()
-    .toString()
-    .slice(2, 12)
-    .replace(/(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
+const generatePhone = () => Math.random()
+  .toString()
+  .slice(2, 12)
+  .replace(/(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
 
 export const defaultColumnValues = {
   gender: ['Male', 'Female'],
@@ -210,12 +209,11 @@ export const globalSalesValues = {
   product: ['SolarMax', 'SolarOne', 'EnviroCare', 'EnviroCare Max'],
   amount: ({ random }) => Math.floor(random() * 1000000 + 1000) / 20,
   discount: ({ random }) => Math.round(random() * 0.5 * 1000) / 1000,
-  saleDate: ({ random }) =>
-    generateDate({
-      random,
-      year: 2016,
-      month: () => Math.floor(random() * 3) + 1,
-    }),
+  saleDate: ({ random }) => generateDate({
+    random,
+    year: 2016,
+    month: () => Math.floor(random() * 3) + 1,
+  }),
   shipped: [true, false],
 };
 
@@ -238,11 +236,10 @@ export const employeeValues = {
   lastName: lastNames,
   position: positions,
   state: usStates.map((state) => state.name),
-  birthDate: ({ random }) =>
-    generateDate({
-      random,
-      year: () => Math.floor(random() * 30) + 1960,
-    }),
+  birthDate: ({ random }) => generateDate({
+    random,
+    year: () => Math.floor(random() * 30) + 1960,
+  }),
   phone: generatePhone,
 };
 
@@ -282,17 +279,15 @@ export const employeeTaskValues = {
     'Update Sales Strategy Documents',
     'Refund Request Template',
   ],
-  startDate: ({ random }) =>
-    generateDate({
-      random,
-      year: 2016,
-    }),
-  dueDate: ({ random, record }) =>
-    generateDate({
-      random,
-      year: 2016,
-      month: () => Math.floor(random() * 2) + new Date(record.startDate).getMonth(),
-    }),
+  startDate: ({ random }) => generateDate({
+    random,
+    year: 2016,
+  }),
+  dueDate: ({ random, record }) => generateDate({
+    random,
+    year: 2016,
+    month: () => Math.floor(random() * 2) + new Date(record.startDate).getMonth(),
+  }),
 };
 
 export function generateRows({ columnValues = defaultColumnValues, length, random = randomSeed(329972281) }) {

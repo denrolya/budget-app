@@ -3,7 +3,9 @@ import cn from 'classnames';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { CardBody, CardFooter, Col, Row, Table } from 'reactstrap';
+import {
+  CardBody, CardFooter, Col, Row, Table,
+} from 'reactstrap';
 
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { amountInPercentage, expenseIconColorFromPercentage } from 'src/services/common';
@@ -26,10 +28,15 @@ const DailyExpenseCard = ({ forToday, previousMonthDailyAverage, isLoading }) =>
             <h5 className="text-muted mb-0 text-white card-category text-capitalize">
               Today's Expenses
               <span className="pull-right text-info text-nowrap d-xs-inline d-sm-none">
-                {symbol} {previousMonthDailyAverage}
+                {symbol}
+                {' '}
+                {previousMonthDailyAverage}
               </span>
             </h5>
-            <sup className={cn(`text-${percentageInColor}`)}>{symbol} </sup>
+            <sup className={cn(`text-${percentageInColor}`)}>
+              {symbol}
+              {' '}
+            </sup>
             <span className={cn('h2', `text-${percentageInColor}`)}>{forToday}</span>
 
             <Table borderless size="sm" className="mt-3 mb-0 d-none d-sm-block">
@@ -37,9 +44,14 @@ const DailyExpenseCard = ({ forToday, previousMonthDailyAverage, isLoading }) =>
                 <tr>
                   <td>
                     <span className="text-info text-nowrap mr-2">
-                      {symbol} {previousMonthDailyAverage}
+                      {symbol}
+                      {' '}
+                      {previousMonthDailyAverage}
                     </span>
-                    <span className="text-nowrap text-light">Avg. daily expense in {previousMonth.format('MMMM')}</span>
+                    <span className="text-nowrap text-light">
+                      Avg. daily expense in
+                      {previousMonth.format('MMMM')}
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -54,7 +66,9 @@ const DailyExpenseCard = ({ forToday, previousMonthDailyAverage, isLoading }) =>
         <hr />
         <div className="stats">
           <Link to={generateLinkToExpenses(todayString, todayString)}>
-            <i className="mdi mdi-format-list-bulleted" /> See today's expenses
+            <i className="mdi mdi-format-list-bulleted" />
+            {' '}
+            See today's expenses
           </Link>
         </div>
       </CardFooter>

@@ -1,4 +1,6 @@
-import { object, oneOf, oneOfType, shape, string } from 'prop-types';
+import {
+  object, oneOf, oneOfType, shape, string,
+} from 'prop-types';
 
 export const moneyFlowDataType = shape({
   expenses: object,

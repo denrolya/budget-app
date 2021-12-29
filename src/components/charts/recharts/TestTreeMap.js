@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import { Card } from 'reactstrap';
 import { Treemap, ResponsiveContainer, Tooltip } from 'recharts';
@@ -7,7 +8,10 @@ import sortBy from 'lodash/sortBy';
 import { RAINBOW_COLORS } from 'src/constants/charts';
 import MoneyValue from 'src/components/MoneyValue';
 
-const Cell = ({ root, depth, x, y, width, height, index, payload, colors, rank, name }) => (
+/* eslint-disable react/prop-types */
+const Cell = ({
+  root, depth, x, y, width, height, index, colors, name,
+}) => (
   <g>
     <rect
       x={x}
@@ -36,7 +40,7 @@ const Cell = ({ root, depth, x, y, width, height, index, payload, colors, rank, 
   </g>
 );
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload }) => {
   if (!active) {
     return null;
   }
@@ -44,13 +48,24 @@ const CustomTooltip = ({ active, payload, label }) => {
   return (
     <Card body className="px-3 py-2">
       <h5 className="mb-1">
-        <i aria-hidden className={payload[0].payload.icon} /> {payload[0].payload.name}
+        <i aria-hidden className={payload[0].payload.icon} />
+        {' '}
+        {payload[0].payload.name}
       </h5>
       <p className={cn('mb-0')}>
         <MoneyValue bold amount={payload[0].payload.value} maximumFractionDigits={0} />
       </p>
     </Card>
   );
+};
+
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array.isRequired,
 };
 
 const TestTreeMap = ({ data }) => {

@@ -1,4 +1,6 @@
-import { number, object, oneOf, oneOfType, shape, string } from 'prop-types';
+import {
+  number, object, oneOf, oneOfType, shape, string,
+} from 'prop-types';
 
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import accountType from 'src/types/account';

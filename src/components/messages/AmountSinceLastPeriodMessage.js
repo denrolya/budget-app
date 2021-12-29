@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { amountInPercentage, textColor } from 'src/services/common';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
-const AmountSinceLastPeriodMessage = ({ previous, current, invertedColors, period, text }) => {
+const AmountSinceLastPeriodMessage = ({
+  previous, current, invertedColors, period, text,
+}) => {
   const { symbol } = useBaseCurrency();
   const percentage = amountInPercentage(previous, current, 0);
   const diff = current - previous;
@@ -20,7 +22,13 @@ const AmountSinceLastPeriodMessage = ({ previous, current, invertedColors, perio
         {symbol}
         {amountString}
       </strong>
-      {text && period && <> since {period}</>}
+      {text && period && (
+        <>
+          {' '}
+          since
+          {period}
+        </>
+      )}
     </>
   );
 };

@@ -1,4 +1,6 @@
-import { bool, number, shape, string } from 'prop-types';
+import {
+  bool, number, shape, string,
+} from 'prop-types';
 
 import transactionsTypeType from 'src/types/transactionsType';
 

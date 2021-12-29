@@ -31,7 +31,8 @@ const MonthExpenseCard = ({ twoMonthsAgo, monthAgo, currentMonthProjected }) => 
           3 Month Expenses
           <span className={`pull-right text-${percentageInColor}`}>
             {percentage > 0 ? '+' : ''}
-            {percentage.toFixed(2)}%
+            {percentage.toFixed(2)}
+            %
           </span>
         </h5>
       </CardHeader>
@@ -39,9 +40,22 @@ const MonthExpenseCard = ({ twoMonthsAgo, monthAgo, currentMonthProjected }) => 
         <hr />
         <div className="stats">
           <i className="tim-icons icon-money-coins" />
-          <Link to={generateLinkToExpenses(secondMonthAgo.from, secondMonthAgo.to)}>€ {twoMonthsAgo}</Link> /
-          <Link to={generateLinkToExpenses(firstMonthAgo.from, firstMonthAgo.to)}>€ {monthAgo}</Link> /
-          <Link to={generateLinkToExpenses(currentMonth.from, currentMonth.to)}>€ {currentMonthProjected}</Link>
+          <Link to={generateLinkToExpenses(secondMonthAgo.from, secondMonthAgo.to)}>
+            €
+            {twoMonthsAgo}
+          </Link>
+          {' '}
+          /
+          <Link to={generateLinkToExpenses(firstMonthAgo.from, firstMonthAgo.to)}>
+            €
+            {monthAgo}
+          </Link>
+          {' '}
+          /
+          <Link to={generateLinkToExpenses(currentMonth.from, currentMonth.to)}>
+            €
+            {currentMonthProjected}
+          </Link>
         </div>
       </CardFooter>
     </Card>

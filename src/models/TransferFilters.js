@@ -20,7 +20,9 @@ class TransferFilters extends Record(DEFAULT_VALUES) {
     let finalValues = { ...props };
 
     if (finalValues) {
-      const { from, to, accounts, withCanceled } = finalValues;
+      const {
+        from, to, accounts, withCanceled,
+      } = finalValues;
 
       finalValues = {
         from: TransferFilters.normalize('from', from),

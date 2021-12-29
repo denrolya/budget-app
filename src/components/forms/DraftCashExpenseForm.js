@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { ErrorMessage, Field, Formik } from 'formik';
+import {
+  ErrorMessage, Field, Formik, Form,
+} from 'formik';
 import find from 'lodash/find';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Col, FormGroup, Input, Label,
+} from 'reactstrap';
 import * as Yup from 'yup';
 
 import LoadingButton from 'src/components/LoadingButton';
@@ -15,7 +19,9 @@ import ModalForm from 'src/components/forms/ModalForm';
 import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
-const DraftCashExpenseForm = ({ isLoading, isOpen, onSubmit, toggleModal }) => {
+const DraftCashExpenseForm = ({
+  isLoading, isOpen, onSubmit, toggleModal,
+}) => {
   const { code } = useBaseCurrency();
   const [accounts, setAccounts] = useState([]);
   const [form, setForm] = useState({
@@ -27,7 +33,7 @@ const DraftCashExpenseForm = ({ isLoading, isOpen, onSubmit, toggleModal }) => {
       executedAt: moment().format(MOMENT_DATETIME_FORMAT),
       note: '',
       compensations: [],
-      isDraft: false,
+      isDraft: true,
     },
     validationSchema: Yup.object({
       type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
@@ -89,11 +95,13 @@ const DraftCashExpenseForm = ({ isLoading, isOpen, onSubmit, toggleModal }) => {
         onSubmit={handleSubmit}
       >
         {(model) => {
-          const { values, touched, errors, handleBlur, setFieldValue } = model;
+          const {
+            values, touched, errors, handleBlur, setFieldValue,
+          } = model;
           const { amount, account, note } = values;
 
           return (
-            <Form>
+            <Form role="form">
               {form.initialValues.isDraft && <h3 className="text-warning">Draft</h3>}
 
               <FormGroup row className="mb-md-0">

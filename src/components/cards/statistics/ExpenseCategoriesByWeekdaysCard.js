@@ -79,8 +79,7 @@ const CategoryExpensesByWeekdaysCard = ({ isLoading, model, onUpdate }) => {
         mode: 'x',
         callbacks: {
           title: ([item], { labels }) => labels[item.index],
-          label: ({ index, datasetIndex }, { datasets }) =>
-            `${categories[datasetIndex]}: ${symbol} ${datasets[datasetIndex].data[index]}`,
+          label: ({ index, datasetIndex }, { datasets }) => `${categories[datasetIndex]}: ${symbol} ${datasets[datasetIndex].data[index]}`,
           footer: ([item], { datasets }) => {
             const total = sumBy(datasets, (el) => parseFloat(el.data[item.index]));
 
