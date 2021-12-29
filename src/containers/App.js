@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useRoutes, Navigate } from 'react-router-dom';
 
 import Layout from 'src/containers/Layout';
-import { assertAuthorization } from 'src/store/actions/auth';
 import {
   ROUTE_ACCOUNTS, ROUTE_CATEGORIES, ROUTE_CURRENCY_CONVERTER,
   ROUTE_DASHBOARD,
@@ -27,11 +26,7 @@ import TransferList from 'src/containers/TransferList';
 import UserProfile from 'src/containers/UserProfile';
 import AccountDetails from 'src/containers/AccountDetails';
 
-const App = ({ isAuthenticated, assertAuthorization }) => {
-  useEffect(() => {
-    assertAuthorization();
-  }, []);
-
+const App = ({ isAuthenticated }) => {
   const routes = useMemo(() => [
     {
       path: '/*',
@@ -76,4 +71,4 @@ App.propTypes = {
 
 const mapStateToProps = ({ auth: { isAuthenticated } }) => ({ isAuthenticated });
 
-export default connect(mapStateToProps, { assertAuthorization })(App);
+export default connect(mapStateToProps)(App);
