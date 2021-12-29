@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 import {
   toggleArchived, updateName, updateColor,
@@ -11,6 +11,7 @@ import {
 import AccountSelector from 'src/components/AccountSelector';
 
 const AccountList = ({ list }) => {
+  const { id } = useParams();
   const [selectedAccount, setSelectedAccount] = useState();
   const navigate = useNavigate();
 
@@ -21,10 +22,10 @@ const AccountList = ({ list }) => {
   }, [list.length]);
 
   useEffect(() => {
-    if (selectedAccount) {
+    if (!id || selectedAccount) {
       navigate(`${selectedAccount}`);
     }
-  }, [selectedAccount]);
+  }, [id, selectedAccount]);
 
   return (
     <>
@@ -36,7 +37,9 @@ const AccountList = ({ list }) => {
 
       {list.length > 0 && <AccountSelector accounts={list} onChange={setSelectedAccount} selected={selectedAccount} />}
 
-      <Outlet />
+      { id && (
+        <Outlet />
+      )}
     </>
   );
 };
