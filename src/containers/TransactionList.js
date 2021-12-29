@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {
   useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import {
   Button, Card, CardHeader, CardBody, Row, Collapse, Col,
@@ -74,6 +75,12 @@ const TransactionList = ({
 
   return (
     <>
+      <Helmet>
+        <title>
+          {`Transactions(${pagination.count}) | Budget`}
+        </title>
+      </Helmet>
+
       <Row>
         <Col xs={12} sm={12} md={8} lg={9}>
           <LoadingCard inverse isLoading={isLoading} className="card-transactions card-table mb-0">

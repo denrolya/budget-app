@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useMemo, useEffect } from 'react';
 import sumBy from 'lodash/sumBy';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { CardBody, Col, Row } from 'reactstrap';
 import snakeCase from 'voca/snake_case';
@@ -35,92 +36,100 @@ const Dashboard = ({
   );
 
   return (
-    <div className="dashboard">
-      {dashboard.includes('moneyFlow') && (
-        <Row>
-          <Col md={12} lg={12} xl={12} className="d-flex">
-            <MoneyFlowCard
-              isLoading={isStatisticsActionLoading('moneyFlow')}
-              model={statistics.moneyFlow}
-              onIntervalSelect={updateDashboardInterval}
-              onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
-            />
-          </Col>
-        </Row>
-      )}
+    <>
+      <Helmet>
+        <title>
+          Dashboard | Budget
+        </title>
+      </Helmet>
 
-      {dashboard.includes('shortExpenseForGivenPeriod') && (
-        <Row>
-          <ShortStatistics
-            isLoading={isStatisticsActionLoading('shortExpenseForGivenPeriod')}
-            onUpdate={(newModel) => setStatistics('shortExpenseForGivenPeriod', newModel)}
-            model={statistics.shortExpenseForGivenPeriod}
-          />
-        </Row>
-      )}
-
-      <Row className="d-flex d-md-none">
-        <Col xs={6}>
-          <LoadingCard
-            isLoading={isStatisticsActionLoading('moneyFlow')}
-            className="card-chart card-chart-170 text-center"
-          >
-            <CardBody>
-              <span className="text-nowrap text-success">
-                <sup>
-                  {symbol}
-                  {' '}
-                </sup>
-                <span className="h2">
-                  <MoneyValue showSymbol={false} amount={totalIncome} maximumFractionDigits={0} />
-                </span>
-              </span>
-            </CardBody>
-          </LoadingCard>
-        </Col>
-        <Col xs={6}>
-          <LoadingCard
-            isLoading={isStatisticsActionLoading('moneyFlow')}
-            className="card-chart card-chart-170 text-center"
-          >
-            <CardBody>
-              <span className="text-nowrap text-danger">
-                <sup>
-                  {symbol}
-                  {' '}
-                </sup>
-                <span className="h2">
-                  <MoneyValue showSymbol={false} amount={totalExpense} maximumFractionDigits={0} />
-                </span>
-              </span>
-            </CardBody>
-          </LoadingCard>
-        </Col>
-      </Row>
-
-      <Row>
-        {dashboard.includes('expenseCategoriesTree') && (
-          <Col sm={12} className="d-flex">
-            <ExpenseCategoriesCard
-              isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-              model={statistics.expenseCategoriesTree}
-              onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
-            />
-          </Col>
+      <div className="dashboard">
+        {dashboard.includes('moneyFlow') && (
+          <Row>
+            <Col md={12} lg={12} xl={12} className="d-flex">
+              <MoneyFlowCard
+                isLoading={isStatisticsActionLoading('moneyFlow')}
+                model={statistics.moneyFlow}
+                onIntervalSelect={updateDashboardInterval}
+                onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
+              />
+            </Col>
+          </Row>
         )}
-      </Row>
-      {dashboard.includes('transactionCategoriesTimeline') && (
-        <Row>
-          <Col>
-            <TransactionCategoriesTimelineCard
-              isLoading={isStatisticsActionLoading('transactionCategoriesTimeline')}
-              model={statistics.transactionCategoriesTimeline}
-              onUpdate={(newModel) => setStatistics('transactionCategoriesTimeline', newModel)}
+
+        {dashboard.includes('shortExpenseForGivenPeriod') && (
+          <Row>
+            <ShortStatistics
+              isLoading={isStatisticsActionLoading('shortExpenseForGivenPeriod')}
+              onUpdate={(newModel) => setStatistics('shortExpenseForGivenPeriod', newModel)}
+              model={statistics.shortExpenseForGivenPeriod}
             />
+          </Row>
+        )}
+
+        <Row className="d-flex d-md-none">
+          <Col xs={6}>
+            <LoadingCard
+              isLoading={isStatisticsActionLoading('moneyFlow')}
+              className="card-chart card-chart-170 text-center"
+            >
+              <CardBody>
+                <span className="text-nowrap text-success">
+                  <sup>
+                    {symbol}
+                    {' '}
+                  </sup>
+                  <span className="h2">
+                    <MoneyValue showSymbol={false} amount={totalIncome} maximumFractionDigits={0} />
+                  </span>
+                </span>
+              </CardBody>
+            </LoadingCard>
+          </Col>
+          <Col xs={6}>
+            <LoadingCard
+              isLoading={isStatisticsActionLoading('moneyFlow')}
+              className="card-chart card-chart-170 text-center"
+            >
+              <CardBody>
+                <span className="text-nowrap text-danger">
+                  <sup>
+                    {symbol}
+                    {' '}
+                  </sup>
+                  <span className="h2">
+                    <MoneyValue showSymbol={false} amount={totalExpense} maximumFractionDigits={0} />
+                  </span>
+                </span>
+              </CardBody>
+            </LoadingCard>
           </Col>
         </Row>
-      )}
-    </div>
+
+        <Row>
+          {dashboard.includes('expenseCategoriesTree') && (
+            <Col sm={12} className="d-flex">
+              <ExpenseCategoriesCard
+                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+                model={statistics.expenseCategoriesTree}
+                onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
+              />
+            </Col>
+          )}
+        </Row>
+        {dashboard.includes('transactionCategoriesTimeline') && (
+          <Row>
+            <Col>
+              <TransactionCategoriesTimelineCard
+                isLoading={isStatisticsActionLoading('transactionCategoriesTimeline')}
+                model={statistics.transactionCategoriesTimeline}
+                onUpdate={(newModel) => setStatistics('transactionCategoriesTimeline', newModel)}
+              />
+            </Col>
+          </Row>
+        )}
+      </div>
+    </>
   );
 };
 

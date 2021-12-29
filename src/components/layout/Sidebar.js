@@ -71,7 +71,7 @@ const Sidebar = ({
           {routes
             .filter(({ redirect, isInSidebar }) => !redirect && isInSidebar)
             .map(({ name, path, icon }) => (
-              <NavItem tag="li" key={`nav-item-route-${name}`} active={matchPath(path, pathname)}>
+              <NavItem tag="li" key={`nav-item-route-${name}`} active={!!matchPath(path, pathname)}>
                 <NavLink className="nav-link text-white" activeClassName="active" to={path}>
                   <i aria-hidden className={icon} />
                   <p>{name}</p>
@@ -81,7 +81,7 @@ const Sidebar = ({
           <NavItem tag="li">
             <hr />
           </NavItem>
-          <NavItem tag="li" active={matchPath(ROUTE_TRANSACTIONS, pathname)}>
+          <NavItem tag="li" active={!!matchPath(ROUTE_TRANSACTIONS, pathname)}>
             <NavLink className="nav-link text-white" activeClassName="active" to={ROUTE_TRANSACTIONS}>
               <i aria-hidden className="mdi mdi-format-list-bulleted" />
               <p className="text-capitalize">All Transactions</p>
@@ -90,7 +90,7 @@ const Sidebar = ({
           <NavItem tag="li">
             <hr />
           </NavItem>
-          <NavItem tag="li" active={matchPath(ROUTE_DEBTS, pathname)}>
+          <NavItem tag="li" active={!!matchPath(ROUTE_DEBTS, pathname)}>
             <NavLink className="nav-link text-white" activeClassName="active" to={ROUTE_DEBTS}>
               <i aria-hidden className="ion-ios-bookmarks" />
               <p className="text-capitalize">
@@ -128,7 +128,7 @@ const Sidebar = ({
               </NavLink>
             </NavItem>
           ))}
-          <NavItem tag="li" active={matchPath(ROUTE_ACCOUNTS, pathname)}>
+          <NavItem tag="li" active={!!matchPath(ROUTE_ACCOUNTS, pathname)}>
             <NavLink className="nav-link text-capitalize text-white" activeClassName="active" to={ROUTE_ACCOUNTS}>
               <i aria-hidden className="mdi mdi-wallet-travel" />
 

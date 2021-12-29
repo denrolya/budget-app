@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,17 +42,25 @@ const TransactionsCalendar = ({
   );
 
   return (
-    <Calendar
-      events={data}
-      startAccessor={({ executedAt }) => executedAt.toDate()}
-      endAccessor={({ executedAt }) => executedAt.toDate()}
-      titleAccessor={titleAccessor}
-      eventPropGetter={({ account: { color } }) => ({
-        style: {
-          backgroundColor: `${color}80`,
-        },
-      })}
-    />
+    <>
+      <Helmet>
+        <title>
+          Calendar | Budget
+        </title>
+      </Helmet>
+
+      <Calendar
+        events={data}
+        startAccessor={({ executedAt }) => executedAt.toDate()}
+        endAccessor={({ executedAt }) => executedAt.toDate()}
+        titleAccessor={titleAccessor}
+        eventPropGetter={({ account: { color } }) => ({
+          style: {
+            backgroundColor: `${color}80`,
+          },
+        })}
+      />
+    </>
   );
 };
 

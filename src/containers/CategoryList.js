@@ -1,6 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import {
   Button, CardBody, Col, Row,
@@ -59,6 +60,12 @@ const CategoryList = ({
 
   return (
     <>
+      <Helmet>
+        <title>
+          Categories | Budget
+        </title>
+      </Helmet>
+
       <Row>
         {TRANSACTION_TYPES.map((type) => {
           const generateNodeProps = ({ node, path }) => ({

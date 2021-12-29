@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Col, Container, Row } from 'reactstrap';
 
@@ -7,14 +8,13 @@ import LoginForm from 'src/components/forms/LoginForm';
 import { isActionLoading } from 'src/services/common';
 import { loginUser } from 'src/store/actions/auth';
 
-const Login = ({ isLoading, loginUser }) => {
-  useEffect(() => {
-    document.title = 'Log In | Budget';
-  }, []);
-
-  return (
+const Login = ({ isLoading, loginUser }) => (
+  <>
+    <Helmet>
+      <title>Log In | Budget</title>
+    </Helmet>
     <div className="wrapper">
-      <div className="main-panel" data="blue">
+      <div className="main-panel" data-color="blue">
         <div className="content d-flex">
           <Container className="align-self-center">
             <Row>
@@ -26,8 +26,8 @@ const Login = ({ isLoading, loginUser }) => {
         </div>
       </div>
     </div>
-  );
-};
+  </>
+);
 
 Login.propTypes = {
   isLoading: PropTypes.bool.isRequired,

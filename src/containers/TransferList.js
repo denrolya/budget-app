@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, { useRef, useLayoutEffect, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import LoadingOverlay from 'react-loading-overlay';
 import { connect } from 'react-redux';
 import {
@@ -61,41 +62,49 @@ const TransferList = ({
   const applyDateRangeFilter = (event, { startDate, endDate }) => setFilters(pagination.filters.setFromTo(startDate, endDate));
 
   return (
-    <Card>
-      <LoadingOverlay spinner active={isLoading} className="h-100 overlay-rounded">
-        <CardHeader>
-          <Row>
-            <Col xs={6} md={6} className="text-left">
-              <CardTitle tag="h2">Transfers</CardTitle>
-            </Col>
-            <Col className="text-right">
-              <AddNewButton onClick={toggleTransferModal} size="sm" />
-            </Col>
-          </Row>
-        </CardHeader>
-        <CardBody>
-          <Form className="form transaction-filters">
-            <FormGroup className="mb-0">
-              <DateRange from={from} to={to} onApply={applyDateRangeFilter} />
-            </FormGroup>
-          </Form>
-          {!isLoading && data.size === 0 && (
-            <div className="d-flex h-100">
-              <h4 className="justify-content-center align-self-center mx-auto text-center">
-                No transfers found!
-                <small className="text-muted d-block">Register some, or select another date range.</small>
-              </h4>
-            </div>
-          )}
+    <>
+      <Helmet>
+        <title>
+          {`Transfers${pagination.count} | Budget`}
+        </title>
+      </Helmet>
 
-          {data.size > 0 && <TransfersTable data={data} deleteTransfer={deleteTransfer} />}
-        </CardBody>
+      <Card>
+        <LoadingOverlay spinner active={isLoading} className="h-100 overlay-rounded">
+          <CardHeader>
+            <Row>
+              <Col xs={6} md={6} className="text-left">
+                <CardTitle tag="h2">Transfers</CardTitle>
+              </Col>
+              <Col className="text-right">
+                <AddNewButton onClick={toggleTransferModal} size="sm" />
+              </Col>
+            </Row>
+          </CardHeader>
+          <CardBody>
+            <Form className="form transaction-filters">
+              <FormGroup className="mb-0">
+                <DateRange from={from} to={to} onApply={applyDateRangeFilter} />
+              </FormGroup>
+            </Form>
+            {!isLoading && data.size === 0 && (
+              <div className="d-flex h-100">
+                <h4 className="justify-content-center align-self-center mx-auto text-center">
+                  No transfers found!
+                  <small className="text-muted d-block">Register some, or select another date range.</small>
+                </h4>
+              </div>
+            )}
 
-        <CardFooter className="pt-0">
-          <PaginationRow model={pagination} setPage={setPage} setPerPage={setPerPage} />
-        </CardFooter>
-      </LoadingOverlay>
-    </Card>
+            {data.size > 0 && <TransfersTable data={data} deleteTransfer={deleteTransfer} />}
+          </CardBody>
+
+          <CardFooter className="pt-0">
+            <PaginationRow model={pagination} setPage={setPage} setPerPage={setPerPage} />
+          </CardFooter>
+        </LoadingOverlay>
+      </Card>
+    </>
   );
 };
 

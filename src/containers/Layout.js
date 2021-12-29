@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { connect } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 
 import AccountForm from 'src/components/forms/AccountForm';
@@ -38,11 +38,14 @@ import {
 } from 'src/store/actions/ui';
 import { fetch as fetchExchangeRates } from 'src/store/actions/exchangeRates';
 import DraftCashExpenseForm from 'src/components/forms/DraftCashExpenseForm';
+import { CURRENCIES } from 'src/constants/currency';
+import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 
 const Layout = ({
   colorScheme,
   accounts,
   debts,
+  baseCurrency,
   logoutUser,
   toggleDarkMode,
   openSidebar,
@@ -71,10 +74,9 @@ const Layout = ({
   fetchAccounts,
   fetchDebts,
   fetchExchangeRates,
-  children,
 }) => {
-  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const swipeHandlers = useSwipeable({
     onSwipedRight: ({ initial }) => initial[0] < 20 && !isSidebarOpened && openSidebar(),
     onSwipedLeft: () => isSidebarOpened && closeSidebar(),
@@ -98,7 +100,7 @@ const Layout = ({
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <>
+    <BaseCurrencyContext.Provider value={CURRENCIES[baseCurrency]}>
       <Hotkeys keyName="shift+t" onKeyUp={toggleTransactionModal} />
       <Hotkeys keyName="shift+e" onKeyUp={toggleDraftExpenseModal} />
       <Hotkeys keyName="shift+r" onKeyUp={toggleTransferModal} />
@@ -138,7 +140,9 @@ const Layout = ({
             toggleSidebar={toggleSidebar}
             isSidebarOpened={isSidebarOpened}
           />
-          <div className="content pb-0">{children}</div>
+          <div className="content pb-0">
+            <Outlet />
+          </div>
         </div>
       </div>
 
@@ -175,7 +179,7 @@ const Layout = ({
           </button>
         </div>
       </div>
-    </>
+    </BaseCurrencyContext.Provider>
   );
   /* eslint-enable react/jsx-props-no-spreading */
 };
@@ -216,11 +220,14 @@ Layout.propTypes = {
   toggleTransferModal: PropTypes.func.isRequired,
   updateDashboard: PropTypes.func.isRequired,
   accounts: PropTypes.array,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
   debts: PropTypes.array,
+  baseCurrency: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ ui, account, debt }) => ({
+const mapStateToProps = ({
+  ui, account, auth: { user }, debt,
+}) => ({
+  baseCurrency: user.settings.baseCurrency,
   isDarkModeOn: ui.isDarkModeOn,
   colorScheme: ui.colorScheme,
   isSidebarOpened: ui.isSidebarOpened,

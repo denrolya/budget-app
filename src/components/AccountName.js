@@ -62,7 +62,7 @@ AccountName.propTypes = {
     currency: PropTypes.string.isRequired,
     color: PropTypes.string,
     balance: PropTypes.number.isRequired,
-    values: PropTypes.array.isRequired,
+    values: PropTypes.object.isRequired,
   }).isRequired,
   colored: PropTypes.bool,
   showBalance: PropTypes.bool,

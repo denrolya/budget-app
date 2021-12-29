@@ -2,6 +2,7 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import { Helmet } from 'react-helmet';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
 import snakeCase from 'voca/snake_case';
@@ -48,6 +49,12 @@ const Report = ({
 
   return (
     <>
+      <Helmet>
+        <title>
+          {`${from.year()} Report | Budget`}
+        </title>
+      </Helmet>
+
       <DateRangePicker
         autoApply
         showCustomRangeLabel

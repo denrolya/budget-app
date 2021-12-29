@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import filter from 'lodash/filter';
@@ -35,61 +36,69 @@ const UserProfile = ({ availableCurrencies, switchBaseCurrency }) => {
   };
 
   return (
-    <div className="content">
-      <Row>
-        <Col md="8">
-          <Card>
-            <CardHeader>
-              <h5 className="title">Edit Profile</h5>
-            </CardHeader>
-            <CardBody />
-            <CardFooter>
-              <Button className="btn-fill" color="primary" type="submit">
-                Save
-              </Button>
-            </CardFooter>
-          </Card>
-        </Col>
-        <Col md="4">
-          <Card className="card-user">
-            <CardBody>
-              <CardText />
-              <div className="author">
-                <div className="block block-one" />
-                <div className="block block-two" />
-                <div className="block block-three" />
-                <div className="block block-four" />
-                <a href="#test">
-                  <img alt="..." className="avatar" src={avatar} />
-                  <h5 className="title">Mike Andrew</h5>
-                </a>
-                <p className="description">Ceo/Co-Founder</p>
-              </div>
-              <div className="card-description">
-                Do not be scared of the truth because we need to restart the human foundation in truth And I love you
-                like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-              </div>
-            </CardBody>
-            <CardFooter>
-              <div className="button-container">
-                {availableCurrencies.map((c) => (
-                  <Button
-                    key={c.symbol}
-                    active={c.symbol === symbol}
-                    disabled={c.symbol === symbol}
-                    onClick={() => onCurrencyChange(c)}
-                    color="primary"
-                    className="btn-icon btn-simple btn-round mr-2"
-                  >
-                    <span className="text-white">{c.symbol}</span>
-                  </Button>
-                ))}
-              </div>
-            </CardFooter>
-          </Card>
-        </Col>
-      </Row>
-    </div>
+    <>
+      <Helmet>
+        <title>
+          Profile | Budget
+        </title>
+      </Helmet>
+
+      <div className="content">
+        <Row>
+          <Col md="8">
+            <Card>
+              <CardHeader>
+                <h5 className="title">Edit Profile</h5>
+              </CardHeader>
+              <CardBody />
+              <CardFooter>
+                <Button className="btn-fill" color="primary" type="submit">
+                  Save
+                </Button>
+              </CardFooter>
+            </Card>
+          </Col>
+          <Col md="4">
+            <Card className="card-user">
+              <CardBody>
+                <CardText />
+                <div className="author">
+                  <div className="block block-one" />
+                  <div className="block block-two" />
+                  <div className="block block-three" />
+                  <div className="block block-four" />
+                  <a href="#test">
+                    <img alt="..." className="avatar" src={avatar} />
+                    <h5 className="title">Mike Andrew</h5>
+                  </a>
+                  <p className="description">Ceo/Co-Founder</p>
+                </div>
+                <div className="card-description">
+                  Do not be scared of the truth because we need to restart the human foundation in truth And I love you
+                  like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                </div>
+              </CardBody>
+              <CardFooter>
+                <div className="button-container">
+                  {availableCurrencies.map((c) => (
+                    <Button
+                      key={c.symbol}
+                      active={c.symbol === symbol}
+                      disabled={c.symbol === symbol}
+                      onClick={() => onCurrencyChange(c)}
+                      color="primary"
+                      className="btn-icon btn-simple btn-round mr-2"
+                    >
+                      <span className="text-white">{c.symbol}</span>
+                    </Button>
+                  ))}
+                </div>
+              </CardFooter>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
   );
 };
 

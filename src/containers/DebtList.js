@@ -2,6 +2,7 @@ import cn from 'classnames';
 import moment from 'moment-timezone/index';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import {
   Button,
@@ -81,6 +82,12 @@ const DebtList = ({
 
   return (
     <>
+      <Helmet>
+        <title>
+          Debts | Budget
+        </title>
+      </Helmet>
+
       <LoadingCard isLoading={isLoading}>
         <CardHeader>
           <div className="tools float-right">
