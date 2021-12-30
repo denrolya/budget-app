@@ -30,7 +30,7 @@ const TransactionForm = ({
     initialValues: modelData,
     validationSchema: Yup.object({
       type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
-      account: Yup.string().required('Required field'),
+      account: Yup.number().required('Required field'),
       amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
       category: Yup.string().required('Required field'),
       executedAt: Yup.string().required('Required field'),
@@ -87,7 +87,7 @@ const TransactionForm = ({
       setAccounts(
         accounts.map((a) => ({
           ...a,
-          lastTransactionAt: a.id === model.values.account.id ? moment() : a.lastTransactionAt,
+          lastTransactionAt: a.id === model.values.account ? moment() : a.lastTransactionAt,
         })),
       );
     }
@@ -107,16 +107,13 @@ const TransactionForm = ({
           type, category, amount, account, note, executedAt, compensations, isDraft,
         } = values;
         const newCompensation = () => ({
+          executedAt,
           account: '',
           amount: 0,
-          category: {
-            name:
-              category.name === DEBT_TRANSACTION_CATEGORY_NAME
-                ? DEBT_TRANSACTION_CATEGORY_NAME
-                : COMPENSATION_TRANSACTION_CATEGORY_NAME,
-          },
+          category: category === DEBT_TRANSACTION_CATEGORY_NAME
+            ? DEBT_TRANSACTION_CATEGORY_NAME
+            : COMPENSATION_TRANSACTION_CATEGORY_NAME,
           type: INCOME_TYPE,
-          executedAt,
           note: `[Compensation]: ${note}`,
         });
 
@@ -154,7 +151,7 @@ const TransactionForm = ({
                 isInvalid={touched.category && !!errors.category}
                 selected={category ? [category] : []}
                 onBlur={handleBlur}
-                onChange={(s) => setFieldValue('category', s.length ? s[0] : '')}
+                onChange={([selected]) => setFieldValue('category', selected ? selected.name : '')}
                 options={categories.filter((c) => c.type === type)}
               />
               <ErrorMessage component="div" name="category" className="invalid-feedback" />
@@ -180,22 +177,23 @@ const TransactionForm = ({
               </Col>
               <Col md={6}>
                 <FormGroup>
-                  <Label for="account">Account*</Label>
-                  <Typeahead
-                    allowNew
-                    id="account"
-                    className="form-control-typeahead"
+                  <Label for="accountSelect">Account*</Label>
+                  <Input
+                    type="select"
                     name="account"
-                    placeholder="Select account..."
-                    labelKey="name"
-                    multiple={false}
-                    inputProps={{ id: 'account' }}
-                    isInvalid={touched.account && !!errors.account}
-                    selected={account ? [account] : []}
-                    onBlur={handleBlur}
-                    onChange={(s) => setFieldValue('account', s.length ? s[0] : '')}
-                    options={accounts.sort((a, b) => b.lastTransactionAt - a.lastTransactionAt)}
-                  />
+                    id="accountSelect"
+                    value={account}
+                    onChange={({ target }) => setFieldValue('account', target.value)}
+                  >
+                    <option value="">------------</option>
+                    {accounts.map(({ id, name, archivedAt }) => (
+                      <option key={`account-option-${id}`} value={parseInt(id, 10)}>
+                        {name}
+                        {' '}
+                        {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                      </option>
+                    ))}
+                  </Input>
                   <ErrorMessage component="div" name="account" className="invalid-feedback" />
                 </FormGroup>
               </Col>
@@ -292,23 +290,23 @@ const TransactionForm = ({
                             </Col>
                             <Col xs={12} md={6}>
                               <FormGroup>
-                                <Label for={accountKey}>Account*</Label>
-                                <Typeahead
-                                  allowNew
-                                  multiple={false}
+                                <Label for="accountSelect">Account*</Label>
+                                <Input
+                                  type="select"
                                   name={accountKey}
                                   id={accountKey}
-                                  className="form-control-typeahead"
-                                  inputProps={{ id: accountKey }}
-                                  placeholder="Select account..."
-                                  invalid={!!get(touched, accountKey) && !!get(errors, accountKey)}
-                                  labelKey="name"
-                                  selected={compensations[key].account ? [compensations[key].account] : []}
-                                  onBlur={handleBlur}
-                                  onChange={(s) => setFieldValue(accountKey, s.length ? s[0] : '')}
-                                  options={accounts}
-                                />
-                                <ErrorMessage component="div" name={accountKey} className="invalid-feedback" />
+                                  value={compensations[key].account}
+                                  onChange={({ target }) => setFieldValue(accountKey, target.value)}
+                                >
+                                  {accounts.map(({ id, name, archivedAt }) => (
+                                    <option key={`account-option-${id}`} value={parseInt(id, 10)}>
+                                      {name}
+                                      {' '}
+                                      {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                                    </option>
+                                  ))}
+                                </Input>
+                                <ErrorMessage component="div" className="invalid-feedback" name={accountKey} />
                               </FormGroup>
                             </Col>
                             <Col xs={12} md={12}>

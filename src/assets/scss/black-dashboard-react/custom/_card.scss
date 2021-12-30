@@ -107,7 +107,7 @@
       color: $black-states;
     }
 
-    .form-control {
+    .form-control, .form-select {
       color: $black;
       border-color: rgba($black-states, 0.2);
 

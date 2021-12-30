@@ -11,7 +11,6 @@ import {
 import TransactionFilters from 'src/components/TransactionFilters';
 import TransactionModalForm from 'src/components/forms/TransactionModalForm';
 import { isActionLoading } from 'src/services/common';
-import { formatTransactionToFormType } from 'src/services/transaction';
 import {
   setPage,
   setPerPage,
@@ -71,7 +70,7 @@ const TransactionList = ({
     setEditModalOpened(!isEditModalOpened);
   };
 
-  const handleTransactionEdition = (transaction) => editTransaction(transaction.id, transaction.type, formatTransactionToFormType(transaction));
+  const handleTransactionEdition = (transaction) => editTransaction(transaction.id, transaction.type, transaction);
 
   return (
     <>

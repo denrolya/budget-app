@@ -113,59 +113,6 @@ export const createCategoriesTree = (categories) => orderBy(
 );
 
 /**
- * Formats transaction into backend-suitable shape
- *
- * @returns {{executedAt: *, note: *, amount: *, id: *, category: *, account: *}}
- */
-export const formatTransactionToFormType = ({
-  amount,
-  account,
-  category,
-  note,
-  executedAt,
-  compensations,
-  isDraft,
-}) => ({
-  amount,
-  note,
-  isDraft,
-  account: account.id,
-  category: category?.name ? category.name : category,
-  executedAt: moment(executedAt).tz(SERVER_TIMEZONE).format(),
-  ...(compensations && {
-    compensations: compensations.map(formatTransactionToFormType),
-  }),
-});
-
-/**
- * Formats transfer object into backend-suitable shape
- *
- * @param {number} id
- * @param {Object} from
- * @param {Object} to
- * @param {number} amount
- * @param {number} rate
- * @param {float} fee
- * @param {Object} feeAccount
- * @param {string} executedAt
- * @param {string} note
- * @returns {{executedAt: *, note: *, amount: *, feeAccount: *, rate: *, fee: *, from: *, id: *, to: *}}
- */
-export const formatTransferToFormType = ({
-  id, from, to, amount, rate, fee, feeAccount, executedAt, note,
-}) => ({
-  id,
-  amount,
-  note,
-  fee,
-  rate,
-  from: from.id,
-  to: to.id,
-  feeAccount: feeAccount ? feeAccount.id : feeAccount,
-  executedAt: moment(executedAt).tz(SERVER_TIMEZONE).format(),
-});
-
-/**
  * @param {array} transactions
  * @returns {array}
  */

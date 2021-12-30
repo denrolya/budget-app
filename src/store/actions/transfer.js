@@ -1,6 +1,7 @@
 import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 import Swal from 'sweetalert2';
+import moment from 'moment-timezone';
 
 import Routing, { getTransferListQueryParams, isOnDashboardPage, isOnTransfersPage } from 'src/services/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
@@ -11,6 +12,7 @@ import Pagination from 'src/models/Pagination';
 import TransferFilters from 'src/models/TransferFilters';
 import { ROUTE_TRANSFERS } from 'src/constants/routes';
 import history from 'src/services/history';
+import { SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
@@ -81,7 +83,12 @@ export const registerTransfer = (transfer) => (dispatch) => {
   dispatch(Creators.registerRequest());
 
   return axios
-    .post(Routing.generate('api_v1_transfer_save'), { transfer })
+    .post(Routing.generate('api_v1_transfer_save'), {
+      transfer: {
+        ...transfer,
+        executedAt: moment(transfer.executedAt).tz(SERVER_TIMEZONE).format(),
+      },
+    })
     .then(() => {
       dispatch(Creators.registerSuccess());
       notify('success', 'Transfer successfully registered', 'Transaction registered');

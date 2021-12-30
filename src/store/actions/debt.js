@@ -2,13 +2,15 @@ import axios from 'src/services/http';
 import orderBy from 'lodash/orderBy';
 import { createActions } from 'reduxsauce';
 import Swal from 'sweetalert2';
+import moment from 'moment-timezone';
 
 import { ROUTE_DASHBOARD, ROUTE_DEBTS } from 'src/constants/routes';
 import Routing, { isOnPath } from 'src/services/routing';
-import { confirmTransactionDeletion, formatTransactionToFormType } from 'src/services/transaction';
+import { confirmTransactionDeletion } from 'src/services/transaction';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
+import { SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
@@ -162,7 +164,10 @@ export const registerDebtTransaction = (debtId, type, transaction, shouldCloseDe
       }),
       {
         shouldCloseDebt,
-        [type]: transaction,
+        [type]: {
+          ...transaction,
+          executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
+        },
       },
     )
     .then(() => {
@@ -187,7 +192,7 @@ export const editDebtTransaction = (debt, transaction) => (dispatch) => {
         id: debt.id,
         transactionId: transaction.id,
       }),
-      { [transaction.type]: formatTransactionToFormType(transaction) },
+      { [transaction.type]: transaction },
     )
     .then(() => {
       dispatch(Creators.editDebtTransactionSuccess());

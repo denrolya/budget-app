@@ -16,7 +16,6 @@ import Sidebar from 'src/components/layout/Sidebar';
 import { ROUTE_DASHBOARD, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import { isActionLoading, copyToClipboard } from 'src/services/common';
 import { getBrandText } from 'src/services/routing';
-import { formatTransactionToFormType } from 'src/services/transaction';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
@@ -84,7 +83,7 @@ const Layout = ({
     preventDefaultTouchmoveEvent: false,
   });
 
-  const handleTransactionSubmission = (transaction) => registerTransaction(transaction.type, formatTransactionToFormType(transaction));
+  const handleTransactionSubmission = (transaction) => registerTransaction(transaction.type, transaction);
 
   useEffect(() => {
     fetchAccounts();
@@ -172,13 +171,13 @@ const Layout = ({
         <AccountForm toggleModal={toggleAccountModal} />
       </ModalForm>
 
-      <div className="fixed-plugin">
-        <div className="dropdown show-dropdown">
-          <button type="button" onClick={window.isMobile ? toggleDraftExpenseModal : toggleTransactionModal}>
-            <i aria-hidden className="fa fa-plus fa-2x" />
-          </button>
-        </div>
-      </div>
+      <button
+        type="button"
+        className="fixed-plugin"
+        onClick={window.isMobile ? toggleDraftExpenseModal : toggleTransactionModal}
+      >
+        <i aria-hidden className="fa fa-plus fa-2x" />
+      </button>
     </BaseCurrencyContext.Provider>
   );
   /* eslint-enable react/jsx-props-no-spreading */

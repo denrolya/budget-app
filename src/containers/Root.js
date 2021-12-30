@@ -8,7 +8,7 @@ import 'src/middlewares/toastr';
 import store from 'src/store/store';
 import history from 'src/services/history';
 import App from 'src/containers/App';
-import { assertAuthorization } from '../store/actions/auth';
+import { assertAuthorization } from 'src/store/actions/auth';
 
 const Root = () => {
   store.dispatch(assertAuthorization());

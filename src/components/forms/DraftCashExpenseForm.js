@@ -5,7 +5,6 @@ import {
 import find from 'lodash/find';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   Col, FormGroup, Input, Label,
 } from 'reactstrap';
@@ -37,7 +36,7 @@ const DraftCashExpenseForm = ({
     },
     validationSchema: Yup.object({
       type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
-      account: Yup.string().required('Required field'),
+      account: Yup.number().required('Required field'),
       amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
       category: Yup.string().required('Required field'),
       executedAt: Yup.string().required('Required field'),
@@ -66,7 +65,7 @@ const DraftCashExpenseForm = ({
       ...form,
       initialValues: {
         ...form.initialValues,
-        account: find(accounts, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code),
+        account: find(accounts, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code)?.id,
       },
     });
   };
@@ -74,6 +73,16 @@ const DraftCashExpenseForm = ({
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setForm({
+      ...form,
+      initialValues: {
+        ...form.initialValues,
+        executedAt: moment().format(MOMENT_DATETIME_FORMAT),
+      },
+    });
+  }, [isOpen]);
 
   const handleSubmit = async (values) => {
     await onSubmit(values);
@@ -96,7 +105,7 @@ const DraftCashExpenseForm = ({
       >
         {(model) => {
           const {
-            values, touched, errors, handleBlur, setFieldValue,
+            values, touched, errors, setFieldValue,
           } = model;
           const { amount, account, note } = values;
 
@@ -126,22 +135,24 @@ const DraftCashExpenseForm = ({
 
                 <Col md={6}>
                   <FormGroup>
-                    <Label for="account">Account*</Label>
-                    <Typeahead
-                      allowNew
-                      id="account"
-                      className="form-control-typeahead"
+                    <Label for="accountSelect">
+                      Account*
+                    </Label>
+                    <Input
+                      type="select"
                       name="account"
-                      placeholder="Select account..."
-                      labelKey="name"
-                      multiple={false}
-                      inputProps={{ id: 'account' }}
-                      isInvalid={touched.account && !!errors.account}
-                      selected={account ? [account] : []}
-                      onBlur={handleBlur}
-                      onChange={(s) => setFieldValue('account', s.length ? s[0] : '')}
-                      options={accounts.sort((a, b) => b.lastTransactionAt - a.lastTransactionAt)}
-                    />
+                      id="accountSelect"
+                      value={account}
+                      onChange={({ target }) => setFieldValue('account', target.value)}
+                    >
+                      {accounts.map(({ id, name, archivedAt }) => (
+                        <option key={`account-option-${id}`} value={id}>
+                          {name}
+                          {' '}
+                          {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                        </option>
+                      ))}
+                    </Input>
                     <ErrorMessage component="div" name="account" className="invalid-feedback" />
                   </FormGroup>
                 </Col>

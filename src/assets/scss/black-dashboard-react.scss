@@ -20,8 +20,8 @@
 @import 'black-dashboard-react/theme/openbase/variables';
 
 @import 'black-dashboard-react/bootstrap/variables';
-@import 'black-dashboard-react/custom/mixins';
 @import 'black-dashboard-react/bootstrap/mixins';
+@import 'black-dashboard-react/custom/mixins';
 @import 'black-dashboard-react/custom/utilities/helper';
 // Bootstrap components
 @import 'black-dashboard-react/bootstrap/root';
@@ -56,6 +56,7 @@
 @import 'black-dashboard-react/bootstrap/carousel';
 @import 'black-dashboard-react/bootstrap/utilities';
 @import 'black-dashboard-react/bootstrap/print';
+
 // Custom components
 @import 'black-dashboard-react/custom/alerts';
 @import 'black-dashboard-react/custom/badges';
@@ -75,14 +76,15 @@
 @import 'black-dashboard-react/custom/rtl';
 @import 'black-dashboard-react/custom/input-group';
 @import 'black-dashboard-react/custom/pagination';
+
 // Vendor / Plugins
 @import 'black-dashboard-react/custom/vendor/plugin-perfect-scrollbar';
 @import 'black-dashboard-react/custom/vendor/plugin-react-notification-alert';
 @import 'black-dashboard-react/custom/plugin_react_sweetalert';
 @import 'black-dashboard-react/custom/plugin-react-datetime';
 @import 'black-dashboard-react/custom/plugin-react-bootstrap-daterangepicker';
-// light mode
 
+// Light mode
 @import 'black-dashboard-react/custom/white-content';
 
 // Cards
@@ -99,20 +101,18 @@
 @import 'black-dashboard-react/custom/pills';
 
 // Dependencies
+@import 'black-dashboard-react/custom/vendor/toastr';
+@import 'black-dashboard-react/plugins/react-sortable-tree';
+@import 'black-dashboard-react/custom/plugin-react-big-calendar';
 @import '../fonts/nucleo/nucleo-icons';
 @import '~font-awesome/css/font-awesome.css';
 @import '~react-bootstrap-typeahead/css/Typeahead.css';
-@import 'black-dashboard-react/custom/vendor/toastr';
 @import '~bootstrap-daterangepicker/daterangepicker.css';
 @import '~@mdi/font/scss/materialdesignicons';
 @import '~open-iconic/font/css/open-iconic-bootstrap';
 @import '~react-big-calendar/lib/sass/styles';
 @import '~react-big-calendar/lib/addons/dragAndDrop/styles';
-@import 'black-dashboard-react/plugins/react-sortable-tree';
 @import '~ionicons/dist/css/ionicons';
-
-// if using DnD
-@import 'black-dashboard-react/custom/plugin-react-big-calendar';
 
 .content-preview {
   max-height: 350px;

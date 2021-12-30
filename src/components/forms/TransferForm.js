@@ -11,7 +11,6 @@ import * as Yup from 'yup';
 
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
-import { formatTransferToFormType } from 'src/services/transaction';
 import { fetchTypeaheadList as fetchAccounts } from 'src/store/actions/account';
 import { registerTransfer } from 'src/store/actions/transfer';
 
@@ -34,23 +33,23 @@ const TransferForm = ({ isLoading, registerTransfer, toggleModal }) => {
     note: '',
   };
   const validationSchema = Yup.object({
-    from: Yup.string().required('Required field'),
-    to: Yup.string().required('Required field'),
+    from: Yup.number().required('Required field'),
+    to: Yup.number().required('Required field'),
     amount: Yup.number().required('Required field'),
     rate: Yup.number().moreThan(0, 'Invalid value').required('Required field'),
     fee: Yup.number(),
-    feeAccount: Yup.string(),
+    feeAccount: Yup.number(),
     executedAt: Yup.string().required('Required field'),
     note: Yup.string(),
   });
 
-  const submitTransfer = (values) => registerTransfer(formatTransferToFormType(values)).then(toggleModal);
+  const submitTransfer = (values) => registerTransfer(values).then(toggleModal);
 
   return (
     <Formik initialValues={initialData} validationSchema={validationSchema} onSubmit={submitTransfer}>
       {(model) => {
         const {
-          values, touched, errors, handleSubmit, handleBlur, setFieldValue,
+          values, touched, errors, handleSubmit, setFieldValue,
         } = model;
         const {
           from, to, amount, rate, fee, feeAccount, executedAt, note,
@@ -61,22 +60,23 @@ const TransferForm = ({ isLoading, registerTransfer, toggleModal }) => {
             <FormGroup row>
               <Col md={6}>
                 <FormGroup>
-                  <Label for="from">From*</Label>
-                  <Typeahead
-                    allowNew
-                    multiple={false}
-                    id="from"
-                    className="form-control-typeahead"
+                  <Label for="accountSelect">From*</Label>
+                  <Input
+                    type="select"
                     name="from"
-                    inputProps={{ id: 'from' }}
-                    placeholder="From account..."
-                    isInvalid={touched.from && !!errors.from}
-                    labelKey="name"
-                    selected={from ? [from] : []}
-                    onBlur={handleBlur}
-                    onChange={(s) => setFieldValue('from', s.length ? s[0] : '')}
-                    options={accounts}
-                  />
+                    id="fromSelect"
+                    value={from}
+                    onChange={({ target }) => setFieldValue('from', target.value)}
+                  >
+                    <option value="">------------</option>
+                    {accounts.map(({ id, name, archivedAt }) => (
+                      <option key={`from-option-${id}`} value={parseInt(id, 10)}>
+                        {name}
+                        {' '}
+                        {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                      </option>
+                    ))}
+                  </Input>
                   <ErrorMessage component="div" name="from" className="invalid-feedback" />
                 </FormGroup>
               </Col>
@@ -101,22 +101,23 @@ const TransferForm = ({ isLoading, registerTransfer, toggleModal }) => {
             <FormGroup row>
               <Col md={6}>
                 <FormGroup>
-                  <Label for="to">To*</Label>
-                  <Typeahead
-                    allowNew
-                    multiple={false}
-                    id="to"
-                    className="form-control-typeahead"
+                  <Label for="accountSelect">To*</Label>
+                  <Input
+                    type="select"
                     name="to"
-                    inputProps={{ id: 'to' }}
-                    placeholder="To account..."
-                    isInvalid={touched.to && !!errors.to}
-                    labelKey="name"
-                    selected={to ? [to] : []}
-                    onBlur={handleBlur}
-                    onChange={(s) => setFieldValue('to', s.length ? s[0] : '')}
-                    options={accounts}
-                  />
+                    id="toSelect"
+                    value={to}
+                    onChange={({ target }) => setFieldValue('to', target.value)}
+                  >
+                    <option value="">------------</option>
+                    {accounts.map(({ id, name, archivedAt }) => (
+                      <option key={`to-option-${id}`} value={parseInt(id, 10)}>
+                        {name}
+                        {' '}
+                        {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                      </option>
+                    ))}
+                  </Input>
                   <ErrorMessage component="div" name="to" className="invalid-feedback" />
                 </FormGroup>
               </Col>
@@ -157,22 +158,23 @@ const TransferForm = ({ isLoading, registerTransfer, toggleModal }) => {
               </Col>
               <Col md={6}>
                 <FormGroup>
-                  <Label for="to">Fee paid from</Label>
-                  <Typeahead
-                    allowNew
-                    multiple={false}
-                    id="feeAccount"
-                    className="form-control-typeahead"
+                  <Label for="feeAccount">Fee paid from</Label>
+                  <Input
+                    type="select"
                     name="feeAccount"
-                    inputProps={{ id: 'feeAccount' }}
-                    placeholder="Select account that pays the fee..."
-                    isInvalid={touched.feeAccount && !!errors.feeAccount}
-                    labelKey="name"
-                    selected={feeAccount ? [feeAccount] : []}
-                    onBlur={handleBlur}
-                    onChange={(s) => setFieldValue('feeAccount', s.length ? s[0] : '')}
-                    options={accounts}
-                  />
+                    id="feeAccountSelect"
+                    value={feeAccount}
+                    onChange={({ target }) => setFieldValue('feeAccount', target.value)}
+                  >
+                    <option value="">------------</option>
+                    {accounts.map(({ id, name, archivedAt }) => (
+                      <option key={`feeAccount-option-${id}`} value={parseInt(id, 10)}>
+                        {name}
+                        {' '}
+                        {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                      </option>
+                    ))}
+                  </Input>
                   <ErrorMessage component="div" name="feeAccount" className="invalid-feedback" />
                 </FormGroup>
               </Col>

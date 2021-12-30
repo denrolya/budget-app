@@ -1,5 +1,6 @@
 import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
+import moment from 'moment-timezone';
 
 import Routing, { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/services/routing';
 import { confirmTransactionCancellation, confirmTransactionDeletion } from 'src/services/transaction';
@@ -11,6 +12,7 @@ import Pagination from 'src/models/Pagination';
 import { ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import TransactionFilters from 'src/models/TransactionFilters';
 import history from 'src/services/history';
+import { SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
@@ -91,7 +93,14 @@ export const registerTransaction = (type, transaction) => (dispatch, getState) =
 
   return axios
     .post(Routing.generate('api_v1_transaction_new', { type }), {
-      [type]: transaction,
+      [type]: {
+        ...transaction,
+        executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
+        compensations: transaction.compensations.map((c) => ({
+          ...c,
+          executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
+        })),
+      },
     })
     .then(() => {
       dispatch(Creators.registerSuccess());
@@ -110,7 +119,10 @@ export const registerTransaction = (type, transaction) => (dispatch, getState) =
       dispatch(fetchAccounts());
       dispatch(fetchDebts());
     })
-    .catch(({ message }) => dispatch(Creators.registerFailure(message)));
+    .catch((e) => {
+      console.error(e);
+      dispatch(Creators.registerFailure(e.message));
+    });
 };
 
 export const editTransaction = (id, type, transaction) => (dispatch, getState) => {
@@ -133,7 +145,10 @@ export const editTransaction = (id, type, transaction) => (dispatch, getState) =
       dispatch(fetchAccounts());
       dispatch(fetchDebts());
     })
-    .catch(({ message }) => dispatch(Creators.editFailure(message)));
+    .catch((e) => {
+      console.error(e);
+      dispatch(Creators.editFailure(e.message));
+    });
 };
 
 /**

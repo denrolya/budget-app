@@ -8,7 +8,7 @@ const ModalForm = ({
   title, isOpen, toggleModal, children,
 }) => (
   <Modal centered backdrop size="lg" isOpen={isOpen} toggle={toggleModal}>
-    <ModalHeader toggle={toggleModal} tag="h4">
+    <ModalHeader toggle={toggleModal} tag="h4" close={<button type="button" className="close" onClick={toggleModal}>×</button>}>
       {title}
     </ModalHeader>
     <ModalBody>

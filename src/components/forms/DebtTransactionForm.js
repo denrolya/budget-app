@@ -13,7 +13,6 @@ import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import {
   DEBT_TRANSACTION_CATEGORY_NAME, EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES,
 } from 'src/constants/transactions';
-import { formatTransactionToFormType } from 'src/services/transaction';
 import { fetchTypeaheadList as fetchAccounts } from 'src/store/actions/account';
 import { fetchCategories } from 'src/store/actions/category';
 import { registerDebtTransaction } from 'src/store/actions/debt';
@@ -45,16 +44,14 @@ const DebtTransactionForm = ({
       type: EXPENSE_TYPE,
       account: '',
       amount: 0,
-      category: {
-        name: DEBT_TRANSACTION_CATEGORY_NAME,
-      },
+      category: DEBT_TRANSACTION_CATEGORY_NAME,
       createdAt: moment().format(MOMENT_DATETIME_FORMAT),
       note: '',
       compensations: [],
     };
   const validationSchema = Yup.object({
     type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
-    account: Yup.string().required('Required field'),
+    account: Yup.number().required('Required field'),
     amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
     category: Yup.string().required('Required field'),
     createdAt: Yup.string().required('Required field'),
@@ -62,7 +59,7 @@ const DebtTransactionForm = ({
   });
 
   const onSubmit = async (values, { resetForm }) => {
-    await registerDebtTransaction(debt.id, values.type, formatTransactionToFormType(values), closeDebt);
+    await registerDebtTransaction(debt.id, values.type, values, closeDebt);
 
     resetForm();
 
@@ -105,18 +102,18 @@ const DebtTransactionForm = ({
             <FormGroup>
               <Typeahead
                 allowNew
-                autoFocus={!isEditMode}
-                multiple={false}
                 id="category"
                 className="form-control-typeahead"
                 name="category"
-                inputProps={{ id: 'category' }}
                 placeholder="Select category..."
-                isInvalid={touched.category && !!errors.category}
                 labelKey="name"
+                autoFocus={!isEditMode}
+                multiple={false}
+                inputProps={{ id: 'category' }}
+                isInvalid={touched.category && !!errors.category}
                 selected={category ? [category] : []}
                 onBlur={handleBlur}
-                onChange={(s) => setFieldValue('category', s.length ? s[0] : '')}
+                onChange={([selected]) => setFieldValue('category', selected ? selected.name : '')}
                 options={categories.filter((c) => c.type === type)}
               />
               <ErrorMessage component="div" name="category" className="invalid-feedback" />
@@ -142,22 +139,23 @@ const DebtTransactionForm = ({
               </Col>
               <Col md={6}>
                 <FormGroup>
-                  <Label for="account">Account*</Label>
-                  <Typeahead
-                    allowNew
-                    multiple={false}
-                    id="account"
-                    className="form-control-typeahead"
+                  <Label for="accountSelect">Account*</Label>
+                  <Input
+                    type="select"
                     name="account"
-                    inputProps={{ id: 'account' }}
-                    placeholder="Select account..."
-                    isInvalid={touched.account && !!errors.account}
-                    labelKey="name"
-                    selected={account ? [account] : []}
-                    onBlur={handleBlur}
-                    onChange={(s) => setFieldValue('account', s.length ? s[0] : '')}
-                    options={accounts}
-                  />
+                    id="accountSelect"
+                    value={account}
+                    onChange={({ target }) => setFieldValue('account', target.value)}
+                  >
+                    <option value="">------------</option>
+                    {accounts.map(({ id, name, archivedAt }) => (
+                      <option key={`account-option-${id}`} value={parseInt(id, 10)}>
+                        {name}
+                        {' '}
+                        {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                      </option>
+                    ))}
+                  </Input>
                   <ErrorMessage component="div" name="account" className="invalid-feedback" />
                 </FormGroup>
               </Col>
