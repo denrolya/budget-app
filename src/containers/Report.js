@@ -46,6 +46,7 @@ const Report = ({
   const { from, to } = statistics.mainExpenseCategoriesReview;
   const diffInDays = statistics.mainExpenseCategoriesReview.diffIn('days');
   const previousYear = from.year() - 1;
+  const previousPeriodText = (previousYear === moment().year() - 1) ? `last year(${previousYear})` : previousYear;
 
   return (
     <>
@@ -100,7 +101,7 @@ const Report = ({
             footer={(
               <AmountSinceLastPeriodMessage
                 invertedColors
-                period={`last year(${previousYear})`}
+                period={previousPeriodText}
                 previous={statistics.totalIncomeExpense.data.previous.income}
                 current={statistics.totalIncomeExpense.data.current.income}
               />
@@ -131,7 +132,7 @@ const Report = ({
             footer={(
               <AmountSinceLastPeriodMessage
                 invertedColors
-                period={`last year(${previousYear})`}
+                period={previousPeriodText}
                 previous={statistics.totalIncomeExpense.data.previous.income / diffInDays}
                 current={statistics.totalIncomeExpense.data.current.income / diffInDays}
               />
@@ -167,7 +168,7 @@ const Report = ({
             }
             footer={(
               <AmountSinceLastPeriodMessage
-                period={`last year(${previousYear})`}
+                period={previousPeriodText}
                 previous={statistics.totalIncomeExpense.data.previous.expense}
                 current={statistics.totalIncomeExpense.data.current.expense}
               />
@@ -234,7 +235,7 @@ const Report = ({
               content={<MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpenses.data.current} />}
               footer={(
                 <AmountSinceLastPeriodMessage
-                  period={`last year(${previousYear})`}
+                  period={previousPeriodText}
                   previous={statistics.foodExpenses.data.previous}
                   current={statistics.foodExpenses.data.current}
                 />
@@ -287,7 +288,7 @@ const Report = ({
               }
               footer={(
                 <AmountSinceLastPeriodMessage
-                  period={`last year(${previousYear})`}
+                  period={previousPeriodText}
                   previous={statistics.foodExpenses.data.previous / diffInDays}
                   current={statistics.foodExpenses.data.current / diffInDays}
                 />

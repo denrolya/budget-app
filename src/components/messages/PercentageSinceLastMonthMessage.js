@@ -15,13 +15,7 @@ const PercentageSinceLastMonthMessage = ({
         {percentage}
         %
       </strong>
-      {text && (
-        <>
-          {' '}
-          since
-          {period}
-        </>
-      )}
+      {text && ` since ${period}`}
     </>
   );
 };

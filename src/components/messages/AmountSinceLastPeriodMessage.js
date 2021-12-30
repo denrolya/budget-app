@@ -22,13 +22,7 @@ const AmountSinceLastPeriodMessage = ({
         {symbol}
         {amountString}
       </strong>
-      {text && period && (
-        <>
-          {' '}
-          since
-          {period}
-        </>
-      )}
+      {(text && period) && ` since ${period}`}
     </>
   );
 };
