@@ -33,7 +33,7 @@ AccountSelector.defaultProps = {
 
 AccountSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
-  selected: PropTypes.number,
+  selected: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   accounts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

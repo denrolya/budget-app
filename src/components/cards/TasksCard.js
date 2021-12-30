@@ -24,7 +24,7 @@ const TasksCard = () => (
         <DropdownToggle caret className="btn-icon" color="link" data-toggle="dropdown" type="button">
           <i className="tim-icons icon-settings-gear-63" />
         </DropdownToggle>
-        <DropdownMenu end aria-labelledby="dropdownMenuLink">
+        <DropdownMenu right aria-labelledby="dropdownMenuLink">
           <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
             Action
           </DropdownItem>

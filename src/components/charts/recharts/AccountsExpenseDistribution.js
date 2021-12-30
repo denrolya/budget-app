@@ -1,79 +1,109 @@
-import React from 'react';
+import isEqual from 'lodash/isEqual';
+import React, { memo, useMemo } from 'react';
 import { Card } from 'reactstrap';
-import PropTypes from 'prop-types';
 import {
-  Radar,
-  RadarChart,
-  ResponsiveContainer,
-  PolarGrid,
-  Tooltip,
-  PolarRadiusAxis,
-  PolarAngleAxis,
+  PieChart, Pie, Cell, ResponsiveContainer, Tooltip,
 } from 'recharts';
+import PropTypes from 'prop-types';
+import sortBy from 'lodash/sortBy';
+import sumBy from 'lodash/sumBy';
 
+import { amountInPercentage } from 'src/services/common';
+import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
-import { HEX_COLORS } from 'src/constants/charts';
+import {
+  ACCOUNT_TYPE_BANK_CARD,
+  ACCOUNT_TYPE_BASIC,
+  ACCOUNT_TYPE_CASH,
+  ACCOUNT_TYPE_INTERNET,
+} from 'src/constants/account';
 
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip = ({ active, payload, total }) => {
   if (!active) {
     return null;
   }
 
+  const { account, amount, value } = payload[0].payload;
+
   return (
-    <Card body className="px-3 py-2">
+    <Card body>
       <h5
         className="mb-1"
         style={{
-          color: payload[0].payload.account.color,
+          color: account.color,
         }}
       >
-        {payload[0].payload.account.name}
+        <AccountName account={account} />
       </h5>
       <p className="mb-0 text-white">
-        <MoneyValue
-          bold
-          currency={payload[0].payload.account.currency}
-          amount={payload[0].payload.amount}
-          maximumFractionDigits={0}
-        />
+        <MoneyValue bold currency={account.currency} amount={amount} maximumFractionDigits={0} />
+      </p>
+      <p className="mb-0">
+        <span className="font-weight-bold">
+          {amountInPercentage(total, value, 0)}
+          %
+        </span>
+        {' '}
+        from total
       </p>
     </Card>
   );
 };
 
-CustomTooltip.defaultProps = {
-  active: false,
-};
-
 CustomTooltip.propTypes = {
-  active: PropTypes.bool,
+  active: PropTypes.bool.isRequired,
   payload: PropTypes.array.isRequired,
+  total: PropTypes.number.isRequired,
 };
 
-const AccountsExpenseDistribution = ({ data }) => (
-  <ResponsiveContainer width="100%" height={300}>
-    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
-      <PolarGrid stroke={HEX_COLORS.text} />
-      <PolarAngleAxis dataKey="account.name" stroke={HEX_COLORS.text} />
-      <PolarRadiusAxis stroke={HEX_COLORS.text} tickCount={2} />
-      <Radar name="test" dataKey="value" fillOpacity={0.6} stroke={HEX_COLORS.primary} fill={HEX_COLORS.primary} />
-      <Tooltip content={CustomTooltip} />
-    </RadarChart>
-  </ResponsiveContainer>
-);
+const AccountDistribution = ({ data, height }) => {
+  const total = useMemo(() => sumBy(data, 'value'), [data]);
 
-AccountsExpenseDistribution.defaultProps = {
-  data: [],
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <PieChart
+        margin={{
+          top: 0, left: 0, right: 0, bottom: 0,
+        }}
+      >
+        <Pie
+          data={data}
+          labelLine={false}
+          outerRadius={140}
+          startAngle={90}
+          endAngle={450}
+          dataKey="value"
+        >
+          {data.map(({ account }) => (
+            <Cell key={`account-${account.id}`} stroke={account.color} strokeWidth={2} fill={`${account.color}33`} />
+          ))}
+        </Pie>
+        <Tooltip content={<CustomTooltip total={total} />} />
+      </PieChart>
+    </ResponsiveContainer>
+  );
 };
 
-AccountsExpenseDistribution.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      account: PropTypes.shape({}).isRequired,
-      value: PropTypes.number.isRequired,
-      amount: PropTypes.number.isRequired,
-    }),
-  ),
+AccountDistribution.defaultProps = {
+  height: 300,
 };
 
-export default AccountsExpenseDistribution;
+AccountDistribution.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    account: PropTypes.shape({
+      type: PropTypes.oneOf([ACCOUNT_TYPE_BANK_CARD, ACCOUNT_TYPE_INTERNET, ACCOUNT_TYPE_CASH, ACCOUNT_TYPE_BASIC])
+        .isRequired,
+      icon: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      currency: PropTypes.string.isRequired,
+      color: PropTypes.string,
+      balance: PropTypes.number,
+      values: PropTypes.object,
+    }).isRequired,
+    amount: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  })).isRequired,
+  height: PropTypes.number,
+};
+
+export default AccountDistribution;

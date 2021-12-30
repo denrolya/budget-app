@@ -97,7 +97,7 @@ const Header = ({
                 <b className="caret d-none d-lg-block d-xl-block" />
                 <p className="d-lg-none">User Menu</p>
               </DropdownToggle>
-              <DropdownMenu end className="dropdown-navbar" tag="ul">
+              <DropdownMenu right className="dropdown-navbar" tag="ul">
                 <NavLink tag="li">
                   <DropdownItem tag="button" onClick={toggleDarkMode}>
                     Toggle Dark Mode
