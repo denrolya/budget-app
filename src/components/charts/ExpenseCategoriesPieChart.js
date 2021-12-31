@@ -52,6 +52,7 @@ const ExpenseCategoriesPieChart = ({
     selectedSubtree.children
       .map((node) => node.model)
       .forEach(({ name, total, previous }) => {
+        console.log({ name });
         chartData.current.push(total);
         chartData.previous.push(previous);
         labels.push(name === selectedCategory ? 'Uncategorized' : name);
@@ -94,12 +95,10 @@ const ExpenseCategoriesPieChart = ({
     const ratio = amountInPercentage(data.model.total, currentValue.total, 0);
     const revenueRatio = 0; // TODO: Ratio to revenue for selected period;
     return [
-      `Selected Period: ${symbol} ${parseFloat(
-        currentValue.total.toFixed(),
-      ).toLocaleString()} (${ratio}% of total expense for selected period${
+      `Selected Period: ${symbol} ${currentValue.total.toLocaleString(undefined, { maximumFractionDigits: 0 })} (${ratio}% of total expense for selected period${
         revenueRatio ? ` | ${revenueRatio}% of selected period's revenue` : ''
       })`,
-      `Previous Period: ${symbol} ${parseFloat(currentValue.previous.toFixed()).toLocaleString()}`,
+      `Previous Period: ${symbol} ${currentValue.previous.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
     ];
   };
 

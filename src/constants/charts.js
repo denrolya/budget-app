@@ -10,6 +10,7 @@
 
 export const HEX_COLORS = {
   text: '#92ABCF',
+  white: '#ffffff',
   default: '#344675',
   primary: '#e14eca',
   secondary: '#f4f5f7',

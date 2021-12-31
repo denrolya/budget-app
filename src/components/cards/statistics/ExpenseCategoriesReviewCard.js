@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
-import TransactionCategoriesComparison from 'src/components/charts/recharts/TransactionCategoriesComparison';
+import TransactionCategoriesComparison from 'src/components/charts/recharts/bar/TransactionCategoriesComparison';
 
 const ExpenseCategoriesReviewCard = ({
   isLoading, model, onUpdate,

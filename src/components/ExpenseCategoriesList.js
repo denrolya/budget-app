@@ -22,8 +22,7 @@ import {
   amountInPercentage, arrowIcon, expenseRatioColor, ratio,
 } from 'src/services/common';
 import { generateLinkToExpenses } from 'src/services/routing';
-import { COLORS } from 'src/constants/charts';
-import { generateRGBA } from 'src/services/chart';
+import { HEX_COLORS } from 'src/constants/charts';
 
 const ExpenseCategoriesList = ({
   data, selectedCategory, onCategorySelect, from, to,
@@ -57,7 +56,7 @@ const ExpenseCategoriesList = ({
             const rotation = key !== 0
               ? selectedSubtree.children
                 .slice(0, key)
-                .reduce((acc, el) => acc + amountInPercentage(data.model.total, el.model.total, 2) / 100, 1)
+                .reduce((acc, el) => acc + amountInPercentage(selectedSubtree.model.total, el.model.total, 2) / 100, 1)
               : 1;
 
             return (
@@ -68,7 +67,7 @@ const ExpenseCategoriesList = ({
                       <CircularProgressbarWithChildren
                         styles={buildStyles({
                           rotation,
-                          pathColor: generateRGBA(COLORS[toPreviousRatioColor], 0.8),
+                          pathColor: `${HEX_COLORS[toPreviousRatioColor]}`,
                           trailColor: 'transparent',
                         })}
                         value={percentageInTotalSum}

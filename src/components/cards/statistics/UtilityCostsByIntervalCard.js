@@ -7,7 +7,7 @@ import { Col, Row } from 'reactstrap';
 import MoneyValue from 'src/components/MoneyValue';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import CarouselCard from 'src/components/cards/CarouselCard';
-import UtilityCosts from 'src/components/charts/recharts/UtilityCosts';
+import UtilityCosts from 'src/components/charts/recharts/area/UtilityCosts';
 import SimpleStatisticsCard from 'src/components/cards/statistics/SimpleStatisticsCard';
 
 /** TODO: Point radius 0; toFixed in tooltips */

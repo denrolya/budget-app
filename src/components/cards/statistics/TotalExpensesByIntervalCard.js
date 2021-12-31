@@ -5,7 +5,7 @@ import cn from 'classnames';
 
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import ExpensesBySeason from 'src/components/charts/recharts/ExpensesBySeason';
+import ExpensesBySeason from 'src/components/charts/recharts/pie/ExpensesBySeason';
 
 const TotalExpensesByIntervalCard = ({
   isLoading, model, onUpdate, className, transparent,

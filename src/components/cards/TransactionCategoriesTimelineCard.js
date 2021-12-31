@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Button, Row, Col } from 'reactstrap';
 
-import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/TransactionCategoriesTimeline';
+import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import { TRANSACTION_TYPES, TRANSACTIONS_CATEGORIES_PRESETS as PRESETS } from 'src/constants/transactions';
 import { fetchCategories } from 'src/store/actions/category';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';

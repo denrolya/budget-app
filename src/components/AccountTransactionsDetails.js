@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import { Row, Col, Button } from 'reactstrap';
 
 import { generateLinkToAccountTransactionsPage } from 'src/services/routing';
-import TransactionsCountByMonth from 'src/components/charts/recharts/TransactionsCountByMonth';
+import TransactionsCountByMonth from 'src/components/charts/recharts/bar/TransactionsCountByMonth';
 import TransactionsTable from 'src/components/tables/TransactionsTable';
 
 const AccountTransactionsDetails = ({ account }) => {

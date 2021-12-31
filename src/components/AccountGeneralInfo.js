@@ -6,11 +6,11 @@ import {
   Row, Col, Button, UncontrolledPopover, PopoverBody,
 } from 'reactstrap';
 
-import AccountBalance from 'src/components/charts/recharts/AccountBalance';
+import AccountBalance from 'src/components/charts/recharts/area/AccountBalance';
 import MoneyValue from 'src/components/MoneyValue';
 import { convert, generateExchangeRatesStatistics } from 'src/services/currency';
 import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
-import TransactionCategoriesRadial from 'src/components/charts/recharts/TransactionCategoriesRadial';
+import TransactionCategoriesRadial from 'src/components/charts/recharts/radial/TransactionCategoriesRadial';
 import {
   ACCOUNT_TYPE_BANK_CARD,
   ACCOUNT_TYPE_BASIC,

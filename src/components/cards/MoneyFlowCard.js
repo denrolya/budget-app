@@ -7,7 +7,7 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import MoneyValue from 'src/components/MoneyValue';
-import MoneyFlowChart from 'src/components/charts/recharts/MoneyFlowByInterval';
+import MoneyFlowChart from 'src/components/charts/recharts/bar/MoneyFlowByInterval';
 
 const MoneyFlowCard = ({ isLoading, model, onUpdate }) => {
   const { symbol } = useBaseCurrency();

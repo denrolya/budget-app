@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 
 import Breadcrumbs from 'src/components/ExpenseCategoriesBreadcrumbs';
-import ExpenseCategoriesChart from 'src/components/charts/ExpenseCategoriesPieChart';
 import ExpenseCategoriesList from 'src/components/ExpenseCategoriesList';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import CenteredMessage from 'src/components/messages/CenteredMessage';
+import TransactionCategories from 'src/components/charts/recharts/pie/TransactionCategories';
 
 const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
   const { from, to, data } = model;
@@ -33,12 +33,7 @@ const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
             />
           </Col>
           <Col className="order-first order-xl-last d-flex justify-content-center pb-4" md={12} lg={12} xl={7}>
-            <ExpenseCategoriesChart
-              height={null}
-              onClick={selectCategory}
-              selectedCategory={selectedCategory}
-              data={data}
-            />
+            <TransactionCategories data={data} selectedCategory={selectedCategory} onClick={selectCategory} />
           </Col>
         </Row>
       )}
