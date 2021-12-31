@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 import { Card } from 'reactstrap';
 
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active) {
@@ -42,7 +42,7 @@ const TransactionsCountByMonth = ({ height, width, data }) => (
         dataKey="value"
         tickCount={3}
         stroke={HEX_COLORS.text}
-        tick={{ fontSize: 10 }}
+        tick={{ fontSize: 9 }}
         width={20}
         axisLine={false}
         tickLine={false}

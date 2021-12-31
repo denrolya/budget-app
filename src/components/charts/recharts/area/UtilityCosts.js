@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import snakeCase from 'voca/snake_case';
 
 import MoneyValue from 'src/components/MoneyValue';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const SEASONS = ['Winter', 'Spring', 'Summer', 'Autumn'];
@@ -19,8 +19,12 @@ const CustomTooltip = ({ active, payload }) => {
   }
 
   return (
-    <Card body>
-      <h5 className="mb-0">{payload[0].payload.name}</h5>
+    <Card body className="px-3 py-2">
+      <h5 className="mb-0">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
+        {payload[0].payload.name}
+      </h5>
       <p>
         <MoneyValue bold amount={payload[0].value} maximumFractionDigits={0} />
       </p>

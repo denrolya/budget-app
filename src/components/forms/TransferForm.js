@@ -2,7 +2,6 @@ import { ErrorMessage, Field, Formik } from 'formik';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
 import {
   Col, Form, FormGroup, Input, Label,

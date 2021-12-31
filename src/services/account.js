@@ -3,7 +3,7 @@ import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 
 import { initializeList } from 'src/services/transaction';
-import { RAINBOW_COLORS } from 'src/constants/charts';
+import { RAINBOW_COLORS } from 'src/constants/color';
 import { amountInPercentage } from 'src/services/common';
 
 export const formatDetails = (data, baseCurrencyCode) => {

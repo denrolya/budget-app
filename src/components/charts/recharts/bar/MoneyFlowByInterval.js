@@ -9,7 +9,7 @@ import {
 
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active) {
@@ -23,7 +23,11 @@ const CustomTooltip = ({ active, payload, label }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">{date.format('MMMM')}</h5>
+      <h5 className="mb-1">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
+        {date.format('MMMM')}
+      </h5>
       {income && (
         <p className="text-info mb-0">
           <MoneyValue bold amount={income.value} maximumFractionDigits={0} />
@@ -74,11 +78,11 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
         <defs>
           <linearGradient id="income-gradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={HEX_COLORS.info} stopOpacity={0.4} />
-            <stop offset="90%" stopColor={`${HEX_COLORS.info}11`} stopOpacity={0.2} />
+            <stop offset="80%" stopColor={`${HEX_COLORS.info}11`} stopOpacity={0.2} />
           </linearGradient>
           <linearGradient id="expense-gradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={HEX_COLORS.primary} stopOpacity={0.4} />
-            <stop offset="90%" stopColor={`${HEX_COLORS.primary}11`} stopOpacity={0.2} />
+            <stop offset="0%" stopColor={`${HEX_COLORS.primary}11`} stopOpacity={0.2} />
+            <stop offset="80%" stopColor={HEX_COLORS.primary} stopOpacity={0.4} />
           </linearGradient>
         </defs>
 

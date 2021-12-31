@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const CustomTooltip = ({ active, payload, selectedYear }) => {
@@ -66,7 +66,14 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
         <Bar dataKey="previous" fill="url(#previous-gradient)" dot={false} stroke={HEX_COLORS.default} />
         <Bar dataKey="current" fill="url(#current-gradient)" dot={false} stroke={HEX_COLORS.info} />
 
-        <YAxis dataKey="current" tickCount={3} axisLine={false} tickFormatter={yAxisTickFormatter} />
+        <YAxis
+          dataKey="current"
+          width={45}
+          tick={{ fontSize: 9 }}
+          tickCount={3}
+          axisLine={false}
+          tickFormatter={yAxisTickFormatter}
+        />
         <XAxis dataKey="name" axisLine={false} />
 
         <CartesianGrid opacity={0.1} vertical={false} />

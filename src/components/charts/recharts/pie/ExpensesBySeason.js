@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 
 const renderActiveShape = ({
   cx,

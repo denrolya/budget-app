@@ -3,8 +3,7 @@ import TreeModel from 'tree-model';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import { randomFloat, randomColor } from 'src/services/common';
-import { randomMoneyFlowData } from 'src/services/moneyFlowChart';
+import { randomFloat, randomColor, randomMoneyFlowData } from 'src/services/common';
 
 const startOfYear = moment().startOf('year');
 const endOfYear = moment().endOf('year');
@@ -269,52 +268,22 @@ export const INITIAL_STATE = {
     expenseCategoriesByWeekdays: new TimeperiodStatistics({
       from: startOfYear,
       to: endOfYear,
-      data: {
-        'Food & Drinks': {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(206, 34, 24, 0.6)',
-        },
-        Housing: {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(215, 252, 176, 0.6)',
-        },
-        'Work Expense': {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(43, 16, 40, 0.6)',
-        },
-        Unknown: {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(86, 2, 30, 0.6)',
-        },
-        Transportation: {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(50, 179, 143, 0.6)',
-        },
-        Other: {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(242, 198, 1, 0.6)',
-        },
-        'Life & Entertainment': {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(246, 215, 239, 0.6)',
-        },
-        Shopping: {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(120, 73, 207, 0.6)',
-        },
-        'Health & Fitness': {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(81, 217, 21, 0.6)',
-        },
-        Vehicle: {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(23, 234, 193, 0.6)',
-        },
-        'Financial expenses': {
-          data: [1, 2, 3, 4, 5, 6, 7].map(() => randomFloat()),
-          color: 'rgba(31, 78, 95, 0.6)',
-        },
-      },
+      data: [1, 2, 3, 4, 5, 6, 7].map((day) => ({
+        name: moment().isoWeekday(day).format('dddd'),
+        values: ['Food & Drinks',
+          'Housing',
+          'Work Expense',
+          'Unknown',
+          'Transportation',
+          'Other',
+          'Life & Entertainment',
+          'Shopping',
+          'Health & Fitness',
+          'Vehicle',
+          'Financial expenses'].map((cat) => ({
+          [cat]: randomFloat(),
+        })),
+      })),
     }),
     utilityCostsByInterval: new TimeperiodIntervalStatistics({
       interval: 'quarter',

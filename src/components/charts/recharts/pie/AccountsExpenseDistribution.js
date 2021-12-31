@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload, total }) => {
   const { account, amount, value } = payload[0].payload;
 
   return (
-    <Card body>
+    <Card body className="px-3 py-2">
       <h5
         className="mb-1"
         style={{
@@ -48,8 +48,12 @@ const CustomTooltip = ({ active, payload, total }) => {
   );
 };
 
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
 CustomTooltip.propTypes = {
-  active: PropTypes.bool.isRequired,
+  active: PropTypes.bool,
   payload: PropTypes.array.isRequired,
   total: PropTypes.number.isRequired,
 };

@@ -5,7 +5,7 @@ import { Card } from 'reactstrap';
 import { Treemap, ResponsiveContainer, Tooltip } from 'recharts';
 import sortBy from 'lodash/sortBy';
 
-import { RAINBOW_COLORS } from 'src/constants/charts';
+import { RAINBOW_COLORS } from 'src/constants/color';
 import MoneyValue from 'src/components/MoneyValue';
 
 /* eslint-disable react/prop-types */

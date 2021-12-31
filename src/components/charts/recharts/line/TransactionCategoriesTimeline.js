@@ -8,7 +8,7 @@ import color from 'randomcolor';
 import { Card } from 'reactstrap';
 
 import MoneyValue from 'src/components/MoneyValue';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const CustomTooltip = ({ active, payload }) => {
@@ -20,7 +20,7 @@ const CustomTooltip = ({ active, payload }) => {
   const categories = Object.keys(values);
 
   return (
-    <Card body>
+    <Card body className="px-3 py-2">
       <h4 className="mb-1 text-white">{moment.unix(date).format('MMMM')}</h4>
       {categories.map((category) => (
         <p className="mb-0" key={category}>
@@ -103,7 +103,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
           axisLine={false}
           tickLine={false}
           tickCount={3}
-          tick={{ fontSize: 10 }}
+          tick={{ fontSize: 9 }}
           width={45}
           stroke={HEX_COLORS.text}
           tickFormatter={yAxisTickFormatter}

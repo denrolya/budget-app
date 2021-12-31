@@ -4,7 +4,7 @@ import React from 'react';
 import { Badge } from 'reactstrap';
 import Swal from 'sweetalert2';
 
-import { MOMENT_VIEW_TIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
+import { MOMENT_VIEW_TIME_FORMAT } from 'src/constants/datetime';
 
 /**
  * Shows cancellation confirmation alert

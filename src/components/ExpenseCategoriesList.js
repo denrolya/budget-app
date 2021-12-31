@@ -22,7 +22,7 @@ import {
   amountInPercentage, arrowIcon, expenseRatioColor, ratio,
 } from 'src/services/common';
 import { generateLinkToExpenses } from 'src/services/routing';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 
 const ExpenseCategoriesList = ({
   data, selectedCategory, onCategorySelect, from, to,

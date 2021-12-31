@@ -9,7 +9,7 @@ import {
 import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import MoneyValue from 'src/components/MoneyValue';
 import { CURRENCIES } from 'src/constants/currency';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 
 const CustomTooltip = ({ active, payload, account }) => {
   if (!active) {

@@ -2,8 +2,7 @@ import TreeModel from 'tree-model';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import { randomTransactionCategoriesTimelineData } from 'src/services/common';
-import { randomMoneyFlowData } from 'src/services/moneyFlowChart';
+import { randomMoneyFlowData, randomTransactionCategoriesTimelineData } from 'src/services/common';
 
 export const AVAILABLE_STATISTICS = [
   'moneyFlow',

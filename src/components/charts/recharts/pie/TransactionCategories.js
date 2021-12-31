@@ -14,7 +14,7 @@ import {
   ACCOUNT_TYPE_CASH,
   ACCOUNT_TYPE_INTERNET,
 } from 'src/constants/account';
-import { HEX_COLORS } from 'src/constants/charts';
+import { HEX_COLORS } from 'src/constants/color';
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active) {
@@ -27,7 +27,7 @@ const CustomTooltip = ({ active, payload }) => {
   const color = expenseRatioColor(amountInPercentage(previous, total, 0));
 
   return (
-    <Card body>
+    <Card body className="px-3 py-2">
       <h5
         className="mb-1"
         style={{

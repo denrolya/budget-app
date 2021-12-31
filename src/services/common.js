@@ -221,6 +221,24 @@ export const randomTransactionCategoriesTimelineData = () => ({
   ],
 });
 
+export const randomMoneyFlowData = () => {
+  const result = [];
+  const startOfYear = moment().startOf('year');
+  const endOfYear = moment().endOf('year').startOf('day');
+
+  while (endOfYear.diff(startOfYear, 'days') >= 0) {
+    result.push({
+      date: startOfYear.clone().unix(),
+      expense: -randomFloat(),
+      income: randomFloat(),
+    });
+
+    startOfYear.add(1, 'month');
+  }
+
+  return result;
+};
+
 export const generateCategoriesStatisticsTree = (current, previous) => {
   const tree = new TreeModel({
     modelComparatorFn: (a, b) => b.total - a.total,
