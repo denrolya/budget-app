@@ -84,7 +84,7 @@ const TransactionList = ({
         <Col xs={12} sm={12} md={8} lg={9}>
           <LoadingCard inverse isLoading={isLoading} className="card-transactions card-table mb-0">
             <CardBody className="p-0">
-              { ((window.isDev && isGridSelected) || (!window.isDev && window.isMobile)) && (
+              { ((window.isDev && isGridSelected) || (!window.isDev && !window.isMobile)) && (
                 <TransactionsGrid
                   data={data}
                   pagination={pagination}
@@ -97,7 +97,7 @@ const TransactionList = ({
                 />
               ) }
 
-              { ((window.isDev && !isGridSelected) || (!window.isDev && !window.isMobile)) && (
+              { ((window.isDev && !isGridSelected) || (!window.isDev && window.isMobile)) && (
                 <TransactionsTable
                   data={data}
                   pagination={pagination}
