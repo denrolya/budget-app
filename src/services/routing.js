@@ -123,9 +123,9 @@ export const getBrandText = (path) => {
 
 export const isOnPath = (pathname) => !!matchPath(history.location.pathname, pathname);
 
-export const isOnDashboardPage = () => isOnPath(ROUTE_DASHBOARD);
-export const isOnTransfersPage = () => isOnPath(ROUTE_TRANSFERS);
-export const isOnTransactionsPage = () => isOnPath(ROUTE_TRANSACTIONS);
+export const isOnDashboardPage = () => isOnPath(`/${ROUTE_DASHBOARD}`);
+export const isOnTransfersPage = () => isOnPath(`/${ROUTE_TRANSFERS}`);
+export const isOnTransactionsPage = () => isOnPath(`/${ROUTE_TRANSACTIONS}`);
 
 export const getQueryParam = (queryString, key, callback = false) => {
   const parsed = parse(queryString);

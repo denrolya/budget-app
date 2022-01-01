@@ -68,6 +68,8 @@ const TransactionForm = ({
         ...form,
         initialValues: {
           ...modelData,
+          category: modelData.category?.name ? modelData.category.name : modelData.category,
+          account: modelData.account?.id ? modelData.account.id : modelData.account,
           executedAt: moment(modelData.executedAt).format(MOMENT_DATETIME_FORMAT),
           compensations: modelData?.compensations?.map((c) => ({
             ...c,
