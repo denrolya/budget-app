@@ -49,9 +49,27 @@ const TransactionCategoriesRadial = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <RadialBarChart cx="50%" cy="50%" innerRadius="15%" outerRadius="100%" barSize={20} data={chartData}>
+        <defs>
+          <filter id="shadow" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="blur" />
+            <feOffset in="blur" dx="0" dy="15" result="offsetBlur" />
+            <feFlood floodColor="#000000" floodOpacity="0.5" result="offsetColor" />
+            <feComposite
+              in="offsetColor"
+              in2="offsetBlur"
+              operator="in"
+              result="offsetBlur"
+            />
+            <feMerge>
+              <feMergeNode />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
         <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
         <RadialBar
           clockWise
+          filter="url(#shadow)"
           background={{ fill: '#ffffff11' }}
           angleAxisId={0}
           minAngle={15}

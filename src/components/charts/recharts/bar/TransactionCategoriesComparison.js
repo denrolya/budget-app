@@ -53,6 +53,9 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data} barGap="5%" barCategoryGap="15%">
         <defs>
+          <filter id="shadow" height="200%">
+            <feDropShadow dx="0" dy="10" stdDeviation="10" />
+          </filter>
           <linearGradient id="previous-gradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={`${HEX_COLORS.default}`} stopOpacity={0.2} />
             <stop offset="50%" stopColor={`${HEX_COLORS.default}11`} stopOpacity={0.4} />
@@ -63,8 +66,8 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
           </linearGradient>
         </defs>
 
-        <Bar dataKey="previous" fill="url(#previous-gradient)" dot={false} stroke={HEX_COLORS.default} />
-        <Bar dataKey="current" fill="url(#current-gradient)" dot={false} stroke={HEX_COLORS.info} />
+        <Bar filter="url(#shadow)" dataKey="previous" fill="url(#previous-gradient)" dot={false} stroke={HEX_COLORS.default} />
+        <Bar filter="url(#shadow)" dataKey="current" fill="url(#current-gradient)" dot={false} stroke={HEX_COLORS.info} />
 
         <YAxis
           dataKey="current"

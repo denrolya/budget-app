@@ -68,6 +68,11 @@ const AccountDistribution = ({ data, height }) => {
           top: 0, left: 0, right: 0, bottom: 0,
         }}
       >
+        <defs>
+          <filter id="shadow" height="200%">
+            <feDropShadow dx="0" dy="10" stdDeviation="10" />
+          </filter>
+        </defs>
         <Pie
           data={data}
           labelLine={false}
@@ -77,7 +82,7 @@ const AccountDistribution = ({ data, height }) => {
           dataKey="value"
         >
           {data.map(({ account }) => (
-            <Cell key={`account-${account.id}`} stroke={account.color} strokeWidth={2} fill={`${account.color}33`} />
+            <Cell filter="url(#shadow)" key={`account-${account.id}`} stroke={account.color} strokeWidth={2} fill={`${account.color}33`} />
           ))}
         </Pie>
         <Tooltip content={<CustomTooltip total={total} />} />

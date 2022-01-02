@@ -80,6 +80,11 @@ const AccountDistribution = ({ data, selectedCategory, onClick }) => {
           bottom: 0,
         }}
       >
+        <defs>
+          <filter id="shadow" height="200%">
+            <feDropShadow dx="0" dy="10" stdDeviation="10" />
+          </filter>
+        </defs>
         <Pie
           clockwise
           data={chartData}
@@ -98,10 +103,11 @@ const AccountDistribution = ({ data, selectedCategory, onClick }) => {
 
             return (
               <Cell
+                filter="url(#shadow)"
                 key={`account-${name}`}
-                stroke={HEX_COLORS[color]}
-                strokeWidth={active === index ? 4 : 2}
-                fill={`${HEX_COLORS[color]}${active === index ? '33' : '11'}`}
+                stroke={`${HEX_COLORS[color]}`}
+                strokeWidth={active === index ? 3 : 2}
+                fill={`${HEX_COLORS[color]}${active === index ? '22' : '11'}`}
               />
             );
           })}

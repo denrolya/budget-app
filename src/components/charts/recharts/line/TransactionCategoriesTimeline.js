@@ -82,11 +82,30 @@ const TransactionCategoriesTimeline = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <LineChart data={chartData}>
+        <defs>
+          <filter id="shadow" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur" />
+            <feOffset in="blur" dx="0" dy="7" result="offsetBlur" />
+            <feFlood floodColor="#000000" floodOpacity="0.5" result="offsetColor" />
+            <feComposite
+              in="offsetColor"
+              in2="offsetBlur"
+              operator="in"
+              result="offsetBlur"
+            />
+            <feMerge>
+              <feMergeNode />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
         <CartesianGrid opacity={0.2} vertical={false} stroke={HEX_COLORS.text} />
         {Object.keys(data).map((category) => (
           <Line
             type="monotone"
             strokeWidth={2}
+            fillOpacity={1}
+            filter="url(#shadow)"
             dot={false}
             key={category}
             name={category}

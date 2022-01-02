@@ -88,8 +88,14 @@ const ExpensesBySeason = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <PieChart>
+        <defs>
+          <filter id="shadow" height="200%">
+            <feDropShadow dx="0" dy="10" stdDeviation="10" />
+          </filter>
+        </defs>
         <Pie
           clockwise
+          filter="url(#shadow)"
           startAngle={270}
           endAngle={-270}
           stroke="none"

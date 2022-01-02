@@ -36,6 +36,11 @@ CustomTooltip.propTypes = {
 const TransactionsCountByMonth = ({ height, width, data }) => (
   <ResponsiveContainer width={width} height={height}>
     <BarChart data={data} barGap="90%" barCategoryGap="70%">
+      <defs>
+        <filter id="shadow" height="200%">
+          <feDropShadow dx="0" dy="10" stdDeviation="10" />
+        </filter>
+      </defs>
       <CartesianGrid vertical={false} stroke={HEX_COLORS.default} />
 
       <YAxis
@@ -50,7 +55,7 @@ const TransactionsCountByMonth = ({ height, width, data }) => (
       <XAxis hide dataKey="date" axisLine={false} tickLine={false} />
 
       <Tooltip cursor={false} content={<CustomTooltip />} />
-      <Bar dataKey="value" width={5} fill={HEX_COLORS.secondary} />
+      <Bar filter="url(#shadow)" dataKey="value" width={5} fill={HEX_COLORS.secondary} />
     </BarChart>
   </ResponsiveContainer>
 );
