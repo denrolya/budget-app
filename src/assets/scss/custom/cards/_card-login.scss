@@ -1,0 +1,105 @@
+.card-login {
+  border-radius: $border-radius-lg;
+  padding-bottom: $padding-base-horizontal;
+
+  .card-header {
+    padding: 0 0 100px;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+    }
+
+    .card-title {
+      position: relative;
+      font-size: 5em;
+      font-weight: 900;
+      color: $black;
+      text-transform: lowercase;
+      margin-left: -5px;
+      z-index: 1;
+    }
+  }
+
+  .btn-wd {
+    min-width: 180px;
+  }
+
+  .logo-container {
+    width: 65px;
+    margin: 0 auto 55px auto;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .input-group:last-child {
+    margin-bottom: 40px;
+  }
+
+  &.card-plain {
+    @include input-coloured-bg(
+                    $opacity-5,
+                    $white,
+                    $white,
+                    $transparent-bg,
+                    $opacity-1,
+                    $opacity-2
+    );
+
+    .input-group-addon,
+    .form-group.no-border .input-group-addon,
+    .input-group.no-border .input-group-addon {
+      color: $opacity-8;
+    }
+  }
+
+  &.card-white {
+    background: $white;
+
+    .card-header {
+      .card-title {
+        color: $white;
+      }
+    }
+
+    @include form-control-placeholder(rgba($black, 0.4), 1);
+
+    .has-danger {
+      .form-control,
+      .input-group-prepend .input-group-text {
+        border-color: $danger-states;
+      }
+    }
+
+    .input-group-prepend .input-group-text {
+      border-color: rgba($black-states, 0.2);
+      color: $black-states;
+    }
+
+    .form-control {
+      color: $black;
+      border-color: rgba($black-states, 0.2);
+
+      ~ .input-group-prepend .input-group-text {
+        border-color: $primary;
+      }
+
+      &:focus {
+        border-color: $primary;
+      }
+    }
+  }
+
+  .link {
+    font-size: 10px;
+    text-decoration: none;
+  }
+
+  .card-black {
+    .link {
+      color: $white;
+    }
+  }
+}

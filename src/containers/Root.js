@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import 'src/assets/scss/black-dashboard-react.scss';
+import 'src/assets/scss/index.scss';
 import 'src/middlewares/axios';
 import 'src/middlewares/toastr';
 import store from 'src/store/store';

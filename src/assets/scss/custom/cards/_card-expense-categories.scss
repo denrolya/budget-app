@@ -1,0 +1,32 @@
+.card-expense-categories {
+  .breadcrumb {
+    &-item {
+      &.active {
+        color: $text-muted;
+      }
+
+      &:not(.active) {
+        cursor: pointer;
+        color: $primary-states;
+
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  .progress {
+    height: 0.1rem;
+  }
+}
+
+.wrapper:not(.white-content) .card-expense-categories {
+  a {
+    color: rgba(255, 255, 255, 0.7) !important;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+  }
+}

@@ -2,7 +2,9 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-import { Input, InputGroup, InputGroupText } from 'reactstrap';
+import {
+  Input, InputGroup, InputGroupAddon, InputGroupText,
+} from 'reactstrap';
 
 import { rangeToString } from 'src/services/common';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
@@ -36,9 +38,11 @@ const DateRange = ({
       onApply={onApply}
     >
       <InputGroup size={size} className="m-0">
-        <InputGroupText>
-          <i className="ion-md-calendar" aria-hidden />
-        </InputGroupText>
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>
+            <i className="ion-md-calendar" aria-hidden />
+          </InputGroupText>
+        </InputGroupAddon>
         <Input
           type="text"
           value={rangeToString(moment(from, MOMENT_DATE_FORMAT), moment(to, MOMENT_DATE_FORMAT))}

@@ -1,0 +1,134 @@
+%card-stats {
+  hr {
+    margin: 5px 10px;
+  }
+}
+
+.card-stats {
+  @extend %card-stats;
+
+  &-simple {
+    overflow: hidden;
+
+    &--animated::before {
+      content: '';
+      width: 100%;
+      padding-top: 100%;
+      border-radius: 50%;
+      background-image: linear-gradient(
+                      to top right,
+                      $primary,
+                      $primary-states
+      );
+      position: absolute;
+      left: -50%;
+      top: 0;
+      transform: scale(0);
+      transition: transform 0.4s ease 0s;
+    }
+
+    &:hover::before {
+      transform: scale(3);
+    }
+  }
+
+  &-carousel .card {
+    margin-bottom: 0;
+  }
+
+  .info-icon {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    @include diagonal-gradient($primary, $primary-states);
+
+    i[class^="ion-"] {
+      line-height: 2.15em;
+    }
+
+    i {
+      color: $white;
+      font-size: 1.7em;
+      padding: 14px 13px;
+    }
+
+    div {
+      color: $white;
+      font-size: 1.2em;
+      font-weight: 100;
+      line-height: 50px;
+      padding: 0 0 0 5px;
+    }
+
+    span {
+      color: $white;
+      font-size: 1.4em;
+      padding: 14px 13px;
+      line-height: 50px;
+      font-weight: bold;
+    }
+
+    &.icon-danger {
+      background: $danger;
+    }
+
+    &.icon-warning {
+      background: $warning;
+    }
+
+    &.icon-success {
+      background: $success;
+    }
+
+    &.icon-info {
+      background: $info;
+    }
+
+    &.icon-primary {
+      background: $primary;
+    }
+  }
+
+  .numbers {
+    .card-title {
+      margin-top: 0;
+    }
+
+    .card-category {
+      margin-bottom: 0;
+      color: $dark-gray;
+    }
+  }
+
+  .card-footer {
+    padding: 0;
+  }
+
+  hr {
+    border-color: lighten($black, 5%);
+  }
+
+  .stats {
+    color: rgba($white, 0.6);
+    margin: 10px;
+    font-size: 0.9em;
+  }
+
+  &.card-white {
+    hr {
+      border-color: rgba(43, 53, 83, 0.2);
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .card-stats [class*="col-"] .statistics::after {
+    display: none;
+  }
+}
+
+.card-stats-small {
+  h3.card-title {
+    font-size: 1.0375rem;
+  }
+}

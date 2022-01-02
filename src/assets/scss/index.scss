@@ -1,0 +1,142 @@
+/*
+ =========================================================
+ * Black Dashboard React v1.0.0 based on Black Dashboard - v1.0.0
+ =========================================================
+
+ * Product Page: https://www.creative-tim.com/product/black-dashboard-react
+ * Copyright 2018 Creative Tim (http://www.creative-tim.com)
+
+
+ =========================================================
+
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ */
+// Core
+@import 'custom/functions';
+@import 'bootstrap/functions';
+
+// Openbase theme
+@import 'custom/theme/openbase/variables';
+
+@import 'bootstrap/variables';
+@import 'bootstrap/mixins';
+@import 'custom/mixins';
+@import 'custom/utilities/helper';
+
+// Bootstrap components
+@import 'bootstrap/root';
+@import 'bootstrap/reboot';
+@import 'bootstrap/type';
+@import 'bootstrap/images';
+@import 'bootstrap/code';
+@import 'bootstrap/grid';
+@import 'bootstrap/tables';
+@import 'bootstrap/forms';
+@import 'bootstrap/buttons';
+@import 'bootstrap/transitions';
+@import 'bootstrap/dropdown';
+@import 'bootstrap/button-group';
+@import 'bootstrap/input-group';
+@import 'bootstrap/custom-forms';
+@import 'bootstrap/nav';
+@import 'bootstrap/navbar';
+@import 'bootstrap/card';
+@import 'bootstrap/breadcrumb';
+@import 'bootstrap/pagination';
+@import 'bootstrap/badge';
+@import 'bootstrap/jumbotron';
+@import 'bootstrap/alert';
+@import 'bootstrap/progress';
+@import 'bootstrap/media';
+@import 'bootstrap/list-group';
+@import 'bootstrap/close';
+@import 'bootstrap/modal';
+@import 'bootstrap/tooltip';
+@import 'bootstrap/popover';
+@import 'bootstrap/carousel';
+@import 'bootstrap/utilities';
+@import 'bootstrap/print';
+
+// Custom components
+@import 'custom/alerts';
+@import 'custom/badges';
+@import 'custom/buttons';
+@import 'custom/dropdown';
+@import 'custom/footer';
+@import 'custom/forms';
+@import 'custom/images';
+@import 'custom/modal';
+@import 'custom/navbar';
+@import 'custom/type';
+@import 'custom/tables';
+@import 'custom/checkboxes-radio';
+@import 'custom/fixed-plugin';
+@import 'custom/sidebar-and-main-panel';
+@import 'custom/misc';
+@import 'custom/rtl';
+@import 'custom/input-group';
+@import 'custom/pagination';
+@import 'custom/pills';
+@import 'custom/cursors';
+@import 'custom/preview';
+@import 'custom/overlay';
+// Light mode
+@import 'custom/white-content';
+
+// Cards
+@import 'custom/card';
+@import 'custom/cards/card-register';
+@import 'custom/cards/card-stats';
+@import 'custom/cards/card-chart';
+@import 'custom/cards/card-map';
+@import 'custom/cards/card-user';
+@import 'custom/cards/card-task';
+@import 'custom/cards/card-transaction';
+@import 'custom/cards/card-plain';
+@import 'custom/cards/card-collapse';
+@import 'custom/cards/card-login';
+@import 'custom/cards/card-expense-categories';
+@import 'custom/widths';
+
+// Vendors
+@import '../fonts/nucleo/nucleo-icons';
+@import '~font-awesome/css/font-awesome.css';
+@import '~react-bootstrap-typeahead/css/Typeahead.css';
+@import '~bootstrap-daterangepicker/daterangepicker.css';
+@import '~@mdi/font/scss/materialdesignicons';
+@import '~open-iconic/font/css/open-iconic-bootstrap';
+@import '~react-big-calendar/lib/sass/styles';
+@import '~react-big-calendar/lib/addons/dragAndDrop/styles';
+@import '~ionicons/dist/css/ionicons';
+
+// Vendor / Plugins Overrides
+@import 'plugins/react-sweetalert';
+@import 'plugins/react-datetime';
+@import 'plugins/react-bootstrap-daterangepicker';
+@import 'plugins/toastr';
+@import 'plugins/react-sortable-tree';
+@import 'plugins/react-big-calendar';
+@import 'plugins/my-masonry-grid';
+@import 'plugins/react-bootstrap-typeahead';
+@import 'plugins/devextreme';
+
+.table-responsive {
+  overflow: auto;
+}
+
+.transaction-filters {
+  .rbt-input-multi.form-control.rbt-input input {
+    color: white
+  }
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-control-typeahead ~ .invalid-feedback,
+.is-invalid ~ .invalid-feedback {
+  display: block
+}

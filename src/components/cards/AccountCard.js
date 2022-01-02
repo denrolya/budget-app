@@ -17,7 +17,7 @@ const AccountCard = ({ account, toggleEdit }) => (
         <Col xs={10}>
           <Col>
             <h5 className="text-uppercase text-muted mb-0 text-white card-title">{account.name}</h5>
-            <CardTitle tag="h3" className="account-balance">
+            <CardTitle tag="h3" className="font-weight-bolder">
               {account.balance}
             </CardTitle>
           </Col>

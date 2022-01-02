@@ -39,7 +39,7 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
       >
         <AccountName account={account} />
 
-        <span className="text-muted smaller d-block d-md-none text-left">
+        <span className="text-muted font-size-smaller d-block d-md-none text-left">
           <TransactionDate showTimeIcon showDate={false} date={executedAt} />
         </span>
         {note && (

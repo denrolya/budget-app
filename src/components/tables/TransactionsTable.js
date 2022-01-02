@@ -64,12 +64,12 @@ const TransactionsTable = ({
                 {!isToday(date) && !isYesterday(date) && date.format(MOMENT_VIEW_DATE_FORMAT)}
               </span>
               {' '}
-              <Badge pill color={sum > 0 ? 'success' : 'danger'} className="float-right">
+              <Badge pill className="float-right" color={sum > 0 ? 'success' : 'danger'}>
                 <MoneyValue amount={sum} />
               </Badge>
             </p>
             <UncontrolledCollapse defaultOpen toggler={`date-${date.format(MOMENT_DATE_FORMAT)}`}>
-              <Table size={size} className="table--border-top-0">
+              <Table className="table--border-top-0" size={size}>
                 <tbody>
                   {transactions.map((transaction) => (
                     <TransactionRow

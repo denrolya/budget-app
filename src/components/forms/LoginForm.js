@@ -12,6 +12,7 @@ import {
   FormGroup,
   Input,
   InputGroup,
+  InputGroupAddon,
   InputGroupText,
 } from 'reactstrap';
 import * as Yup from 'yup';
@@ -47,9 +48,11 @@ const LoginForm = ({ isLoading, logIn }) => {
                     'input-group-focus': selected === 'username',
                   })}
                 >
-                  <InputGroupText>
-                    <i className="fa fa-user" aria-hidden />
-                  </InputGroupText>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="fa fa-user" aria-hidden />
+                    </InputGroupText>
+                  </InputGroupAddon>
                   <Field
                     autoFocus
                     as={Input}
@@ -71,9 +74,11 @@ const LoginForm = ({ isLoading, logIn }) => {
                     'input-group-focus': selected === 'password',
                   })}
                 >
-                  <InputGroupText>
-                    <i className="fa fa-lock" aria-hidden />
-                  </InputGroupText>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="fa fa-lock" aria-hidden />
+                    </InputGroupText>
+                  </InputGroupAddon>
                   <Field
                     as={Input}
                     type="password"

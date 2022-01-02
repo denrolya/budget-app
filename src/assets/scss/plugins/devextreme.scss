@@ -1,0 +1,7 @@
+.table-active, .table-active > td, .table-active > th {
+  background-color: transparent !important;
+}
+
+.dx-g-bs4-inactive:before, .dx-g-bs4-inactive:after {
+  display: none;
+}

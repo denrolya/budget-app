@@ -57,7 +57,7 @@ const AccountTransactionsDetails = ({ account }) => {
             <Col xs={4} className="d-flex flex-column justify-content-between">
               <span className="h5 mb-2">In last 7 days</span>
               <span className="h1 mb-4 font-weight-light">
-                {account.logs.filter(({ date }) => date.isBefore(transactionsCountingFrom)).length}
+                {account.logs.filter(({ date }) => date.isAfter(transactionsCountingFrom)).length}
               </span>
             </Col>
           </Row>
@@ -66,10 +66,7 @@ const AccountTransactionsDetails = ({ account }) => {
             <Col>
               <span className="h5 mb-2 d-block">Transaction frequency over last 12 months</span>
               <span className="h1 mb-2 font-weight-light d-block">
-                Every
-                {transactionFrequency}
-                {' '}
-                hours
+                {`Every ${transactionFrequency} hours`}
               </span>
             </Col>
           </Row>
@@ -89,8 +86,8 @@ const AccountTransactionsDetails = ({ account }) => {
         </Col>
         <Col xs={12} md={6}>
           <span className="h5 mb-2 d-block">Latest Transactions</span>
-          <div className="content-preview">
-            <div className="content-preview-inner">
+          <div className="preview">
+            <div className="preview-inner">
               {account?.latestTransactions && (
                 <TransactionsTable data={latestTransactions} editTransaction={() => {}} deleteTransaction={() => {}} />
               )}

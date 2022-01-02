@@ -88,22 +88,28 @@ const TransactionsGrid = ({
     { name: 'amount', title: 'Amount' },
     { name: 'executedAt', title: 'When' },
     { name: 'executionTime', title: 'Time' },
-    { name: 'editAction', title: '' },
-    { name: 'deleteAction', title: '' },
+    { name: 'editAction', title: ' ' },
+    { name: 'deleteAction', title: ' ' },
   ]);
   const [columnOrder, setColumnOrder] = useState(columns.map(({ name }) => name));
   const [columnWidths, setColumnWidths] = useState([
-    { columnName: 'id', width: '50' },
+    { columnName: 'id', width: '55' },
     { columnName: 'account', width: '100' },
     { columnName: 'category', width: '40%' },
-    { columnName: 'amount', width: '150' },
+    { columnName: 'amount', width: 'auto' },
     { columnName: 'executedAt', width: 'auto' },
-    { columnName: 'executionTime', width: '70' },
+    { columnName: 'executionTime', width: '100' },
     { columnName: 'editAction', width: '40' },
-    { columnName: 'deleteAction', width: '40' },
+    { columnName: 'deleteAction', width: '30' },
   ]);
 
   const [grouping, setGrouping] = useState([{ columnName: 'executedAt' }]);
+  const [groupingStateColumnExtensions] = useState([
+    { columnName: 'id', groupingEnabled: false },
+    { columnName: 'executionTime', groupingEnabled: false },
+    { columnName: 'editAction', groupingEnabled: false },
+    { columnName: 'deleteAction', groupingEnabled: false },
+  ]);
   const [integratedGroupingColumnExtensions] = useState([
     { columnName: 'category', criteria: nameGroupCriteria },
     { columnName: 'account', criteria: nameGroupCriteria },
@@ -117,6 +123,8 @@ const TransactionsGrid = ({
     { columnName: 'amount', align: 'center' },
     { columnName: 'executedAt', align: 'right' },
     { columnName: 'executionTime', align: 'right' },
+    { columnName: 'editAction', align: 'center' },
+    { columnName: 'deleteAction', align: 'center' },
   ]);
 
   const expandedExecutedAtGroups = useMemo(
@@ -183,6 +191,7 @@ const TransactionsGrid = ({
         grouping={grouping}
         onGroupingChange={groupColumns}
         expandedGroups={expandedGroups}
+        columnExtensions={groupingStateColumnExtensions}
         onExpandedGroupsChange={setExpandedGroups}
       />
       <IntegratedGrouping columnExtensions={integratedGroupingColumnExtensions} />
@@ -194,7 +203,7 @@ const TransactionsGrid = ({
 
       <TableColumnResizing
         onColumnWidthsChange={setColumnWidths}
-        columnWidths={columnWidths}
+        defaultColumnWidths={columnWidths}
         resizingMode="nextColumn"
       />
 

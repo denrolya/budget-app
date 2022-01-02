@@ -1,0 +1,10 @@
+.rbt-input-multi.focus {
+  border-color: $info;
+  box-shadow: none;
+  outline: 0;
+}
+
+.rbt-token {
+  background-color: $info-states;
+  color: $body-color;
+}

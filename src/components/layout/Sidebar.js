@@ -138,9 +138,10 @@ const Sidebar = ({
                   <MoneyValue
                     bold
                     amount={totalAccountsValue}
-                    className={cn('text-currency', {
+                    className={cn('text-currency', 'font-size-larger', 'font-weight-bold', {
+                      'text-white': totalAccountsValue === 0,
+                      'text-danger': totalAccountsValue < 0,
                       'text-success': totalAccountsValue > 0,
-                      'text-danger': totalAccountsValue <= 0,
                     })}
                   />
                 )}
