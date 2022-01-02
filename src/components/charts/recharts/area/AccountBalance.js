@@ -47,19 +47,19 @@ const AccountBalance = ({ account }) => {
   const yAxisTickFormatter = (val) => `${CURRENCIES[account.currency].symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
   return (
-    <ResponsiveContainer width="100%" height={80}>
+    <ResponsiveContainer width="100%" height={200}>
       <AreaChart data={account.logs}>
         <defs>
           <linearGradient id={`${account.id}-gradient`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={HEX_COLORS.info} stopOpacity={0.4} />
-            <stop offset="75%" stopColor={`${HEX_COLORS.info}11`} stopOpacity={0.2} />
+            <stop offset="0%" stopColor={HEX_COLORS.success} stopOpacity={0.4} />
+            <stop offset="75%" stopColor={`${HEX_COLORS.success}11`} stopOpacity={0.2} />
           </linearGradient>
         </defs>
 
         <Area
           dot={false}
           type="monotone"
-          stroke={HEX_COLORS.info}
+          stroke={HEX_COLORS.success}
           dataKey={`values.${account.currency}`}
           fill={`url(#${account.id}-gradient)`}
         />
