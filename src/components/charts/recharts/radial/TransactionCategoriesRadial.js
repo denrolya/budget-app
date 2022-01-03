@@ -48,7 +48,16 @@ const TransactionCategoriesRadial = ({ data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <RadialBarChart cx="50%" cy="50%" innerRadius="15%" outerRadius="100%" barSize={20} data={chartData}>
+      <RadialBarChart
+        cx={showLegend ? '75%' : '50%'}
+        cy="50%"
+        innerRadius="15%"
+        outerRadius="100%"
+        barSize={20}
+        data={chartData}
+        startAngle={0}
+        endAngle={300}
+      >
         <defs>
           <filter id="shadow" height="200%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="blur" />
@@ -69,12 +78,12 @@ const TransactionCategoriesRadial = ({ data }) => {
         <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
         <RadialBar
           clockWise
+          dataKey="percentage"
           filter="url(#shadow)"
           background={{ fill: '#ffffff11' }}
           angleAxisId={0}
           minAngle={15}
           label={false}
-          dataKey="percentage"
         />
         <Tooltip content={<CustomTooltip />} />
         {showLegend && (

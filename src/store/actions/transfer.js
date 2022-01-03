@@ -141,36 +141,47 @@ export const deleteTransfer = ({ id }) => (dispatch) => Swal.fire({
     .catch(({ message }) => dispatch(Creators.deleteFailure(message)));
 });
 
-export const setPagination = (model) => (dispatch) => {
-  dispatch(Creators.setPagination(model));
-  history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+export const setPagination = (model) => (dispatch, getState) => {
+  if (!getState().transfer.pagination.isEqual(model)) {
+    dispatch(Creators.setPagination(model));
+    history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+  }
 };
 
 export const setPage = (page) => (dispatch, getState) => {
-  dispatch(Creators.setPage(page));
   const model = getState().transfer.pagination.merge({
     page,
   });
-  history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+
+  if (!getState().transfer.pagination.page !== page) {
+    dispatch(Creators.setPage(page));
+    history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+  }
 };
 
 export const setPerPage = (perPage) => (dispatch, getState) => {
-  dispatch(Creators.setPerPage(perPage));
   const model = getState().transfer.pagination.merge({
     perPage,
   });
-  history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+
+  if (getState().transfer.pagination.perPage !== perPage) {
+    dispatch(Creators.setPerPage(perPage));
+    history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+  }
 };
 
 export const resetPagination = () => (dispatch) => dispatch(Creators.resetPagination());
 
 export const setFilters = (filters) => (dispatch, getState) => {
   const { pagination } = getState().transfer;
-  dispatch(Creators.setFilters(filters));
   const model = pagination.merge({
     filters,
   });
-  history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+
+  if (!getState().transaction.pagination.isEqual(model)) {
+    dispatch(Creators.setFilters(filters));
+    history.push(`${ROUTE_TRANSFERS}?${model.getParamsQuery()}`);
+  }
 };
 
 export const resetFilters = () => (dispatch, getState) => {

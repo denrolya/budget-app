@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import {
-  ResponsiveContainer, LineChart, Line, Tooltip, YAxis, XAxis, CartesianGrid, Legend,
+  ResponsiveContainer, BarChart, Bar, Tooltip, YAxis, XAxis, CartesianGrid, Legend,
 } from 'recharts';
 import color from 'randomcolor';
 import { Card } from 'reactstrap';
@@ -31,7 +31,6 @@ const CustomTooltip = ({ active, payload }) => {
             style={{
               color: color({
                 luminosity: 'bright',
-                hue: 'aqua',
                 seed: category,
               }),
             }}
@@ -49,8 +48,8 @@ CustomTooltip.defaultProps = {
 };
 
 CustomTooltip.propTypes = {
-  payload: PropTypes.array.isRequired,
   active: PropTypes.bool,
+  payload: PropTypes.array,
 };
 
 const TransactionCategoriesTimeline = ({ data }) => {
@@ -81,7 +80,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={250}>
-      <LineChart data={chartData}>
+      <BarChart data={chartData}>
         <defs>
           <filter id="shadow" height="200%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur" />
@@ -101,7 +100,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
         </defs>
         <CartesianGrid opacity={0.2} vertical={false} stroke={HEX_COLORS.text} />
         {Object.keys(data).map((category) => (
-          <Line
+          <Bar
             type="monotone"
             strokeWidth={2}
             fillOpacity={1}
@@ -111,8 +110,11 @@ const TransactionCategoriesTimeline = ({ data }) => {
             name={category}
             dataKey={`values.${category}`}
             stroke={color({
-              luminosity: 'bright',
-              hue: 'aqua',
+              luminosity: 'dark',
+              seed: category,
+            })}
+            fill={color({
+              luminosity: 'dark',
               seed: category,
             })}
           />
@@ -130,14 +132,14 @@ const TransactionCategoriesTimeline = ({ data }) => {
         <XAxis hide dataKey="date" axisLine={false} tickLine={false} stroke={HEX_COLORS.text} />
 
         <Legend iconType="square" verticalAlign="top" />
-        <Tooltip content={<CustomTooltip />} />
-      </LineChart>
+        <Tooltip cursor={false} content={<CustomTooltip />} />
+      </BarChart>
     </ResponsiveContainer>
   );
 };
 
 TransactionCategoriesTimeline.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 
 export default TransactionCategoriesTimeline;

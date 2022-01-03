@@ -49,7 +49,7 @@ CustomTooltip.defaultProps = {
 CustomTooltip.propTypes = {
   active: PropTypes.bool,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  payload: PropTypes.array.isRequired,
+  payload: PropTypes.array,
 };
 
 /**

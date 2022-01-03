@@ -52,12 +52,17 @@ const CustomTooltip = ({ active, payload }) => {
   );
 };
 
+CustomTooltip.defaultProps = {
+  active: false,
+};
+
 CustomTooltip.propTypes = {
-  active: PropTypes.bool.isRequired,
+  active: PropTypes.bool,
   payload: PropTypes.array.isRequired,
 };
 
-const AccountDistribution = ({ data, selectedCategory, onClick }) => {
+const TransactionCategories = ({ data, selectedCategory, onClick }) => {
+  console.log(data);
   const total = useMemo(() => sumBy(data, 'value'), [data]);
   const [chartData, setChartData] = useState([]);
   const onSectorEnter = (_, index) => setActive(index);
@@ -144,25 +149,12 @@ const AccountDistribution = ({ data, selectedCategory, onClick }) => {
   );
 };
 
-AccountDistribution.defaultProps = {};
+TransactionCategories.defaultProps = {};
 
-AccountDistribution.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    account: PropTypes.shape({
-      type: PropTypes.oneOf([ACCOUNT_TYPE_BANK_CARD, ACCOUNT_TYPE_INTERNET, ACCOUNT_TYPE_CASH, ACCOUNT_TYPE_BASIC])
-        .isRequired,
-      icon: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      currency: PropTypes.string.isRequired,
-      color: PropTypes.string,
-      balance: PropTypes.number,
-      values: PropTypes.object,
-    }).isRequired,
-    amount: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-  })).isRequired,
+TransactionCategories.propTypes = {
+  data: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
   selectedCategory: PropTypes.string,
 };
 
-export default AccountDistribution;
+export default TransactionCategories;

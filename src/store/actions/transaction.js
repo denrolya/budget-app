@@ -194,31 +194,30 @@ export const deleteTransaction = (transaction) => (dispatch, getState) => {
 };
 
 export const setPagination = (model) => (dispatch, getState) => {
-  dispatch(Creators.setPagination(model));
-
   if (!getState().transaction.pagination.isEqual(model)) {
+    dispatch(Creators.setPagination(model));
     history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
 
 export const setPage = (page) => (dispatch, getState) => {
-  dispatch(Creators.setPage(page));
   const model = getState().transaction.pagination.merge({
     page,
   });
 
-  if (!getState().transaction.pagination.isEqual(model)) {
+  if (!getState().transaction.pagination.page !== page) {
+    dispatch(Creators.setPage(page));
     history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
 
 export const setPerPage = (perPage) => (dispatch, getState) => {
-  dispatch(Creators.setPerPage(perPage));
   const model = getState().transaction.pagination.merge({
     perPage,
   });
 
-  if (!getState().transaction.pagination.isEqual(model)) {
+  if (getState().transaction.pagination.perPage !== perPage) {
+    dispatch(Creators.setPerPage(perPage));
     history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
@@ -227,12 +226,12 @@ export const resetPagination = () => (dispatch) => dispatch(Creators.resetPagina
 
 export const setFilters = (filters) => (dispatch, getState) => {
   const { pagination } = getState().transaction;
-  dispatch(Creators.setFilters(filters));
   const model = pagination.merge({
     filters,
   });
 
   if (!getState().transaction.pagination.isEqual(model)) {
+    dispatch(Creators.setFilters(filters));
     history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };

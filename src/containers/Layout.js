@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { connect } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
@@ -74,6 +74,7 @@ const Layout = ({
   fetchDebts,
   fetchExchangeRates,
 }) => {
+  const [isVitalDataLoaded, setIsVitalDataLoaded] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const swipeHandlers = useSwipeable({
@@ -85,17 +86,18 @@ const Layout = ({
 
   const handleTransactionSubmission = (transaction) => registerTransaction(transaction.type, transaction);
 
+  const fetchData = async () => {
+    await fetchAccounts();
+    await fetchDebts();
+    await fetchExchangeRates();
+    setIsVitalDataLoaded(true);
+  };
+
   useEffect(() => {
-    fetchAccounts();
-    fetchDebts();
-    fetchExchangeRates();
+    fetchData();
   }, []);
 
-  const copyTokenToClipboard = () => {
-    copyToClipboard(localStorage.getItem('token'));
-
-    notify('info', 'Copied to clipboard');
-  };
+  const copyTokenToClipboard = () => copyToClipboard(localStorage.getItem('token'));
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -140,7 +142,9 @@ const Layout = ({
             isSidebarOpened={isSidebarOpened}
           />
           <div className="content pb-0">
-            <Outlet />
+            {isVitalDataLoaded && (
+              <Outlet />
+            ) }
           </div>
         </div>
       </div>
