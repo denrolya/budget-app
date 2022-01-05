@@ -98,7 +98,7 @@ export const fetchList = () => (dispatch) => {
 
   return axios
     .get(Routing.generate('api_v1_account_list'))
-    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data, 'updated_at', 'desc'))))
+    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data, 'lastTransactionAt', 'desc'))))
     .catch((e) => {
       console.error(e);
       dispatch(Creators.fetchListFailure(e.message));
