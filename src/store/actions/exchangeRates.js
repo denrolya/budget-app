@@ -1,6 +1,8 @@
 import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
-import Routing from 'src/services/routing';
+import moment from 'moment-timezone';
+
+import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
@@ -14,6 +16,6 @@ export const { Types, Creators } = createActions(
 export const fetch = () => async (dispatch) => {
   dispatch(Creators.fetchRequest());
 
-  const { data } = await axios.get(Routing.generate('api_v1_currency_rates'));
-  dispatch(Creators.fetchSuccess(data));
+  const { data } = await axios.get(`api/exchange-rates/${moment().format(MOMENT_DATE_FORMAT)}`);
+  dispatch(Creators.fetchSuccess(data.rates));
 };
