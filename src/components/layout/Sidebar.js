@@ -21,12 +21,12 @@ const Sidebar = ({
 }) => {
   const { pathname } = useLocation();
   const { symbol, code } = useBaseCurrency();
-  const totalDebt = useMemo(() => sumBy(debts, ({ values }) => values[code], [debts]));
-  const totalAccountsValue = useMemo(() => sumBy(accounts, ({ values }) => values[code]), [accounts]);
+  const totalDebt = useMemo(() => sumBy(debts, ({ convertedValues }) => convertedValues[code], [debts]));
+  const totalAccountsValue = useMemo(() => sumBy(accounts, ({ convertedValues }) => convertedValues[code]), [accounts]);
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
 
   const accountsOrdered = useMemo(
-    () => orderBy(accounts, 'name').filter(({ values }) => Math.abs(values[code]) >= 0.5),
+    () => orderBy(accounts, 'name').filter(({ convertedValues }) => Math.abs(convertedValues[code]) >= 0.5),
     [accounts],
   );
 

@@ -39,14 +39,7 @@ export const { Types, Creators } = createActions(
 );
 
 export const fetchCategories = (type) => axios
-  .get(
-    Routing.generate(
-      'api_v1_category_list',
-      type && {
-        types: [type],
-      },
-    ),
-  )
+  .get(type ? `api/categories/${type}` : 'api/categories')
   .then((response) => uniqBy(response.data, 'name'));
 
 export const fetchList = (types) => (dispatch) => {

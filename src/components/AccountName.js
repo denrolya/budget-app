@@ -55,8 +55,6 @@ AccountName.defaultProps = {
 
 AccountName.propTypes = {
   account: PropTypes.shape({
-    type: PropTypes.oneOf([ACCOUNT_TYPE_BANK_CARD, ACCOUNT_TYPE_INTERNET, ACCOUNT_TYPE_CASH, ACCOUNT_TYPE_BASIC])
-      .isRequired,
     icon: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     currency: PropTypes.string.isRequired,

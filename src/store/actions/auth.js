@@ -59,9 +59,9 @@ export const loginUser = ({ username, password }) => (dispatch) => {
   dispatch(Creators.loginRequest());
 
   return axios
-    .post(Routing.generate('fos_user_security_login'), {
-      _username: username,
-      _password: password,
+    .post('/api/login_check', {
+      username,
+      password,
     })
     .then(({ data }) => dispatch(authorize(data.token)))
     .catch(({ message }) => dispatch(Creators.loginFailure(message)));

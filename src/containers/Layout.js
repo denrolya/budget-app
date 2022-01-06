@@ -21,7 +21,6 @@ import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { fetchList as fetchDebts } from 'src/store/actions/debt';
 import { registerTransaction } from 'src/store/actions/transaction';
-import { notify } from 'src/store/actions/global';
 import { switchBaseCurrency } from 'src/store/actions/user';
 import {
   closeSidebar,
@@ -36,7 +35,7 @@ import {
   toggleTransferModal,
 } from 'src/store/actions/ui';
 import { fetch as fetchExchangeRates } from 'src/store/actions/exchangeRates';
-import DraftCashExpenseForm from 'src/components/forms/DraftCashExpenseForm';
+import DraftCashExpenseModalForm from 'src/components/forms/DraftCashExpenseModalForm';
 import { CURRENCIES } from 'src/constants/currency';
 import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 
@@ -61,12 +60,9 @@ const Layout = ({
   isDarkModeOn,
   isHeaderOpened,
   isSidebarOpened,
-  isTransactionModalOpened,
-  isDraftExpenseModalOpened,
   isTransferModalOpened,
   isDebtModalOpened,
   isAccountModalOpened,
-  isTransactionRequestInProgress,
   isTransferRequestInProgress,
   isAssetsLoading,
   updateDashboard,
@@ -83,8 +79,6 @@ const Layout = ({
     delta: 40,
     preventDefaultTouchmoveEvent: false,
   });
-
-  const handleTransactionSubmission = (transaction) => registerTransaction(transaction.type, transaction);
 
   const fetchData = async () => {
     await fetchAccounts();
@@ -127,7 +121,12 @@ const Layout = ({
           updateDashboard={updateDashboard}
         />
 
-        <div className="main-panel" role="main" data-color={colorScheme} onClick={() => isSidebarOpened && toggleSidebar()}>
+        <div
+          className="main-panel"
+          role="main"
+          data-color={colorScheme}
+          onClick={() => isSidebarOpened && toggleSidebar()}
+        >
           <Header
             onCurrencySwitch={switchBaseCurrency}
             onTokenCopyClick={copyTokenToClipboard}
@@ -149,19 +148,9 @@ const Layout = ({
         </div>
       </div>
 
-      <DraftCashExpenseForm
-        isOpen={isDraftExpenseModalOpened}
-        isLoading={isTransactionRequestInProgress}
-        toggleModal={toggleDraftExpenseModal}
-        onSubmit={handleTransactionSubmission}
-      />
+      <DraftCashExpenseModalForm />
 
-      <TransactionModalForm
-        isOpen={isTransactionModalOpened}
-        isLoading={isTransactionRequestInProgress}
-        toggleTransactionModal={toggleTransactionModal}
-        onSubmit={handleTransactionSubmission}
-      />
+      <TransactionModalForm />
 
       <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
         <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
@@ -204,9 +193,6 @@ Layout.propTypes = {
   isDebtModalOpened: PropTypes.bool.isRequired,
   isHeaderOpened: PropTypes.bool.isRequired,
   isSidebarOpened: PropTypes.bool.isRequired,
-  isTransactionModalOpened: PropTypes.bool.isRequired,
-  isDraftExpenseModalOpened: PropTypes.bool.isRequired,
-  isTransactionRequestInProgress: PropTypes.bool.isRequired,
   isTransferModalOpened: PropTypes.bool.isRequired,
   isTransferRequestInProgress: PropTypes.bool.isRequired,
   logoutUser: PropTypes.func.isRequired,
@@ -235,12 +221,9 @@ const mapStateToProps = ({
   colorScheme: ui.colorScheme,
   isSidebarOpened: ui.isSidebarOpened,
   isHeaderOpened: ui.isHeaderOpened,
-  isDraftExpenseModalOpened: ui.isDraftExpenseModalOpened,
-  isTransactionModalOpened: ui.isTransactionModalOpened,
   isTransferModalOpened: ui.isTransferModalOpened,
   isDebtModalOpened: ui.isDebtModalOpened,
   isAccountModalOpened: ui.isAccountModalOpened,
-  isTransactionRequestInProgress: isActionLoading(ui.TRANSACTION_REGISTER),
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
   accounts: account.filter(({ archivedAt }) => !archivedAt),
   debts: debt.debts,

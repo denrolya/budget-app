@@ -51,6 +51,22 @@ export const { Types, Creators } = createActions(
   { prefix: 'DEBT_' },
 );
 
+export const fetchList = () => (dispatch, getState) => {
+  dispatch(Creators.fetchListRequest());
+
+  return axios
+    .get('api/debts', {
+      withDeleted: getState().debt.withClosed ? 1 : 0,
+    })
+    .then((response) => {
+      dispatch(Creators.fetchListSuccess(orderBy(response.data, 'updated_at', 'asc')));
+    })
+    .catch((e) => {
+      console.error(e);
+      dispatch(Creators.fetchListFailure(e.message));
+    });
+};
+
 export const createDebt = (debt) => (dispatch) => {
   dispatch(Creators.createRequest());
 
@@ -83,24 +99,6 @@ export const editDebt = (id, debt) => (dispatch) => {
       dispatch(fetchList());
     }
   });
-};
-
-export const fetchList = () => (dispatch, getState) => {
-  dispatch(Creators.fetchListRequest());
-
-  return axios
-    .get(
-      Routing.generate('api_v1_debt_list', {
-        withClosed: getState().debt.withClosed ? 1 : 0,
-      }),
-    )
-    .then((response) => {
-      dispatch(Creators.fetchListSuccess(orderBy(response.data, 'updated_at', 'asc')));
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.fetchListFailure(e.message));
-    });
 };
 
 export const fetchTransactionsList = (id) => (dispatch) => {

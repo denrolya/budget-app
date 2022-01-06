@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   ErrorMessage, Field, Formik, Form,
 } from 'formik';
@@ -8,21 +9,22 @@ import PropTypes from 'prop-types';
 import {
   Col, FormGroup, Input, Label,
 } from 'reactstrap';
+import { isActionLoading } from 'src/services/common';
+import { toggleDraftExpenseModal } from 'src/store/actions/ui';
 import * as Yup from 'yup';
 
+import { registerTransaction } from 'src/store/actions/transaction';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-import { fetchTypeaheadList as fetchAccounts } from 'src/store/actions/account';
 import ModalForm from 'src/components/forms/ModalForm';
 import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
-const DraftCashExpenseForm = ({
-  isLoading, isOpen, onSubmit, toggleModal,
+const DraftCashExpenseModalForm = ({
+  isSaving, isOpen, onSubmit, toggleModal, accountOptions,
 }) => {
   const { code } = useBaseCurrency();
-  const [accounts, setAccounts] = useState([]);
   const [form, setForm] = useState({
     initialValues: {
       type: EXPENSE_TYPE,
@@ -52,26 +54,14 @@ const DraftCashExpenseForm = ({
     }),
   });
 
-  const fetchData = async () => {
-    const accounts = await fetchAccounts();
-    setAccounts(
-      accounts.map((a) => ({
-        ...a,
-        lastTransactionAt: moment(a.lastTransactionAt, MOMENT_DATETIME_FORMAT).unix(),
-      })),
-    );
-
+  useEffect(() => {
     setForm({
       ...form,
       initialValues: {
         ...form.initialValues,
-        account: find(accounts, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code)?.id,
+        account: find(accountOptions, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code)?.id,
       },
     });
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
   useEffect(() => {
@@ -85,7 +75,7 @@ const DraftCashExpenseForm = ({
   }, [isOpen]);
 
   const handleSubmit = async (values) => {
-    await onSubmit(values);
+    await onSubmit(values.type, values);
 
     if (toggleModal) {
       toggleModal();
@@ -145,7 +135,8 @@ const DraftCashExpenseForm = ({
                       value={account}
                       onChange={({ target }) => setFieldValue('account', target.value)}
                     >
-                      {accounts.map(({ id, name, archivedAt }) => (
+                      <option value="">----------------</option>
+                      {accountOptions.map(({ id, name, archivedAt }) => (
                         <option key={`account-option-${id}`} value={id}>
                           {name}
                           {' '}
@@ -178,7 +169,7 @@ const DraftCashExpenseForm = ({
                 color="primary"
                 label="Submit"
                 className="mr-1"
-                isLoading={isLoading}
+                isLoading={isSaving}
               />
             </Form>
           );
@@ -188,13 +179,25 @@ const DraftCashExpenseForm = ({
   );
 };
 
-DraftCashExpenseForm.defaultProps = {};
-
-DraftCashExpenseForm.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func,
+DraftCashExpenseModalForm.defaultProps = {
+  accountOptions: [],
 };
 
-export default DraftCashExpenseForm;
+DraftCashExpenseModalForm.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  isSaving: PropTypes.bool.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  accountOptions: PropTypes.array,
+};
+
+const mapStateToProps = ({ ui, account }) => ({
+  isOpen: ui.isDraftExpenseModalOpened,
+  isSaving: isActionLoading(ui.TRANSACTION_REGISTER),
+  accountOptions: account.filter(({ archivedAt }) => !archivedAt),
+});
+
+export default connect(mapStateToProps, {
+  onSubmit: registerTransaction,
+  toggleModal: toggleDraftExpenseModal,
+})(DraftCashExpenseModalForm);

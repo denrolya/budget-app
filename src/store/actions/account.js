@@ -26,6 +26,18 @@ export const { Types, Creators } = createActions(
   { prefix: 'ACCOUNT_' },
 );
 
+export const fetchList = () => (dispatch) => {
+  dispatch(Creators.fetchListRequest());
+
+  return axios
+    .get('api/accounts')
+    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data, 'lastTransactionAt', 'desc'))))
+    .catch((e) => {
+      console.error(e);
+      dispatch(Creators.fetchListFailure(e.message));
+    });
+};
+
 export const createAccount = (account) => (dispatch) => {
   dispatch(Creators.createRequest());
 
@@ -93,17 +105,6 @@ export const updateColor = (account, newColor) => (dispatch) => {
     });
 };
 
-export const fetchList = () => (dispatch) => {
-  dispatch(Creators.fetchListRequest());
-
-  return axios
-    .get(Routing.generate('api_v1_account_list'))
-    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data, 'updated_at', 'desc'))))
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.fetchListFailure(e.message));
-    });
-};
 export const fetchDetail = (id) => axios.get(Routing.generate('api_v1_account_detail', { id }));
 
 export const fetchTypeaheadList = () => axios
