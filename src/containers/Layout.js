@@ -55,7 +55,7 @@ const Layout = ({
   toggleTransferModal,
   toggleDebtModal,
   toggleAccountModal,
-  registerTransaction,
+  isTransactionModalOpened,
   switchBaseCurrency,
   isDarkModeOn,
   isHeaderOpened,
@@ -66,6 +66,7 @@ const Layout = ({
   isTransferRequestInProgress,
   isAssetsLoading,
   updateDashboard,
+  registerTransaction,
   fetchAccounts,
   fetchDebts,
   fetchExchangeRates,
@@ -150,7 +151,11 @@ const Layout = ({
 
       <DraftCashExpenseForm />
 
-      <TransactionForm />
+      <TransactionForm
+        onSubmit={(v) => registerTransaction(v.type, v)}
+        isOpen={isTransactionModalOpened}
+        toggleModal={toggleTransactionModal}
+      />
 
       <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
         <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
@@ -194,6 +199,7 @@ Layout.propTypes = {
   isHeaderOpened: PropTypes.bool.isRequired,
   isSidebarOpened: PropTypes.bool.isRequired,
   isTransferModalOpened: PropTypes.bool.isRequired,
+  isTransactionModalOpened: PropTypes.bool.isRequired,
   isTransferRequestInProgress: PropTypes.bool.isRequired,
   logoutUser: PropTypes.func.isRequired,
   openSidebar: PropTypes.func.isRequired,
@@ -222,6 +228,7 @@ const mapStateToProps = ({
   isSidebarOpened: ui.isSidebarOpened,
   isHeaderOpened: ui.isHeaderOpened,
   isTransferModalOpened: ui.isTransferModalOpened,
+  isTransactionModalOpened: ui.isTransactionModalOpened,
   isDebtModalOpened: ui.isDebtModalOpened,
   isAccountModalOpened: ui.isAccountModalOpened,
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),

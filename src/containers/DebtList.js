@@ -20,8 +20,7 @@ import TransactionsTable from 'src/components/tables/TransactionsTable';
 import DebtForm from 'src/components/forms/DebtForm';
 import DebtTransactionModalForm from 'src/components/forms/DebtTransactionModalForm';
 import ModalForm from 'src/components/forms/ModalForm';
-import TransactionModalForm from 'src/components/forms/TransactionModalForm';
-import { isActionLoading } from 'src/services/common';
+import TransactionForm from 'src/containers/TransactionForm';
 import {
   closeDebt,
   deleteDebtTransaction,
@@ -42,7 +41,6 @@ const DebtList = ({
   debts,
   withClosed,
   isLoading,
-  isTransactionEditInProgress,
   fetchList,
   editDebtTransaction,
   closeDebt,
@@ -242,9 +240,8 @@ const DebtList = ({
       )}
 
       {selectedTransaction && (
-        <TransactionModalForm
+        <TransactionForm
           model={selectedTransaction}
-          isLoading={isTransactionEditInProgress}
           onSubmit={(t) => editDebtTransaction(selectedDebt, t)}
           title={`Edit ${selectedTransaction.type} #${selectedTransaction.id}`}
           isOpen={isTransactionEditModalOpened}
@@ -275,7 +272,6 @@ DebtList.propTypes = {
   editDebtTransaction: PropTypes.func.isRequired,
   fetchList: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  isTransactionEditInProgress: PropTypes.bool.isRequired,
   toggleDebtModal: PropTypes.func.isRequired,
   toggleWithClosedFilter: PropTypes.func.isRequired,
   withClosed: PropTypes.bool,
@@ -285,7 +281,6 @@ const mapStateToProps = ({ debt, ui }) => ({
   debts: debt.debts,
   withClosed: debt.withClosed,
   isLoading: getIsLoading({ ui }),
-  isTransactionEditInProgress: isActionLoading(ui.TRANSACTION_EDIT),
   isDebtModalOpened: ui.isDebtModalOpened,
 });
 

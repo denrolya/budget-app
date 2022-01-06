@@ -20,8 +20,6 @@ import {
 } from 'src/constants/transactions';
 import { isActionLoading } from 'src/services/common';
 import { fetchCategories } from 'src/store/actions/category';
-import { registerTransaction } from 'src/store/actions/transaction';
-import { toggleTransactionModal } from 'src/store/actions/ui';
 import * as Yup from 'yup';
 
 const TransactionForm = ({
@@ -75,7 +73,7 @@ const TransactionForm = ({
   }, []);
 
   const handleSubmit = async (model, addAnother = true) => {
-    await onSubmit(model.values.type, model.values);
+    await onSubmit(model.values);
 
     if (!isEditMode) {
       model.handleReset();
@@ -389,12 +387,8 @@ TransactionForm.propTypes = {
 };
 
 const mapStateToProps = ({ ui, account }) => ({
-  isOpen: ui.isTransactionModalOpened,
-  isSaving: isActionLoading(ui.TRANSACTION_REGISTER),
+  isSaving: isActionLoading(ui.TRANSACTION_REGISTER) || isActionLoading(ui.TRANSACTION_EDIT),
   accountOptions: account.filter(({ archivedAt }) => !archivedAt),
 });
 
-export default connect(mapStateToProps, {
-  onSubmit: registerTransaction,
-  toggleModal: toggleTransactionModal,
-})(TransactionForm);
+export default connect(mapStateToProps)(TransactionForm);

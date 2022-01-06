@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 
 import TransactionFilters from 'src/components/TransactionFilters';
-import TransactionModalForm from 'src/components/forms/TransactionModalForm';
+import TransactionForm from 'src/containers/TransactionForm';
 import { isActionLoading } from 'src/services/common';
 import {
   setPage,
@@ -29,7 +29,6 @@ import LoadingCard from 'src/components/cards/LoadingCard';
 
 const TransactionList = ({
   isLoading,
-  isTransactionEditInProgress,
   data,
   totalValue,
   pagination,
@@ -69,8 +68,6 @@ const TransactionList = ({
 
     setEditModalOpened(!isEditModalOpened);
   };
-
-  const handleTransactionEdition = (transaction) => editTransaction(transaction.id, transaction.type, transaction);
 
   return (
     <>
@@ -144,10 +141,9 @@ const TransactionList = ({
       </Row>
 
       {selectedTransaction && (
-        <TransactionModalForm
+        <TransactionForm
           title={`Edit ${selectedTransaction.type} #${selectedTransaction.id}`}
-          isLoading={isTransactionEditInProgress}
-          onSubmit={handleTransactionEdition}
+          onSubmit={(t) => editTransaction(t.id, t.type, t)}
           model={selectedTransaction}
           isOpen={isEditModalOpened}
           toggleTransactionModal={() => setEditModalOpened(!isEditModalOpened)}
@@ -168,7 +164,6 @@ TransactionList.propTypes = {
   editTransaction: PropTypes.func.isRequired,
   fetchList: PropTypes.func.isRequired,
   initializeList: PropTypes.func.isRequired,
-  isTransactionEditInProgress: PropTypes.bool.isRequired,
   pagination: PropTypes.instanceOf(Pagination).isRequired,
   resetPagination: PropTypes.func.isRequired,
   setFilters: PropTypes.func.isRequired,
@@ -187,7 +182,6 @@ const mapStateToProps = ({ ui, account, transaction }) => ({
     || isActionLoading(ui.TRANSACTION_REGISTER)
     || isActionLoading(ui.TRANSACTION_DELETE)
     || isActionLoading(ui.TRANSACTION_EDIT),
-  isTransactionEditInProgress: isActionLoading(ui.TRANSACTION_EDIT),
 });
 
 export default connect(mapStateToProps, {
