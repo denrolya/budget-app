@@ -24,7 +24,7 @@ import { registerTransaction } from 'src/store/actions/transaction';
 import { toggleTransactionModal } from 'src/store/actions/ui';
 import * as Yup from 'yup';
 
-const TransactionModalForm = ({
+const TransactionForm = ({
   isSaving, model, title, isOpen, onSubmit, toggleModal, accountOptions,
 }) => {
   const [categories, setCategories] = useState([]);
@@ -363,7 +363,7 @@ const TransactionModalForm = ({
   );
 };
 
-TransactionModalForm.defaultProps = {
+TransactionForm.defaultProps = {
   accountOptions: [],
   model: {
     type: EXPENSE_TYPE,
@@ -378,7 +378,7 @@ TransactionModalForm.defaultProps = {
   title: 'New transaction',
 };
 
-TransactionModalForm.propTypes = {
+TransactionForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
@@ -397,4 +397,4 @@ const mapStateToProps = ({ ui, account }) => ({
 export default connect(mapStateToProps, {
   onSubmit: registerTransaction,
   toggleModal: toggleTransactionModal,
-})(TransactionModalForm);
+})(TransactionForm);

@@ -21,7 +21,7 @@ import ModalForm from 'src/components/forms/ModalForm';
 import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
-const DraftCashExpenseModalForm = ({
+const DraftCashExpenseForm = ({
   isSaving, isOpen, onSubmit, toggleModal, accountOptions,
 }) => {
   const { code } = useBaseCurrency();
@@ -179,11 +179,11 @@ const DraftCashExpenseModalForm = ({
   );
 };
 
-DraftCashExpenseModalForm.defaultProps = {
+DraftCashExpenseForm.defaultProps = {
   accountOptions: [],
 };
 
-DraftCashExpenseModalForm.propTypes = {
+DraftCashExpenseForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
@@ -200,4 +200,4 @@ const mapStateToProps = ({ ui, account }) => ({
 export default connect(mapStateToProps, {
   onSubmit: registerTransaction,
   toggleModal: toggleDraftExpenseModal,
-})(DraftCashExpenseModalForm);
+})(DraftCashExpenseForm);

@@ -9,7 +9,7 @@ import { useSwipeable } from 'react-swipeable';
 import AccountForm from 'src/components/forms/AccountForm';
 import DebtForm from 'src/components/forms/DebtForm';
 import ModalForm from 'src/components/forms/ModalForm';
-import TransactionModalForm from 'src/components/forms/TransactionModalForm';
+import TransactionForm from 'src/containers/TransactionForm';
 import TransferForm from 'src/components/forms/TransferForm';
 import Header from 'src/components/layout/Header';
 import Sidebar from 'src/components/layout/Sidebar';
@@ -35,7 +35,7 @@ import {
   toggleTransferModal,
 } from 'src/store/actions/ui';
 import { fetch as fetchExchangeRates } from 'src/store/actions/exchangeRates';
-import DraftCashExpenseModalForm from 'src/components/forms/DraftCashExpenseModalForm';
+import DraftCashExpenseForm from 'src/containers/DraftCashExpenseForm';
 import { CURRENCIES } from 'src/constants/currency';
 import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 
@@ -148,9 +148,9 @@ const Layout = ({
         </div>
       </div>
 
-      <DraftCashExpenseModalForm />
+      <DraftCashExpenseForm />
 
-      <TransactionModalForm />
+      <TransactionForm />
 
       <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
         <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
