@@ -8,12 +8,6 @@ import sumBy from 'lodash/sumBy';
 
 import { amountInPercentage, expenseRatioColor } from 'src/services/common';
 import MoneyValue from 'src/components/MoneyValue';
-import {
-  ACCOUNT_TYPE_BANK_CARD,
-  ACCOUNT_TYPE_BASIC,
-  ACCOUNT_TYPE_CASH,
-  ACCOUNT_TYPE_INTERNET,
-} from 'src/constants/account';
 import { HEX_COLORS } from 'src/constants/color';
 
 const CustomTooltip = ({ active, payload }) => {
@@ -62,7 +56,6 @@ CustomTooltip.propTypes = {
 };
 
 const TransactionCategories = ({ data, selectedCategory, onClick }) => {
-  console.log(data);
   const total = useMemo(() => sumBy(data, 'value'), [data]);
   const [chartData, setChartData] = useState([]);
   const onSectorEnter = (_, index) => setActive(index);

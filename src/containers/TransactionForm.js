@@ -48,12 +48,8 @@ const TransactionForm = ({
 
   const isEditMode = !!model.id;
 
-  const fetchData = async () => {
-    setCategories(await fetchCategories());
-  };
-
   useEffect(() => {
-    fetchData();
+    fetchCategories().then((res) => setCategories(res));
 
     if (isEditMode) {
       setForm({

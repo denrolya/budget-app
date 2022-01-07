@@ -31,7 +31,7 @@ export const fetchList = () => (dispatch) => {
 
   return axios
     .get('api/accounts')
-    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data, 'lastTransactionAt', 'desc'))))
+    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'lastTransactionAt', 'desc'))))
     .catch((e) => {
       console.error(e);
       dispatch(Creators.fetchListFailure(e.message));

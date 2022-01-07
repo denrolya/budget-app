@@ -40,7 +40,7 @@ export const { Types, Creators } = createActions(
 
 export const fetchCategories = (type) => axios
   .get(type ? `api/categories/${type}` : 'api/categories')
-  .then((response) => uniqBy(response.data, 'name'));
+  .then(({ data }) => uniqBy(data['hydra:member'], 'name'));
 
 export const fetchList = (types) => (dispatch) => {
   dispatch(Creators.fetchListRequest());

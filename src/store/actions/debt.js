@@ -58,8 +58,8 @@ export const fetchList = () => (dispatch, getState) => {
     .get('api/debts', {
       withDeleted: getState().debt.withClosed ? 1 : 0,
     })
-    .then((response) => {
-      dispatch(Creators.fetchListSuccess(orderBy(response.data, 'updated_at', 'asc')));
+    .then(({ data }) => {
+      dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'updatedAt', 'asc')));
     })
     .catch((e) => {
       console.error(e);

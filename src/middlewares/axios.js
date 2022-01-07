@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { Service } from 'axios-middleware';
 
 import axios from 'src/services/http';
@@ -5,7 +6,6 @@ import { FORBIDDEN, UNAUTHORIZED } from 'src/constants/http';
 import { logoutUser } from 'src/store/actions/auth';
 import { notify } from 'src/store/actions/global';
 import store from 'src/store/store';
-import Swal from 'sweetalert2';
 
 const service = new Service(axios);
 
@@ -16,7 +16,6 @@ service.register({
       headers: {
         ...config.headers,
         Authorization: `Bearer ${localStorage.getItem('token')}`,
-        Accept: 'application/json',
       },
     };
   },
