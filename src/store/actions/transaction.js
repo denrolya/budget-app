@@ -68,22 +68,22 @@ export const fetchList = () => (dispatch, getState) => {
 
   dispatch(Creators.fetchListRequest());
 
-  const queryParams = {
+  const params = {
     types,
     perPage,
     page,
-    from,
-    to,
-    accounts,
     categories,
-    withCanceled: withCanceled ? 1 : 0,
-    onlyDrafts: onlyDrafts ? 1 : 0,
+    accounts,
+    'executedAt[strictly_after]': from,
+    'executedAt[strictly_before]': to,
+    withDeleted: withCanceled ? 1 : 0,
+    isDraft: onlyDrafts ? 1 : 0,
   };
 
   return axios
-    .get(Routing.generate('api_v1_transaction_list', queryParams))
-    .then(({ data: { list, totalValue, count } }) => {
-      dispatch(Creators.fetchListSuccess(list, count, totalValue));
+    .get('api/transactions', { params })
+    .then(({ data }) => {
+      dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems']));
     })
     .catch(({ message }) => dispatch(Creators.fetchListFailure(message)));
 };

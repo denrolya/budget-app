@@ -44,7 +44,6 @@ const TransactionList = ({
 }) => {
   const [isEditModalOpened, setEditModalOpened] = useState(false);
   const [selectedTransaction, selectTransaction] = useState();
-  const firstUpdate = useRef(true);
   const [isGridSelected, selectGrid] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(!window.isMobile);
 
@@ -55,11 +54,6 @@ const TransactionList = ({
   }, []);
 
   useLayoutEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-
     fetchList();
   }, [pagination.page, pagination.perPage, pagination.filters]);
 

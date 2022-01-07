@@ -13,6 +13,7 @@ export const INITIAL_STATE = {
   colorScheme: 'blue',
 };
 
+// eslint-disable-next-line default-param-last
 export default (state = INITIAL_STATE, action) => {
   const { type } = action;
   const matches = /(.*)_(REQUEST|SUCCESS|FAILURE)/.exec(type);
@@ -20,13 +21,6 @@ export default (state = INITIAL_STATE, action) => {
   // not a *_REQUEST / *_SUCCESS /  *_FAILURE actions, so we ignore them
   if (!matches) {
     switch (action.type) {
-      case '@@router/LOCATION_CHANGE':
-        return {
-          ...state,
-          ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
-          isDarkModeOn: state.isDarkModeOn,
-        };
       case Types.TOGGLE_DARK_MODE:
         return {
           ...state,
