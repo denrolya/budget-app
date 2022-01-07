@@ -58,8 +58,8 @@ export const fetchTree = (categoryType) => (dispatch) => {
   dispatch(Creators.fetchTreeRequest());
 
   return axios
-    .get(Routing.generate(`api_v1_${categoryType}_category_tree`))
-    .then(({ data }) => dispatch(Creators.fetchTreeSuccess(categoryType, createCategoriesTree(data))))
+    .get(`api/categories-tree/${categoryType}`)
+    .then(({ data }) => dispatch(Creators.fetchTreeSuccess(categoryType, createCategoriesTree(data['hydra:member']))))
     .catch(({ message }) => {
       dispatch(Creators.fetchTreeFailure(message));
       console.error('Error: ', message);
@@ -104,13 +104,11 @@ export const create = (type, category) => (dispatch) => {
     .catch(({ message }) => dispatch(Creators.createFailure(message)));
 };
 
-export const edit = (id, type, category) => (dispatch) => {
+export const edit = (id, type, data) => (dispatch) => {
   dispatch(Creators.editRequest());
 
   return axios
-    .put(Routing.generate('api_v1_category_edit', { id }), {
-      [`${type}_category`]: category,
-    })
+    .put(`api/categories/${id}`, data)
     .then(() => {
       dispatch(Creators.editSuccess());
       notify('success', 'Category was successfully updated.', 'Edited successfully');

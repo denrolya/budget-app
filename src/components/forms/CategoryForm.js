@@ -1,6 +1,7 @@
 import { ErrorMessage, Field, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import pick from 'lodash/pick';
 import React, { useEffect, useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import {
@@ -17,7 +18,7 @@ const CategoryForm = ({
   const [tags] = useState([]);
   const isEditMode = !!modelData;
   const initialData = isEditMode
-    ? modelData
+    ? pick(modelData, ['id', 'type', 'name', 'icon', 'isAffectingProfit', 'isTechnical', 'isFixed', 'tags'])
     : {
       type: EXPENSE_TYPE,
       name: '',
@@ -37,9 +38,7 @@ const CategoryForm = ({
     tags: Yup.array(),
   });
 
-  useEffect(() => {
-    // TODO: Fetch tags here
-  }, []);
+  // TODO: Fetch tags
 
   const onSubmit = async (values, { resetForm }) => {
     await handleSubmit(values);
