@@ -92,7 +92,7 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
           startAngle={90}
           endAngle={450}
           dataKey="total"
-          onClick={({ name }) => onClick(name)}
+          onDoubleClick={({ name }) => onClick(name)}
           onMouseEnter={onSectorEnter}
           onMouseLeave={() => setActive()}
         >
@@ -119,7 +119,7 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
           startAngle={90}
           endAngle={450}
           dataKey="previous"
-          onClick={({ name }) => onClick(name)}
+          onDoubleClick={({ name }) => onClick(name)}
           onMouseEnter={onSectorEnter}
           onMouseLeave={() => setActive()}
         >
