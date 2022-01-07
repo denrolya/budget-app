@@ -35,11 +35,11 @@ const TransactionsTable = ({
         const transactions = data.filter(({ executedAt }) => executedAt.clone().startOf('day').isSame(date));
         const sum = sumBy(
           transactions.filter((t) => !isExpense(t)),
-          ({ values }) => values[code],
+          ({ convertedValues }) => convertedValues[code],
         )
           - sumBy(
             transactions.filter((t) => isExpense(t)),
-            ({ values }) => values[code],
+            ({ convertedValues }) => convertedValues[code],
           );
 
         return (

@@ -12,17 +12,15 @@ export const formatDetails = (data, baseCurrencyCode) => {
   return {
     totalExpense,
     totalIncome,
-    account: {
-      ...data.account,
-      logs: data.account.logs.map((log) => ({
-        ...log,
-        date: moment.unix(log.date),
-      })),
-      latestTransactions: initializeList(data.account.latestTransactions).map((t) => ({
-        ...t,
-        account: pick(data.account, ['id', 'name', 'type', 'icon', 'balance', 'color', 'currency']),
-      })),
-    },
+    ...data,
+    logs: data.logs.map((log) => ({
+      ...log,
+      date: moment.unix(log.date),
+    })),
+    latestTransactions: initializeList(data.latestTransactions).map((t) => ({
+      ...t,
+      account: pick(data, ['id', 'name', 'type', 'icon', 'balance', 'color', 'currency']),
+    })),
     topExpenseCategories: data.topExpenseCategories
       .filter((el) => el.total !== 0)
       .sort((a, b) => b.total - a.total)

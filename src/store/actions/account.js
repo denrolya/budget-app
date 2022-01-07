@@ -105,7 +105,7 @@ export const updateColor = (account, newColor) => (dispatch) => {
     });
 };
 
-export const fetchDetail = (id) => axios.get(Routing.generate('api_v1_account_detail', { id }));
+export const fetchDetail = (id) => axios.get(`api/accounts/${id}`);
 
 export const fetchTypeaheadList = () => axios
   .get(Routing.generate('api_v1_account_typeahead_list'))

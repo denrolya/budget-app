@@ -33,14 +33,15 @@ const CustomTooltip = ({ active, payload, account }) => {
 
 CustomTooltip.defaultProps = {
   active: false,
+  payload: [],
 };
 
 CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  payload: PropTypes.array.isRequired,
   account: PropTypes.shape({
     currency: PropTypes.string.isRequired,
   }).isRequired,
+  payload: PropTypes.array,
+  active: PropTypes.bool,
 };
 
 const AccountBalance = ({ account }) => {
@@ -60,7 +61,7 @@ const AccountBalance = ({ account }) => {
           dot={false}
           type="monotone"
           stroke={HEX_COLORS.success}
-          dataKey={`values.${account.currency}`}
+          dataKey={`convertedValues.${account.currency}`}
           fill={`url(#${account.id}-gradient)`}
         />
 
@@ -70,7 +71,7 @@ const AccountBalance = ({ account }) => {
           tick={{ fontSize: 9 }}
           width={40}
           stroke={HEX_COLORS.text}
-          dataKey={`values.${account.currency}`}
+          dataKey={`convertedValues.${account.currency}`}
           tickFormatter={yAxisTickFormatter}
         />
         <XAxis hide dataKey="date" axisLine={false} tickLine={false} stroke={HEX_COLORS.text} />
@@ -91,7 +92,7 @@ AccountBalance.propTypes = {
     logs: PropTypes.arrayOf(
       PropTypes.shape({
         date: PropTypes.object.isRequired,
-        values: PropTypes.object.isRequired,
+        convertedValues: PropTypes.object.isRequired,
       }),
     ),
     color: PropTypes.string.isRequired,

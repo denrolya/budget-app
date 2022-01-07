@@ -2,7 +2,9 @@ import Swal from 'sweetalert2';
 import { Service } from 'axios-middleware';
 
 import axios from 'src/services/http';
-import { FORBIDDEN, UNAUTHORIZED } from 'src/constants/http';
+import {
+  BAD_REQUEST, FORBIDDEN, NOT_FOUND, UNAUTHORIZED,
+} from 'src/constants/http';
 import { logoutUser } from 'src/store/actions/auth';
 import { notify } from 'src/store/actions/global';
 import store from 'src/store/store';
@@ -26,10 +28,12 @@ service.register({
       const message = status === UNAUTHORIZED ? 'Session terminated!' : 'Not enough access rights!';
       notify('warning', message, 'Authorization error');
       store.dispatch(logoutUser());
-    } else if (status >= 400 && status < 500) {
+    } else if (status === BAD_REQUEST) {
       notify('warning', 'Bad request was sent!');
+    } else if (status === NOT_FOUND) {
+      notify('error', `Not found: ${error.response.config.url}`);
     } else if (status >= 500 && status < 600) {
-      notify('error', 'Error happened on backend!');
+      notify('error', 'Internal server error!');
     }
 
     const profilerLink = error.response.headers['x-debug-token-link'];

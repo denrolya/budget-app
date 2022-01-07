@@ -25,11 +25,12 @@ const CustomTooltip = ({ active, payload }) => {
 
 CustomTooltip.defaultProps = {
   active: false,
+  payload: [],
 };
 
 CustomTooltip.propTypes = {
-  payload: PropTypes.array.isRequired,
   active: PropTypes.bool,
+  payload: PropTypes.array,
 };
 
 const TransactionCategoriesRadial = ({ data }) => {

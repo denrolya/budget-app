@@ -25,11 +25,19 @@ const AccountGeneralInfo = ({
   data, exchangeRates, onArchive, onRestore, onNameChange, onColorChange,
 }) => {
   const {
-    account, totalIncome, totalExpense, topExpenseCategories, topIncomeCategories,
+    balance,
+    color,
+    icon,
+    name,
+    type,
+    logs,
+    archivedAt,
+    currency,
+    totalIncome,
+    totalExpense,
+    topExpenseCategories,
+    topIncomeCategories,
   } = data;
-  const {
-    balance, color, icon, name, type, archivedAt, currency,
-  } = account;
 
   const exchangeData = generateExchangeRatesStatistics(currency);
 
@@ -50,29 +58,29 @@ const AccountGeneralInfo = ({
 
               <UncontrolledPopover placement="bottom" target="color-popover">
                 <PopoverBody>
-                  <AccountColorForm color={color} onSubmit={(values) => onColorChange(account, values.color)} />
+                  <AccountColorForm color={color} onSubmit={(values) => onColorChange(data, values.color)} />
                 </PopoverBody>
               </UncontrolledPopover>
 
               <div className="d-none d-md-block">
-                <AccountNameForm value={name} onSubmit={(values) => onNameChange(account, values.name)} />
+                <AccountNameForm value={name} onSubmit={(values) => onNameChange(data, values.name)} />
               </div>
 
               <div className="d-block d-md-none text-nowrap">{name}</div>
             </div>
 
-            {account.iban && (
+            {data.iban && (
               <span
                 className="h4 mb-1 text-uppercase cursor-copy d-inline-block"
-                onClick={() => copyToClipboard(account.iban)}
+                onClick={() => copyToClipboard(data.iban)}
               >
-                {account.iban}
+                {data.iban}
               </span>
             )}
 
-            {account.cardNumber && (
-              <h4 className="mb-1 cursor-copy d-inline-block" onClick={() => copyToClipboard(account.cardNumber)}>
-                {account.cardNumber.match(/.{1,4}/g).join(' ')}
+            {data.cardNumber && (
+              <h4 className="mb-1 cursor-copy d-inline-block" onClick={() => copyToClipboard(data.cardNumber)}>
+                {data.cardNumber.match(/.{1,4}/g).join(' ')}
               </h4>
             )}
 
@@ -81,7 +89,7 @@ const AccountGeneralInfo = ({
               {' '}
               Created:
               {' '}
-              {moment(account.createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
+              {moment(data.createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
             </h5>
           </Col>
           <Col xs={6} className="text-right">
@@ -99,9 +107,9 @@ const AccountGeneralInfo = ({
         </Row>
       </section>
 
-      {account.logs.length > 0 && (
+      {logs.length > 0 && (
         <section className="mb-2">
-          <AccountBalance account={account} />
+          <AccountBalance account={data} />
         </section>
       )}
 
@@ -131,7 +139,7 @@ const AccountGeneralInfo = ({
               </span>
             </h3>
             {totalExpense > 0 && (
-              <TransactionCategoriesRadial legend="left" account={account} data={topExpenseCategories} />
+              <TransactionCategoriesRadial legend="left" account={data} data={topExpenseCategories} />
             )}
           </Col>
           <Col xs={12} md={6}>
@@ -143,7 +151,7 @@ const AccountGeneralInfo = ({
               </span>
             </h3>
             {totalIncome > 0 && (
-              <TransactionCategoriesRadial legend="left" account={account} data={topIncomeCategories} />
+              <TransactionCategoriesRadial legend="left" account={data} data={topIncomeCategories} />
             )}
           </Col>
         </Row>
@@ -151,12 +159,12 @@ const AccountGeneralInfo = ({
         <hr />
       </section>
 
-      {type === ACCOUNT_TYPE_BANK_CARD && account.monobankId && (
+      {type === ACCOUNT_TYPE_BANK_CARD && data.monobankId && (
         <section>
-          <p className="cursor-copy" onClick={() => copyToClipboard(account.monobankId)}>
+          <p className="cursor-copy" onClick={() => copyToClipboard(data.monobankId)}>
             MonoBank ID:
             {' '}
-            {account.monobankId}
+            {data.monobankId}
           </p>
           <hr />
         </section>
@@ -165,7 +173,7 @@ const AccountGeneralInfo = ({
       {archivedAt && (
         <section>
           <h3 className="mb-1">Restore account</h3>
-          <Button color="info" className="btn-simple" onClick={() => onRestore(account)}>
+          <Button color="info" className="btn-simple" onClick={() => onRestore(data)}>
             Restore
           </Button>
         </section>
@@ -174,7 +182,7 @@ const AccountGeneralInfo = ({
       {!archivedAt && (
         <section>
           <h3 className="mb-1">Archive account</h3>
-          <Button color="danger" className="btn-simple" onClick={() => onArchive(account)}>
+          <Button color="danger" className="btn-simple" onClick={() => onArchive(data)}>
             Archive
           </Button>
         </section>
@@ -189,21 +197,19 @@ AccountGeneralInfo.defaultProps = {
 
 AccountGeneralInfo.propTypes = {
   data: PropTypes.shape({
-    account: PropTypes.shape({
-      balance: PropTypes.number.isRequired,
-      color: PropTypes.string.isRequired,
-      icon: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.oneOf([ACCOUNT_TYPE_BANK_CARD, ACCOUNT_TYPE_INTERNET, ACCOUNT_TYPE_CASH, ACCOUNT_TYPE_BASIC])
-        .isRequired,
-      archivedAt: PropTypes.string,
-      logs: PropTypes.array,
-      createdAt: PropTypes.string.isRequired,
-      currency: PropTypes.string.isRequired,
-      monobankId: PropTypes.string,
-      iban: PropTypes.string,
-      cardNumber: PropTypes.string,
-    }),
+    balance: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.oneOf([ACCOUNT_TYPE_BANK_CARD, ACCOUNT_TYPE_INTERNET, ACCOUNT_TYPE_CASH, ACCOUNT_TYPE_BASIC])
+      .isRequired,
+    archivedAt: PropTypes.string,
+    logs: PropTypes.array,
+    createdAt: PropTypes.string.isRequired,
+    currency: PropTypes.string.isRequired,
+    monobankId: PropTypes.string,
+    iban: PropTypes.string,
+    cardNumber: PropTypes.string,
     totalIncome: PropTypes.number.isRequired,
     totalExpense: PropTypes.number.isRequired,
     topExpenseCategories: PropTypes.array.isRequired,

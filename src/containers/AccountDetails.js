@@ -69,7 +69,7 @@ const AccountDetails = ({
     <>
       <Helmet>
         <title>
-          {accountDetails?.account.name ? accountDetails.account.name : 'Accounts'}
+          {accountDetails?.name ? accountDetails?.name : 'Accounts'}
           {' '}
           | Budget
         </title>
@@ -96,7 +96,7 @@ const AccountDetails = ({
         <Col xs={12} md={8}>
           <h4 className="mb-2">Transactions</h4>
           <LoadingCard isLoading={isAccountDetailsLoading}>
-            <CardBody>{accountDetails && <AccountTransactionsDetails account={accountDetails.account} />}</CardBody>
+            <CardBody>{accountDetails && <AccountTransactionsDetails account={accountDetails} />}</CardBody>
           </LoadingCard>
         </Col>
       </Row>
