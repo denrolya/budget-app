@@ -85,26 +85,29 @@ export const fetchList = () => (dispatch, getState) => {
     .then(({ data }) => {
       dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems']));
     })
-    .catch(({ message }) => dispatch(Creators.fetchListFailure(message)));
+    .catch(({ message }) => {
+      notify('error', '[Error]: Fetch Transaction List');
+      dispatch(Creators.fetchListFailure(message));
+    });
 };
 
 export const registerTransaction = (type, transaction) => (dispatch, getState) => {
   dispatch(Creators.registerRequest());
 
   return axios
-    .post(Routing.generate('api_v1_transaction_new', { type }), {
-      [type]: {
-        ...transaction,
-        executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
-        compensations: transaction.compensations.map((c) => ({
-          ...c,
-          executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
-        })),
-      },
+    .post(`api/transactions/${type}`, {
+      ...transaction,
+      amount: String(transaction.amount),
+      executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
+      compensations: transaction.compensations.map((c) => ({
+        ...c,
+        amount: String(c.amount),
+        executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
+      })),
     })
     .then(() => {
       dispatch(Creators.registerSuccess());
-      notify('success', 'Transaction successfully registered', 'New transaction');
+      notify('success', 'Transaction registered');
 
       if (isOnDashboardPage()) {
         dispatch(updateDashboard());
@@ -120,7 +123,7 @@ export const registerTransaction = (type, transaction) => (dispatch, getState) =
       dispatch(fetchDebts());
     })
     .catch((e) => {
-      console.error(e);
+      notify('error', '[Error]: Register Transaction');
       dispatch(Creators.registerFailure(e.message));
     });
 };
@@ -129,12 +132,10 @@ export const editTransaction = (id, type, transaction) => (dispatch, getState) =
   dispatch(Creators.editRequest());
 
   return axios
-    .put(Routing.generate('api_v1_transaction_edit', { id }), {
-      [type]: transaction,
-    })
+    .put(`api/transactions/${id}`, transaction)
     .then(() => {
       dispatch(Creators.editSuccess());
-      notify('success', 'Given transaction was successfully modified.', 'Edited successfully');
+      notify('success', `Transaction ${id} edited successfully`);
 
       const { filters } = getState().transaction.pagination;
 
@@ -146,7 +147,7 @@ export const editTransaction = (id, type, transaction) => (dispatch, getState) =
       dispatch(fetchDebts());
     })
     .catch((e) => {
-      console.error(e);
+      notify('error', '[Error]: Edit Transaction');
       dispatch(Creators.editFailure(e.message));
     });
 };
@@ -189,7 +190,10 @@ export const deleteTransaction = (transaction) => (dispatch, getState) => {
           dispatch(fetchDebts());
         }
       })
-      .catch(({ message }) => dispatch(Creators.deleteFailure(message)));
+      .catch(({ message }) => {
+        notify('error', '[Error]: Delete Transaction');
+        dispatch(Creators.deleteFailure(message));
+      });
   });
 };
 

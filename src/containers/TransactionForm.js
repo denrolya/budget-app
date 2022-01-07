@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Formik } from 'formik';
 import get from 'lodash/get';
 import moment from 'moment-timezone';
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Typeahead } from 'react-bootstrap-typeahead';
@@ -56,7 +56,7 @@ const TransactionForm = ({
         ...form,
         initialValues: {
           ...model,
-          category: model.category?.name ? model.category.name : model.category,
+          category: model.category?.id ? model.category.id : model.category,
           account: model.account?.id ? model.account.id : model.account,
           executedAt: moment(model.executedAt).format(MOMENT_DATETIME_FORMAT),
           compensations: model?.compensations?.map((c) => ({
@@ -137,9 +137,9 @@ const TransactionForm = ({
                   multiple={false}
                   inputProps={{ id: 'category' }}
                   isInvalid={touched.category && !!errors.category}
-                  selected={category ? [category] : []}
+                  selected={category ? categories.filter(({ id }) => id === category) : []}
                   onBlur={handleBlur}
-                  onChange={([selected]) => setFieldValue('category', selected ? selected.name : '')}
+                  onChange={([selected]) => setFieldValue('category', selected ? selected.id : '')}
                   options={categories.filter((c) => c.type === type)}
                 />
                 <ErrorMessage component="div" name="category" className="invalid-feedback" />
