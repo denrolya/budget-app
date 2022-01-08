@@ -48,11 +48,12 @@ const CustomTooltip = ({ active, payload }) => {
 
 CustomTooltip.defaultProps = {
   active: false,
+  payload: [],
 };
 
 CustomTooltip.propTypes = {
   active: PropTypes.bool,
-  payload: PropTypes.array.isRequired,
+  payload: PropTypes.array,
 };
 
 const TransactionCategories = ({ data, selectedCategory, onClick }) => {

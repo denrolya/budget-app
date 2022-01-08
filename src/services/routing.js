@@ -174,7 +174,7 @@ export const generateLinkToTransactionPage = (types, from, to, accounts, categor
     accounts,
   });
 
-  return `${ROUTE_TRANSACTIONS}?${queryParams}`;
+  return `/${ROUTE_TRANSACTIONS}?${queryParams}`;
 };
 
 export const generateLinkToAccountTransactionsPage = (account) => generateLinkToTransactionPage([], null, null, [account], []);
@@ -185,6 +185,6 @@ export const generateLinkToAccountTransactionsPage = (account) => generateLinkTo
  * @param {array=} accounts
  * @param {array=} categories
  */
-export const generateLinkToExpenses = (from, to, accounts, categories) => generateLinkToTransactionPage([EXPENSE_TYPE], from, to, accounts, categories);
+export const generateLinkToExpenses = (from, to, accounts = [], categories = []) => generateLinkToTransactionPage([EXPENSE_TYPE], from, to, accounts, categories);
 
 export default Routing;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { ReduxRouter } from '@lagunovsky/redux-react-router';
 
 import 'src/assets/scss/index.scss';
 import 'src/middlewares/axios';
@@ -15,9 +15,9 @@ const Root = () => {
 
   return (
     <Provider store={store}>
-      <BrowserRouter history={history}>
+      <ReduxRouter history={history} store={store}>
         <App />
-      </BrowserRouter>
+      </ReduxRouter>
     </Provider>
   );
 };
