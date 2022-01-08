@@ -23,7 +23,7 @@ import 'react-sortable-tree/style.css';
 const CategoryList = ({
   fetchTree,
   setParent,
-  categoriesTree,
+  tree,
   isSavingCategory,
   updateTree,
   create,
@@ -87,7 +87,7 @@ const CategoryList = ({
                   type,
                   removeNodeAtPath({
                     path,
-                    treeData: categoriesTree[type],
+                    treeData: tree[type],
                     getNodeKey: ({ treeIndex }) => treeIndex,
                   }),
                 )}
@@ -112,7 +112,7 @@ const CategoryList = ({
                   <div style={{ height: 600, zIndex: 1 }}>
                     <SortableTree
                       shouldCopyOnOutsideDrop
-                      treeData={categoriesTree[type]}
+                      treeData={tree[type]}
                       onMoveNode={reorderNodes}
                       onChange={(treeData) => updateTree(type, treeData)}
                       generateNodeProps={generateNodeProps}
@@ -142,7 +142,7 @@ const CategoryList = ({
 };
 
 CategoryList.propTypes = {
-  categoriesTree: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
   isSavingCategory: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   fetchTree: PropTypes.func.isRequired,
@@ -153,8 +153,8 @@ CategoryList.propTypes = {
   remove: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ category, ui }) => ({
-  categoriesTree: category.categoriesTree,
+const mapStateToProps = ({ category: { tree }, ui }) => ({
+  tree,
   isSavingCategory: isActionLoading(ui.CATEGORY_CREATE) || isActionLoading(ui.CATEGORY_EDIT),
   isLoading: isActionLoading(ui.CATEGORY_FETCH_TREE),
 });

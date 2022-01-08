@@ -33,6 +33,7 @@ const TransactionList = ({
   totalValue,
   pagination,
   accounts,
+  categories,
   fetchList,
   initializeList,
   setFilters,
@@ -133,7 +134,12 @@ const TransactionList = ({
             </CardHeader>
             <Collapse isOpen={isFiltersOpen}>
               <CardBody>
-                <TransactionFilters accounts={accounts} model={pagination.filters} onModelChange={setFilters} />
+                <TransactionFilters
+                  accounts={accounts}
+                  categories={categories}
+                  model={pagination.filters}
+                  onModelChange={setFilters}
+                />
               </CardBody>
             </Collapse>
           </Card>
@@ -155,6 +161,7 @@ const TransactionList = ({
 
 TransactionList.defaultProps = {
   accounts: [],
+  categories: [],
   isLoading: false,
 };
 
@@ -171,11 +178,15 @@ TransactionList.propTypes = {
   setPerPage: PropTypes.func.isRequired,
   totalValue: PropTypes.number.isRequired,
   accounts: PropTypes.array,
+  categories: PropTypes.array,
   isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui, account, transaction }) => ({
+const mapStateToProps = ({
+  ui, account, transaction, category: { list: categories },
+}) => ({
   ...transaction,
+  categories,
   accounts: account,
   isLoading:
     isActionLoading(ui.TRANSACTION_FETCH_LIST)

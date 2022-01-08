@@ -1,8 +1,7 @@
-import axios from 'src/services/http';
 import orderBy from 'lodash/orderBy';
-import uniqBy from 'lodash/uniqBy';
 import { createActions } from 'reduxsauce';
 
+import axios from 'src/services/http';
 import Routing from 'src/services/routing';
 import { confirmCategoryRemoval, createCategoriesTree } from 'src/services/transaction';
 import { notify } from 'src/store/actions/global';
@@ -38,19 +37,15 @@ export const { Types, Creators } = createActions(
   { prefix: 'CATEGORY_' },
 );
 
-export const fetchCategories = (type) => axios
-  .get(type ? `api/categories/${type}` : 'api/categories')
-  .then(({ data }) => uniqBy(data['hydra:member'], 'name'));
-
-export const fetchList = (types) => (dispatch) => {
+export const fetchList = () => (dispatch) => {
   dispatch(Creators.fetchListRequest());
 
   return axios
-    .get(Routing.generate('api_v1_category_list', { types }))
-    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data, 'id', 'asc'))))
+    .get('api/categories')
+    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'id', 'asc'))))
     .catch(({ message }) => {
+      notify('error', '[Error]: Fetch Category List');
       dispatch(Creators.fetchListFailure(message));
-      console.error('Error: ', message);
     });
 };
 
@@ -61,8 +56,8 @@ export const fetchTree = (categoryType) => (dispatch) => {
     .get(`api/categories-tree/${categoryType}`)
     .then(({ data }) => dispatch(Creators.fetchTreeSuccess(categoryType, createCategoriesTree(data['hydra:member']))))
     .catch(({ message }) => {
+      notify('error', '[Error]: Fetch Category Tree');
       dispatch(Creators.fetchTreeFailure(message));
-      console.error('Error: ', message);
     });
 };
 
@@ -81,8 +76,8 @@ export const setParent = (category, parentCategory) => (dispatch) => {
       notify('info', message);
     })
     .catch(({ message }) => {
+      notify('error', '[Error]: Category Set Parent');
       dispatch(Creators.setParentFailure(message));
-      console.error('Error: ', message);
     });
 };
 
@@ -101,7 +96,10 @@ export const create = (type, category) => (dispatch) => {
 
       dispatch(fetchTree(type));
     })
-    .catch(({ message }) => dispatch(Creators.createFailure(message)));
+    .catch(({ message }) => {
+      notify('error', '[Error]: Category Create');
+      dispatch(Creators.createFailure(message));
+    });
 };
 
 export const edit = (id, type, data) => (dispatch) => {
@@ -115,7 +113,10 @@ export const edit = (id, type, data) => (dispatch) => {
 
       dispatch(fetchTree(type));
     })
-    .catch(({ message }) => dispatch(Creators.editFailure(message)));
+    .catch(({ message }) => {
+      notify('error', '[Error]: Category Edit');
+      dispatch(Creators.editFailure(message));
+    });
 };
 
 export const remove = (category, categoryType, treeData) => (dispatch) => confirmCategoryRemoval(category).then(({ value }) => {
@@ -133,7 +134,7 @@ export const remove = (category, categoryType, treeData) => (dispatch) => confir
       notify('warning', `Category '${category.name}' and it's transactions were removed`);
     })
     .catch(({ message }) => {
+      notify('error', '[Error]: Category Delete');
       dispatch(Creators.removeFailure(message));
-      console.error('Error: ', message);
     });
 });

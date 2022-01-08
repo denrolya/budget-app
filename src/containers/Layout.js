@@ -20,6 +20,7 @@ import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { fetchList as fetchDebts } from 'src/store/actions/debt';
+import { fetchList as fetchCategories } from 'src/store/actions/category';
 import { registerTransaction } from 'src/store/actions/transaction';
 import { switchBaseCurrency } from 'src/store/actions/user';
 import {
@@ -68,6 +69,7 @@ const Layout = ({
   updateDashboard,
   registerTransaction,
   fetchAccounts,
+  fetchCategories,
   fetchDebts,
   fetchExchangeRates,
 }) => {
@@ -85,6 +87,7 @@ const Layout = ({
     await fetchAccounts();
     await fetchDebts();
     await fetchExchangeRates();
+    await fetchCategories();
     setIsVitalDataLoaded(true);
   };
 
@@ -190,6 +193,7 @@ Layout.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
   colorScheme: PropTypes.string.isRequired,
   fetchAccounts: PropTypes.func.isRequired,
+  fetchCategories: PropTypes.func.isRequired,
   fetchDebts: PropTypes.func.isRequired,
   fetchExchangeRates: PropTypes.func.isRequired,
   isAccountModalOpened: PropTypes.bool.isRequired,
@@ -253,6 +257,7 @@ export default connect(mapStateToProps, {
   registerTransaction,
   switchBaseCurrency,
   fetchAccounts,
+  fetchCategories,
   fetchDebts,
   fetchExchangeRates,
 })(Layout);

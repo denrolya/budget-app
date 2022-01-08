@@ -19,13 +19,11 @@ import {
   INCOME_TYPE, TRANSACTION_TYPES,
 } from 'src/constants/transactions';
 import { isActionLoading } from 'src/services/common';
-import { fetchCategories } from 'src/store/actions/category';
 import * as Yup from 'yup';
 
 const TransactionForm = ({
-  isSaving, model, title, isOpen, onSubmit, toggleModal, accountOptions,
+  isSaving, model, title, isOpen, onSubmit, toggleModal, accountOptions, categoryOptions,
 }) => {
-  const [categories, setCategories] = useState([]);
   const [form, setForm] = useState({
     initialValues: model,
     validationSchema: Yup.object({
@@ -49,8 +47,6 @@ const TransactionForm = ({
   const isEditMode = !!model.id;
 
   useEffect(() => {
-    fetchCategories().then((res) => setCategories(res));
-
     if (isEditMode) {
       setForm({
         ...form,
@@ -137,10 +133,10 @@ const TransactionForm = ({
                   multiple={false}
                   inputProps={{ id: 'category' }}
                   isInvalid={touched.category && !!errors.category}
-                  selected={category ? categories.filter(({ id }) => id === category) : []}
+                  selected={category ? categoryOptions.filter(({ id }) => id === category) : []}
                   onBlur={handleBlur}
                   onChange={([selected]) => setFieldValue('category', selected ? selected.id : '')}
-                  options={categories.filter((c) => c.type === type)}
+                  options={categoryOptions.filter((c) => c.type === type)}
                 />
                 <ErrorMessage component="div" name="category" className="invalid-feedback" />
               </FormGroup>
@@ -359,6 +355,7 @@ const TransactionForm = ({
 
 TransactionForm.defaultProps = {
   accountOptions: [],
+  categoryOptions: [],
   model: {
     type: EXPENSE_TYPE,
     account: '',
@@ -378,13 +375,15 @@ TransactionForm.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   accountOptions: PropTypes.array,
+  categoryOptions: PropTypes.array,
   model: PropTypes.object,
   title: PropTypes.string,
 };
 
-const mapStateToProps = ({ ui, account }) => ({
+const mapStateToProps = ({ ui, account, category }) => ({
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER) || isActionLoading(ui.TRANSACTION_EDIT),
   accountOptions: account.filter(({ archivedAt }) => !archivedAt),
+  categoryOptions: category.list,
 });
 
 export default connect(mapStateToProps)(TransactionForm);

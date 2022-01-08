@@ -43,9 +43,6 @@ export const { Types, Creators } = createActions(
   { prefix: 'TRANSACTION_' },
 );
 
-/**
- * TODO: Refactor using react-router v6. Now history.location.search is always empty
- */
 export const initializeList = () => (dispatch) => {
   const { page, perPage, ...filters } = getTransactionListQueryParams(history.location.search);
 
@@ -65,7 +62,7 @@ export const fetchList = () => (dispatch, getState) => {
     perPage,
     page,
     filters: {
-      from, to, accounts, categories, withCanceled, onlyDrafts, types,
+      from, to, accounts: account, categories: category, withCanceled, onlyDrafts, types,
     },
   } = getState().transaction.pagination;
 
@@ -75,8 +72,8 @@ export const fetchList = () => (dispatch, getState) => {
     types,
     perPage,
     page,
-    categories,
-    accounts,
+    category,
+    account,
     'executedAt[strictly_after]': from,
     'executedAt[strictly_before]': to,
     withDeleted: withCanceled ? 1 : 0,

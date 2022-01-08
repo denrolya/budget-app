@@ -3,22 +3,24 @@ import { createReducer } from 'reduxsauce';
 import { Types } from 'src/store/actions/category';
 
 const INITIAL_STATE = {
-  categories: [],
-  categoriesTree: {
+  list: [],
+  tree: {
     expense: [],
     income: [],
   },
 };
 
-const fetchListSuccessHandler = (state = INITIAL_STATE, { categories }) => ({
+// eslint-disable-next-line default-param-last
+const fetchListSuccessHandler = (state = INITIAL_STATE, { categories: list }) => ({
   ...state,
-  categories,
+  list,
 });
 
+// eslint-disable-next-line default-param-last
 const updateTreeSuccessHandler = (state = INITIAL_STATE, { categoryType, treeData }) => ({
   ...state,
-  categoriesTree: {
-    ...state.categoriesTree,
+  tree: {
+    ...state.tree,
     [categoryType]: treeData,
   },
 });

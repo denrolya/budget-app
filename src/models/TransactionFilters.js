@@ -61,15 +61,15 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
   }
 
   hasAccount(account) {
-    return this.accounts.filter((a) => a === account.name).length > 0;
+    return this.accounts.filter((a) => a === account.id).length > 0;
   }
 
   toggleAccount(account) {
-    return this.setAccounts(xor(this.accounts, [account.name]));
+    return this.setAccounts(xor(this.accounts, [account.id]));
   }
 
   removeAccount(account) {
-    return this.setAccounts(this.accounts.filter(({ name }) => name !== account.name));
+    return this.setAccounts(this.accounts.filter(({ id }) => id !== account.id));
   }
 
   setAccounts(value) {
@@ -81,7 +81,7 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
   }
 
   removeCategory(category) {
-    return this.setCategories(this.categories.filter(({ name }) => name !== category.name));
+    return this.setCategories(this.categories.filter(({ id }) => id !== category.id));
   }
 
   setCategories(value) {
@@ -128,7 +128,7 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
         return isMoment(value) ? value.format(MOMENT_DATE_FORMAT) : value;
       case 'accounts':
       case 'categories':
-        return uniq(value.map((el) => el?.name || el));
+        return uniq(value.map((el) => el?.id || el));
       default:
         return value;
     }

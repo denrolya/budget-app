@@ -6,38 +6,32 @@ import { Button, Row, Col } from 'reactstrap';
 
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import { TRANSACTION_TYPES, TRANSACTIONS_CATEGORIES_PRESETS as PRESETS } from 'src/constants/transactions';
-import { fetchCategories } from 'src/store/actions/category';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
 
-export const TransactionCategoriesTimelineCard = ({ isLoading, model, onUpdate }) => {
+export const TransactionCategoriesTimelineCard = ({
+  isLoading, model, onUpdate, categories,
+}) => {
   const typeaheads = [];
-  const [categoriesOptions, setCategoriesOptions] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLineChart, setIsLineChart] = useState(true);
 
-  useEffect(() => {
-    fetchCategories().then((res) => setCategoriesOptions(res));
-  }, []);
-
-  const selectCategories = (categories) => {
-    setSelectedCategories(categories);
+  const selectCategories = (selected) => {
+    setSelectedCategories(selected);
     onUpdate(
       model.setIn(
         'data.categories'.split('.'),
-        categories.map(({ id }) => id),
+        selected.map(({ id }) => id),
       ),
     );
   };
 
-  const setCategoriesFromPresets = (presetCategoriesIds) => selectCategories(presetCategoriesIds.map((id) => categoriesOptions.find((c) => c.id === id)));
+  const setCategoriesFromPresets = (presetCategoriesIds) => selectCategories(presetCategoriesIds.map((id) => categories.find((c) => c.id === id)));
 
   useEffect(() => {
-    if (categoriesOptions.length > 0) {
-      setSelectedCategories(model.data.categories.map((id) => categoriesOptions.find((cat) => cat.id === id)));
-    }
-  }, [categoriesOptions]);
+    setSelectedCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)));
+  }, []);
 
   return (
     <TimeperiodStatisticsCard
@@ -56,7 +50,7 @@ export const TransactionCategoriesTimelineCard = ({ isLoading, model, onUpdate }
         onChange={selectCategories}
         selected={selectedCategories}
         ref={(t) => typeaheads.push(t)}
-        options={categoriesOptions.filter(
+        options={categories.filter(
           ({ type, name }) => TRANSACTION_TYPES.includes(type) && !model.data.categories.includes(name),
         )}
       />
@@ -96,6 +90,7 @@ export const TransactionCategoriesTimelineCard = ({ isLoading, model, onUpdate }
 };
 
 TransactionCategoriesTimelineCard.defaultProps = {
+  categories: [],
   isLoading: false,
 };
 
@@ -103,6 +98,7 @@ TransactionCategoriesTimelineCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
   onUpdate: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  categories: PropTypes.array,
 };
 
 export default TransactionCategoriesTimelineCard;

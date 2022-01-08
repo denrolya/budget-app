@@ -1,26 +1,21 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import uniqBy from 'lodash/uniqBy';
+import React from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   Form, FormGroup, Label, Input,
 } from 'reactstrap';
 
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
-import { fetchCategories } from 'src/store/actions/category';
 import TransactionFiltersModel from 'src/models/TransactionFilters';
 import DateRange from 'src/components/forms/fields/DateRange';
 import AccountName from 'src/components/AccountName';
 
-const TransactionFilters = ({ accounts, onModelChange, model }) => {
+const TransactionFilters = ({
+  accounts, categories, onModelChange, model,
+}) => {
   const typeaheads = [];
-  const [categoriesOptions, setCategoriesOptions] = useState([]);
 
-  const { from, to, categories } = model;
-
-  useEffect(() => {
-    fetchCategories().then((res) => setCategoriesOptions(uniqBy(res, 'name')));
-  }, []);
+  const { from, to } = model;
 
   const applyDateRangeFilter = (event, { startDate, endDate }) => onModelChange(model.setFromTo(startDate, endDate));
 
@@ -87,14 +82,14 @@ const TransactionFilters = ({ accounts, onModelChange, model }) => {
       <FormGroup className="mb-4">
         <h5>Categories:</h5>
         <Typeahead
-          id="categories"
           multiple
-          ref={(t) => typeaheads.push(t)}
+          id="categories"
           placeholder="Filter by categories..."
-          selected={categories}
           labelKey="name"
+          ref={(t) => typeaheads.push(t)}
+          selected={model.categories.map((id) => categories.find((c) => c.id === id))}
           onChange={(selected) => onModelChange(model.setCategories(selected))}
-          options={categoriesOptions.filter(
+          options={categories.filter(
             ({ type, name }) => TRANSACTION_TYPES.includes(type) && !categories.includes(name),
           )}
         />
@@ -133,12 +128,14 @@ const TransactionFilters = ({ accounts, onModelChange, model }) => {
 
 TransactionFilters.defaultProps = {
   accounts: [],
+  categories: [],
 };
 
 TransactionFilters.propTypes = {
   model: PropTypes.instanceOf(TransactionFiltersModel).isRequired,
   onModelChange: PropTypes.func.isRequired,
   accounts: PropTypes.array,
+  categories: PropTypes.array,
 };
 
 export default TransactionFilters;

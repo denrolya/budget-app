@@ -18,7 +18,7 @@ import { setStatistics, updateDashboard, updateDashboardInterval } from 'src/sto
 import MoneyValue from 'src/components/MoneyValue';
 
 const Dashboard = ({
-  ui, userSettings, statistics, updateDashboard, updateDashboardInterval, setStatistics,
+  ui, userSettings, statistics, updateDashboard, updateDashboardInterval, setStatistics, categories,
 }) => {
   const { dashboardStatistics: dashboard } = userSettings;
 
@@ -121,6 +121,7 @@ const Dashboard = ({
           <Row>
             <Col>
               <TransactionCategoriesTimelineCard
+                categories={categories}
                 isLoading={isStatisticsActionLoading('transactionCategoriesTimeline')}
                 model={statistics.transactionCategoriesTimeline}
                 onUpdate={(newModel) => setStatistics('transactionCategoriesTimeline', newModel)}
@@ -133,6 +134,10 @@ const Dashboard = ({
   );
 };
 
+Dashboard.defaultProps = {
+  categories: [],
+};
+
 Dashboard.propTypes = {
   setStatistics: PropTypes.func.isRequired,
   statistics: PropTypes.object.isRequired,
@@ -140,6 +145,7 @@ Dashboard.propTypes = {
   updateDashboard: PropTypes.func.isRequired,
   updateDashboardInterval: PropTypes.func.isRequired,
   userSettings: PropTypes.object.isRequired,
+  categories: PropTypes.array,
 };
 
 const mapStateToProps = ({
@@ -147,11 +153,13 @@ const mapStateToProps = ({
     user: { settings: userSettings },
   },
   dashboard: statistics,
+  category: { list: categories },
   ui,
 }) => ({
   userSettings,
   statistics,
   ui,
+  categories,
 });
 
 export default connect(mapStateToProps, {

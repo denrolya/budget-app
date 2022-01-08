@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Formik } from 'formik';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
 import {
@@ -13,25 +13,14 @@ import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import {
   DEBT_TRANSACTION_CATEGORY_NAME, EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES,
 } from 'src/constants/transactions';
-import { fetchTypeaheadList as fetchAccounts } from 'src/store/actions/account';
-import { fetchCategories } from 'src/store/actions/category';
 import { registerDebtTransaction } from 'src/store/actions/debt';
 import debtType from 'src/types/debt';
 import transactionType from 'src/types/transaction';
 
 const DebtTransactionForm = ({
-  modelData, debt, registerDebtTransaction, toggleModal,
+  modelData, debt, registerDebtTransaction, toggleModal, accountOptions, categoryOptions,
 }) => {
-  // Initialize state
-  const [categories, setCategories] = useState([]);
-  const [accounts, setAccounts] = useState([]);
   const [closeDebt, setCloseDebt] = useState(false);
-
-  // Initialize container
-  useEffect(() => {
-    fetchCategories().then((categories) => setCategories(categories));
-    fetchAccounts().then((accounts) => setAccounts(accounts));
-  }, []);
 
   const isEditMode = !!modelData;
   const toggleCloseDebt = () => setCloseDebt(!closeDebt);
@@ -114,7 +103,7 @@ const DebtTransactionForm = ({
                 selected={category ? [category] : []}
                 onBlur={handleBlur}
                 onChange={([selected]) => setFieldValue('category', selected ? selected.name : '')}
-                options={categories.filter((c) => c.type === type)}
+                options={categoryOptions.filter((c) => c.type === type)}
               />
               <ErrorMessage component="div" name="category" className="invalid-feedback" />
             </FormGroup>
@@ -148,7 +137,7 @@ const DebtTransactionForm = ({
                     onChange={({ target }) => setFieldValue('account', target.value)}
                   >
                     <option value="">------------</option>
-                    {accounts.map(({ id, name, archivedAt }) => (
+                    {accountOptions.map(({ id, name, archivedAt }) => (
                       <option key={`account-option-${id}`} value={parseInt(id, 10)}>
                         {name}
                         {' '}
@@ -206,13 +195,25 @@ const DebtTransactionForm = ({
   );
 };
 
+DebtTransactionForm.defaultProps = {
+  accountOptions: [],
+  categoryOptions: [],
+};
+
 DebtTransactionForm.propTypes = {
   debt: debtType.isRequired,
   registerDebtTransaction: PropTypes.func.isRequired,
   modelData: transactionType,
   toggleModal: PropTypes.func,
+  accountOptions: PropTypes.array,
+  categoryOptions: PropTypes.array,
 };
 
-export default connect(null, {
+const mapStateToProps = ({ account, category }) => ({
+  accountOptions: account.filter(({ archivedAt }) => !archivedAt),
+  categoryOptions: category.list,
+});
+
+export default connect(mapStateToProps, {
   registerDebtTransaction,
 })(DebtTransactionForm);
