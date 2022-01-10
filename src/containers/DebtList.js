@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import moment from 'moment-timezone/index';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import {
@@ -25,8 +25,6 @@ import {
   closeDebt,
   deleteDebtTransaction,
   editDebtTransaction,
-  fetchList,
-  toggleWithClosedFilter,
 } from 'src/store/actions/debt';
 import { toggleDebtModal } from 'src/store/actions/ui';
 import { getIsLoading } from 'src/store/selectors/debt';
@@ -39,14 +37,11 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const DebtList = ({
   debts,
-  withClosed,
   isLoading,
-  fetchList,
   editDebtTransaction,
   closeDebt,
   deleteDebtTransaction,
   toggleDebtModal,
-  toggleWithClosedFilter,
 }) => {
   const { code } = useBaseCurrency();
   const [selectedDebt, setSelectedDebt] = useState();
@@ -56,11 +51,10 @@ const DebtList = ({
   const [isDebtTransactionModalOpened, setDebtTransactionModalOpened] = useState(false);
   const [selectedTransaction, selectTransaction] = useState();
 
-  const total = useMemo(() => sumBy(debts, ({ values }) => values[code]), [debts]);
-
-  useEffect(() => {
-    fetchList();
-  }, []);
+  const total = useMemo(
+    () => sumBy(debts.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[code]),
+    [debts],
+  );
 
   const toggleDebtEditModal = (debt) => {
     setSelectedDebt(debt);
@@ -89,17 +83,6 @@ const DebtList = ({
       <LoadingCard isLoading={isLoading}>
         <CardHeader>
           <div className="tools float-right">
-            <Button
-              size="sm"
-              color="info"
-              className={cn('btn-icon', 'mr-2', {
-                'btn-simple': !withClosed,
-              })}
-              onClick={toggleWithClosedFilter}
-            >
-              <i aria-hidden className="tim-icons icon-trash-simple" />
-            </Button>
-
             <AddNewButton onClick={toggleDebtModal} size="sm" color="warning" />
           </div>
           <h5 className="card-title">Debts</h5>
@@ -252,10 +235,6 @@ const DebtList = ({
   );
 };
 
-DebtList.defaultProps = {
-  withClosed: false,
-};
-
 DebtList.propTypes = {
   closeDebt: PropTypes.func.isRequired,
   debts: PropTypes.arrayOf(
@@ -264,31 +243,25 @@ DebtList.propTypes = {
       debtor: PropTypes.string.isRequired,
       createdAt: PropTypes.string.isRequired,
       balance: PropTypes.number.isRequired,
-      values: PropTypes.object.isRequired,
+      convertedValues: PropTypes.object.isRequired,
       currency: PropTypes.string.isRequired,
     }),
   ).isRequired,
   deleteDebtTransaction: PropTypes.func.isRequired,
   editDebtTransaction: PropTypes.func.isRequired,
-  fetchList: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   toggleDebtModal: PropTypes.func.isRequired,
-  toggleWithClosedFilter: PropTypes.func.isRequired,
-  withClosed: PropTypes.bool,
 };
 
 const mapStateToProps = ({ debt, ui }) => ({
   debts: debt.debts,
-  withClosed: debt.withClosed,
   isLoading: getIsLoading({ ui }),
   isDebtModalOpened: ui.isDebtModalOpened,
 });
 
 export default connect(mapStateToProps, {
-  fetchList,
   closeDebt,
   editDebtTransaction,
   toggleDebtModal,
   deleteDebtTransaction,
-  toggleWithClosedFilter,
 })(DebtList);

@@ -21,7 +21,7 @@ const Sidebar = ({
 }) => {
   const { pathname } = useLocation();
   const { symbol, code } = useBaseCurrency();
-  const totalDebt = useMemo(() => sumBy(debts, ({ convertedValues }) => convertedValues[code], [debts]));
+  const totalDebt = useMemo(() => sumBy(debts.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[code]), [debts]);
   const totalAccountsValue = useMemo(() => sumBy(accounts, ({ convertedValues }) => convertedValues[code]), [accounts]);
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
 

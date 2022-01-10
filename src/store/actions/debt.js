@@ -45,19 +45,15 @@ export const { Types, Creators } = createActions(
     deleteTransactionRequest: null,
     deleteTransactionSuccess: null,
     deleteTransactionFailure: ['message'],
-
-    toggleWithClosedFilter: null,
   },
   { prefix: 'DEBT_' },
 );
 
-export const fetchList = () => (dispatch, getState) => {
+export const fetchList = () => (dispatch) => {
   dispatch(Creators.fetchListRequest());
 
   return axios
-    .get('api/debts', {
-      withDeleted: getState().debt.withClosed ? 1 : 0,
-    })
+    .get('api/debts')
     .then(({ data }) => {
       dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'updatedAt', 'asc')));
     })
@@ -233,9 +229,3 @@ export const deleteDebtTransaction = (debt, transaction) => (dispatch) => confir
       dispatch(Creators.deleteTransactionFailure(e.message));
     });
 });
-
-export const toggleWithClosedFilter = () => (dispatch) => {
-  dispatch(Creators.toggleWithClosedFilter());
-
-  dispatch(fetchList());
-};
