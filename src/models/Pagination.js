@@ -62,13 +62,13 @@ class Pagination extends Record(DEFAULT_VALUES) {
       page: this.page === DEFAULT_VALUES.page ? undefined : this.page,
       perPage: this.perPage === DEFAULT_VALUES.perPage ? undefined : this.perPage,
     });
-    const filtersQuery = this.filters.getParamsQuery();
+    const filtersQuery = this.filters?.getParamsQuery();
 
     return compact([paginationQuery, filtersQuery]).join('&');
   }
 
   isEqual(compareTo) {
-    return isEqual(this.toJS(), compareTo.toJS());
+    return this.getParamsQuery() === compareTo.getParamsQuery();
   }
 }
 
