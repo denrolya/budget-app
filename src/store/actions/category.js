@@ -53,7 +53,7 @@ export const fetchTree = (categoryType) => (dispatch) => {
   dispatch(Creators.fetchTreeRequest());
 
   return axios
-    .get(`api/categories-tree/${categoryType}`)
+    .get(`api/categories/${categoryType}`)
     .then(({ data }) => dispatch(Creators.fetchTreeSuccess(categoryType, createCategoriesTree(data['hydra:member']))))
     .catch(({ message }) => {
       notify('error', '[Error]: Fetch Category Tree');
@@ -83,13 +83,11 @@ export const setParent = (category, parentCategory) => (dispatch) => {
 
 export const updateTree = (categoryType, treeData) => (dispatch) => dispatch(Creators.updateTree(categoryType, treeData));
 
-export const create = (type, category) => (dispatch) => {
+export const create = (type, data) => (dispatch) => {
   dispatch(Creators.createRequest());
 
   return axios
-    .post(Routing.generate('api_v1_category_new', { type }), {
-      [`${type}_category`]: category,
-    })
+    .post(`api/categories/${type}`, data)
     .then(() => {
       dispatch(Creators.createSuccess());
       notify('success', 'Category successfully created', 'New category');
