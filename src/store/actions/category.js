@@ -49,30 +49,18 @@ export const fetchList = () => (dispatch) => {
     });
 };
 
-export const fetchTree = (categoryType) => (dispatch) => {
-  dispatch(Creators.fetchTreeRequest());
-
-  return axios
-    .get(`api/categories/${categoryType}`)
-    .then(({ data }) => dispatch(Creators.fetchTreeSuccess(categoryType, createCategoriesTree(data['hydra:member']))))
-    .catch(({ message }) => {
-      notify('error', '[Error]: Fetch Category Tree');
-      dispatch(Creators.fetchTreeFailure(message));
-    });
-};
-
 export const setParent = (category, parentCategory) => (dispatch) => {
   dispatch(Creators.setParentRequest());
 
   return axios
-    .patch(Routing.generate('api_v1_category_set_parent', { id: category.id }), {
-      parentId: parentCategory ? parentCategory.id : null,
+    .put(`api/categories/${category.id}`, {
+      parent: parentCategory?.['@id'] || null,
     })
     .then(() => {
       dispatch(Creators.setParentSuccess());
       const message = parentCategory
-        ? `Category "${category.title}" was nested under "${parentCategory.title}"`
-        : `Category "${category.title}" is now at root level`;
+        ? `Category "${category.name}" was nested under "${parentCategory.name}"`
+        : `Category "${category.name}" is now at root level`;
       notify('info', message);
     })
     .catch(({ message }) => {
@@ -91,8 +79,6 @@ export const create = (type, data) => (dispatch) => {
     .then(() => {
       dispatch(Creators.createSuccess());
       notify('success', 'Category successfully created', 'New category');
-
-      dispatch(fetchTree(type));
     })
     .catch(({ message }) => {
       notify('error', '[Error]: Category Create');
@@ -108,8 +94,6 @@ export const edit = (id, type, data) => (dispatch) => {
     .then(() => {
       dispatch(Creators.editSuccess());
       notify('success', 'Category was successfully updated.', 'Edited successfully');
-
-      dispatch(fetchTree(type));
     })
     .catch(({ message }) => {
       notify('error', '[Error]: Category Edit');

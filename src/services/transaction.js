@@ -65,13 +65,35 @@ export const confirmCategoryRemoval = ({ name }) => Swal.fire({
   buttonsStyling: false,
 });
 
+export const listToTree = (list) => {
+  const map = {}; let node; const roots = []; let
+    i;
+
+  for (i = 0; i < list.length; i += 1) {
+    map[list[i]['@id']] = i; // initialize the map
+    // eslint-disable-next-line no-param-reassign
+    list[i].children = []; // initialize the children
+  }
+
+  for (i = 0; i < list.length; i += 1) {
+    node = list[i];
+    if (node.parent?.['@id']) {
+      // if you have dangling branches check that map[node.parentId] exists
+      list[map[node.parent?.['@id']]]?.children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
+};
+
 /**
  *
- * @param {Array} categories
+ * @param {Array} tree
  * @returns {Array}
  */
-export const createCategoriesTree = (categories) => orderBy(
-  categories.map((c) => {
+export const createCategoriesTree = (tree) => orderBy(
+  tree.map((c) => {
     if (c.children.length > 0) {
       // eslint-disable-next-line no-param-reassign
       c.children = createCategoriesTree(c.children);

@@ -41,14 +41,14 @@ const AccountDetails = ({
 
   const onArchiveClick = (account) => confirmAccountArchivation(account).then(async ({ value }) => {
     if (value) {
-      await toggleArchived(account.id);
+      await toggleArchived(account.id, false);
       await fetchAccountDetails(account.id);
     }
   });
 
   const onRestoreClick = (account) => confirmAccountRestoration(account).then(async ({ value }) => {
     if (value) {
-      await toggleArchived(account.id);
+      await toggleArchived(account.id, true);
       await fetchAccountDetails(account.id);
     }
   });

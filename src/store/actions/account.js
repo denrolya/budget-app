@@ -1,6 +1,8 @@
+import { SERVER_TIMEZONE } from 'src/constants/datetime';
 import axios from 'src/services/http';
 import orderBy from 'lodash/orderBy';
 import { createActions } from 'reduxsauce';
+import moment from 'moment-timezone';
 
 import Routing, { isOnDashboardPage } from 'src/services/routing';
 import { notify } from 'src/store/actions/global';
@@ -38,11 +40,11 @@ export const fetchList = () => (dispatch) => {
     });
 };
 
-export const createAccount = (account) => (dispatch) => {
+export const createAccount = (data) => (dispatch) => {
   dispatch(Creators.createRequest());
 
   return axios
-    .post(Routing.generate('api_v1_account_save'), { account })
+    .post('api/accounts', data)
     .then(() => {
       dispatch(Creators.createSuccess());
       notify('success', 'Account created!', 'New account');
@@ -52,7 +54,7 @@ export const createAccount = (account) => (dispatch) => {
       }
     })
     .catch((e) => {
-      console.error(e);
+      notify('error', '[Error]: Account Create');
       dispatch(Creators.createFailure(e.message));
     });
 };
@@ -60,49 +62,39 @@ export const createAccount = (account) => (dispatch) => {
 export const updateName = (account, newName) => (dispatch) => {
   dispatch(Creators.editRequest());
 
-  return axios
-    .patch(Routing.generate('api_v1_account_edit', { id: account.id }), {
-      account: {
+  return axios.put(`api/accounts/${account.id}`, {
+    name: newName,
+  }).then(() => {
+    dispatch(
+      Creators.editSuccess({
+        ...account,
         name: newName,
-      },
-    })
-    .then(() => {
-      dispatch(
-        Creators.editSuccess({
-          ...account,
-          name: newName,
-        }),
-      );
-      notify('success', 'New name saved!');
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.editFailure(e.message));
-    });
+      }),
+    );
+    notify('success', 'New name saved!');
+  }).catch((e) => {
+    notify('error', '[Error]: Account Edit');
+    dispatch(Creators.editFailure(e.message));
+  });
 };
 
 export const updateColor = (account, newColor) => (dispatch) => {
   dispatch(Creators.editRequest());
 
-  return axios
-    .patch(Routing.generate('api_v1_account_edit', { id: account.id }), {
-      account: {
+  return axios.put(`api/accounts/${account.id}`, {
+    color: newColor,
+  }).then(() => {
+    dispatch(
+      Creators.editSuccess({
+        ...account,
         color: newColor,
-      },
-    })
-    .then(() => {
-      dispatch(
-        Creators.editSuccess({
-          ...account,
-          color: newColor,
-        }),
-      );
-      notify('success', 'Color changed!');
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.editFailure(e.message));
-    });
+      }),
+    );
+    notify('success', 'Color changed!');
+  }).catch((e) => {
+    notify('error', '[Error]: Account Edit');
+    dispatch(Creators.editFailure(e.message));
+  });
 };
 
 export const fetchDetail = (id) => axios.get(`api/accounts/${id}`);
@@ -112,17 +104,16 @@ export const fetchTypeaheadList = () => axios
   .then(({ data }) => data)
   .catch((e) => console.error(e));
 
-export const toggleArchived = (id) => (dispatch) => {
+export const toggleArchived = (id, isArchived = false) => (dispatch) => {
   dispatch(Creators.archiveRequest());
 
-  return axios
-    .delete(Routing.generate('api_v1_account_archive', { id }))
-    .then(() => {
-      dispatch(Creators.archiveSuccess());
-      notify('success', 'Account was archived/restored');
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.archiveFailure(e.message));
-    });
+  return axios.put(`api/accounts/${id}`, {
+    archivedAt: isArchived ? null : moment().tz(SERVER_TIMEZONE).format(),
+  }).then(() => {
+    notify('success', 'Account was archived/restored');
+    dispatch(Creators.archiveSuccess());
+  }).catch((e) => {
+    notify('error', '[Error]: Account Edit');
+    dispatch(Creators.archiveFailure(e.message));
+  });
 };

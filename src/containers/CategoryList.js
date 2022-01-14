@@ -13,24 +13,24 @@ import CategoryForm from 'src/components/forms/CategoryForm';
 import ModalForm from 'src/components/forms/ModalForm';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import { isActionLoading } from 'src/services/common';
+import { createCategoriesTree, listToTree } from 'src/services/transaction';
 import {
-  create, edit, fetchTree, remove, setParent, updateTree,
+  create, edit, remove, setParent,
 } from 'src/store/actions/category';
 import LoadingCard from 'src/components/cards/LoadingCard';
 
 import 'react-sortable-tree/style.css';
 
 const CategoryList = ({
-  fetchTree,
   setParent,
-  tree,
+  list,
   isSavingCategory,
-  updateTree,
   create,
   edit,
   remove,
   isLoading,
 }) => {
+  const [tree, setTree] = useState();
   const [selectedCategory, selectCategory] = useState();
   const [isFormOpened, setIsFormOpened] = useState(false);
   const toggleForm = () => setIsFormOpened(!isFormOpened);
@@ -44,8 +44,10 @@ const CategoryList = ({
   };
 
   useEffect(() => {
-    fetchTree(EXPENSE_TYPE);
-    fetchTree(INCOME_TYPE);
+    setTree({
+      [EXPENSE_TYPE]: createCategoriesTree(listToTree(list.filter(({ type }) => type === EXPENSE_TYPE))),
+      [INCOME_TYPE]: createCategoriesTree(listToTree(list.filter(({ type }) => type === INCOME_TYPE))),
+    });
   }, []);
 
   const reorderNodes = ({
@@ -110,13 +112,18 @@ const CategoryList = ({
                     <AddNewButton onClick={toggleForm} />
                   </div>
                   <div style={{ height: 600, zIndex: 1 }}>
-                    <SortableTree
-                      shouldCopyOnOutsideDrop
-                      treeData={tree[type]}
-                      onMoveNode={reorderNodes}
-                      onChange={(treeData) => updateTree(type, treeData)}
-                      generateNodeProps={generateNodeProps}
-                    />
+                    {tree?.[type] && (
+                      <SortableTree
+                        shouldCopyOnOutsideDrop
+                        treeData={tree[type]}
+                        onMoveNode={reorderNodes}
+                        onChange={(treeData) => setTree({
+                          ...tree,
+                          [type]: treeData,
+                        })}
+                        generateNodeProps={generateNodeProps}
+                      />
+                    )}
                   </div>
                 </CardBody>
               </LoadingCard>
@@ -142,26 +149,22 @@ const CategoryList = ({
 };
 
 CategoryList.propTypes = {
-  tree: PropTypes.object.isRequired,
+  list: PropTypes.array.isRequired,
   isSavingCategory: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  fetchTree: PropTypes.func.isRequired,
-  updateTree: PropTypes.func.isRequired,
   setParent: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ category: { tree }, ui }) => ({
-  tree,
+const mapStateToProps = ({ category: { list }, ui }) => ({
+  list,
   isSavingCategory: isActionLoading(ui.CATEGORY_CREATE) || isActionLoading(ui.CATEGORY_EDIT),
   isLoading: isActionLoading(ui.CATEGORY_FETCH_TREE),
 });
 
 export default connect(mapStateToProps, {
-  fetchTree,
-  updateTree,
   setParent,
   create,
   edit,

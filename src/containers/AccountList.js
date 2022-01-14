@@ -5,9 +5,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
-import {
-  toggleArchived, updateName, updateColor,
-} from 'src/store/actions/account';
+import { updateName, updateColor } from 'src/store/actions/account';
 import AccountSelector from 'src/components/AccountSelector';
 
 const AccountList = ({ list }) => {
@@ -54,7 +52,6 @@ const mapStateToProps = ({ account }) => ({
 });
 
 export default connect(mapStateToProps, {
-  toggleArchived,
   updateName,
   updateColor,
 })(AccountList);
