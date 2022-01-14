@@ -45,6 +45,7 @@ export const { Types, Creators } = createActions(
 
 export const initializeList = () => (dispatch) => {
   const { page, perPage, ...filters } = getTransactionListQueryParams(history.location.search);
+  console.log(page, perPage, filters);
 
   dispatch(
     setPagination(

@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {
-  useEffect, useLayoutEffect, useRef, useState,
-} from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import {
@@ -45,7 +43,6 @@ const TransactionList = ({
 }) => {
   const [isEditModalOpened, setEditModalOpened] = useState(false);
   const [selectedTransaction, selectTransaction] = useState();
-  const firstUpdate = useRef(true);
   const [isGridSelected, selectGrid] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(!window.isMobile);
 
@@ -56,11 +53,6 @@ const TransactionList = ({
   }, []);
 
   useLayoutEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-
     fetchList();
   }, [pagination.page, pagination.perPage, pagination.filters]);
 

@@ -33,6 +33,11 @@ const AccountTransactionsDetails = ({ account }) => {
     }));
   }, [logs]);
 
+  const lastMonthTransactionsCount = useMemo(
+    () => transactionsCountByMonths[Object.keys(transactionsCountByMonths)[Object.keys(transactionsCountByMonths).length - 1]]?.value || 0,
+    [transactionsCountByMonths],
+  );
+
   const transactionsCountingFrom = moment().subtract(7, 'days');
   const daysFromLastTransaction = moment().startOf('day').diff(moment(lastTransactionAt).startOf('day'), 'days') + 1;
 
@@ -75,7 +80,7 @@ const AccountTransactionsDetails = ({ account }) => {
           <Row className="mb-5 gx-0">
             <Col xs={4} className="d-flex flex-column justify-content-center">
               <span className="h1 mb-2 font-weight-light d-block text-nowrap">
-                {transactionsCountByMonths[moment().month() - 1]?.value || 0}
+                { lastMonthTransactionsCount }
               </span>
               <span className="h5 m-0 d-block">Last month</span>
             </Col>
