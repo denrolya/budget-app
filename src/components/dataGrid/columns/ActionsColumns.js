@@ -45,7 +45,7 @@ const ActionColumns = ({ columns }) => {
                     aria-label={actionColumn.label}
                     onClick={() => actionColumn.onClick(params.tableRow.row)}
                   >
-                    <i aria-hidden className={actionColumn.icon} />
+                    <i aria-hidden className={typeof actionColumn.icon === 'function' ? actionColumn.icon(params.tableRow.row) : actionColumn.icon} />
                   </Button>
                 </Table.Cell>
               );
@@ -65,7 +65,7 @@ ActionColumns.defaultProps = {
 ActionColumns.propTypes = {
   columns: PropTypes.arrayOf(
     PropTypes.shape({
-      icon: PropTypes.string.isRequired,
+      icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
       name: PropTypes.string.isRequired,
       color: PropTypes.string,
       label: PropTypes.string,
