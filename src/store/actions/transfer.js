@@ -62,32 +62,34 @@ export const fetchList = () => (dispatch, getState) => {
 
   dispatch(Creators.fetchListRequest());
 
-  const queryParams = {
+  const params = {
     perPage,
     page,
-    from,
-    to,
+    'executedAt[strictly_after]': from,
+    'executedAt[strictly_before]': to,
   };
 
   return axios
-    .get(Routing.generate('api_v1_transfer_list', queryParams))
+    .get('api/transfers', { params })
     .then(({ data }) => {
-      const { list, count } = data;
-
-      dispatch(Creators.fetchListSuccess(list, count));
+      dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems']));
     })
-    .catch(({ message }) => dispatch(Creators.fetchListFailure(message)));
+    .catch(({ message }) => {
+      notify('error', '[Error]: Fetch Transfer List');
+      dispatch(Creators.fetchListFailure(message));
+    });
 };
 
 export const registerTransfer = (transfer) => (dispatch) => {
   dispatch(Creators.registerRequest());
 
   return axios
-    .post(Routing.generate('api_v1_transfer_save'), {
-      transfer: {
-        ...transfer,
-        executedAt: moment(transfer.executedAt).tz(SERVER_TIMEZONE).format(),
-      },
+    .post('api/transfers', {
+      ...transfer,
+      amount: String(transfer.amount),
+      rate: String(transfer.rate),
+      fee: String(transfer.fee),
+      executedAt: moment(transfer.executedAt).tz(SERVER_TIMEZONE).format(),
     })
     .then(() => {
       dispatch(Creators.registerSuccess());
@@ -104,7 +106,10 @@ export const registerTransfer = (transfer) => (dispatch) => {
       dispatch(fetchAccounts());
       dispatch(fetchDebts());
     })
-    .catch(({ message }) => dispatch(Creators.registerFailure(message)));
+    .catch(({ message }) => {
+      notify('error', '[Error]: Register Transfer');
+      dispatch(Creators.registerFailure(message));
+    });
 };
 
 export const deleteTransfer = ({ id }) => (dispatch) => Swal.fire({
@@ -125,7 +130,7 @@ export const deleteTransfer = ({ id }) => (dispatch) => Swal.fire({
   dispatch(Creators.deleteRequest());
 
   return axios
-    .delete(Routing.generate('api_v1_transfer_delete', { id }))
+    .delete(`api/transfers/${id}`)
     .then(() => {
       dispatch(Creators.deleteSuccess(id));
       notify('success', 'Transfer deleted!', 'Deleted');
@@ -138,7 +143,10 @@ export const deleteTransfer = ({ id }) => (dispatch) => Swal.fire({
         dispatch(fetchList());
       }
     })
-    .catch(({ message }) => dispatch(Creators.deleteFailure(message)));
+    .catch(({ message }) => {
+      notify('error', '[Error]: Delete Transfer');
+      dispatch(Creators.deleteFailure(message));
+    });
 });
 
 export const setPagination = (model) => (dispatch, getState) => {

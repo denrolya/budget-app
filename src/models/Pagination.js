@@ -54,7 +54,7 @@ class Pagination extends Record(DEFAULT_VALUES) {
   }
 
   countPages() {
-    return Math.ceil(this.count / this.perPage);
+    return this.count === 0 ? 1 : Math.ceil(this.count / this.perPage);
   }
 
   getParamsQuery() {

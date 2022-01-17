@@ -15,7 +15,7 @@ import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/tran
 import { isActionLoading } from 'src/services/common';
 import { createCategoriesTree, listToTree } from 'src/services/transaction';
 import {
-  create, edit, remove, setParent,
+  create, edit, remove, setParent, fetchList,
 } from 'src/store/actions/category';
 import LoadingCard from 'src/components/cards/LoadingCard';
 
@@ -28,6 +28,7 @@ const CategoryList = ({
   create,
   edit,
   remove,
+  fetchList,
   isLoading,
 }) => {
   const [tree, setTree] = useState();
@@ -38,9 +39,10 @@ const CategoryList = ({
     selectCategory(category);
     toggleForm();
   };
-  const handleCategorySubmit = (category) => {
+  const handleCategorySubmit = async (category) => {
     selectCategory();
-    return category.id ? edit(category.id, category.type, category) : create(category.type, category);
+    await (category.id ? edit(category.id, category.type, category) : create(category.type, category));
+    fetchList();
   };
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const CategoryList = ({
       [EXPENSE_TYPE]: createCategoriesTree(listToTree(list.filter(({ type }) => type === EXPENSE_TYPE))),
       [INCOME_TYPE]: createCategoriesTree(listToTree(list.filter(({ type }) => type === INCOME_TYPE))),
     });
-  }, []);
+  }, [list]);
 
   const reorderNodes = ({
     node, nextParentNode, prevPath, nextPath,
@@ -84,15 +86,17 @@ const CategoryList = ({
                 size="sm"
                 color="danger"
                 className="btn-link px-2"
-                onClick={() => remove(
-                  node,
-                  type,
-                  removeNodeAtPath({
-                    path,
-                    treeData: tree[type],
-                    getNodeKey: ({ treeIndex }) => treeIndex,
-                  }),
-                )}
+                onClick={async () => {
+                  await remove(node);
+                  setTree({
+                    ...tree,
+                    [type]: removeNodeAtPath({
+                      path,
+                      treeData: tree[type],
+                      getNodeKey: ({ treeIndex }) => treeIndex,
+                    }),
+                  });
+                }}
               >
                 <i aria-hidden className="tim-icons icon-trash-simple" />
               </Button>,
@@ -156,6 +160,7 @@ CategoryList.propTypes = {
   create: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
+  fetchList: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ category: { list }, ui }) => ({
@@ -169,4 +174,5 @@ export default connect(mapStateToProps, {
   create,
   edit,
   remove,
+  fetchList,
 })(CategoryList);

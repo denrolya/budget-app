@@ -2,8 +2,7 @@ import orderBy from 'lodash/orderBy';
 import { createActions } from 'reduxsauce';
 
 import axios from 'src/services/http';
-import Routing from 'src/services/routing';
-import { confirmCategoryRemoval, createCategoriesTree } from 'src/services/transaction';
+import { confirmCategoryRemoval } from 'src/services/transaction';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(
@@ -11,10 +10,6 @@ export const { Types, Creators } = createActions(
     fetchListRequest: null,
     fetchListSuccess: ['categories'],
     fetchListFailure: ['message'],
-
-    fetchTreeRequest: null,
-    fetchTreeSuccess: ['categoryType', 'treeData'],
-    fetchTreeFailure: ['message'],
 
     createRequest: null,
     createSuccess: null,
@@ -27,8 +22,6 @@ export const { Types, Creators } = createActions(
     removeRequest: null,
     removeSuccess: null,
     removeFailure: ['message'],
-
-    updateTree: ['categoryType', 'treeData'],
 
     setParentRequest: null,
     setParentSuccess: null,
@@ -54,7 +47,7 @@ export const setParent = (category, parentCategory) => (dispatch) => {
 
   return axios
     .put(`api/categories/${category.id}`, {
-      parent: parentCategory?.['@id'] || null,
+      parent: parentCategory?.id || null,
     })
     .then(() => {
       dispatch(Creators.setParentSuccess());
@@ -68,8 +61,6 @@ export const setParent = (category, parentCategory) => (dispatch) => {
       dispatch(Creators.setParentFailure(message));
     });
 };
-
-export const updateTree = (categoryType, treeData) => (dispatch) => dispatch(Creators.updateTree(categoryType, treeData));
 
 export const create = (type, data) => (dispatch) => {
   dispatch(Creators.createRequest());
@@ -101,7 +92,7 @@ export const edit = (id, type, data) => (dispatch) => {
     });
 };
 
-export const remove = (category, categoryType, treeData) => (dispatch) => confirmCategoryRemoval(category).then(({ value }) => {
+export const remove = (category) => (dispatch) => confirmCategoryRemoval(category).then(({ value }) => {
   if (!value) {
     return {};
   }
@@ -109,10 +100,9 @@ export const remove = (category, categoryType, treeData) => (dispatch) => confir
   dispatch(Creators.removeRequest());
 
   return axios
-    .delete(Routing.generate('api_v1_category_remove', { id: category.id }))
+    .delete(`api/categories/${category.id}`)
     .then(() => {
       dispatch(Creators.removeSuccess());
-      dispatch(updateTree(categoryType, treeData));
       notify('warning', `Category '${category.name}' and it's transactions were removed`);
     })
     .catch(({ message }) => {

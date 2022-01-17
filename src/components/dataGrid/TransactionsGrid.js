@@ -75,10 +75,10 @@ const TransactionsGrid = ({
     },
     {
       name: 'deleteAction',
-      label: 'Delete transaction',
+      label: 'Delete\\Cancel transaction',
       color: 'danger',
       onClick: deleteTransaction,
-      icon: 'tim-icons icon-trash-simple',
+      icon: ({ canceledAt }) => canceledAt ? 'tim-icons icon-trash-simple' : 'tim-icons icon-simple-remove',
     },
   ]);
   const [columns] = useState([
@@ -100,6 +100,7 @@ const TransactionsGrid = ({
     { columnName: 'executedAt', width: 'auto' },
     { columnName: 'executionTime', width: '100' },
     { columnName: 'editAction', width: '40' },
+    { columnName: 'cancelAction', width: '30' },
     { columnName: 'deleteAction', width: '30' },
   ]);
 
@@ -108,6 +109,7 @@ const TransactionsGrid = ({
     { columnName: 'id', groupingEnabled: false },
     { columnName: 'executionTime', groupingEnabled: false },
     { columnName: 'editAction', groupingEnabled: false },
+    { columnName: 'cancelAction', groupingEnabled: false },
     { columnName: 'deleteAction', groupingEnabled: false },
   ]);
   const [integratedGroupingColumnExtensions] = useState([
@@ -124,6 +126,7 @@ const TransactionsGrid = ({
     { columnName: 'executedAt', align: 'right' },
     { columnName: 'executionTime', align: 'right' },
     { columnName: 'editAction', align: 'center' },
+    { columnName: 'cancelAction', align: 'center' },
     { columnName: 'deleteAction', align: 'center' },
   ]);
 

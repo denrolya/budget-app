@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
-import React, { useRef, useLayoutEffect, useEffect } from 'react';
+import React, { useLayoutEffect, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import LoadingOverlay from 'react-loading-overlay';
 import { connect } from 'react-redux';
@@ -38,8 +38,6 @@ const TransferList = ({
   setFilters,
   toggleTransferModal,
 }) => {
-  const firstUpdate = useRef(true);
-
   const {
     filters: { from, to },
   } = pagination;
@@ -51,11 +49,6 @@ const TransferList = ({
   }, []);
 
   useLayoutEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-
     fetchList();
   }, [pagination.page, pagination.perPage, pagination.filters]);
 
@@ -65,7 +58,7 @@ const TransferList = ({
     <>
       <Helmet>
         <title>
-          {`Transfers${pagination.count} | Budget`}
+          {`Transfers(${pagination.count}) | Budget`}
         </title>
       </Helmet>
 

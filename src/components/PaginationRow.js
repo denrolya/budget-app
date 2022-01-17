@@ -28,7 +28,7 @@ const PaginationRow = ({ model, setPage }) => (
         onClick={() => setPage(model.page - 1)}
         disabled={model.isFirstPage()}
       >
-        <i className="ion-ios-arrow-back" aria-hidden />
+        <i aria-hidden className="ion-ios-arrow-back" />
       </Button>
       <Button
         color="danger"
@@ -39,7 +39,7 @@ const PaginationRow = ({ model, setPage }) => (
         onClick={() => setPage(model.page + 1)}
         disabled={model.isLastPage()}
       >
-        <i className="ion-ios-arrow-forward" aria-hidden />
+        <i aria-hidden className="ion-ios-arrow-forward" />
       </Button>
     </Col>
   </Row>
