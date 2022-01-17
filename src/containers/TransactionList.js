@@ -56,6 +56,12 @@ const TransactionList = ({
     fetchList();
   }, [pagination.page, pagination.perPage, pagination.filters]);
 
+  useEffect(() => {
+    if (!isEditModalOpened) {
+      selectTransaction();
+    }
+  }, [isEditModalOpened]);
+
   const toggleTransactionEdition = (transaction) => {
     selectTransaction(transaction);
 
@@ -144,7 +150,7 @@ const TransactionList = ({
           onSubmit={(t) => editTransaction(t.id, t.type, t)}
           model={selectedTransaction}
           isOpen={isEditModalOpened}
-          toggleTransactionModal={() => setEditModalOpened(!isEditModalOpened)}
+          toggleModal={() => setEditModalOpened(!isEditModalOpened)}
         />
       )}
     </>

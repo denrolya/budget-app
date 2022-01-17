@@ -132,7 +132,16 @@ export const editTransaction = (id, type, transaction) => (dispatch, getState) =
   dispatch(Creators.editRequest());
 
   return axios
-    .put(`api/transactions/${id}`, transaction)
+    .put(`api/transactions/${id}`, {
+      ...transaction,
+      amount: String(transaction.amount),
+      executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
+      compensations: transaction.compensations.map((c) => ({
+        ...c,
+        amount: String(c.amount),
+        executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
+      })),
+    })
     .then(() => {
       dispatch(Creators.editSuccess());
       notify('success', `Transaction ${id} edited successfully`);

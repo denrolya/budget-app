@@ -17,11 +17,10 @@ import AccountName from 'src/components/AccountName';
 import { CURRENCIES } from 'src/constants/currency';
 
 const Sidebar = ({
-  accounts, debts, loading, onCurrencySwitch, updateDashboard,
+  accounts, totalDebt, isLoading, onCurrencySwitch, updateDashboard,
 }) => {
   const { pathname } = useLocation();
   const { symbol, code } = useBaseCurrency();
-  const totalDebt = useMemo(() => sumBy(debts.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[code]), [debts]);
   const totalAccountsValue = useMemo(() => sumBy(accounts, ({ convertedValues }) => convertedValues[code]), [accounts]);
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
 
@@ -96,7 +95,7 @@ const Sidebar = ({
               <p className="text-capitalize">
                 Debts
                 {' '}
-                {!loading && (
+                {!isLoading && (
                   <span
                     style={{ fontSize: 'larger' }}
                     className={cn('text-currency', {
@@ -134,7 +133,7 @@ const Sidebar = ({
 
               <div className="d-flex flex-column">
                 <p className="text-nowrap">All Accounts</p>
-                {!loading && (
+                {!isLoading && (
                   <MoneyValue
                     bold
                     amount={totalAccountsValue}
@@ -156,19 +155,19 @@ const Sidebar = ({
 
 Sidebar.defaultProps = {
   accounts: [],
-  debts: [],
-  loading: false,
+  totalDebt: 0,
+  isLoading: false,
 };
 
 Sidebar.propTypes = {
   updateDashboard: PropTypes.func.isRequired,
   onCurrencySwitch: PropTypes.func.isRequired,
   accounts: PropTypes.array,
-  debts: PropTypes.array,
-  loading: PropTypes.bool,
+  totalDebt: PropTypes.number,
+  isLoading: PropTypes.bool,
 };
 
 export default memo(
   Sidebar,
-  (pp, np) => isEqual(pp.accounts, np.accounts) && isEqual(pp.debts, np.debts) && pp.loading === np.loading,
+  (pp, np) => isEqual(pp.accounts, np.accounts) && isEqual(pp.totalDebt, np.totalDebt) && pp.isLoading === np.isLoading,
 );

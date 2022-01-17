@@ -1,6 +1,7 @@
 import cn from 'classnames';
+import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { connect } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
@@ -43,7 +44,7 @@ import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 const Layout = ({
   colorScheme,
   accounts,
-  debts,
+  totalDebt,
   baseCurrency,
   logoutUser,
   toggleDarkMode,
@@ -119,8 +120,8 @@ const Layout = ({
       >
         <Sidebar
           accounts={accounts}
-          debts={debts}
-          loading={isAssetsLoading}
+          totalDebt={totalDebt}
+          isLoading={isAssetsLoading}
           onCurrencySwitch={switchBaseCurrency}
           updateDashboard={updateDashboard}
         />
@@ -186,7 +187,7 @@ const Layout = ({
 
 Layout.defaultProps = {
   accounts: [],
-  debts: [],
+  totalDebt: 0,
 };
 
 Layout.propTypes = {
@@ -219,7 +220,7 @@ Layout.propTypes = {
   toggleTransferModal: PropTypes.func.isRequired,
   updateDashboard: PropTypes.func.isRequired,
   accounts: PropTypes.array,
-  debts: PropTypes.array,
+  totalDebt: PropTypes.number,
   baseCurrency: PropTypes.string.isRequired,
 };
 
@@ -237,7 +238,7 @@ const mapStateToProps = ({
   isAccountModalOpened: ui.isAccountModalOpened,
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
   accounts: account.filter(({ archivedAt }) => !archivedAt),
-  debts: debt.debts,
+  totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.settings.baseCurrency.code]),
   isAssetsLoading: isActionLoading(ui.ACCOUNT_FETCH_LIST) || isActionLoading(ui.DEBT_FETCH_LIST),
 });
 

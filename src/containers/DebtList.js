@@ -36,7 +36,7 @@ import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const DebtList = ({
-  debts,
+  list,
   isLoading,
   editDebtTransaction,
   closeDebt,
@@ -52,8 +52,8 @@ const DebtList = ({
   const [selectedTransaction, selectTransaction] = useState();
 
   const total = useMemo(
-    () => sumBy(debts.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[code]),
-    [debts],
+    () => sumBy(list.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[code]),
+    [list],
   );
 
   const toggleDebtEditModal = (debt) => {
@@ -89,10 +89,10 @@ const DebtList = ({
         </CardHeader>
         <CardBody
           className={cn({
-            'mb-0 pb-0': debts.length > 0,
+            'mb-0 pb-0': list.length > 0,
           })}
         >
-          {debts.map((debt) => {
+          {list.map((debt) => {
             const {
               id, debtor, balance, values, currency, createdAt, closedAt, transactions, note,
             } = debt;
@@ -186,9 +186,9 @@ const DebtList = ({
             );
           })}
 
-          {!isLoading && debts.length === 0 && <NoDebtsMessage />}
+          {!isLoading && list.length === 0 && <NoDebtsMessage />}
         </CardBody>
-        {debts.length > 0 && (
+        {list.length > 0 && (
           <CardFooter className="pt-0">
             <p className="text-right">
               <span
@@ -237,7 +237,7 @@ const DebtList = ({
 
 DebtList.propTypes = {
   closeDebt: PropTypes.func.isRequired,
-  debts: PropTypes.arrayOf(
+  list: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       debtor: PropTypes.string.isRequired,
@@ -253,8 +253,8 @@ DebtList.propTypes = {
   toggleDebtModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ debt, ui }) => ({
-  debts: debt.debts,
+const mapStateToProps = ({ debt: list, ui }) => ({
+  list,
   isLoading: getIsLoading({ ui }),
   isDebtModalOpened: ui.isDebtModalOpened,
 });
