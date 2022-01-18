@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   }),
 };
 
+// eslint-disable-next-line default-param-last
 const fetchListSuccessHandler = (state = INITIAL_STATE, { data, totalValue, count }) => ({
   ...state,
   totalValue,
@@ -20,26 +21,31 @@ const fetchListSuccessHandler = (state = INITIAL_STATE, { data, totalValue, coun
   pagination: state.pagination.set('count', count),
 });
 
+// eslint-disable-next-line default-param-last
 const deleteSuccessHandler = (state = INITIAL_STATE, { transactionId }) => ({
   ...state,
   data: state.data.filter(({ id }) => id !== transactionId),
 });
 
+// eslint-disable-next-line default-param-last
 const setPaginationHandler = (state = INITIAL_STATE, { model: pagination }) => ({
   ...state,
   pagination,
 });
 
+// eslint-disable-next-line default-param-last
 const setPageHandler = (state = INITIAL_STATE, { page }) => ({
   ...state,
   pagination: state.pagination.set('page', page),
 });
 
+// eslint-disable-next-line default-param-last
 const setPerPageHandler = (state = INITIAL_STATE, { perPage }) => ({
   ...state,
   pagination: state.pagination.set('perPage', perPage),
 });
 
+// eslint-disable-next-line default-param-last
 const resetPaginationHandler = (state = INITIAL_STATE) => ({
   ...state,
   pagination: new Pagination({
@@ -47,6 +53,7 @@ const resetPaginationHandler = (state = INITIAL_STATE) => ({
   }),
 });
 
+// eslint-disable-next-line default-param-last
 const setFiltersHandler = (state = INITIAL_STATE, { model: filters }) => ({
   ...state,
   pagination: state.pagination.merge({
