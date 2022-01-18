@@ -48,7 +48,6 @@ export const { Types, Creators } = createActions(
  */
 export const initializeList = () => (dispatch) => {
   const { page, perPage, ...filters } = getTransactionListQueryParams(history.location.search);
-  console.log(page, perPage, filters);
 
   dispatch(
     setPagination(
@@ -134,7 +133,14 @@ export const editTransaction = (id, type, transaction) => (dispatch, getState) =
 
   return axios
     .put(Routing.generate('api_v1_transaction_edit', { id }), {
-      [type]: transaction,
+      [type]: {
+        ...transaction,
+        executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
+        compensations: transaction.compensations.map((c) => ({
+          ...c,
+          executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
+        })),
+      },
     })
     .then(() => {
       dispatch(Creators.editSuccess());

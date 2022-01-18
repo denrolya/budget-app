@@ -4,7 +4,7 @@ import React from 'react';
 import { Badge } from 'reactstrap';
 import Swal from 'sweetalert2';
 
-import { MOMENT_VIEW_TIME_FORMAT } from 'src/constants/datetime';
+import { MOMENT_VIEW_TIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
 
 /**
  * Shows cancellation confirmation alert
@@ -118,7 +118,7 @@ export const createCategoriesTree = (categories) => orderBy(
  */
 export const initializeList = (transactions) => transactions.map(({ executedAt, canceledAt, ...rest }) => ({
   ...rest,
-  executedAt: moment(executedAt),
-  executionTime: moment(executedAt).format(MOMENT_VIEW_TIME_FORMAT),
+  executedAt: moment(executedAt).tz(SERVER_TIMEZONE),
+  executionTime: moment(executedAt).tz(SERVER_TIMEZONE).format(MOMENT_VIEW_TIME_FORMAT),
   canceledAt: canceledAt ? moment(canceledAt) : null,
 }));
