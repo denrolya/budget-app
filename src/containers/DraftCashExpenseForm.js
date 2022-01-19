@@ -11,12 +11,11 @@ import {
 } from 'reactstrap';
 import { isActionLoading } from 'src/services/common';
 import { toggleDraftExpenseModal } from 'src/store/actions/ui';
-import * as Yup from 'yup';
 
 import { registerTransaction } from 'src/store/actions/transaction';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
-import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
+import { EXPENSE_TYPE, VALIDATION_SCHEMA } from 'src/constants/transactions';
 import ModalForm from 'src/components/forms/ModalForm';
 import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
@@ -36,22 +35,7 @@ const DraftCashExpenseForm = ({
       compensations: [],
       isDraft: true,
     },
-    validationSchema: Yup.object({
-      type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
-      account: Yup.number().required('Required field'),
-      amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
-      category: Yup.string().required('Required field'),
-      executedAt: Yup.string().required('Required field'),
-      note: Yup.string(),
-      isDraft: Yup.bool(),
-      compensations: Yup.array().of(
-        Yup.object({
-          account: Yup.string().required('Required field'),
-          amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
-          executedAt: Yup.string().required('Required field'),
-        }),
-      ),
-    }),
+    validationSchema: VALIDATION_SCHEMA,
   });
 
   useEffect(() => {

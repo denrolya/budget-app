@@ -66,16 +66,20 @@ const customHandlers = {
     } = getState().dashboard.transactionCategoriesTimeline;
     dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineRequest());
 
-    const { data } = await axios.get(
-      Routing.generate('api_v1_statistics_transaction_categories_timeline', {
-        categories,
-        interval,
-        from: from.format(MOMENT_DATE_FORMAT),
-        to: to.format(MOMENT_DATE_FORMAT),
-      }),
-    );
+    try {
+      const { data } = await axios.get(
+        Routing.generate('api_v1_statistics_transaction_categories_timeline', {
+          categories,
+          interval,
+          from: from.format(MOMENT_DATE_FORMAT),
+          to: to.format(MOMENT_DATE_FORMAT),
+        }),
+      );
 
-    dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineSuccess(data));
+      dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineSuccess(data));
+    } catch (e) {
+      dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineFailure(e));
+    }
   },
   expenseCategoriesTree: () => (dispatch, getState) => {
     const { from, to } = getState().dashboard.expenseCategoriesTree;
@@ -108,11 +112,10 @@ const customHandlers = {
             ),
           );
         }),
-      );
-    // .catch((e) => {
-    //   console.error(e);
-    //   dispatch(Creators.fetchStatisticsExpenseCategoriesTreeFailure(e.message));
-    // });
+      )
+      .catch((e) => {
+        dispatch(Creators.fetchStatisticsExpenseCategoriesTreeFailure(e.message));
+      });
   },
 };
 

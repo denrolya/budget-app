@@ -165,9 +165,7 @@ const Layout = ({
         <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
       </ModalForm>
 
-      <ModalForm title="Add Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal}>
-        <DebtForm toggleModal={toggleDebtModal} />
-      </ModalForm>
+      <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
 
       <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
         <AccountForm toggleModal={toggleAccountModal} />
@@ -238,7 +236,7 @@ const mapStateToProps = ({
   isAccountModalOpened: ui.isAccountModalOpened,
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
   accounts: account.filter(({ archivedAt }) => !archivedAt),
-  totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.settings.baseCurrency.code]),
+  totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.settings.baseCurrency]),
   isAssetsLoading: isActionLoading(ui.ACCOUNT_FETCH_LIST) || isActionLoading(ui.DEBT_FETCH_LIST),
 });
 

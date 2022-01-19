@@ -1,4 +1,6 @@
-import { ErrorMessage, Field, Formik } from 'formik';
+import {
+  ErrorMessage, Field, Form, Formik,
+} from 'formik';
 import get from 'lodash/get';
 import moment from 'moment-timezone';
 import React, { useEffect, useState } from 'react';
@@ -6,7 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import {
-  Button, ButtonGroup, Col, Form, FormGroup, Input, Label,
+  Button, ButtonGroup, Col, FormGroup, Input, Label,
 } from 'reactstrap';
 
 import ModalForm from 'src/components/forms/ModalForm';
@@ -16,62 +18,60 @@ import {
   COMPENSATION_TRANSACTION_CATEGORY_NAME,
   DEBT_TRANSACTION_CATEGORY_NAME,
   EXPENSE_TYPE,
-  INCOME_TYPE, TRANSACTION_TYPES,
+  INCOME_TYPE, INITIAL_FORM_DATA, TRANSACTION_TYPES, VALIDATION_SCHEMA,
 } from 'src/constants/transactions';
 import { isActionLoading } from 'src/services/common';
-import * as Yup from 'yup';
 
 const TransactionForm = ({
-  isSaving, model, title, isOpen, onSubmit, toggleModal, accountOptions, categoryOptions,
+  accountOptions,
+  categoryOptions,
+  title,
+  model,
+  isSaving,
+  isOpen,
+  onSubmit,
+  toggleModal,
 }) => {
+  const isEditMode = !!model.id;
   const [form, setForm] = useState({
-    initialValues: model,
-    validationSchema: Yup.object({
-      type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
-      account: Yup.number().required('Required field'),
-      amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
-      category: Yup.string().required('Required field'),
-      executedAt: Yup.string().required('Required field'),
-      note: Yup.string(),
-      isDraft: Yup.bool(),
-      compensations: Yup.array().of(
-        Yup.object({
-          account: Yup.string().required('Required field'),
-          amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
-          executedAt: Yup.string().required('Required field'),
-        }),
-      ),
-    }),
+    initialValues: INITIAL_FORM_DATA,
+    validationSchema: VALIDATION_SCHEMA,
   });
 
-  const isEditMode = !!model.id;
-
   useEffect(() => {
-    if (isEditMode) {
-      setForm({
-        ...form,
-        initialValues: {
-          ...model,
-          category: model.category?.id ? model.category.id : model.category,
-          account: model.account?.id ? model.account.id : model.account,
-          executedAt: moment(model.executedAt).format(MOMENT_DATETIME_FORMAT),
-          compensations: model?.compensations?.map((c) => ({
-            ...c,
-            executedAt: moment(c.executedAt).format(MOMENT_DATETIME_FORMAT),
-          })),
-        },
-      });
+    let { category } = model;
+    if (category?.id) {
+      category = category.id;
+    } else if (typeof model.category === 'string' || model.category instanceof String) {
+      category = categoryOptions.find(({ name, type }) => type === model.type && name === model.category)?.id || '';
+    } else {
+      category = INITIAL_FORM_DATA.category;
     }
+
+    setForm({
+      ...form,
+      initialValues: {
+        ...INITIAL_FORM_DATA,
+        ...model,
+        category,
+        account: model.account?.id ? model.account.id : model.account,
+        executedAt: moment(model.executedAt).format(MOMENT_DATETIME_FORMAT),
+        compensations: model?.compensations?.map((c) => ({
+          ...c,
+          executedAt: moment(c.executedAt).format(MOMENT_DATETIME_FORMAT),
+        })),
+      },
+    });
   }, []);
 
-  const handleSubmit = async (model, addAnother = true) => {
-    await onSubmit(model.values);
+  const handleSubmit = async ({ closeModal, ...values }, { resetForm }) => {
+    await onSubmit(values);
 
     if (!isEditMode) {
-      model.handleReset();
+      resetForm();
     }
 
-    if (!addAnother && toggleModal) {
+    if (closeModal) {
       toggleModal();
     }
   };
@@ -82,6 +82,7 @@ const TransactionForm = ({
         enableReinitialize
         initialValues={form.initialValues}
         validationSchema={form.validationSchema}
+        onSubmit={handleSubmit}
       >
         {(model) => {
           const {
@@ -94,11 +95,11 @@ const TransactionForm = ({
             executedAt,
             account: '',
             amount: 0,
-            category: category === DEBT_TRANSACTION_CATEGORY_NAME
-              ? DEBT_TRANSACTION_CATEGORY_NAME
-              : COMPENSATION_TRANSACTION_CATEGORY_NAME,
+            category: categoryOptions.find(({ name }) => category === DEBT_TRANSACTION_CATEGORY_NAME
+              ? name === DEBT_TRANSACTION_CATEGORY_NAME
+              : name === COMPENSATION_TRANSACTION_CATEGORY_NAME)?.id,
             type: INCOME_TYPE,
-            note: `[Compensation]: ${note}`,
+            note: note ? `[Compensation]: ${note}` : '',
           });
 
           return (
@@ -332,15 +333,15 @@ const TransactionForm = ({
                 <Col className="text-right">
                   <ButtonGroup>
                     {!form.initialValues.isDraft && (
-                      <LoadingButton type="button" isLoading={isSaving} onClick={() => handleSubmit(model)} />
+                      <LoadingButton type="submit" isLoading={isSaving} onClick={() => setFieldValue('closeModal', false)} />
                     )}
                     <LoadingButton
-                      type="button"
+                      type="submit"
                       color="warning"
                       label="& Close"
                       className="mr-1"
                       isLoading={isSaving}
-                      onClick={() => handleSubmit(model, false)}
+                      onClick={() => setFieldValue('closeModal', true)}
                     />
                   </ButtonGroup>
                 </Col>
@@ -356,16 +357,7 @@ const TransactionForm = ({
 TransactionForm.defaultProps = {
   accountOptions: [],
   categoryOptions: [],
-  model: {
-    type: EXPENSE_TYPE,
-    account: '',
-    amount: 0,
-    category: '',
-    executedAt: moment().format(MOMENT_DATETIME_FORMAT),
-    note: '',
-    compensations: [],
-    isDraft: false,
-  },
+  model: INITIAL_FORM_DATA,
   title: 'New transaction',
 };
 

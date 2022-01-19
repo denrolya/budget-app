@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import moment from 'moment-timezone/index';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -18,14 +18,10 @@ import sumBy from 'lodash/sumBy';
 
 import TransactionsTable from 'src/components/tables/TransactionsTable';
 import DebtForm from 'src/components/forms/DebtForm';
-import DebtTransactionModalForm from 'src/components/forms/DebtTransactionModalForm';
-import ModalForm from 'src/components/forms/ModalForm';
+import { DEBT_TRANSACTION_CATEGORY_NAME, EXPENSE_TYPE } from 'src/constants/transactions';
 import TransactionForm from 'src/containers/TransactionForm';
-import {
-  closeDebt,
-  deleteDebtTransaction,
-  editDebtTransaction,
-} from 'src/store/actions/debt';
+import { registerTransaction, editTransaction, deleteTransaction } from 'src/store/actions/transaction';
+import { closeDebt } from 'src/store/actions/debt';
 import { toggleDebtModal } from 'src/store/actions/ui';
 import { getIsLoading } from 'src/store/selectors/debt';
 import AddNewButton from 'src/components/AddNewButton';
@@ -38,9 +34,10 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 const DebtList = ({
   list,
   isLoading,
-  editDebtTransaction,
+  registerTransaction,
+  editTransaction,
   closeDebt,
-  deleteDebtTransaction,
+  deleteTransaction,
   toggleDebtModal,
 }) => {
   const { code } = useBaseCurrency();
@@ -178,7 +175,7 @@ const DebtList = ({
                     <TransactionsTable
                       data={transactions}
                       editTransaction={(t) => toggleTransactionEditModal(debt, t)}
-                      deleteTransaction={(t) => deleteDebtTransaction(debt, t)}
+                      deleteTransaction={(t) => deleteTransaction(t)}
                     />
                   </UncontrolledCollapse>
                 )}
@@ -205,30 +202,36 @@ const DebtList = ({
       </LoadingCard>
 
       {selectedDebt && (
-        <ModalForm
+        <DebtForm
           title={`Edit ${selectedDebt.debtor}'s Debt`}
+          model={selectedDebt}
           isOpen={isDebtEditModalOpened}
           toggleModal={() => toggleDebtEditModal()}
-        >
-          <DebtForm data={selectedDebt} toggleModal={() => toggleDebtEditModal()} />
-        </ModalForm>
+        />
       )}
 
       {newTransactionDebt && (
-        <DebtTransactionModalForm
-          debt={newTransactionDebt}
-          isOpened={isDebtTransactionModalOpened}
-          toggle={() => toggleDebtTransactionModal()}
+        <TransactionForm
+          model={{
+            type: EXPENSE_TYPE,
+            category: DEBT_TRANSACTION_CATEGORY_NAME,
+            debt: newTransactionDebt.id,
+            executedAt: moment(),
+          }}
+          onSubmit={({ type, ...values }) => registerTransaction(type, values)}
+          title={`Add new transaction to ${newTransactionDebt.debtor}'s debt`}
+          isOpen={isDebtTransactionModalOpened}
+          toggleModal={() => toggleDebtTransactionModal()}
         />
       )}
 
       {selectedTransaction && (
         <TransactionForm
           model={selectedTransaction}
-          onSubmit={(t) => editDebtTransaction(selectedDebt, t)}
+          onSubmit={({ id, type, ...values }) => editTransaction(id, type, values)}
           title={`Edit ${selectedTransaction.type} #${selectedTransaction.id}`}
           isOpen={isTransactionEditModalOpened}
-          toggleTransactionModal={() => toggleTransactionEditModal()}
+          toggleModal={() => toggleTransactionEditModal()}
         />
       )}
     </>
@@ -247,8 +250,9 @@ DebtList.propTypes = {
       currency: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  deleteDebtTransaction: PropTypes.func.isRequired,
-  editDebtTransaction: PropTypes.func.isRequired,
+  deleteTransaction: PropTypes.func.isRequired,
+  registerTransaction: PropTypes.func.isRequired,
+  editTransaction: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   toggleDebtModal: PropTypes.func.isRequired,
 };
@@ -261,7 +265,8 @@ const mapStateToProps = ({ debt: list, ui }) => ({
 
 export default connect(mapStateToProps, {
   closeDebt,
-  editDebtTransaction,
+  registerTransaction,
+  editTransaction,
   toggleDebtModal,
-  deleteDebtTransaction,
+  deleteTransaction,
 })(DebtList);

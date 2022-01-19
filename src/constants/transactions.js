@@ -1,9 +1,41 @@
+import moment from 'moment-timezone';
+import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import * as Yup from 'yup';
+
 export const EXPENSE_TYPE = 'expense';
 export const INCOME_TYPE = 'income';
 export const DEBT_TRANSACTION_CATEGORY_NAME = 'Debt';
 export const COMPENSATION_TRANSACTION_CATEGORY_NAME = 'Compensation';
 export const RETURN_TRANSACTION_CATEGORY_NAME = 'Return';
 export const TRANSACTION_TYPES = [EXPENSE_TYPE, INCOME_TYPE];
+
+export const INITIAL_FORM_DATA = {
+  type: EXPENSE_TYPE,
+  account: '',
+  amount: 1,
+  category: '',
+  executedAt: moment().format(MOMENT_DATETIME_FORMAT),
+  note: '',
+  compensations: [],
+  isDraft: false,
+};
+
+export const VALIDATION_SCHEMA = Yup.object({
+  type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
+  account: Yup.number().required('Required field'),
+  amount: Yup.number().min(1, 'Invalid amount entered').required('Required field'),
+  category: Yup.string().required('Required field'),
+  executedAt: Yup.string().required('Required field'),
+  note: Yup.string(),
+  isDraft: Yup.bool(),
+  compensations: Yup.array().of(
+    Yup.object({
+      account: Yup.string().required('Required field'),
+      amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
+      executedAt: Yup.string().required('Required field'),
+    }),
+  ),
+});
 
 export const TRANSACTIONS_CATEGORIES_PRESETS = [
   {
@@ -74,7 +106,7 @@ export const TEST_EXPENSE_CATEGORIES = [
                     root: 1,
                     parent: 84,
                     icon: 'mdi mdi-food',
-                    name: 'MacDonalds',
+                    name: 'MacDonald\'s',
                     children: [],
                     value: 59.09941610572765,
                     total: 59.09941610572765,

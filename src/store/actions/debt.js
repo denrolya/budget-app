@@ -1,50 +1,32 @@
-import axios from 'src/services/http';
 import orderBy from 'lodash/orderBy';
-import { createActions } from 'reduxsauce';
-import Swal from 'sweetalert2';
 import moment from 'moment-timezone';
+import { createActions } from 'reduxsauce';
+import { SERVER_TIMEZONE } from 'src/constants/datetime';
+import Swal from 'sweetalert2';
 
 import { ROUTE_DASHBOARD, ROUTE_DEBTS } from 'src/constants/routes';
+import axios from 'src/services/http';
 import Routing, { isOnPath } from 'src/services/routing';
-import { confirmTransactionDeletion } from 'src/services/transaction';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
-import { fetchList as fetchAccounts } from 'src/store/actions/account';
-import { SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
-    createRequest: null,
-    createSuccess: null,
-    createFailure: ['message'],
-
-    editRequest: null,
-    editSuccess: null,
-    editFailure: ['message'],
-
-    registerDebtTransactionRequest: null,
-    registerDebtTransactionSuccess: null,
-    registerDebtTransactionFailure: ['message'],
-
-    editDebtTransactionRequest: null,
-    editDebtTransactionSuccess: null,
-    editDebtTransactionFailure: ['message'],
-
-    deleteDebtRequest: null,
-    deleteDebtSuccess: ['debt'],
-    deleteDebtFailure: ['message'],
-
     fetchListRequest: null,
     fetchListSuccess: ['debts'],
     fetchListFailure: ['message'],
 
-    fetchTransactionsListRequest: null,
-    fetchTransactionsListSuccess: ['transactions'],
-    fetchTransactionsListFailure: ['message'],
+    createRequest: null,
+    createSuccess: ['debt'],
+    createFailure: ['message'],
 
-    deleteTransactionRequest: null,
-    deleteTransactionSuccess: null,
-    deleteTransactionFailure: ['message'],
+    editRequest: null,
+    editSuccess: ['debt'],
+    editFailure: ['message'],
+
+    deleteDebtRequest: null,
+    deleteDebtSuccess: ['debt'],
+    deleteDebtFailure: ['message'],
   },
   { prefix: 'DEBT_' },
 );
@@ -58,7 +40,7 @@ export const fetchList = () => (dispatch) => {
       dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'updatedAt', 'asc')));
     })
     .catch((e) => {
-      console.error(e);
+      notify('error', '[Error]: Fetch Debt List');
       dispatch(Creators.fetchListFailure(e.message));
     });
 };
@@ -67,9 +49,14 @@ export const createDebt = (debt) => (dispatch) => {
   dispatch(Creators.createRequest());
 
   return axios
-    .post(Routing.generate('api_v1_debt_save'), { debt })
-    .then(() => {
-      dispatch(Creators.createSuccess());
+    .post('api/debts', {
+      ...debt,
+      balance: String(debt.balance),
+      createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
+      closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
+    })
+    .then(({ data }) => {
+      dispatch(Creators.createSuccess(data));
 
       if (isOnPath(ROUTE_DEBTS)) {
         dispatch(fetchList());
@@ -80,7 +67,7 @@ export const createDebt = (debt) => (dispatch) => {
       }
     })
     .catch((e) => {
-      console.log(e);
+      notify('error', '[Error]: Create Debt');
       dispatch(Creators.createFailure(e.message));
     });
 };
@@ -88,28 +75,22 @@ export const createDebt = (debt) => (dispatch) => {
 export const editDebt = (id, debt) => (dispatch) => {
   dispatch(Creators.editRequest());
 
-  return axios.put(Routing.generate('api_v1_debt_edit', { id }), { debt }).then(() => {
-    dispatch(Creators.editSuccess());
+  return axios.put(`api/debts/${id}`, {
+    ...debt,
+    balance: String(debt.balance),
+    createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
+    closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
+  })
+    .then(({ data }) => {
+      dispatch(Creators.editSuccess(data));
 
-    if (isOnPath(ROUTE_DEBTS)) {
-      dispatch(fetchList());
-    }
-  });
-};
-
-export const fetchTransactionsList = (id) => (dispatch) => {
-  dispatch(Creators.fetchTransactionsListRequest());
-
-  return axios
-    .get(Routing.generate('api_v1_debt_transaction_list', { id }))
-    .then((response) => {
-      const transactionsOrdered = orderBy(response.data, 'createdAt', 'asc');
-      dispatch(Creators.fetchTransactionsListSuccess(transactionsOrdered));
-      return transactionsOrdered;
+      if (isOnPath(ROUTE_DEBTS)) {
+        dispatch(fetchList());
+      }
     })
     .catch((e) => {
-      console.error(e);
-      dispatch(Creators.fetchTransactionsListFailure(e.message));
+      notify('error', '[Error]: Edit Debt');
+      dispatch(Creators.editFailure(e.message));
     });
 };
 
@@ -142,90 +123,7 @@ export const closeDebt = ({
       }
     })
     .catch((e) => {
-      console.error(e);
+      notify('error', '[Error]: Close Debt');
       dispatch(Creators.deleteDebtFailure(e.message));
-    });
-});
-
-export const registerDebtTransaction = (debtId, type, transaction, shouldCloseDebt) => (dispatch) => {
-  dispatch(Creators.registerDebtTransactionRequest());
-
-  return axios
-    .post(
-      Routing.generate('api_v1_debt_transaction_new', {
-        type,
-        id: debtId,
-      }),
-      {
-        shouldCloseDebt,
-        [type]: {
-          ...transaction,
-          executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
-        },
-      },
-    )
-    .then(() => {
-      dispatch(Creators.registerDebtTransactionSuccess());
-      notify('success', 'New debt transaction was successfully created.', 'Transaction registered!');
-
-      dispatch(fetchAccounts());
-      dispatch(fetchList());
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.registerDebtTransactionFailure(e.message));
-    });
-};
-
-export const editDebtTransaction = (debt, transaction) => (dispatch) => {
-  dispatch(Creators.editDebtTransactionRequest());
-
-  return axios
-    .put(
-      Routing.generate('api_v1_debt_transaction_edit', {
-        id: debt.id,
-        transactionId: transaction.id,
-      }),
-      { [transaction.type]: transaction },
-    )
-    .then(() => {
-      dispatch(Creators.editDebtTransactionSuccess());
-      notify('success', 'Given transaction was successfully modified.', 'Edited successfully');
-
-      if (isOnPath(ROUTE_DEBTS)) {
-        dispatch(fetchList());
-      }
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.editDebtTransactionFailure(e.message));
-    });
-};
-
-export const deleteDebtTransaction = (debt, transaction) => (dispatch) => confirmTransactionDeletion(transaction).then(({ value }) => {
-  if (!value) {
-    return {};
-  }
-
-  dispatch(Creators.deleteTransactionRequest());
-
-  return axios
-    .delete(
-      Routing.generate('api_v1_debt_transaction_delete', {
-        id: debt.id,
-        transactionId: transaction.id,
-      }),
-    )
-    .then(() => {
-      dispatch(Creators.deleteTransactionSuccess(transaction.id));
-      notify('success', 'Transaction deleted!', 'Deleted');
-
-      if (isOnPath(ROUTE_DEBTS)) {
-        dispatch(fetchList());
-      }
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.deleteTransactionFailure(e.message));
     });
 });

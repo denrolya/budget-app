@@ -71,7 +71,7 @@ const Sidebar = ({
             .filter(({ redirect, isInSidebar }) => !redirect && isInSidebar)
             .map(({ name, path, icon }) => (
               <NavItem tag="li" key={`nav-item-route-${name}`} active={!!matchPath(path, pathname)}>
-                <NavLink className="nav-link text-white" activeClassName="active" to={path}>
+                <NavLink className="nav-link text-white" to={path}>
                   <i aria-hidden className={icon} />
                   <p>{name}</p>
                 </NavLink>
@@ -81,7 +81,7 @@ const Sidebar = ({
             <hr />
           </NavItem>
           <NavItem tag="li" active={!!matchPath(ROUTE_TRANSACTIONS, pathname)}>
-            <NavLink className="nav-link text-white" activeClassName="active" to={ROUTE_TRANSACTIONS}>
+            <NavLink className="nav-link text-white" to={ROUTE_TRANSACTIONS}>
               <i aria-hidden className="mdi mdi-format-list-bulleted" />
               <p className="text-capitalize">All Transactions</p>
             </NavLink>
@@ -90,7 +90,7 @@ const Sidebar = ({
             <hr />
           </NavItem>
           <NavItem tag="li" active={!!matchPath(ROUTE_DEBTS, pathname)}>
-            <NavLink className="nav-link text-white" activeClassName="active" to={ROUTE_DEBTS}>
+            <NavLink className="nav-link text-white" to={ROUTE_DEBTS}>
               <i aria-hidden className="ion-ios-bookmarks" />
               <p className="text-capitalize">
                 Debts
@@ -116,7 +116,6 @@ const Sidebar = ({
             <NavItem tag="li" key={account.name}>
               <NavLink
                 className="nav-link text-capitalize text-white"
-                activeClassName="active"
                 to={generateLinkToAccountTransactionsPage(account.name)}
                 style={{
                   borderTop: `1px solid ${account.color}`,
@@ -128,7 +127,7 @@ const Sidebar = ({
             </NavItem>
           ))}
           <NavItem tag="li" active={!!matchPath(ROUTE_ACCOUNTS, pathname)}>
-            <NavLink className="nav-link text-capitalize text-white" activeClassName="active" to={ROUTE_ACCOUNTS}>
+            <NavLink className="nav-link text-capitalize text-white" to={ROUTE_ACCOUNTS}>
               <i aria-hidden className="mdi mdi-wallet-travel" />
 
               <div className="d-flex flex-column">
@@ -155,8 +154,8 @@ const Sidebar = ({
 
 Sidebar.defaultProps = {
   accounts: [],
-  totalDebt: 0,
   isLoading: false,
+  totalDebt: 0,
 };
 
 Sidebar.propTypes = {
