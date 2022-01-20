@@ -62,7 +62,7 @@ const App = ({ isAuthenticated, baseCurrency }) => {
   ], [isAuthenticated]);
 
   return (
-    <BaseCurrencyContext.Provider value={CURRENCIES[baseCurrency]}>
+    <BaseCurrencyContext.Provider value={baseCurrency}>
       <TransactionFormProvider>
         {useRoutes(routes)}
       </TransactionFormProvider>
@@ -75,10 +75,18 @@ App.defaultProps = {
 };
 
 App.propTypes = {
-  baseCurrency: PropTypes.string.isRequired,
+  baseCurrency: PropTypes.shape({
+    code: PropTypes.string.isRequired,
+    symbol: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['fiat', 'crypto']).isRequired,
+  }).isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = ({ auth: { user, isAuthenticated } }) => ({ isAuthenticated, baseCurrency: user.settings.baseCurrency });
+const mapStateToProps = ({ auth: { user, isAuthenticated } }) => ({
+  isAuthenticated,
+  baseCurrency: CURRENCIES[user?.settings?.baseCurrency || 'EUR'],
+});
 
 export default connect(mapStateToProps)(App);

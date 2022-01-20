@@ -91,11 +91,19 @@ const TransactionForm = ({
           const {
             type, category, amount, account, note, executedAt, compensations, isDraft,
           } = values;
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          useEffect(() => {
+            if (category) {
+              const selectedCategoryName = categoryOptions.find(({ id }) => id === category).name;
+              const categoryForNewType = categoryOptions.find((c) => c.type === type && c.name === selectedCategoryName);
+              setFieldValue('category', categoryForNewType ? categoryForNewType.id : '');
+            }
+          }, [type]);
           const newCompensation = () => ({
             executedAt,
             account: '',
             amount: 0,
-            category: categoryOptions.find(({ name }) => category === DEBT_TRANSACTION_CATEGORY_NAME
+            category: categoryOptions.find(({ name, type }) => type === INCOME_TYPE && category === DEBT_TRANSACTION_CATEGORY_NAME
               ? name === DEBT_TRANSACTION_CATEGORY_NAME
               : name === COMPENSATION_TRANSACTION_CATEGORY_NAME)?.id,
             type: INCOME_TYPE,
