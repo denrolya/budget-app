@@ -5,7 +5,6 @@ export const INITIAL_STATE = {
   errorMessage: '',
   isSidebarOpened: false,
   isHeaderOpened: false,
-  isTransactionModalOpened: false,
   isDraftExpenseModalOpened: false,
   isTransferModalOpened: false,
   isDebtModalOpened: false,
@@ -49,14 +48,6 @@ export default (state = INITIAL_STATE, action) => {
           colorScheme: state.colorScheme,
           isDarkModeOn: state.isDarkModeOn,
           isDraftExpenseModalOpened: !state.isDraftExpenseModalOpened,
-        };
-      case Types.TOGGLE_TRANSACTION_MODAL:
-        return {
-          ...state,
-          ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
-          isDarkModeOn: state.isDarkModeOn,
-          isTransactionModalOpened: !state.isTransactionModalOpened,
         };
       case Types.TOGGLE_TRANSFER_MODAL:
         return {

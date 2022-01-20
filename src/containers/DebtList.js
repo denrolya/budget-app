@@ -19,7 +19,7 @@ import sumBy from 'lodash/sumBy';
 import TransactionsTable from 'src/components/tables/TransactionsTable';
 import DebtForm from 'src/components/forms/DebtForm';
 import { DEBT_TRANSACTION_CATEGORY_NAME, EXPENSE_TYPE } from 'src/constants/transactions';
-import TransactionForm from 'src/containers/TransactionForm';
+import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { registerTransaction, editTransaction, deleteTransaction } from 'src/store/actions/transaction';
 import { closeDebt } from 'src/store/actions/debt';
 import { toggleDebtModal } from 'src/store/actions/ui';
@@ -41,12 +41,9 @@ const DebtList = ({
   toggleDebtModal,
 }) => {
   const { code } = useBaseCurrency();
+  const toggleTransactionForm = useTransactionForm();
   const [selectedDebt, setSelectedDebt] = useState();
-  const [isTransactionEditModalOpened, setTransactionEditModalOpened] = useState(false);
   const [isDebtEditModalOpened, setDebtEditModalOpened] = useState(false);
-  const [newTransactionDebt, setNewTransactionDebt] = useState(null);
-  const [isDebtTransactionModalOpened, setDebtTransactionModalOpened] = useState(false);
-  const [selectedTransaction, selectTransaction] = useState();
 
   const total = useMemo(
     () => sumBy(list.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[code]),
@@ -58,16 +55,22 @@ const DebtList = ({
     setDebtEditModalOpened(!isDebtEditModalOpened);
   };
 
-  const toggleDebtTransactionModal = (debt) => {
-    setNewTransactionDebt(debt);
-    setDebtTransactionModalOpened(!isDebtTransactionModalOpened);
-  };
+  const toggleDebtTransactionModal = ({ id, debtor }) => toggleTransactionForm({
+    model: {
+      type: EXPENSE_TYPE,
+      category: DEBT_TRANSACTION_CATEGORY_NAME,
+      debt: id,
+      executedAt: moment(),
+    },
+    onSubmit: ({ type, ...values }) => registerTransaction(type, values),
+    title: `Add new transaction to ${debtor}'s debt`,
+  });
 
-  const toggleTransactionEditModal = (debt, transaction) => {
-    setSelectedDebt(debt);
-    selectTransaction(transaction);
-    setTransactionEditModalOpened(!isTransactionEditModalOpened);
-  };
+  const toggleTransactionEditModal = (debt, transaction) => toggleTransactionForm({
+    model: transaction,
+    onSubmit: ({ id, type, ...values }) => editTransaction(id, type, values),
+    title: `Edit ${transaction.type} #${transaction.id}`,
+  });
 
   return (
     <>
@@ -207,31 +210,6 @@ const DebtList = ({
           model={selectedDebt}
           isOpen={isDebtEditModalOpened}
           toggleModal={() => toggleDebtEditModal()}
-        />
-      )}
-
-      {newTransactionDebt && (
-        <TransactionForm
-          model={{
-            type: EXPENSE_TYPE,
-            category: DEBT_TRANSACTION_CATEGORY_NAME,
-            debt: newTransactionDebt.id,
-            executedAt: moment(),
-          }}
-          onSubmit={({ type, ...values }) => registerTransaction(type, values)}
-          title={`Add new transaction to ${newTransactionDebt.debtor}'s debt`}
-          isOpen={isDebtTransactionModalOpened}
-          toggleModal={() => toggleDebtTransactionModal()}
-        />
-      )}
-
-      {selectedTransaction && (
-        <TransactionForm
-          model={selectedTransaction}
-          onSubmit={({ id, type, ...values }) => editTransaction(id, type, values)}
-          title={`Edit ${selectedTransaction.type} #${selectedTransaction.id}`}
-          isOpen={isTransactionEditModalOpened}
-          toggleModal={() => toggleTransactionEditModal()}
         />
       )}
     </>

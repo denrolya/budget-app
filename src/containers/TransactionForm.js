@@ -62,7 +62,7 @@ const TransactionForm = ({
         })),
       },
     });
-  }, []);
+  }, [model]);
 
   const handleSubmit = async ({ closeModal, ...values }, { resetForm }) => {
     await onSubmit(values);

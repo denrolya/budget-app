@@ -5,7 +5,6 @@ export const { Types, Creators } = createActions(
     toggleDarkMode: null,
     toggleSidebar: ['isOpen'],
     toggleHeader: null,
-    toggleTransactionModal: null,
     toggleDraftExpenseModal: null,
     toggleTransferModal: null,
     toggleDebtModal: null,
@@ -24,8 +23,6 @@ export const closeSidebar = () => (dispatch) => dispatch(Creators.toggleSidebar(
 export const toggleSidebar = () => (dispatch) => dispatch(Creators.toggleSidebar(null));
 
 export const toggleHeader = () => (dispatch) => dispatch(Creators.toggleHeader());
-
-export const toggleTransactionModal = () => (dispatch) => dispatch(Creators.toggleTransactionModal());
 
 export const toggleDraftExpenseModal = () => (dispatch) => dispatch(Creators.toggleDraftExpenseModal());
 

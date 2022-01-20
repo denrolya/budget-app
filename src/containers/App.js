@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useRoutes, Navigate } from 'react-router-dom';
 
+import { CURRENCIES } from 'src/constants/currency';
+import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 import Layout from 'src/containers/Layout';
 import {
   ROUTE_ACCOUNTS, ROUTE_CATEGORIES, ROUTE_CURRENCY_CONVERTER,
@@ -25,8 +27,9 @@ import TransactionsCalendar from 'src/containers/TransactionsCalendar';
 import TransferList from 'src/containers/TransferList';
 import UserProfile from 'src/containers/UserProfile';
 import AccountDetails from 'src/containers/AccountDetails';
+import TransactionFormProvider from 'src/contexts/TransactionFormProvider';
 
-const App = ({ isAuthenticated }) => {
+const App = ({ isAuthenticated, baseCurrency }) => {
   const routes = useMemo(() => [
     {
       path: '/*',
@@ -58,7 +61,13 @@ const App = ({ isAuthenticated }) => {
     },
   ], [isAuthenticated]);
 
-  return useRoutes(routes);
+  return (
+    <BaseCurrencyContext.Provider value={CURRENCIES[baseCurrency]}>
+      <TransactionFormProvider>
+        {useRoutes(routes)}
+      </TransactionFormProvider>
+    </BaseCurrencyContext.Provider>
+  );
 };
 
 App.defaultProps = {
@@ -66,9 +75,10 @@ App.defaultProps = {
 };
 
 App.propTypes = {
+  baseCurrency: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = ({ auth: { isAuthenticated } }) => ({ isAuthenticated });
+const mapStateToProps = ({ auth: { user, isAuthenticated } }) => ({ isAuthenticated, baseCurrency: user.settings.baseCurrency });
 
 export default connect(mapStateToProps)(App);

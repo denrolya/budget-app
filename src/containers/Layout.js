@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { connect } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
@@ -10,11 +10,11 @@ import { useSwipeable } from 'react-swipeable';
 import AccountForm from 'src/components/forms/AccountForm';
 import DebtForm from 'src/components/forms/DebtForm';
 import ModalForm from 'src/components/forms/ModalForm';
-import TransactionForm from 'src/containers/TransactionForm';
 import TransferForm from 'src/components/forms/TransferForm';
 import Header from 'src/components/layout/Header';
 import Sidebar from 'src/components/layout/Sidebar';
 import { ROUTE_DASHBOARD, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
+import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { isActionLoading, copyToClipboard } from 'src/services/common';
 import { getBrandText } from 'src/services/routing';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
@@ -32,32 +32,26 @@ import {
   toggleDebtModal,
   toggleHeader,
   toggleSidebar,
-  toggleTransactionModal,
   toggleDraftExpenseModal,
   toggleTransferModal,
 } from 'src/store/actions/ui';
 import { fetch as fetchExchangeRates } from 'src/store/actions/exchangeRates';
 import DraftCashExpenseForm from 'src/containers/DraftCashExpenseForm';
-import { CURRENCIES } from 'src/constants/currency';
-import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 
 const Layout = ({
   colorScheme,
   accounts,
   totalDebt,
-  baseCurrency,
   logoutUser,
   toggleDarkMode,
   openSidebar,
   closeSidebar,
   toggleSidebar,
   toggleHeader,
-  toggleTransactionModal,
   toggleDraftExpenseModal,
   toggleTransferModal,
   toggleDebtModal,
   toggleAccountModal,
-  isTransactionModalOpened,
   switchBaseCurrency,
   isDarkModeOn,
   isHeaderOpened,
@@ -75,6 +69,10 @@ const Layout = ({
   fetchExchangeRates,
 }) => {
   const [isVitalDataLoaded, setIsVitalDataLoaded] = useState(false);
+  const toggleTransactionForm = useTransactionForm();
+  const toggleNewTransaction = () => toggleTransactionForm({
+    onSubmit: ({ type, ...values }) => registerTransaction(type, values),
+  });
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const swipeHandlers = useSwipeable({
@@ -100,8 +98,8 @@ const Layout = ({
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <BaseCurrencyContext.Provider value={CURRENCIES[baseCurrency]}>
-      <Hotkeys keyName="shift+t" onKeyUp={toggleTransactionModal} />
+    <>
+      <Hotkeys keyName="shift+t" onKeyUp={toggleNewTransaction} />
       <Hotkeys keyName="shift+e" onKeyUp={toggleDraftExpenseModal} />
       <Hotkeys keyName="shift+r" onKeyUp={toggleTransferModal} />
       <Hotkeys keyName="shift+d" onKeyUp={toggleDebtModal} />
@@ -140,7 +138,7 @@ const Layout = ({
             updateDashboard={updateDashboard}
             toggle={toggleHeader}
             toggleDarkMode={toggleDarkMode}
-            toggleTransactionModal={toggleTransactionModal}
+            toggleTransactionModal={toggleNewTransaction}
             isOpened={isHeaderOpened}
             toggleSidebar={toggleSidebar}
             isSidebarOpened={isSidebarOpened}
@@ -155,12 +153,6 @@ const Layout = ({
 
       <DraftCashExpenseForm />
 
-      <TransactionForm
-        onSubmit={(v) => registerTransaction(v.type, v)}
-        isOpen={isTransactionModalOpened}
-        toggleModal={toggleTransactionModal}
-      />
-
       <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
         <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
       </ModalForm>
@@ -174,11 +166,11 @@ const Layout = ({
       <button
         type="button"
         className="fixed-plugin"
-        onClick={window.isMobile ? toggleDraftExpenseModal : toggleTransactionModal}
+        onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
       >
         <i aria-hidden className="fa fa-plus fa-2x" />
       </button>
-    </BaseCurrencyContext.Provider>
+    </>
   );
   /* eslint-enable react/jsx-props-no-spreading */
 };
@@ -202,7 +194,6 @@ Layout.propTypes = {
   isHeaderOpened: PropTypes.bool.isRequired,
   isSidebarOpened: PropTypes.bool.isRequired,
   isTransferModalOpened: PropTypes.bool.isRequired,
-  isTransactionModalOpened: PropTypes.bool.isRequired,
   isTransferRequestInProgress: PropTypes.bool.isRequired,
   logoutUser: PropTypes.func.isRequired,
   openSidebar: PropTypes.func.isRequired,
@@ -213,25 +204,21 @@ Layout.propTypes = {
   toggleDebtModal: PropTypes.func.isRequired,
   toggleHeader: PropTypes.func.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
-  toggleTransactionModal: PropTypes.func.isRequired,
   toggleDraftExpenseModal: PropTypes.func.isRequired,
   toggleTransferModal: PropTypes.func.isRequired,
   updateDashboard: PropTypes.func.isRequired,
   accounts: PropTypes.array,
   totalDebt: PropTypes.number,
-  baseCurrency: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = ({
   ui, account, auth: { user }, debt,
 }) => ({
-  baseCurrency: user.settings.baseCurrency,
   isDarkModeOn: ui.isDarkModeOn,
   colorScheme: ui.colorScheme,
   isSidebarOpened: ui.isSidebarOpened,
   isHeaderOpened: ui.isHeaderOpened,
   isTransferModalOpened: ui.isTransferModalOpened,
-  isTransactionModalOpened: ui.isTransactionModalOpened,
   isDebtModalOpened: ui.isDebtModalOpened,
   isAccountModalOpened: ui.isAccountModalOpened,
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
@@ -246,7 +233,6 @@ export default connect(mapStateToProps, {
   openSidebar,
   closeSidebar,
   toggleSidebar,
-  toggleTransactionModal,
   toggleDraftExpenseModal,
   toggleTransferModal,
   toggleDebtModal,

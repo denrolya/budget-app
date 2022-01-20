@@ -8,6 +8,7 @@ import {
 
 import TransactionFilters from 'src/components/TransactionFilters';
 import TransactionForm from 'src/containers/TransactionForm';
+import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { isActionLoading } from 'src/services/common';
 import {
   setPage,
@@ -41,8 +42,7 @@ const TransactionList = ({
   editTransaction,
   deleteTransaction,
 }) => {
-  const [isEditModalOpened, setEditModalOpened] = useState(false);
-  const [selectedTransaction, selectTransaction] = useState();
+  const toggleTransactionForm = useTransactionForm();
   const [isGridSelected, selectGrid] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(!window.isMobile);
 
@@ -56,17 +56,11 @@ const TransactionList = ({
     fetchList();
   }, [pagination.page, pagination.perPage, pagination.filters]);
 
-  useEffect(() => {
-    if (!isEditModalOpened) {
-      selectTransaction();
-    }
-  }, [isEditModalOpened]);
-
-  const toggleTransactionEdition = (transaction) => {
-    selectTransaction(transaction);
-
-    setEditModalOpened(!isEditModalOpened);
-  };
+  const toggleTransactionEdition = (transaction) => toggleTransactionForm({
+    model: transaction,
+    title: `Edit ${transaction.type} #${transaction.id}`,
+    onSubmit: ({ id, type, ...values }) => editTransaction(id, type, values),
+  });
 
   return (
     <>
@@ -143,16 +137,6 @@ const TransactionList = ({
           </Card>
         </Col>
       </Row>
-
-      {selectedTransaction && (
-        <TransactionForm
-          title={`Edit ${selectedTransaction.type} #${selectedTransaction.id}`}
-          onSubmit={(t) => editTransaction(t.id, t.type, t)}
-          model={selectedTransaction}
-          isOpen={isEditModalOpened}
-          toggleModal={() => setEditModalOpened(!isEditModalOpened)}
-        />
-      )}
     </>
   );
 };
