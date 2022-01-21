@@ -117,10 +117,6 @@ const Sidebar = ({
               <NavLink
                 className="nav-link text-capitalize text-white"
                 to={generateLinkToAccountTransactionsPage(account.name)}
-                style={{
-                  borderTop: `1px solid ${account.color}`,
-                  borderBottom: `1px solid ${account.color}`,
-                }}
               >
                 <AccountName showBalance account={account} />
               </NavLink>

@@ -1,8 +1,9 @@
-import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 import moment from 'moment-timezone';
 
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import axios from 'src/services/http';
+import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(
   {
@@ -16,6 +17,11 @@ export const { Types, Creators } = createActions(
 export const fetch = () => async (dispatch) => {
   dispatch(Creators.fetchRequest());
 
-  const { data } = await axios.get(`api/exchange-rates/${moment().format(MOMENT_DATE_FORMAT)}`);
-  dispatch(Creators.fetchSuccess(data.rates));
+  try {
+    const { data } = await axios.get(`api/exchange-rates/${moment().format(MOMENT_DATE_FORMAT)}`);
+    dispatch(Creators.fetchSuccess(data.rates));
+  } catch (e) {
+    notify('error', '[Error]: Fetch Exchange Rates');
+    dispatch(Creators.fetchFailure(e));
+  }
 };

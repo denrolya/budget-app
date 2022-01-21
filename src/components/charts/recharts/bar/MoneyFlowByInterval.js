@@ -44,6 +44,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 CustomTooltip.defaultProps = {
   active: false,
+  payload: [],
 };
 
 CustomTooltip.propTypes = {

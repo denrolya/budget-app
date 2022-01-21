@@ -2,8 +2,8 @@ import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 import camelCase from 'voca/camel_case';
 import capitalize from 'voca/capitalize';
-import snakeCase from 'voca/snake_case';
 
+import { notify } from 'src/store/actions/global';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
 import Routing from 'src/services/routing';
@@ -48,10 +48,12 @@ export const fetchStatistics = (name) => (dispatch, getState) => {
   }
 
   return axios
-    .get(Routing.generate(`api_v1_statistics_${snakeCase(name)}`, requestParams))
-    .then(({ data }) => dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data)))
+    .get(`api/statistics/${name}`, requestParams)
+    .then(({ data }) => {
+      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data.data));
+    })
     .catch((e) => {
-      console.error(e);
+      notify('error', `[Error]: Fetch Statistics(${name})`);
       dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e.message));
     });
 };

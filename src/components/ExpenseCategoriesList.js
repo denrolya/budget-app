@@ -84,7 +84,7 @@ const ExpenseCategoriesList = ({
                     {'  '}
                     <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
                   </div>
-                  <div>
+                  <div className="text-nowrap">
                     <MoneyValue className="mr-1" amount={total} maximumFractionDigits={0} />
                     <Link
                       to={generateLinkToExpenses(
