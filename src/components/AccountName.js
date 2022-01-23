@@ -12,7 +12,7 @@ import {
 
 const AccountName = ({
   colored, account: {
-    name, color, balance, icon, values, currency,
+    name, color, balance, icon, convertedValues, currency,
   }, showBalance, showIcon,
 }) => (
   <>
@@ -33,7 +33,7 @@ const AccountName = ({
           <MoneyValue
             bold
             amount={balance}
-            values={values}
+            values={convertedValues}
             currency={currency}
             className={cn('text-currency', 'font-size-larger', 'font-weight-bold', {
               'text-white': balance === 0,
@@ -60,7 +60,7 @@ AccountName.propTypes = {
     currency: PropTypes.string.isRequired,
     color: PropTypes.string,
     balance: PropTypes.number,
-    values: PropTypes.object,
+    convertedValues: PropTypes.object,
   }).isRequired,
   colored: PropTypes.bool,
   showBalance: PropTypes.bool,

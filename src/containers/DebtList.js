@@ -94,7 +94,7 @@ const DebtList = ({
         >
           {list.map((debt) => {
             const {
-              id, debtor, balance, values, currency, createdAt, closedAt, transactions, note,
+              id, debtor, balance, convertedValues, currency, createdAt, closedAt, transactions, note,
             } = debt;
 
             return (
@@ -135,7 +135,7 @@ const DebtList = ({
                 </Col>
 
                 <Col xs={6} className="text-danger text-currency text-nowrap text-center font-weight-bold">
-                  <MoneyValue amount={Math.abs(balance)} currency={currency} values={values} />
+                  <MoneyValue amount={Math.abs(balance)} currency={currency} values={convertedValues} />
                 </Col>
 
                 <Col xs={3} className="text-nowrap text-right">

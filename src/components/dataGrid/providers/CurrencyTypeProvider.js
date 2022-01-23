@@ -18,7 +18,7 @@ const CurrencyTypeProvider = (props) => {
     >
       { isExpense(row) ? '-' : '+' }
       { ' ' }
-      <MoneyValue currency={row.account.currency} amount={row.amount} values={row.values} />
+      <MoneyValue currency={row.account.currency} amount={row.amount} values={row.convertedValues} />
     </span>
   ) : (
     <span

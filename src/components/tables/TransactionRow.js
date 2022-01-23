@@ -17,7 +17,7 @@ import TransactionCategory from 'src/components/TransactionCategory';
 
 const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
   const {
-    id, account, amount, values, note, category, executedAt, canceledAt,
+    id, account, amount, convertedValues, note, category, executedAt, canceledAt,
   } = transaction;
 
   return (
@@ -66,7 +66,7 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
         >
           {isExpense(transaction) ? '-' : '+'}
           {' '}
-          <MoneyValue currency={account.currency} amount={amount} values={values} />
+          <MoneyValue currency={account.currency} amount={amount} values={convertedValues} />
         </span>
 
         <small className="text-nowrap d-block d-md-none">
