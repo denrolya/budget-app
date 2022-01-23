@@ -143,8 +143,8 @@ export const getTransactionListQueryParams = (queryString) => ({
   types: getQueryParam(queryString, 'types', (v) => (Array.isArray(v) ? v : [v])),
   from: getQueryParam(queryString, 'from'),
   to: getQueryParam(queryString, 'to'),
-  accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? v : [v])),
-  categories: getQueryParam(queryString, 'categories', (v) => (Array.isArray(v) ? v : [v])),
+  accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
+  categories: getQueryParam(queryString, 'categories', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
   withCanceled: getQueryParam(queryString, 'withCanceled', (v) => v === 'true'),
   onlyDrafts: getQueryParam(queryString, 'onlyDrafts', (v) => v === 'true'),
 });
@@ -177,7 +177,7 @@ export const generateLinkToTransactionPage = (types, from, to, accounts, categor
   return `/${ROUTE_TRANSACTIONS}?${queryParams}`;
 };
 
-export const generateLinkToAccountTransactionsPage = (account) => generateLinkToTransactionPage([], null, null, [account], []);
+export const generateLinkToAccountTransactionsPage = (account) => generateLinkToTransactionPage([], undefined, undefined, [account], []);
 
 /**
  * @param {string=} from

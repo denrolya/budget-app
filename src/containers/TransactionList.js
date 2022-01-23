@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, {
+  useEffect, useLayoutEffect, useRef, useState,
+} from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import {
   Button, Card, CardHeader, CardBody, Row, Collapse, Col,
 } from 'reactstrap';
 
 import TransactionFilters from 'src/components/TransactionFilters';
-import TransactionForm from 'src/containers/TransactionForm';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { isActionLoading } from 'src/services/common';
 import {
@@ -42,19 +44,30 @@ const TransactionList = ({
   editTransaction,
   deleteTransaction,
 }) => {
+  const { search } = useLocation();
+  const firstUpdate = useRef(true);
   const toggleTransactionForm = useTransactionForm();
   const [isGridSelected, selectGrid] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(!window.isMobile);
 
   useEffect(() => {
-    initializeList();
+    if (search) {
+      initializeList(search);
+    }
+
+    fetchList();
 
     return () => resetPagination();
   }, []);
 
   useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+
     fetchList();
-  }, [pagination.page, pagination.perPage, pagination.filters]);
+  }, [search]);
 
   const toggleTransactionEdition = (transaction) => toggleTransactionForm({
     model: transaction,

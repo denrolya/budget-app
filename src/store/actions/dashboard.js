@@ -1,8 +1,9 @@
-import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 import camelCase from 'voca/camel_case';
+import kebabCase from 'voca/kebab_case';
 import capitalize from 'voca/capitalize';
 
+import axios from 'src/services/http';
 import { notify } from 'src/store/actions/global';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
@@ -48,9 +49,9 @@ export const fetchStatistics = (name) => (dispatch, getState) => {
   }
 
   return axios
-    .get(`api/statistics/${name}`, requestParams)
+    .get(`api/statistics/${kebabCase(name)}`, requestParams)
     .then(({ data }) => {
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data.data));
+      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0]?.data));
     })
     .catch((e) => {
       notify('error', `[Error]: Fetch Statistics(${name})`);
@@ -88,25 +89,25 @@ const customHandlers = {
 
     dispatch(Creators.fetchStatisticsExpenseCategoriesTreeRequest());
 
-    const getSelectedPeriodDataRequest = axios.get(
-      Routing.generate('api_v1_statistics_expense_categories_tree', {
+    const getSelectedPeriodDataRequest = axios.get('api/statistics/expense-categories-tree', {
+      params: {
         from: from.format(MOMENT_DATE_FORMAT),
         to: to.format(MOMENT_DATE_FORMAT),
-      }),
-    );
+      },
+    });
 
     const previousPeriod = generatePreviousPeriod(from, to);
 
-    const getPreviousPeriodDataRequest = axios.get(
-      Routing.generate('api_v1_statistics_expense_categories_tree', previousPeriod),
-    );
+    const getPreviousPeriodDataRequest = axios.get('api/statistics/expense-categories-tree', {
+      params: previousPeriod,
+    });
 
     axios
       .all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest])
       .then(
         axios.spread((...responses) => {
-          const currentPeriodData = responses[0].data;
-          const previousPeriodData = responses[1].data;
+          const currentPeriodData = responses[0].data?.['hydra:member'][0]?.data;
+          const previousPeriodData = responses[1].data?.['hydra:member'][0]?.data;
 
           dispatch(
             Creators.fetchStatisticsExpenseCategoriesTreeSuccess(

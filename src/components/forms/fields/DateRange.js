@@ -40,7 +40,7 @@ const DateRange = ({
       <InputGroup size={size} className="m-0">
         <InputGroupAddon addonType="prepend">
           <InputGroupText>
-            <i className="ion-md-calendar" aria-hidden />
+            <i aria-hidden className="ion-md-calendar" />
           </InputGroupText>
         </InputGroupAddon>
         <Input

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button, CardBody, Col, Row,
 } from 'reactstrap';
@@ -13,6 +14,7 @@ import CategoryForm from 'src/components/forms/CategoryForm';
 import ModalForm from 'src/components/forms/ModalForm';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import { isActionLoading } from 'src/services/common';
+import { generateLinkToExpenses, generateLinkToTransactionPage } from 'src/services/routing';
 import { createCategoriesTree, listToTree } from 'src/services/transaction';
 import {
   create, edit, remove, setParent, fetchList,
@@ -82,6 +84,19 @@ const CategoryList = ({
               >
                 <i aria-hidden className="tim-icons icon-pencil" />
               </Button>,
+              <Link
+                to={generateLinkToTransactionPage(
+                  [node.type],
+                  undefined,
+                  undefined,
+                  [],
+                  [node.id],
+                )}
+              >
+                <Button size="sm" color="info" className="btn-link px-2">
+                  <i aria-hidden className="mdi mdi-format-list-bulleted" />
+                </Button>
+              </Link>,
               <Button
                 size="sm"
                 color="danger"

@@ -10,7 +10,7 @@ import TransactionsTable from 'src/components/tables/TransactionsTable';
 
 const AccountTransactionsDetails = ({ account }) => {
   const {
-    name, numberOfTransactions, lastTransactionAt, latestTransactions, logs,
+    id, numberOfTransactions, lastTransactionAt, latestTransactions, logs,
   } = account;
 
   const transactionFrequency = useMemo(() => {
@@ -101,7 +101,7 @@ const AccountTransactionsDetails = ({ account }) => {
 
           <p className="text-center py-3">
             <Button color="link">
-              <Link to={generateLinkToAccountTransactionsPage(name)}>
+              <Link to={generateLinkToAccountTransactionsPage(id)}>
                 See all Transactions
                 {'>'}
               </Link>
@@ -117,6 +117,7 @@ AccountTransactionsDetails.defaultProps = {};
 
 AccountTransactionsDetails.propTypes = {
   account: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     numberOfTransactions: PropTypes.number.isRequired,
     logs: PropTypes.array.isRequired,

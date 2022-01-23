@@ -9,7 +9,6 @@ import { stringify } from 'query-string';
 
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
-import { getQueryParam } from 'src/services/routing';
 
 export const DEFAULT_VALUES = {
   types: [],
@@ -77,7 +76,7 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
   }
 
   toggleCategory(category) {
-    return this.setCategories([...this.categories, category]);
+    return this.setCategories(xor(this.categories, [category.id]));
   }
 
   removeCategory(category) {
@@ -103,18 +102,6 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
     });
   }
 
-  parseFromQueryString() {
-    return {
-      types: getQueryParam('types', (v) => (Array.isArray(v) ? v : [v])),
-      from: getQueryParam('from'),
-      to: getQueryParam('to'),
-      accounts: getQueryParam('accounts', (v) => (Array.isArray(v) ? v : [v])),
-      categories: getQueryParam('categories', (v) => (Array.isArray(v) ? v : [v])),
-      withCanceled: getQueryParam('withCanceled', (v) => v === 'true'),
-      onlyDrafts: getQueryParam('onlyDrafts', (v) => v === 'true'),
-    };
-  }
-
   static normalize(name, value) {
     if (isNil(value)) {
       return DEFAULT_VALUES[name];
@@ -128,7 +115,7 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
         return isMoment(value) ? value.format(MOMENT_DATE_FORMAT) : value;
       case 'accounts':
       case 'categories':
-        return uniq(value.map((el) => el?.id || el));
+        return uniq(value.map((el) => el?.id ? parseInt(el.id, 10) : el));
       default:
         return value;
     }

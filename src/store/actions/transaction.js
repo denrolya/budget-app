@@ -43,8 +43,8 @@ export const { Types, Creators } = createActions(
   { prefix: 'TRANSACTION_' },
 );
 
-export const initializeList = () => (dispatch) => {
-  const { page, perPage, ...filters } = getTransactionListQueryParams(history.location.search);
+export const initializeList = () => (dispatch, getState) => {
+  const { page, perPage, ...filters } = getTransactionListQueryParams(getState().router.location.search);
 
   dispatch(
     setPagination(
