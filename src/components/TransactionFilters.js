@@ -100,24 +100,22 @@ const TransactionFilters = ({
           <>
             <h5>Accounts:</h5>
             <ul className="list-unstyled">
-              {accounts
-                .sort((a, b) => b.lastTransactionAt - a.lastTransactionAt)
-                .map((account) => (
-                  <li className="ml-3" key={account.id}>
-                    <FormGroup check>
-                      <Label check>
-                        <Input
-                          type="checkbox"
-                          checked={model.hasAccount(account)}
-                          onChange={() => onModelChange(model.toggleAccount(account))}
-                        />
-                        <span className="form-check-sign" />
-                        {' '}
-                        <AccountName account={account} />
-                      </Label>
-                    </FormGroup>
-                  </li>
-                ))}
+              {accounts.map((account) => (
+                <li className="ml-3" key={account.id}>
+                  <FormGroup check>
+                    <Label check>
+                      <Input
+                        type="checkbox"
+                        checked={model.hasAccount(account)}
+                        onChange={() => onModelChange(model.toggleAccount(account))}
+                      />
+                      <span className="form-check-sign" />
+                      {' '}
+                      <AccountName account={account} />
+                    </Label>
+                  </FormGroup>
+                </li>
+              ))}
             </ul>
           </>
         )}

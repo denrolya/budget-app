@@ -24,7 +24,7 @@ const Sidebar = ({
   const totalAccountsValue = useMemo(() => sumBy(accounts, ({ convertedValues }) => convertedValues[code]), [accounts]);
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
 
-  const accountsOrdered = useMemo(
+  const accountsWithBalanceOrdered = useMemo(
     () => orderBy(accounts, 'name').filter(({ convertedValues }) => Math.abs(convertedValues[code]) >= 0.5),
     [accounts],
   );
@@ -112,11 +112,11 @@ const Sidebar = ({
           <NavItem tag="li">
             <hr />
           </NavItem>
-          {accountsOrdered.map((account) => (
+          {accountsWithBalanceOrdered.map((account) => (
             <NavItem tag="li" key={account.name}>
               <NavLink
                 className="nav-link text-capitalize text-white"
-                to={generateLinkToAccountTransactionsPage(account.name)}
+                to={generateLinkToAccountTransactionsPage(account.id)}
               >
                 <AccountName showBalance account={account} />
               </NavLink>

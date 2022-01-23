@@ -33,9 +33,9 @@ export const fetchList = () => (dispatch) => {
 
   return axios
     .get('api/accounts')
-    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'lastTransactionAt', 'desc'))))
+    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], ['archivedAt', 'lastTransactionAt'], ['desc', 'desc']))))
     .catch((e) => {
-      console.error(e);
+      notify('error', '[Error]: Account Fetch List');
       dispatch(Creators.fetchListFailure(e.message));
     });
 };
@@ -98,11 +98,6 @@ export const updateColor = (account, newColor) => (dispatch) => {
 };
 
 export const fetchDetail = (id) => axios.get(`api/accounts/${id}`);
-
-export const fetchTypeaheadList = () => axios
-  .get(Routing.generate('api_v1_account_typeahead_list'))
-  .then(({ data }) => data)
-  .catch((e) => console.error(e));
 
 export const toggleArchived = (id, isArchived = false) => (dispatch) => {
   dispatch(Creators.archiveRequest());

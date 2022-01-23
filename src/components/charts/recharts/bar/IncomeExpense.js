@@ -67,13 +67,13 @@ const MoneyFlowChart = () => {
 
   useEffect(() => {
     axios
-      .get(
-        Routing.generate('api_v1_statistics_income_expense', {
+      .get('api/statistics/income-expense', {
+        params: {
           from: INTERVALS[interval][0].format(MOMENT_DATE_FORMAT),
           to: INTERVALS[interval][1].format(MOMENT_DATE_FORMAT),
-        }),
-      )
-      .then(({ data }) => setData(data));
+        },
+      })
+      .then(({ data }) => setData(data['hydra:member'][0].data));
   }, [interval]);
 
   const xTickFormatter = (val, index) => {
