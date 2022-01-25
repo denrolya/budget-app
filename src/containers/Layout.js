@@ -177,12 +177,13 @@ const Layout = ({
 
 Layout.defaultProps = {
   accounts: [],
+  colorScheme: 'blue',
   totalDebt: 0,
 };
 
 Layout.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
-  colorScheme: PropTypes.string.isRequired,
+
   fetchAccounts: PropTypes.func.isRequired,
   fetchCategories: PropTypes.func.isRequired,
   fetchDebts: PropTypes.func.isRequired,
@@ -208,6 +209,7 @@ Layout.propTypes = {
   toggleTransferModal: PropTypes.func.isRequired,
   updateDashboard: PropTypes.func.isRequired,
   accounts: PropTypes.array,
+  colorScheme: PropTypes.string,
   totalDebt: PropTypes.number,
 };
 
@@ -215,7 +217,6 @@ const mapStateToProps = ({
   ui, account, auth: { user }, debt,
 }) => ({
   isDarkModeOn: ui.isDarkModeOn,
-  colorScheme: ui.colorScheme,
   isSidebarOpened: ui.isSidebarOpened,
   isHeaderOpened: ui.isHeaderOpened,
   isTransferModalOpened: ui.isTransferModalOpened,

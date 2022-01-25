@@ -2,10 +2,11 @@ import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 
 import { ROUTE_LOGIN } from 'src/constants/routes';
-import { getToken, isTokenPresentAndValid, parseJWT } from 'src/services/auth';
+import {
+  getToken, getUser, isTokenPresentAndValid, parseJWT, setToken, setUser,
+} from 'src/services/auth';
 import Routing from 'src/services/routing';
 import { RESET_ACTION } from 'src/store/actions/global';
-import { setColorScheme } from 'src/store/actions/ui';
 import history from 'src/services/history';
 
 export const { Types, Creators } = createActions(
@@ -27,14 +28,16 @@ export const authorize = (token, shouldReset = true) => (dispatch) => {
     from: { pathname: history.location.pathname },
   };
 
-  localStorage.setItem('token', token);
+  setToken(token);
 
-  const user = parseJWT(token);
-  dispatch(Creators.loginSuccess(user));
+  let user = getUser();
 
-  if (user.settings.uiTheme) {
-    dispatch(setColorScheme(user.settings.uiTheme));
+  if (!user) {
+    user = parseJWT(token);
+    setUser(user);
   }
+
+  dispatch(Creators.loginSuccess(user));
 
   if (shouldReset) {
     history.push(from.pathname);
@@ -72,6 +75,7 @@ export const logoutUser = () => (dispatch) => {
   dispatch({ type: RESET_ACTION });
   history.push(ROUTE_LOGIN);
   localStorage.removeItem('token');
+  localStorage.removeItem('user');
 };
 
 export const assertAuthorization = () => (dispatch) => {

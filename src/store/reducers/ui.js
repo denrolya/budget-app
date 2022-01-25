@@ -9,7 +9,6 @@ export const INITIAL_STATE = {
   isTransferModalOpened: false,
   isDebtModalOpened: false,
   isAccountModalOpened: false,
-  colorScheme: 'blue',
 };
 
 // eslint-disable-next-line default-param-last
@@ -29,7 +28,6 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
           isDarkModeOn: state.isDarkModeOn,
           isSidebarOpened: action.isOpen === null ? !state.isSidebarOpened : action.isOpen,
         };
@@ -37,7 +35,6 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
           isDarkModeOn: state.isDarkModeOn,
           isHeaderOpened: !state.isHeaderOpened,
         };
@@ -45,7 +42,6 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
           isDarkModeOn: state.isDarkModeOn,
           isDraftExpenseModalOpened: !state.isDraftExpenseModalOpened,
         };
@@ -53,7 +49,6 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
           isDarkModeOn: state.isDarkModeOn,
           isTransferModalOpened: !state.isTransferModalOpened,
         };
@@ -61,7 +56,6 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
           isDarkModeOn: state.isDarkModeOn,
           isDebtModalOpened: !state.isDebtModalOpened,
         };
@@ -69,14 +63,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           ...INITIAL_STATE,
-          colorScheme: state.colorScheme,
           isDarkModeOn: state.isDarkModeOn,
           isAccountModalOpened: !state.isAccountModalOpened,
-        };
-      case Types.SET_COLOR_SCHEME:
-        return {
-          ...state,
-          colorScheme: action.colorScheme,
         };
       default:
         return state;

@@ -42,21 +42,21 @@ const MoneyValue = ({
 };
 
 MoneyValue.defaultProps = {
+  bold: false,
+  className: '',
+  maximumFractionDigits: 2,
   showSign: false,
   showSymbol: true,
-  maximumFractionDigits: 2,
-  className: '',
-  bold: false,
 };
 
 MoneyValue.propTypes = {
   amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   bold: PropTypes.bool,
+  currency: PropTypes.string,
   className: PropTypes.string,
   maximumFractionDigits: PropTypes.number,
   showSign: PropTypes.bool,
   showSymbol: PropTypes.bool,
-  currency: PropTypes.string,
   values: PropTypes.object,
 };
 
