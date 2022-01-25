@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import { initializeList } from 'src/services/transaction';
 import { RAINBOW_COLORS } from 'src/constants/color';
 import { amountInPercentage } from 'src/services/common';
+import { CURRENCIES } from 'src/constants/currency';
 
 export const formatDetails = (data, baseCurrencyCode) => {
   const totalExpense = sumBy(data.topExpenseCategories, 'total');
@@ -26,9 +27,7 @@ export const formatDetails = (data, baseCurrencyCode) => {
       .sort((a, b) => b.total - a.total)
       .map((v, k) => ({
         ...v,
-        name: `${v.name} ${v.total.toLocaleString(undefined, {
-          style: 'currency',
-          currency: baseCurrencyCode,
+        name: `${v.name} ${CURRENCIES[baseCurrencyCode].symbol}${v.total.toLocaleString(undefined, {
           maximumFractionDigits: 0,
         })}`,
         percentage: amountInPercentage(totalExpense, v.total),
@@ -39,9 +38,7 @@ export const formatDetails = (data, baseCurrencyCode) => {
       .sort((a, b) => b.total - a.total)
       .map((v, k) => ({
         ...v,
-        name: `${v.name} ${v.total.toLocaleString(undefined, {
-          style: 'currency',
-          currency: baseCurrencyCode,
+        name: `${v.name} ${CURRENCIES[baseCurrencyCode].symbol}${v.total.toLocaleString(undefined, {
           maximumFractionDigits: 0,
         })}`,
         percentage: amountInPercentage(totalIncome, v.total),
