@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 import { generateYearRanges } from 'src/services/datetime';
 
 export const FIRST_AVAILABLE_YEAR = 2015;
-export const SERVER_TIMEZONE = 'Europe/Kiev';
+export const SERVER_TIMEZONE = 'UTC';
 export const SERVER_OFFSET = 180;
 export const MOMENT_DATE_FORMAT = 'DD-MM-YYYY';
 export const MOMENT_DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';

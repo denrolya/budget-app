@@ -140,7 +140,7 @@ export const createCategoriesTree = (tree) => orderBy(
  */
 export const initializeList = (transactions) => transactions.map(({ executedAt, canceledAt, ...rest }) => ({
   ...rest,
-  executedAt: moment(executedAt).tz(SERVER_TIMEZONE),
-  executionTime: moment(executedAt).tz(SERVER_TIMEZONE).format(MOMENT_VIEW_TIME_FORMAT),
+  executedAt: moment(executedAt),
+  executionTime: moment(executedAt).format(MOMENT_VIEW_TIME_FORMAT),
   canceledAt: canceledAt ? moment(canceledAt) : null,
 }));

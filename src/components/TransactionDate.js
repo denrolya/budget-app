@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+
 import {
   MOMENT_VIEW_DATE_FORMAT,
   MOMENT_VIEW_DATE_WITH_YEAR_FORMAT,
   MOMENT_VIEW_TIME_FORMAT,
 } from 'src/constants/datetime';
-import PropTypes from 'prop-types';
-import React from 'react';
 import { isCurrentYear, isMoreThanHourAgo } from 'src/services/common';
 
 const TransactionDate = ({
