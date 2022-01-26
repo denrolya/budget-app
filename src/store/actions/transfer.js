@@ -65,8 +65,8 @@ export const fetchList = () => (dispatch, getState) => {
   const params = {
     perPage,
     page,
-    'executedAt[strictly_after]': from,
-    'executedAt[strictly_before]': to,
+    'executedAt[after]': from,
+    'executedAt[before]': to,
   };
 
   return axios

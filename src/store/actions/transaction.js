@@ -74,8 +74,8 @@ export const fetchList = () => (dispatch, getState) => {
     page,
     category,
     account,
-    'executedAt[strictly_after]': from,
-    'executedAt[strictly_before]': to,
+    'executedAt[after]': from,
+    'executedAt[before]': to,
     withDeleted: withCanceled ? 1 : 0,
     isDraft: onlyDrafts ? 1 : 0,
   };
@@ -83,7 +83,7 @@ export const fetchList = () => (dispatch, getState) => {
   return axios
     .get('api/transactions', { params })
     .then(({ data }) => {
-      dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems']));
+      dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems'], 0));
     })
     .catch(({ message }) => {
       notify('error', '[Error]: Fetch Transaction List');

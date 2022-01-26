@@ -49,10 +49,8 @@ export const fetchStatistics = (name) => (dispatch, getState) => {
   }
 
   return axios
-    .get(`api/statistics/${kebabCase(name)}`, requestParams)
-    .then(({ data }) => {
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0]?.data));
-    })
+    .get(`api/transactions/statistics/${kebabCase(name)}`, requestParams)
+    .then(({ data }) => dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0])))
     .catch((e) => {
       notify('error', `[Error]: Fetch Statistics(${name})`);
       dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e.message));

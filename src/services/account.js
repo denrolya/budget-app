@@ -1,5 +1,6 @@
 import pick from 'lodash/pick';
 import sumBy from 'lodash/sumBy';
+import React from 'react';
 import moment from 'moment-timezone';
 
 import { initializeList } from 'src/services/transaction';
@@ -27,9 +28,16 @@ export const formatDetails = (data, baseCurrencyCode) => {
       .sort((a, b) => b.total - a.total)
       .map((v, k) => ({
         ...v,
-        name: `${v.name} ${CURRENCIES[baseCurrencyCode].symbol}${v.total.toLocaleString(undefined, {
-          maximumFractionDigits: 0,
-        })}`,
+        name: (<>
+          {v.name}
+          {' '}
+          <b>
+            {CURRENCIES[baseCurrencyCode].symbol}
+            {v.total.toLocaleString(undefined, {
+              maximumFractionDigits: 0,
+            })}
+          </b>
+        </>),
         percentage: amountInPercentage(totalExpense, v.total),
         fill: RAINBOW_COLORS[k],
       })),
@@ -38,9 +46,16 @@ export const formatDetails = (data, baseCurrencyCode) => {
       .sort((a, b) => b.total - a.total)
       .map((v, k) => ({
         ...v,
-        name: `${v.name} ${CURRENCIES[baseCurrencyCode].symbol}${v.total.toLocaleString(undefined, {
-          maximumFractionDigits: 0,
-        })}`,
+        name: (<>
+          {v.name}
+          {' '}
+          <b>
+            {CURRENCIES[baseCurrencyCode].symbol}
+            {v.total.toLocaleString(undefined, {
+              maximumFractionDigits: 0,
+            })}
+          </b>
+        </>),
         percentage: amountInPercentage(totalIncome, v.total),
         fill: RAINBOW_COLORS[RAINBOW_COLORS.length - 5 - k],
       })),
