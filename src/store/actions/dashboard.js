@@ -1,4 +1,5 @@
 import { createActions } from 'reduxsauce';
+import { EXPENSE_TYPE } from 'src/constants/transactions';
 import camelCase from 'voca/camel_case';
 import kebabCase from 'voca/kebab_case';
 import capitalize from 'voca/capitalize';
@@ -7,7 +8,6 @@ import axios from 'src/services/http';
 import { notify } from 'src/store/actions/global';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
-import Routing from 'src/services/routing';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { AVAILABLE_STATISTICS } from 'src/constants/dashboard';
@@ -68,16 +68,16 @@ const customHandlers = {
     dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineRequest());
 
     try {
-      const { data } = await axios.get(
-        Routing.generate('api_v1_statistics_transaction_categories_timeline', {
+      const { data } = await axios.get('api/transactions/statistics/categories-timeline', {
+        params: {
           categories,
           interval,
           from: from.format(MOMENT_DATE_FORMAT),
           to: to.format(MOMENT_DATE_FORMAT),
-        }),
-      );
+        },
+      });
 
-      dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineSuccess(data));
+      dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineSuccess(data['hydra:member'][0]));
     } catch (e) {
       dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineFailure(e));
     }
@@ -87,8 +87,9 @@ const customHandlers = {
 
     dispatch(Creators.fetchStatisticsExpenseCategoriesTreeRequest());
 
-    const getSelectedPeriodDataRequest = axios.get('api/statistics/expense-categories-tree', {
+    const getSelectedPeriodDataRequest = axios.get('api/transactions/statistics/categories-tree', {
       params: {
+        type: EXPENSE_TYPE,
         from: from.format(MOMENT_DATE_FORMAT),
         to: to.format(MOMENT_DATE_FORMAT),
       },
@@ -96,16 +97,19 @@ const customHandlers = {
 
     const previousPeriod = generatePreviousPeriod(from, to);
 
-    const getPreviousPeriodDataRequest = axios.get('api/statistics/expense-categories-tree', {
-      params: previousPeriod,
+    const getPreviousPeriodDataRequest = axios.get('api/transactions/statistics/categories-tree', {
+      params: {
+        ...previousPeriod,
+        type: EXPENSE_TYPE,
+      },
     });
 
     axios
       .all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest])
       .then(
         axios.spread((...responses) => {
-          const currentPeriodData = responses[0].data?.['hydra:member'][0]?.data;
-          const previousPeriodData = responses[1].data?.['hydra:member'][0]?.data;
+          const currentPeriodData = responses[0].data?.['hydra:member'][0];
+          const previousPeriodData = responses[1].data?.['hydra:member'][0];
 
           dispatch(
             Creators.fetchStatisticsExpenseCategoriesTreeSuccess(
