@@ -62,18 +62,18 @@ export const fetchList = () => (dispatch, getState) => {
     perPage,
     page,
     filters: {
-      from, to, accounts: account, categories: category, withCanceled, onlyDrafts, types,
+      from, to, accounts, categories, withCanceled, onlyDrafts, types,
     },
   } = getState().transaction.pagination;
 
   dispatch(Creators.fetchListRequest());
 
   const params = {
-    types,
+    type: types[0], // TODO: To be handled properly
     perPage,
     page,
-    category,
-    account,
+    'category.id': categories,
+    'account.id': accounts,
     'executedAt[after]': from,
     'executedAt[before]': to,
     withDeleted: withCanceled ? 1 : 0,

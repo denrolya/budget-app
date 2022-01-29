@@ -22,7 +22,7 @@ export const { Types, Creators } = createActions(
 
 export const setStatistics = (name, newModel) => (dispatch) => {
   dispatch(Creators.setStatistics(name, newModel));
-  dispatch(fetchStatistics(name));
+  dispatch(fetchStatistics(AVAILABLE_STATISTICS.find((el) => el.name === name)));
 };
 
 export const fetchStatistics = ({

@@ -4,7 +4,6 @@ import capitalize from 'voca/capitalize';
 import { createActions } from 'reduxsauce';
 
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import Routing from 'src/services/routing';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
 
 export const AVAILABLE_STATISTICS = [
