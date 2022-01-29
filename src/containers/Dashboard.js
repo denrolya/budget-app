@@ -11,17 +11,14 @@ import ExpenseCategoriesCard from 'src/components/cards/ExpenseCategoriesCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/TransactionCategoriesTimelineCard';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
-import ShortStatistics from 'src/components/ShortStatistics';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { isActionLoading } from 'src/services/common';
 import { setStatistics, updateDashboard } from 'src/store/actions/dashboard';
 import MoneyValue from 'src/components/MoneyValue';
 
 const Dashboard = ({
-  ui, userSettings, statistics, updateDashboard, setStatistics, categories,
+  ui, statistics, updateDashboard, setStatistics, categories,
 }) => {
-  const { dashboardStatistics: dashboard } = userSettings;
-
   useEffect(() => {
     updateDashboard();
   }, []);
@@ -44,17 +41,15 @@ const Dashboard = ({
       </Helmet>
 
       <div className="dashboard">
-        {dashboard.includes('moneyFlow') && (
-          <Row>
-            <Col md={12} lg={12} xl={12} className="d-flex">
-              <MoneyFlowCard
-                isLoading={isStatisticsActionLoading('moneyFlow')}
-                model={statistics.moneyFlow}
-                onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
-              />
-            </Col>
-          </Row>
-        )}
+        <Row>
+          <Col md={12} lg={12} xl={12} className="d-flex">
+            <MoneyFlowCard
+              isLoading={isStatisticsActionLoading('moneyFlow')}
+              model={statistics.moneyFlow}
+              onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
+            />
+          </Col>
+        </Row>
 
         <Row className="d-flex d-md-none">
           <Col xs={6}>
@@ -96,28 +91,24 @@ const Dashboard = ({
         </Row>
 
         <Row>
-          {dashboard.includes('expenseCategoriesTree') && (
-            <Col sm={12} className="d-flex">
-              <ExpenseCategoriesCard
-                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-                model={statistics.expenseCategoriesTree}
-                onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
-              />
-            </Col>
-          )}
+          <Col sm={12} className="d-flex">
+            <ExpenseCategoriesCard
+              isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+              model={statistics.expenseCategoriesTree}
+              onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
+            />
+          </Col>
         </Row>
-        {dashboard.includes('transactionCategoriesTimeline') && (
-          <Row>
-            <Col>
-              <TransactionCategoriesTimelineCard
-                categories={categories}
-                isLoading={isStatisticsActionLoading('transactionCategoriesTimeline')}
-                model={statistics.transactionCategoriesTimeline}
-                onUpdate={(newModel) => setStatistics('transactionCategoriesTimeline', newModel)}
-              />
-            </Col>
-          </Row>
-        )}
+        <Row>
+          <Col>
+            <TransactionCategoriesTimelineCard
+              categories={categories}
+              isLoading={isStatisticsActionLoading('categoriesTimeline')}
+              model={statistics.categoriesTimeline}
+              onUpdate={(newModel) => setStatistics('categoriesTimeline', newModel)}
+            />
+          </Col>
+        </Row>
       </div>
     </>
   );
@@ -132,19 +123,14 @@ Dashboard.propTypes = {
   statistics: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDashboard: PropTypes.func.isRequired,
-  userSettings: PropTypes.object.isRequired,
   categories: PropTypes.array,
 };
 
 const mapStateToProps = ({
-  auth: {
-    user: { settings: userSettings },
-  },
   dashboard: statistics,
   category: { list: categories },
   ui,
 }) => ({
-  userSettings,
   statistics,
   ui,
   categories,

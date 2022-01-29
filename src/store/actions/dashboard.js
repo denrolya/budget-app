@@ -7,7 +7,6 @@ import axios from 'src/services/http';
 import { notify } from 'src/store/actions/global';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
-import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { AVAILABLE_STATISTICS } from 'src/constants/dashboard';
 
 export const { Types, Creators } = createActions(
@@ -39,11 +38,8 @@ export const fetchStatistics = ({ name, path, additionalParams }) => async (disp
   let params = {
     'executedAt[after]': state.from.format(MOMENT_DATE_FORMAT),
     'executedAt[before]': state.to.format(MOMENT_DATE_FORMAT),
+    interval: state.interval,
   };
-
-  if (state instanceof TimeperiodIntervalStatistics) {
-    params.interval = state.interval;
-  }
 
   if (additionalParams) {
     params = {

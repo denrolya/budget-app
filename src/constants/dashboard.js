@@ -61,7 +61,7 @@ export const INITIAL_STATE = {
   expenseCategoriesTree: new TimeperiodStatistics({
     data: new TreeModel().parse({ name: 'All categories' }),
   }),
-  transactionCategoriesTimeline: new TimeperiodIntervalStatistics({
+  categoriesTimeline: new TimeperiodIntervalStatistics({
     data: {
       data: randomTransactionCategoriesTimelineData(),
       categories: [1, 2, 4],

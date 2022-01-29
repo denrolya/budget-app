@@ -21,11 +21,11 @@ const HANDLERS = {
     [name]: newModel,
   }),
   // eslint-disable-next-line default-param-last
-  [Types.FETCH_STATISTICS_CATEGORIES_TIMELINE_SUCCESS]: (state = INITIAL_STATE, { transactionCategoriesTimeline }) => ({
+  [Types.FETCH_STATISTICS_CATEGORIES_TIMELINE_SUCCESS]: (state = INITIAL_STATE, { categoriesTimeline }) => ({
     ...state,
-    transactionCategoriesTimeline: state.transactionCategoriesTimeline.setIn(
+    categoriesTimeline: state.categoriesTimeline.setIn(
       'data.data'.split('.'),
-      transactionCategoriesTimeline,
+      categoriesTimeline,
     ),
   }),
   // eslint-disable-next-line default-param-last
