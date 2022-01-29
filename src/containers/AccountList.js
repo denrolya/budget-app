@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
-import { updateName, updateColor } from 'src/store/actions/account';
 import AccountSelector from 'src/components/AccountSelector';
 
 const AccountList = ({ list }) => {
@@ -49,7 +48,4 @@ const mapStateToProps = ({ account }) => ({
   list: orderBy(account, ['archivedAt', 'lastTransactionAt'], ['desc', 'desc']),
 });
 
-export default connect(mapStateToProps, {
-  updateName,
-  updateColor,
-})(AccountList);
+export default connect(mapStateToProps)(AccountList);

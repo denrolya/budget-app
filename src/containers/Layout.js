@@ -224,7 +224,7 @@ const mapStateToProps = ({
   isAccountModalOpened: ui.isAccountModalOpened,
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
   accounts: account.filter(({ archivedAt }) => !archivedAt),
-  totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.settings.baseCurrency]),
+  totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.baseCurrency]),
   isAssetsLoading: isActionLoading(ui.ACCOUNT_FETCH_LIST) || isActionLoading(ui.DEBT_FETCH_LIST),
 });
 

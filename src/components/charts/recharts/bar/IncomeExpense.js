@@ -10,7 +10,6 @@ import {
 
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
-import Routing from 'src/services/routing';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 
 const INTERVALS = {
@@ -50,9 +49,9 @@ CustomTooltip.defaultProps = {
 };
 
 CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   payload: PropTypes.array.isRequired,
+  active: PropTypes.bool,
 };
 
 /**

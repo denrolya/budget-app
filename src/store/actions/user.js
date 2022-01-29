@@ -1,39 +1,41 @@
-import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 
-import Routing, { isOnDashboardPage } from 'src/services/routing';
-import { authorize } from 'src/store/actions/auth';
+import { getUser, setUser } from 'src/services/auth';
+import axios from 'src/services/http';
+import { isOnDashboardPage } from 'src/services/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(
   {
     switchBaseCurrencyRequest: null,
-    switchBaseCurrencySuccess: null,
+    switchBaseCurrencySuccess: ['currency'],
     switchBaseCurrencyFailure: ['message'],
   },
   { prefix: 'USER_' },
 );
 
-export const switchBaseCurrency = (code) => (dispatch) => {
+export const switchBaseCurrency = (currency) => async (dispatch) => {
   dispatch(Creators.switchBaseCurrencyRequest());
 
-  return axios
-    .put(Routing.generate('api_v1_user_update_base_currency'), {
-      currency: code,
-    })
-    .then(({ data }) => {
-      dispatch(Creators.switchBaseCurrencySuccess());
-      dispatch(authorize(data.token, false));
+  const user = getUser();
 
-      notify('success', 'Switched currency');
-
-      if (isOnDashboardPage()) {
-        dispatch(updateDashboard());
-      }
-    })
-    .catch((e) => {
-      console.error(e);
-      dispatch(Creators.switchBaseCurrencyFailure(e.message));
+  try {
+    await axios.put(`api/users/${user.username}`, {
+      baseCurrency: currency,
     });
+
+    setUser(user);
+
+    dispatch(Creators.switchBaseCurrencySuccess(currency));
+
+    notify('success', 'Switched currency');
+
+    if (isOnDashboardPage()) {
+      dispatch(updateDashboard());
+    }
+  } catch (e) {
+    notify('error', 'Switch Base Currency');
+    dispatch(Creators.switchBaseCurrencyFailure(e));
+  }
 };

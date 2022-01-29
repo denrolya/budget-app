@@ -39,7 +39,6 @@ export const AVAILABLE_STATISTICS = [{
   additionalParams: {
     type: EXPENSE_TYPE,
   },
-  fetchPreviousPeriod: true,
 }, {
   name: 'categoriesTimeline',
   path: 'api/transactions/statistics/categories-timeline',

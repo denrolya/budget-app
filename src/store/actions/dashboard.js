@@ -1,5 +1,4 @@
 import { createActions } from 'reduxsauce';
-import { EXPENSE_TYPE } from 'src/constants/transactions';
 import camelCase from 'voca/camel_case';
 import capitalize from 'voca/capitalize';
 
@@ -83,7 +82,7 @@ export const fetchStatistics = ({
 
 const customHandlers = {
   categoriesTimeline: (path, params) => async (dispatch, getState) => {
-    const { data: { categories } } = getState().dashboard.transactionCategoriesTimeline;
+    const { data: { categories } } = getState().dashboard.categoriesTimeline;
     dispatch(Creators.fetchStatisticsCategoriesTimelineRequest());
 
     try {

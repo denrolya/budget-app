@@ -86,7 +86,7 @@ App.propTypes = {
 
 const mapStateToProps = ({ auth: { user, isAuthenticated } }) => ({
   isAuthenticated,
-  baseCurrency: CURRENCIES[user?.settings?.baseCurrency || 'EUR'],
+  baseCurrency: CURRENCIES[user?.baseCurrency || 'EUR'],
 });
 
 export default connect(mapStateToProps)(App);

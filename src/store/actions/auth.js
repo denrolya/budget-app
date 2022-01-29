@@ -5,7 +5,6 @@ import { ROUTE_LOGIN } from 'src/constants/routes';
 import {
   getToken, getUser, isTokenPresentAndValid, parseJWT, setToken, setUser,
 } from 'src/services/auth';
-import Routing from 'src/services/routing';
 import { RESET_ACTION } from 'src/store/actions/global';
 import history from 'src/services/history';
 
@@ -44,30 +43,18 @@ export const authorize = (token, shouldReset = true) => (dispatch) => {
   }
 };
 
-export const switchBaseCurrency = (currency) => (dispatch) => {
-  dispatch(Creators.switchBaseCurrencyRequest());
-
-  return axios
-    .put(Routing.generate('api_v1_user_update_base_currency'), {
-      currency,
-    })
-    .then((data) => {
-      dispatch(Creators.switchBaseCurrencySuccess());
-      dispatch(authorize(data.token));
-    })
-    .catch(({ message }) => dispatch(Creators.switchBaseCurrencyFailure(message)));
-};
-
-export const loginUser = ({ username, password }) => (dispatch) => {
+export const loginUser = ({ username, password }) => async (dispatch) => {
   dispatch(Creators.loginRequest());
 
-  return axios
-    .post('/api/login_check', {
+  try {
+    const { data } = await axios.post('/api/login_check', {
       username,
       password,
-    })
-    .then(({ data }) => dispatch(authorize(data.token)))
-    .catch(({ message }) => dispatch(Creators.loginFailure(message)));
+    });
+    dispatch(authorize(data.token));
+  } catch (e) {
+    dispatch(Creators.loginFailure(e));
+  }
 };
 
 export const logoutUser = () => (dispatch) => {
