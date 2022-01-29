@@ -14,11 +14,11 @@ import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
 import ShortStatistics from 'src/components/ShortStatistics';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { isActionLoading } from 'src/services/common';
-import { setStatistics, updateDashboard, updateDashboardInterval } from 'src/store/actions/dashboard';
+import { setStatistics, updateDashboard } from 'src/store/actions/dashboard';
 import MoneyValue from 'src/components/MoneyValue';
 
 const Dashboard = ({
-  ui, userSettings, statistics, updateDashboard, updateDashboardInterval, setStatistics, categories,
+  ui, userSettings, statistics, updateDashboard, setStatistics, categories,
 }) => {
   const { dashboardStatistics: dashboard } = userSettings;
 
@@ -50,20 +50,9 @@ const Dashboard = ({
               <MoneyFlowCard
                 isLoading={isStatisticsActionLoading('moneyFlow')}
                 model={statistics.moneyFlow}
-                onIntervalSelect={updateDashboardInterval}
                 onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
               />
             </Col>
-          </Row>
-        )}
-
-        {dashboard.includes('shortExpenseForGivenPeriod') && (
-          <Row>
-            <ShortStatistics
-              isLoading={isStatisticsActionLoading('shortExpenseForGivenPeriod')}
-              onUpdate={(newModel) => setStatistics('shortExpenseForGivenPeriod', newModel)}
-              model={statistics.shortExpenseForGivenPeriod}
-            />
           </Row>
         )}
 
@@ -143,7 +132,6 @@ Dashboard.propTypes = {
   statistics: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDashboard: PropTypes.func.isRequired,
-  updateDashboardInterval: PropTypes.func.isRequired,
   userSettings: PropTypes.object.isRequired,
   categories: PropTypes.array,
 };
@@ -165,5 +153,4 @@ const mapStateToProps = ({
 export default connect(mapStateToProps, {
   setStatistics,
   updateDashboard,
-  updateDashboardInterval,
 })(Dashboard);

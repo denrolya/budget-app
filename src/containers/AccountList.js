@@ -34,9 +34,7 @@ const AccountList = ({ list }) => {
 
       {list.length > 0 && <AccountSelector accounts={list} onChange={(v) => navigate(`${v}`)} selected={id} />}
 
-      { id && (
-        <Outlet />
-      )}
+      { id && <Outlet /> }
     </>
   );
 };

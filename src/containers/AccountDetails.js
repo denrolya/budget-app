@@ -1,4 +1,3 @@
-import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -113,10 +112,7 @@ AccountDetails.propTypes = {
   exchangeRates: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({ account, exchangeRates }) => ({
-  exchangeRates,
-  list: orderBy(account, ['archivedAt', 'lastTransactionAt'], ['desc', 'desc']),
-});
+const mapStateToProps = ({ exchangeRates }) => ({ exchangeRates });
 
 export default connect(mapStateToProps, {
   toggleArchived,

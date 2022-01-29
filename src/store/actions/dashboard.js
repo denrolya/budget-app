@@ -1,23 +1,21 @@
 import { createActions } from 'reduxsauce';
 import { EXPENSE_TYPE } from 'src/constants/transactions';
 import camelCase from 'voca/camel_case';
-import kebabCase from 'voca/kebab_case';
 import capitalize from 'voca/capitalize';
 
 import axios from 'src/services/http';
 import { notify } from 'src/store/actions/global';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
-import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { AVAILABLE_STATISTICS } from 'src/constants/dashboard';
 
 export const { Types, Creators } = createActions(
   {
-    ...AVAILABLE_STATISTICS.map((name) => ({
+    ...AVAILABLE_STATISTICS.map(({ name }) => ({
       [`fetchStatistics${capitalize(camelCase(name))}Request`]: null,
       [`fetchStatistics${capitalize(camelCase(name))}Success`]: [`${name}`],
-      [`fetchStatistics${capitalize(camelCase(name))}Failure`]: ['message'],
+      [`fetchStatistics${capitalize(camelCase(name))}Failure`]: ['error'],
     })).reduce((acc, curr) => Object.assign(acc, curr), {}),
     setStatistics: ['name', 'newModel'],
   },
@@ -29,75 +27,81 @@ export const setStatistics = (name, newModel) => (dispatch) => {
   dispatch(fetchStatistics(name));
 };
 
-export const fetchStatistics = (name) => (dispatch, getState) => {
+export const fetchStatistics = ({ name, path, additionalParams }) => async (dispatch, getState) => {
   if (customHandlers[name]) {
-    return dispatch(customHandlers[name]());
+    dispatch(customHandlers[name](path, additionalParams));
+    return;
   }
 
   dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
 
   const state = getState().dashboard[name];
-  const requestParams = {};
+  let params = {
+    'executedAt[after]': state.from.format(MOMENT_DATE_FORMAT),
+    'executedAt[before]': state.to.format(MOMENT_DATE_FORMAT),
+  };
 
-  if (state instanceof TimeperiodStatistics) {
-    requestParams.from = state.from.format(MOMENT_DATE_FORMAT);
-    requestParams.to = state.to.format(MOMENT_DATE_FORMAT);
-  } else if (state instanceof TimeperiodIntervalStatistics) {
-    requestParams.from = state.from.format(MOMENT_DATE_FORMAT);
-    requestParams.to = state.to.format(MOMENT_DATE_FORMAT);
-    requestParams.interval = state.interval;
+  if (state instanceof TimeperiodIntervalStatistics) {
+    params.interval = state.interval;
   }
 
-  return axios
-    .get(`api/transactions/statistics/${kebabCase(name)}`, requestParams)
-    .then(({ data }) => dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0])))
-    .catch((e) => {
-      notify('error', `[Error]: Fetch Statistics(${name})`);
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e.message));
-    });
+  if (additionalParams) {
+    params = {
+      ...params,
+      ...additionalParams,
+    };
+  }
+
+  try {
+    const { data } = await axios.get(path, { params });
+    dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0]));
+  } catch (e) {
+    notify('error', `[Error]: Fetch Statistics(${name})`);
+    dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
+  }
 };
 
 const customHandlers = {
-  transactionCategoriesTimeline: () => async (dispatch, getState) => {
+  categoriesTimeline: (path) => async (dispatch, getState) => {
     const {
       from,
       to,
       interval,
       data: { categories },
     } = getState().dashboard.transactionCategoriesTimeline;
-    dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineRequest());
+    dispatch(Creators.fetchStatisticsCategoriesTimelineRequest());
 
     try {
-      const { data } = await axios.get('api/transactions/statistics/categories-timeline', {
+      const { data } = await axios.get(path, {
         params: {
           categories,
           interval,
-          from: from.format(MOMENT_DATE_FORMAT),
-          to: to.format(MOMENT_DATE_FORMAT),
+          'executedAt[after]': from.format(MOMENT_DATE_FORMAT),
+          'executedAt[before]': to.format(MOMENT_DATE_FORMAT),
         },
       });
 
-      dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineSuccess(data['hydra:member'][0]));
+      dispatch(Creators.fetchStatisticsCategoriesTimelineSuccess(data['hydra:member'][0]));
     } catch (e) {
-      dispatch(Creators.fetchStatisticsTransactionCategoriesTimelineFailure(e));
+      dispatch(Creators.fetchStatisticsCategoriesTimelineFailure(e));
     }
   },
-  expenseCategoriesTree: () => (dispatch, getState) => {
+  expenseCategoriesTree: (path) => (dispatch, getState) => {
     const { from, to } = getState().dashboard.expenseCategoriesTree;
 
     dispatch(Creators.fetchStatisticsExpenseCategoriesTreeRequest());
 
-    const getSelectedPeriodDataRequest = axios.get('api/transactions/statistics/categories-tree', {
+    const getSelectedPeriodDataRequest = axios.get(path, {
       params: {
         type: EXPENSE_TYPE,
-        from: from.format(MOMENT_DATE_FORMAT),
-        to: to.format(MOMENT_DATE_FORMAT),
+        'executedAt[after]': from.format(MOMENT_DATE_FORMAT),
+        'executedAt[before]': to.format(MOMENT_DATE_FORMAT),
       },
     });
 
     const previousPeriod = generatePreviousPeriod(from, to);
 
-    const getPreviousPeriodDataRequest = axios.get('api/transactions/statistics/categories-tree', {
+    const getPreviousPeriodDataRequest = axios.get(path, {
       params: {
         ...previousPeriod,
         type: EXPENSE_TYPE,
@@ -143,8 +147,4 @@ export const updateDashboardInterval = (from, to) => (dispatch, getState) => {
   });
 };
 
-export const updateDashboard = () => (dispatch, getState) => {
-  const { settings } = getState().auth.user;
-
-  settings.dashboardStatistics.map((name) => dispatch(fetchStatistics(name)));
-};
+export const updateDashboard = () => (dispatch) => AVAILABLE_STATISTICS.forEach((el) => dispatch(fetchStatistics(el)));
