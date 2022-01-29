@@ -16,21 +16,30 @@ export const AVAILABLE_STATISTICS = [{
     'category.isAffectingProfit': true,
     isDraft: false,
   },
+  fetchPreviousPeriod: true,
 }, {
   name: 'food',
   path: 'api/transactions/statistics/sum',
   additionalParams: {
     category_deep: [1],
+    type: EXPENSE_TYPE,
   },
+  fetchPreviousPeriod: true,
 }, {
   name: 'rent',
   path: 'api/transactions/statistics/sum',
   additionalParams: {
     category_deep: [2, 18], // Rent, Utilities
+    type: EXPENSE_TYPE,
   },
+  fetchPreviousPeriod: true,
 }, {
   name: 'expenseCategoriesTree',
   path: 'api/transactions/statistics/categories-tree',
+  additionalParams: {
+    type: EXPENSE_TYPE,
+  },
+  fetchPreviousPeriod: true,
 }, {
   name: 'categoriesTimeline',
   path: 'api/transactions/statistics/categories-timeline',

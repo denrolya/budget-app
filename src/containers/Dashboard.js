@@ -4,9 +4,16 @@ import sumBy from 'lodash/sumBy';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { CardBody, Col, Row } from 'reactstrap';
+import moment from 'moment-timezone';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
+import SimpleStatisticsCard from 'src/components/cards/statistics/SimpleStatisticsCard';
+import CardsSet from 'src/components/CardsSet';
+import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
+import PercentageSinceLastMonthMessage from 'src/components/messages/PercentageSinceLastMonthMessage';
+import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { generateLinkToExpenses } from 'src/services/routing';
 import ExpenseCategoriesCard from 'src/components/cards/ExpenseCategoriesCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/TransactionCategoriesTimelineCard';
 import LoadingCard from 'src/components/cards/LoadingCard';
@@ -32,6 +39,87 @@ const Dashboard = ({
     [statistics.moneyFlow.data],
   );
 
+  /* eslint-disable react/no-unstable-nested-components */
+  const shortStatistics = [
+    {
+      key: 'short-statistics-month-expenses',
+      item: () => {
+        const { from, to, data } = statistics.monthExpenses;
+        const current = Math.abs(data.current);
+        const previous = Math.abs(data.previous);
+        return (
+          <SimpleStatisticsCard
+            isLoading={isStatisticsActionLoading('monthExpenses')}
+            link={generateLinkToExpenses(from.format(MOMENT_DATE_FORMAT), to.format(MOMENT_DATE_FORMAT))}
+            title={`Expenses in ${from.format('MMMM')}`}
+            content={<MoneyValue className="font-weight-bold" amount={current} maximumFractionDigits={0} />}
+            footer={<PercentageSinceLastMonthMessage previous={previous} current={current} />}
+          />
+        );
+      },
+    },
+    {
+      key: 'short-statistics-food',
+      item: () => {
+        const { from, to, data } = statistics.food;
+        const current = Math.abs(data.current);
+        const previous = Math.abs(data.previous);
+        return (
+          <SimpleStatisticsCard
+            title="Food expenses"
+            isLoading={isStatisticsActionLoading('food')}
+            content={<MoneyValue className="font-weight-bold" amount={current} maximumFractionDigits={0} />}
+            footer={<PercentageSinceLastMonthMessage previous={previous} current={current} />}
+            link={generateLinkToExpenses(
+              from.format(MOMENT_DATE_FORMAT),
+              to.format(MOMENT_DATE_FORMAT),
+              null,
+              [1],
+            )}
+          />
+        );
+      },
+    },
+    {
+      key: 'short-statistics-rent',
+      item: () => {
+        const { from, to, data } = statistics.rent;
+        const current = Math.abs(data.current);
+        const previous = Math.abs(data.previous);
+        return (
+          <SimpleStatisticsCard
+            title="Rent & Utilities"
+            isLoading={isStatisticsActionLoading('rent')}
+            link={generateLinkToExpenses(
+              from.format(MOMENT_DATE_FORMAT),
+              to.format(MOMENT_DATE_FORMAT),
+              null,
+              [2, 18],
+            )}
+            content={<MoneyValue className="font-weight-bold" amount={current} maximumFractionDigits={0} />}
+            footer={<AmountSinceLastPeriodMessage current={current} previous={previous} />}
+          />
+        );
+      },
+    },
+    {
+      key: 'short-statistics-daily-expenses',
+      item: () => {
+        const current = Math.abs(statistics.monthExpenses.data.current) / moment().date();
+        const previous = Math.abs(statistics.monthExpenses.data.previous) / moment().subtract(1, 'month').daysInMonth();
+        return (
+          <SimpleStatisticsCard
+            title="Daily expenses"
+            isLoading={isStatisticsActionLoading('monthExpenses')}
+            content={<MoneyValue className="font-weight-bold" maximumFractionDigits={0} amount={current} />}
+            footer={<PercentageSinceLastMonthMessage previous={previous} current={current} />}
+          />
+        );
+      },
+    },
+  ];
+  /* eslint-enable react/no-unstable-nested-components */
+
   return (
     <>
       <Helmet>
@@ -50,6 +138,8 @@ const Dashboard = ({
             />
           </Col>
         </Row>
+
+        <CardsSet items={shortStatistics} />
 
         <Row className="d-flex d-md-none">
           <Col xs={6}>
