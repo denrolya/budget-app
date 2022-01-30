@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
 import moment from 'moment-timezone';
 import {
   Row, Col, Button, UncontrolledPopover, PopoverBody,
@@ -113,10 +114,19 @@ const AccountGeneralInfo = ({
         </section>
       )}
 
-      {exchangeData.length > 0 && (
+      {(exchangeData.length > 0) && (
         <section>
           <h3 className="mb-1">Exchange Rates</h3>
-          {exchangeData.map(({ from, to, amount }) => (
+          {isEmpty(exchangeRates) && (
+            <code className="text-muted">
+              <Button size="sm" color="warning" className="btn-link">
+                <i aria-hidden className="ion-ios-refresh" />
+              </Button>
+              {' '}
+              No exchange rates.
+            </code>
+          )}
+          {!isEmpty(exchangeRates) && exchangeData.map(({ from, to, amount }) => (
             <p key={`exchange-data-${from}-${to}`}>
               <MoneyValue bold currency={from} amount={amount} />
               {' = '}
