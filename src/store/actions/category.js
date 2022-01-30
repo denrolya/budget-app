@@ -37,7 +37,7 @@ export const fetchList = () => (dispatch) => {
     .get('api/categories')
     .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'id', 'asc'))))
     .catch(({ message }) => {
-      notify('error', '[Error]: Fetch Category List');
+      notify('error', 'Fetch Category List');
       dispatch(Creators.fetchListFailure(message));
     });
 };
@@ -57,7 +57,7 @@ export const setParent = (category, parentCategory) => (dispatch) => {
       notify('info', message);
     })
     .catch(({ message }) => {
-      notify('error', '[Error]: Category Set Parent');
+      notify('error', 'Category Set Parent');
       dispatch(Creators.setParentFailure(message));
     });
 };
@@ -72,7 +72,7 @@ export const create = (type, data) => (dispatch) => {
       notify('success', 'Category successfully created', 'New category');
     })
     .catch(({ message }) => {
-      notify('error', '[Error]: Category Create');
+      notify('error', 'Category Create');
       dispatch(Creators.createFailure(message));
     });
 };
@@ -87,7 +87,7 @@ export const edit = (id, type, data) => (dispatch) => {
       notify('success', 'Category was successfully updated.', 'Edited successfully');
     })
     .catch(({ message }) => {
-      notify('error', '[Error]: Category Edit');
+      notify('error', 'Category Edit');
       dispatch(Creators.editFailure(message));
     });
 };
@@ -106,7 +106,7 @@ export const remove = (category) => (dispatch) => confirmCategoryRemoval(categor
       notify('warning', `Category '${category.name}' and it's transactions were removed`);
     })
     .catch(({ message }) => {
-      notify('error', '[Error]: Category Delete');
+      notify('error', 'Category Delete');
       dispatch(Creators.removeFailure(message));
     });
 });

@@ -4,7 +4,8 @@ import React from 'react';
 import { Badge } from 'reactstrap';
 import Swal from 'sweetalert2';
 
-import { MOMENT_VIEW_TIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
+import { CURRENCIES } from 'src/constants/currency';
+import { MOMENT_VIEW_TIME_FORMAT } from 'src/constants/datetime';
 
 /**
  * Shows cancellation confirmation alert
@@ -16,7 +17,7 @@ import { MOMENT_VIEW_TIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime
  */
 export const confirmTransactionCancellation = ({ account, amount, type }) => Swal.fire({
   title: 'Cancel Transaction',
-  text: `Are you sure you want to delete this ${type}?(${account.currency.symbol} ${amount})`,
+  text: `Are you sure you want to delete this ${type}?(${CURRENCIES[account.currency].symbol} ${amount})`,
   showCancelButton: true,
   confirmButtonText: 'Yes, cancel this transaction',
   cancelButtonText: 'No, keep it',
@@ -36,7 +37,7 @@ export const confirmTransactionCancellation = ({ account, amount, type }) => Swa
  */
 export const confirmTransactionDeletion = ({ account, amount, type }) => Swal.fire({
   title: 'Irrevocably DELETE',
-  text: `Are you sure you want to delete this ${type} FOREVER?(${account.currency.symbol} ${amount})`,
+  text: `Are you sure you want to delete this ${type} FOREVER?(${CURRENCIES[account.currency].symbol} ${amount})`,
   showCancelButton: true,
   confirmButtonText: 'DELETE',
   cancelButtonText: 'OMG, no',

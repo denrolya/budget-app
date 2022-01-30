@@ -1,8 +1,8 @@
-import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 import moment from 'moment-timezone';
 
-import Routing, { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/services/routing';
+import axios from 'src/services/http';
+import { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/services/routing';
 import { confirmTransactionCancellation, confirmTransactionDeletion } from 'src/services/transaction';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
@@ -57,45 +57,51 @@ export const initializeList = () => (dispatch, getState) => {
   );
 };
 
-export const fetchList = () => (dispatch, getState) => {
-  const {
-    perPage,
-    page,
-    filters: {
-      from, to, accounts, categories, withCanceled, onlyDrafts, types,
-    },
-  } = getState().transaction.pagination;
-
+export const fetchList = () => async (dispatch, getState) => {
   dispatch(Creators.fetchListRequest());
+  let response;
 
-  const params = {
-    type: types[0], // TODO: To be handled properly
-    perPage,
-    page,
-    'category.id': categories,
-    'account.id': accounts,
-    'executedAt[after]': from,
-    'executedAt[before]': to,
-    withDeleted: withCanceled ? 1 : 0,
-    isDraft: onlyDrafts ? 1 : 0,
-  };
+  try {
+    const {
+      perPage,
+      page,
+      filters: {
+        from,
+        to,
+        accounts,
+        categories,
+        withCanceled,
+        onlyDrafts,
+        types,
+      },
+    } = getState().transaction.pagination;
 
-  return axios
-    .get('api/transactions', { params })
-    .then(({ data }) => {
-      dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems'], 0));
-    })
-    .catch(({ message }) => {
-      notify('error', '[Error]: Fetch Transaction List');
-      dispatch(Creators.fetchListFailure(message));
-    });
+    const params = {
+      type: types[0], // TODO: To be handled properly
+      perPage,
+      page,
+      'category.id': categories,
+      'account.id': accounts,
+      'executedAt[after]': from,
+      'executedAt[before]': to,
+      withDeleted: withCanceled ? 1 : 0,
+      isDraft: onlyDrafts ? 1 : 0,
+    };
+
+    response = await axios.get('api/transactions', { params });
+  } catch (e) {
+    notify('error', 'Fetch Transaction List');
+    dispatch(Creators.fetchListFailure(e));
+  } finally {
+    dispatch(Creators.fetchListSuccess(response.data['hydra:member'], response.data['hydra:totalItems'], 0));
+  }
 };
 
-export const registerTransaction = (type, transaction) => (dispatch, getState) => {
+export const registerTransaction = (type, transaction) => async (dispatch, getState) => {
   dispatch(Creators.registerRequest());
 
-  return axios
-    .post(`api/transactions/${type}`, {
+  try {
+    await axios.post(`api/transactions/${type}`, {
       ...transaction,
       amount: String(transaction.amount),
       executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
@@ -104,35 +110,34 @@ export const registerTransaction = (type, transaction) => (dispatch, getState) =
         amount: String(c.amount),
         executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
       })),
-    })
-    .then(() => {
-      dispatch(Creators.registerSuccess());
-      notify('success', 'Transaction registered');
-
-      if (isOnDashboardPage()) {
-        dispatch(updateDashboard());
-      }
-
-      const { filters } = getState().transaction.pagination;
-
-      if (isOnTransactionsPage() && (filters.hasType(type) || filters.types.length === 0)) {
-        dispatch(fetchList());
-      }
-
-      dispatch(fetchAccounts());
-      dispatch(fetchDebts());
-    })
-    .catch((e) => {
-      notify('error', '[Error]: Register Transaction');
-      dispatch(Creators.registerFailure(e.message));
     });
+  } catch (e) {
+    notify('error', 'Register Transaction');
+    dispatch(Creators.registerFailure(e));
+  } finally {
+    dispatch(Creators.registerSuccess());
+    notify('success', 'Transaction registered');
+
+    if (isOnDashboardPage()) {
+      dispatch(updateDashboard());
+    }
+
+    const { filters } = getState().transaction.pagination;
+
+    if (isOnTransactionsPage() && (filters.hasType(type) || filters.types.length === 0)) {
+      dispatch(fetchList());
+    }
+
+    dispatch(fetchAccounts());
+    dispatch(fetchDebts());
+  }
 };
 
-export const editTransaction = (id, type, transaction) => (dispatch, getState) => {
+export const editTransaction = (id, type, transaction) => async (dispatch, getState) => {
   dispatch(Creators.editRequest());
 
-  return axios
-    .put(`api/transactions/${id}`, {
+  try {
+    await axios.put(`api/transactions/${id}`, {
       ...transaction,
       amount: String(transaction.amount),
       executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
@@ -141,69 +146,66 @@ export const editTransaction = (id, type, transaction) => (dispatch, getState) =
         amount: String(c.amount),
         executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
       })),
-    })
-    .then(() => {
-      dispatch(Creators.editSuccess());
-      notify('success', `Transaction ${id} edited successfully`);
-
-      const { filters } = getState().transaction.pagination;
-
-      if (isOnTransactionsPage() && (filters.hasType(type) || filters.types.length === 0)) {
-        dispatch(fetchList());
-      }
-
-      dispatch(fetchAccounts());
-      dispatch(fetchDebts());
-    })
-    .catch((e) => {
-      notify('error', '[Error]: Edit Transaction');
-      dispatch(Creators.editFailure(e.message));
     });
+  } catch (e) {
+    notify('error', 'Edit Transaction');
+    dispatch(Creators.editFailure(e));
+  } finally {
+    dispatch(Creators.editSuccess());
+    notify('success', `Transaction ${id} edited successfully`);
+
+    const { filters } = getState().transaction.pagination;
+
+    if (isOnTransactionsPage() && (filters.hasType(type) || filters.types.length === 0)) {
+      dispatch(fetchList());
+    }
+
+    dispatch(fetchAccounts());
+    dispatch(fetchDebts());
+  }
 };
 
 /**
  * TODO: Refactor; Simplify, remove conditions for canceled and not canceled transactions; split maybe in 2 functions
  */
-export const deleteTransaction = (transaction) => (dispatch, getState) => {
-  const confirmation = transaction.canceledAt
-    ? confirmTransactionDeletion(transaction)
-    : confirmTransactionCancellation(transaction);
-  return confirmation.then(({ value }) => {
-    if (!value) {
-      return;
+export const deleteTransaction = (transaction) => async (dispatch, getState) => {
+  const { isConfirmed } = transaction.canceledAt
+    ? await confirmTransactionDeletion(transaction)
+    : await confirmTransactionCancellation(transaction);
+
+  if (!isConfirmed) {
+    return;
+  }
+
+  dispatch(Creators.deleteRequest());
+
+  try {
+    await axios.delete(`api/transactions/${transaction.id}`);
+  } catch (e) {
+    notify('error', 'Delete Transaction');
+    dispatch(Creators.deleteFailure(e));
+  } finally {
+    dispatch(Creators.deleteSuccess(transaction.id));
+
+    notify(
+      'success',
+      `Transaction ${transaction.canceledAt ? 'deleted!' : 'canceled'}`,
+      transaction.canceledAt ? 'DELETED' : 'Canceled',
+    );
+
+    if (isOnDashboardPage()) {
+      dispatch(updateDashboard());
     }
 
-    dispatch(Creators.deleteRequest());
+    if (isOnTransactionsPage() && getState().transaction.pagination.filters.hasType(transaction.type)) {
+      dispatch(fetchList());
+    }
 
-    axios
-      .delete(Routing.generate('api_v1_transaction_delete', { id: transaction.id }))
-      .then(() => {
-        dispatch(Creators.deleteSuccess(transaction.id));
-
-        notify(
-          'success',
-          `Transaction ${transaction.canceledAt ? 'deleted!' : 'canceled'}`,
-          transaction.canceledAt ? 'DELETED' : 'Canceled',
-        );
-
-        if (isOnDashboardPage()) {
-          dispatch(updateDashboard());
-        }
-
-        if (isOnTransactionsPage() && getState().transaction.pagination.filters.hasType(transaction.type)) {
-          dispatch(fetchList());
-        }
-
-        if (!window.isMobile) {
-          dispatch(fetchAccounts());
-          dispatch(fetchDebts());
-        }
-      })
-      .catch(({ message }) => {
-        notify('error', '[Error]: Delete Transaction');
-        dispatch(Creators.deleteFailure(message));
-      });
-  });
+    if (!window.isMobile) {
+      dispatch(fetchAccounts());
+      dispatch(fetchDebts());
+    }
+  }
 };
 
 export const setPagination = (model) => (dispatch, getState) => {

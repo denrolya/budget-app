@@ -35,7 +35,7 @@ export const fetchList = () => async (dispatch) => {
     const { data } = await axios.get('api/accounts');
     dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], ['archivedAt', 'lastTransactionAt'], ['desc', 'desc'])));
   } catch (e) {
-    notify('error', '[Error]: Account Fetch List');
+    notify('error', 'Account Fetch List');
     dispatch(Creators.fetchListFailure(e.message));
   }
 };
@@ -52,7 +52,7 @@ export const createAccount = (data) => async (dispatch) => {
       dispatch(fetchList());
     }
   } catch (e) {
-    notify('error', '[Error]: Account Create');
+    notify('error', 'Account Create');
     dispatch(Creators.createFailure(e));
   }
 };
@@ -70,7 +70,7 @@ export const updateName = (account, newName) => async (dispatch) => {
     }));
     notify('success', 'New name saved!');
   } catch (e) {
-    notify('error', '[Error]: Account Edit');
+    notify('error', 'Account Edit');
     dispatch(Creators.editFailure(e));
   }
 };
@@ -88,7 +88,7 @@ export const updateColor = (account, newColor) => async (dispatch) => {
     }));
     notify('success', 'Color changed!');
   } catch (e) {
-    notify('error', '[Error]: Account Edit');
+    notify('error', 'Account Edit');
     dispatch(Creators.editFailure(e));
   }
 };
@@ -105,7 +105,7 @@ export const toggleArchived = (id, isArchived = false) => async (dispatch) => {
     notify('success', 'Account was archived/restored');
     dispatch(Creators.archiveSuccess());
   } catch (e) {
-    notify('error', '[Error]: Account Edit');
+    notify('error', 'Account Edit');
     dispatch(Creators.archiveFailure(e));
   }
 };

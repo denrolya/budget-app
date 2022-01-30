@@ -30,11 +30,6 @@ import UserProfile from 'src/containers/UserProfile';
 import { isDev } from 'src/services/common';
 import TestPage from 'src/containers/TestPage';
 
-import apiRoutes from 'src/fos_js_routes.json';
-import Routing from 'src/services/router';
-
-Routing.setRoutingData(apiRoutes);
-
 export const routes = [
   {
     path: ROUTE_DASHBOARD,
@@ -115,11 +110,7 @@ export const routes = [
   },
 ];
 
-export const getBrandText = (path) => {
-  const route = find(routes, (route) => isOnPath(route.path, path));
-
-  return route ? route.name : 'Budget';
-};
+export const getBrandText = (path) => find(routes, (route) => isOnPath(route.path, path))?.name || 'Budget';
 
 export const isOnPath = (pathname) => !!matchPath(history.location.pathname, pathname);
 
@@ -186,5 +177,3 @@ export const generateLinkToAccountTransactionsPage = (account) => generateLinkTo
  * @param {array=} categories
  */
 export const generateLinkToExpenses = (from, to, accounts = [], categories = []) => generateLinkToTransactionPage([EXPENSE_TYPE], from, to, accounts, categories);
-
-export default Routing;

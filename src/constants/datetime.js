@@ -1,12 +1,12 @@
 import moment from 'moment-timezone';
+
 import { generateYearRanges } from 'src/services/datetime';
 
 export const FIRST_AVAILABLE_YEAR = 2015;
 export const SERVER_TIMEZONE = 'UTC';
-export const SERVER_OFFSET = 180;
 export const MOMENT_DATE_FORMAT = 'DD-MM-YYYY';
 export const MOMENT_DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
-export const MOMENT_VIEW_DATE_FORMAT = 'ddd, Do MMM';
+export const MOMENT_VIEW_DATE_FORMAT = 'Do MMM, dddd';
 export const MOMENT_VIEW_DATE_WITH_YEAR_FORMAT = 'MMM, Do YYYY';
 export const MOMENT_VIEW_TIME_FORMAT = 'HH:mm';
 export const MOMENT_VIEW_DATETIME_FORMAT = `${MOMENT_VIEW_DATE_FORMAT} ${MOMENT_VIEW_TIME_FORMAT}`;

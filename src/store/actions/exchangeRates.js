@@ -21,7 +21,7 @@ export const fetch = () => async (dispatch) => {
     const { data } = await axios.get(`api/exchange-rates/${moment().format(MOMENT_DATE_FORMAT)}`);
     dispatch(Creators.fetchSuccess(data.rates));
   } catch (e) {
-    notify('error', '[Error]: Fetch Exchange Rates');
+    notify('error', 'Fetch Exchange Rates');
     dispatch(Creators.fetchFailure(e));
   }
 };

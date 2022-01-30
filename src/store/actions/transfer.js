@@ -1,9 +1,9 @@
-import axios from 'src/services/http';
 import { createActions } from 'reduxsauce';
 import Swal from 'sweetalert2';
 import moment from 'moment-timezone';
 
-import Routing, { getTransferListQueryParams, isOnDashboardPage, isOnTransfersPage } from 'src/services/routing';
+import axios from 'src/services/http';
+import { getTransferListQueryParams, isOnDashboardPage, isOnTransfersPage } from 'src/services/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
@@ -53,101 +53,102 @@ export const initializeList = () => (dispatch) => {
   );
 };
 
-export const fetchList = () => (dispatch, getState) => {
-  const {
-    page,
-    perPage,
-    filters: { from, to },
-  } = getState().transfer.pagination;
-
+export const fetchList = () => async (dispatch, getState) => {
   dispatch(Creators.fetchListRequest());
+  let response;
 
-  const params = {
-    perPage,
-    page,
-    'executedAt[after]': from,
-    'executedAt[before]': to,
-  };
-
-  return axios
-    .get('api/transfers', { params })
-    .then(({ data }) => {
-      dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems']));
-    })
-    .catch(({ message }) => {
-      notify('error', '[Error]: Fetch Transfer List');
-      dispatch(Creators.fetchListFailure(message));
-    });
+  try {
+    const {
+      page,
+      perPage,
+      filters: {
+        from,
+        to,
+      },
+    } = getState().transfer.pagination;
+    const params = {
+      perPage,
+      page,
+      'executedAt[after]': from,
+      'executedAt[before]': to,
+    };
+    response = await axios.get('api/transfers', { params });
+  } catch (e) {
+    notify('error', 'Fetch Transfer List');
+    dispatch(Creators.fetchListFailure(e));
+  } finally {
+    dispatch(Creators.fetchListSuccess(response.data['hydra:member'], response.data['hydra:totalItems']));
+  }
 };
 
-export const registerTransfer = (transfer) => (dispatch) => {
+export const registerTransfer = (transfer) => async (dispatch) => {
   dispatch(Creators.registerRequest());
 
-  return axios
-    .post('api/transfers', {
+  try {
+    await axios.post('api/transfers', {
       ...transfer,
       amount: String(transfer.amount),
       rate: String(transfer.rate),
       fee: String(transfer.fee),
       executedAt: moment(transfer.executedAt).tz(SERVER_TIMEZONE).format(),
-    })
-    .then(() => {
-      dispatch(Creators.registerSuccess());
-      notify('success', 'Transfer successfully registered', 'Transaction registered');
-
-      if (isOnDashboardPage()) {
-        dispatch(updateDashboard());
-      }
-
-      if (isOnTransfersPage()) {
-        dispatch(fetchList());
-      }
-
-      dispatch(fetchAccounts());
-      dispatch(fetchDebts());
-    })
-    .catch(({ message }) => {
-      notify('error', '[Error]: Register Transfer');
-      dispatch(Creators.registerFailure(message));
     });
+  } catch (e) {
+    notify('error', 'Register Transfer');
+    dispatch(Creators.registerFailure(e));
+  } finally {
+    dispatch(Creators.registerSuccess());
+    notify('success', 'Transfer successfully registered', 'Transaction registered');
+
+    if (isOnDashboardPage()) {
+      dispatch(updateDashboard());
+    }
+
+    if (isOnTransfersPage()) {
+      dispatch(fetchList());
+    }
+
+    dispatch(fetchAccounts());
+    dispatch(fetchDebts());
+  }
 };
 
-export const deleteTransfer = ({ id }) => (dispatch) => Swal.fire({
-  title: 'Delete transfer',
-  text: `Are you sure you want to delete transfer #${id}?`,
-  showCancelButton: true,
-  confirmButtonText: 'Delete',
-  cancelButtonText: 'Cancel',
-  confirmButtonClass: 'btn btn-danger',
-  cancelButtonClass: 'btn btn-success',
-  reverseButtons: true,
-  buttonsStyling: false,
-}).then(({ value }) => {
-  if (!value) {
-    return {};
+export const deleteTransfer = ({ id }) => async (dispatch) => {
+  const { isConfirmed } = await Swal.fire({
+    title: 'Delete transfer',
+    text: `Are you sure you want to delete transfer #${id}?`,
+    showCancelButton: true,
+    confirmButtonText: 'Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonClass: 'btn btn-danger',
+    cancelButtonClass: 'btn btn-success',
+    reverseButtons: true,
+    buttonsStyling: false,
+  });
+
+  if (!isConfirmed) {
+    return;
   }
 
   dispatch(Creators.deleteRequest());
 
-  return axios
-    .delete(`api/transfers/${id}`)
-    .then(() => {
-      dispatch(Creators.deleteSuccess(id));
-      notify('success', 'Transfer deleted!', 'Deleted');
+  try {
+    await axios.delete(`api/transfers/${id}`);
+  } catch (e) {
+    notify('error', 'Delete Transfer');
+    dispatch(Creators.deleteFailure(e));
+  } finally {
+    dispatch(Creators.deleteSuccess(id));
+    notify('success', 'Transfer deleted!', 'Deleted');
 
-      if (isOnDashboardPage()) {
-        dispatch(updateDashboard());
-      }
+    if (isOnDashboardPage()) {
+      dispatch(updateDashboard());
+    }
 
-      if (isOnTransfersPage()) {
-        dispatch(fetchList());
-      }
-    })
-    .catch(({ message }) => {
-      notify('error', '[Error]: Delete Transfer');
-      dispatch(Creators.deleteFailure(message));
-    });
-});
+    if (isOnTransfersPage()) {
+      dispatch(fetchList());
+    }
+  }
+};
 
 export const setPagination = (model) => (dispatch, getState) => {
   if (!getState().transfer.pagination.isEqual(model)) {

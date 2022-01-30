@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 
 import { ROUTE_DASHBOARD, ROUTE_DEBTS } from 'src/constants/routes';
 import axios from 'src/services/http';
-import Routing, { isOnPath } from 'src/services/routing';
+import { isOnPath } from 'src/services/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 
@@ -31,99 +31,101 @@ export const { Types, Creators } = createActions(
   { prefix: 'DEBT_' },
 );
 
-export const fetchList = () => (dispatch) => {
+export const fetchList = () => async (dispatch) => {
   dispatch(Creators.fetchListRequest());
+  let response;
 
-  return axios
-    .get('api/debts')
-    .then(({ data }) => {
-      dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'updatedAt', 'asc')));
-    })
-    .catch((e) => {
-      notify('error', '[Error]: Fetch Debt List');
-      dispatch(Creators.fetchListFailure(e.message));
-    });
+  try {
+    response = await axios.get('api/debts');
+  } catch (e) {
+    notify('error', 'Fetch Debt List');
+    dispatch(Creators.fetchListFailure(e));
+  } finally {
+    dispatch(Creators.fetchListSuccess(orderBy(response.data['hydra:member'], 'updatedAt', 'asc')));
+  }
 };
 
-export const createDebt = (debt) => (dispatch) => {
+export const createDebt = (debt) => async (dispatch) => {
   dispatch(Creators.createRequest());
+  let response;
 
-  return axios
-    .post('api/debts', {
+  try {
+    response = await axios.post('api/debts', {
       ...debt,
       balance: String(debt.balance),
       createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
       closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
-    })
-    .then(({ data }) => {
-      dispatch(Creators.createSuccess(data));
-
-      if (isOnPath(ROUTE_DEBTS)) {
-        dispatch(fetchList());
-      }
-
-      if (isOnPath(ROUTE_DASHBOARD)) {
-        dispatch(updateDashboard());
-      }
-    })
-    .catch((e) => {
-      notify('error', '[Error]: Create Debt');
-      dispatch(Creators.createFailure(e.message));
     });
+  } catch (e) {
+    notify('error', 'Create Debt');
+    dispatch(Creators.createFailure(e));
+  } finally {
+    dispatch(Creators.createSuccess(response.data));
+
+    if (isOnPath(ROUTE_DEBTS)) {
+      dispatch(fetchList());
+    }
+
+    if (isOnPath(ROUTE_DASHBOARD)) {
+      dispatch(updateDashboard());
+    }
+  }
 };
 
-export const editDebt = (id, debt) => (dispatch) => {
+export const editDebt = (id, debt) => async (dispatch) => {
   dispatch(Creators.editRequest());
+  let response;
 
-  return axios.put(`api/debts/${id}`, {
-    ...debt,
-    balance: String(debt.balance),
-    createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
-    closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
-  })
-    .then(({ data }) => {
-      dispatch(Creators.editSuccess(data));
-
-      if (isOnPath(ROUTE_DEBTS)) {
-        dispatch(fetchList());
-      }
-    })
-    .catch((e) => {
-      notify('error', '[Error]: Edit Debt');
-      dispatch(Creators.editFailure(e.message));
+  try {
+    response = await axios.put(`api/debts/${id}`, {
+      ...debt,
+      balance: String(debt.balance),
+      createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
+      closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
     });
+  } catch (e) {
+    notify('error', 'Edit Debt');
+    dispatch(Creators.editFailure(e));
+  } finally {
+    dispatch(Creators.editSuccess(response.data));
+
+    if (isOnPath(ROUTE_DEBTS)) {
+      dispatch(fetchList());
+    }
+  }
 };
 
 export const closeDebt = ({
   id, debtor, currency, balance,
-}) => (dispatch) => Swal.fire({
-  title: 'Close this debt',
-  text: `Are you sure you want to close ${debtor}'s debt?(${currency.symbol} ${balance})`,
-  showCancelButton: true,
-  confirmButtonText: 'Yes, close this debt!',
-  cancelButtonText: 'No, keep it',
-  confirmButtonClass: 'btn btn-danger',
-  cancelButtonClass: 'btn btn-success',
-  reverseButtons: false,
-  buttonsStyling: false,
-}).then(({ value }) => {
-  if (!value) {
-    return {};
+}) => async (dispatch) => {
+  const { isConfirmed } = await Swal.fire({
+    title: 'Close this debt',
+    text: `Are you sure you want to close ${debtor}'s debt?(${currency.symbol} ${balance})`,
+    showCancelButton: true,
+    confirmButtonText: 'Yes, close this debt!',
+    cancelButtonText: 'No, keep it',
+    confirmButtonClass: 'btn btn-danger',
+    cancelButtonClass: 'btn btn-success',
+    reverseButtons: false,
+    buttonsStyling: false,
+  });
+
+  if (!isConfirmed) {
+    return;
   }
   dispatch(Creators.deleteDebtRequest());
 
-  return axios
-    .delete(Routing.generate('api_v1_debt_delete', { id }))
-    .then(() => {
-      dispatch(Creators.deleteDebtSuccess({ id }));
-      notify('success', 'Debt successfully closed!', 'Closed');
+  try {
+    await axios.delete(`api/debts/${id}`);
+  } catch (e) {
+    notify('error', 'Close Debt');
+    dispatch(Creators.deleteDebtFailure(e));
+  } finally {
+    dispatch(Creators.deleteDebtSuccess({ id }));
+    notify('success', 'Debt successfully closed!', 'Closed');
 
-      if (isOnPath(ROUTE_DEBTS)) {
-        dispatch(fetchList());
-      }
-    })
-    .catch((e) => {
-      notify('error', '[Error]: Close Debt');
-      dispatch(Creators.deleteDebtFailure(e.message));
-    });
-});
+    if (isOnPath(ROUTE_DEBTS)) {
+      dispatch(fetchList());
+    }
+  }
+};
