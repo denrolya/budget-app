@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { Row, Col, CardBody } from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
+import CenteredMessage from 'src/components/messages/CenteredMessage';
 import { confirmAccountArchivation, confirmAccountNameChange, confirmAccountRestoration } from 'src/services/common';
 import {
   toggleArchived, fetchDetail, updateName, updateColor,
@@ -14,6 +15,7 @@ import AccountGeneralInfo from 'src/components/AccountGeneralInfo';
 import { formatDetails } from 'src/services/account';
 import AccountTransactionsDetails from 'src/components/AccountTransactionsDetails';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
+import { notify } from 'src/store/actions/global';
 
 const AccountDetails = ({
   exchangeRates, updateName, updateColor, toggleArchived,
@@ -21,13 +23,21 @@ const AccountDetails = ({
   const { id = null } = useParams();
   const { code } = useBaseCurrency();
   const [accountDetails, setAccountDetails] = useState();
-  const [isAccountDetailsLoading, setIsAccountDetailsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(null);
+
+  const hasData = isLoading === false && !!accountDetails;
 
   const fetchAccountDetails = async (id) => {
-    setIsAccountDetailsLoading(true);
-    const { data } = await fetchDetail(id);
-    setAccountDetails(formatDetails(data, code));
-    setIsAccountDetailsLoading(false);
+    setIsLoading(true);
+
+    try {
+      const { data } = await fetchDetail(id);
+      setIsLoading(false);
+      setAccountDetails(formatDetails(data, code));
+    } catch (e) {
+      setIsLoading(false);
+      notify('error', 'Error fetching account details');
+    }
   };
 
   useEffect(() => {
@@ -38,26 +48,35 @@ const AccountDetails = ({
     }
   }, [id]);
 
-  const onArchiveClick = (account) => confirmAccountArchivation(account).then(async ({ value }) => {
-    if (value) {
-      await toggleArchived(account.id, false);
-      await fetchAccountDetails(account.id);
+  const onArchiveClick = async (account) => {
+    const { isConfirmed } = await confirmAccountArchivation(account);
+    if (!isConfirmed) {
+      return;
     }
-  });
 
-  const onRestoreClick = (account) => confirmAccountRestoration(account).then(async ({ value }) => {
-    if (value) {
-      await toggleArchived(account.id, true);
-      await fetchAccountDetails(account.id);
-    }
-  });
+    await toggleArchived(account.id, false);
+    await fetchAccountDetails(account.id);
+  };
 
-  const onNameChange = (account, newName) => confirmAccountNameChange(account, newName).then(async ({ value }) => {
-    if (value) {
-      await updateName(account, newName);
-      await fetchAccountDetails(account.id);
+  const onRestoreClick = async (account) => {
+    const { isConfirmed } = await confirmAccountRestoration(account);
+    if (!isConfirmed) {
+      return;
     }
-  });
+
+    await toggleArchived(account.id, true);
+    await fetchAccountDetails(account.id);
+  };
+
+  const onNameChange = async (account, newName) => {
+    const { isConfirmed } = await confirmAccountNameChange(account, newName);
+    if (!isConfirmed) {
+      return;
+    }
+
+    await updateName(account, newName);
+    await fetchAccountDetails(account.id);
+  };
 
   const onColorChange = async (account, newColor) => {
     await updateColor(account, newColor);
@@ -77,9 +96,9 @@ const AccountDetails = ({
       <Row>
         <Col xs={12}>
           <h4 className="mb-2">Details</h4>
-          <LoadingCard isLoading={isAccountDetailsLoading}>
+          <LoadingCard isLoading={isLoading}>
             <CardBody>
-              {accountDetails && (
+              {hasData && (
                 <AccountGeneralInfo
                   data={accountDetails}
                   exchangeRates={exchangeRates}
@@ -89,13 +108,23 @@ const AccountDetails = ({
                   onRestore={onRestoreClick}
                 />
               )}
+              {!hasData && (
+                <CenteredMessage title="No data" message="No account data is available at the moment" />
+              )}
             </CardBody>
           </LoadingCard>
         </Col>
         <Col xs={12} md={8}>
           <h4 className="mb-2">Transactions</h4>
-          <LoadingCard isLoading={isAccountDetailsLoading}>
-            <CardBody>{accountDetails && <AccountTransactionsDetails account={accountDetails} />}</CardBody>
+          <LoadingCard isLoading={isLoading}>
+            <CardBody>
+              {hasData && (
+                <AccountTransactionsDetails account={accountDetails} />
+              )}
+              {!hasData && (
+                <CenteredMessage title="No data" message="No account data is available at the moment" />
+              )}
+            </CardBody>
           </LoadingCard>
         </Col>
       </Row>
