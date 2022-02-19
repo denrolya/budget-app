@@ -59,7 +59,6 @@ export const initializeList = () => (dispatch, getState) => {
 
 export const fetchList = () => async (dispatch, getState) => {
   dispatch(Creators.fetchListRequest());
-  let response;
 
   try {
     const {
@@ -88,12 +87,11 @@ export const fetchList = () => async (dispatch, getState) => {
       isDraft: onlyDrafts ? 1 : 0,
     };
 
-    response = await axios.get('api/transactions', { params });
+    const { data } = await axios.get('api/transactions', { params });
+    dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems'], 0));
   } catch (e) {
     notify('error', 'Fetch Transaction List');
     dispatch(Creators.fetchListFailure(e));
-  } finally {
-    dispatch(Creators.fetchListSuccess(response.data['hydra:member'], response.data['hydra:totalItems'], 0));
   }
 };
 
@@ -111,10 +109,7 @@ export const registerTransaction = (type, transaction) => async (dispatch, getSt
         executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
       })),
     });
-  } catch (e) {
-    notify('error', 'Register Transaction');
-    dispatch(Creators.registerFailure(e));
-  } finally {
+
     dispatch(Creators.registerSuccess());
     notify('success', 'Transaction registered');
 
@@ -130,6 +125,9 @@ export const registerTransaction = (type, transaction) => async (dispatch, getSt
 
     dispatch(fetchAccounts());
     dispatch(fetchDebts());
+  } catch (e) {
+    notify('error', 'Register Transaction');
+    dispatch(Creators.registerFailure(e));
   }
 };
 
@@ -147,10 +145,7 @@ export const editTransaction = (id, type, transaction) => async (dispatch, getSt
         executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
       })),
     });
-  } catch (e) {
-    notify('error', 'Edit Transaction');
-    dispatch(Creators.editFailure(e));
-  } finally {
+
     dispatch(Creators.editSuccess());
     notify('success', `Transaction ${id} edited successfully`);
 
@@ -162,6 +157,9 @@ export const editTransaction = (id, type, transaction) => async (dispatch, getSt
 
     dispatch(fetchAccounts());
     dispatch(fetchDebts());
+  } catch (e) {
+    notify('error', 'Edit Transaction');
+    dispatch(Creators.editFailure(e));
   }
 };
 
@@ -181,10 +179,7 @@ export const deleteTransaction = (transaction) => async (dispatch, getState) => 
 
   try {
     await axios.delete(`api/transactions/${transaction.id}`);
-  } catch (e) {
-    notify('error', 'Delete Transaction');
-    dispatch(Creators.deleteFailure(e));
-  } finally {
+
     dispatch(Creators.deleteSuccess(transaction.id));
 
     notify(
@@ -205,6 +200,9 @@ export const deleteTransaction = (transaction) => async (dispatch, getState) => 
       dispatch(fetchAccounts());
       dispatch(fetchDebts());
     }
+  } catch (e) {
+    notify('error', 'Delete Transaction');
+    dispatch(Creators.deleteFailure(e));
   }
 };
 

@@ -3,11 +3,17 @@ import Swal from 'sweetalert2';
 import moment from 'moment-timezone';
 
 import axios from 'src/services/http';
-import { getTransferListQueryParams, isOnDashboardPage, isOnTransfersPage } from 'src/services/routing';
+import {
+  getTransferListQueryParams,
+  isOnDashboardPage,
+  isOnTransactionsPage,
+  isOnTransfersPage,
+} from 'src/services/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import { fetchList as fetchDebts } from 'src/store/actions/debt';
+import { fetchList as fetchTransactionList } from 'src/store/actions/transaction';
 import Pagination from 'src/models/Pagination';
 import TransferFilters from 'src/models/TransferFilters';
 import { ROUTE_TRANSFERS } from 'src/constants/routes';
@@ -55,7 +61,6 @@ export const initializeList = () => (dispatch) => {
 
 export const fetchList = () => async (dispatch, getState) => {
   dispatch(Creators.fetchListRequest());
-  let response;
 
   try {
     const {
@@ -72,12 +77,11 @@ export const fetchList = () => async (dispatch, getState) => {
       'executedAt[after]': from,
       'executedAt[before]': to,
     };
-    response = await axios.get('api/transfers', { params });
+    const { data } = await axios.get('api/transfers', { params });
+    dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems']));
   } catch (e) {
     notify('error', 'Fetch Transfer List');
     dispatch(Creators.fetchListFailure(e));
-  } finally {
-    dispatch(Creators.fetchListSuccess(response.data['hydra:member'], response.data['hydra:totalItems']));
   }
 };
 
@@ -89,13 +93,10 @@ export const registerTransfer = (transfer) => async (dispatch) => {
       ...transfer,
       amount: String(transfer.amount),
       rate: String(transfer.rate),
-      fee: String(transfer.fee),
+      feeAccount: transfer.feeAccount ? transfer.feeAccount : undefined,
+      fee: transfer.fee ? String(transfer.fee) : undefined,
       executedAt: moment(transfer.executedAt).tz(SERVER_TIMEZONE).format(),
     });
-  } catch (e) {
-    notify('error', 'Register Transfer');
-    dispatch(Creators.registerFailure(e));
-  } finally {
     dispatch(Creators.registerSuccess());
     notify('success', 'Transfer successfully registered', 'Transaction registered');
 
@@ -107,8 +108,15 @@ export const registerTransfer = (transfer) => async (dispatch) => {
       dispatch(fetchList());
     }
 
+    if (isOnTransactionsPage()) {
+      dispatch(fetchTransactionList());
+    }
+
     dispatch(fetchAccounts());
     dispatch(fetchDebts());
+  } catch (e) {
+    notify('error', 'Register Transfer');
+    dispatch(Creators.registerFailure(e));
   }
 };
 
@@ -133,10 +141,6 @@ export const deleteTransfer = ({ id }) => async (dispatch) => {
 
   try {
     await axios.delete(`api/transfers/${id}`);
-  } catch (e) {
-    notify('error', 'Delete Transfer');
-    dispatch(Creators.deleteFailure(e));
-  } finally {
     dispatch(Creators.deleteSuccess(id));
     notify('success', 'Transfer deleted!', 'Deleted');
 
@@ -147,6 +151,9 @@ export const deleteTransfer = ({ id }) => async (dispatch) => {
     if (isOnTransfersPage()) {
       dispatch(fetchList());
     }
+  } catch (e) {
+    notify('error', 'Delete Transfer');
+    dispatch(Creators.deleteFailure(e));
   }
 };
 

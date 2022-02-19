@@ -33,34 +33,27 @@ export const { Types, Creators } = createActions(
 
 export const fetchList = () => async (dispatch) => {
   dispatch(Creators.fetchListRequest());
-  let response;
 
   try {
-    response = await axios.get('api/debts');
+    const { data } = await axios.get('api/debts');
+    dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'updatedAt', 'asc')));
   } catch (e) {
     notify('error', 'Fetch Debt List');
     dispatch(Creators.fetchListFailure(e));
-  } finally {
-    dispatch(Creators.fetchListSuccess(orderBy(response.data['hydra:member'], 'updatedAt', 'asc')));
   }
 };
 
 export const createDebt = (debt) => async (dispatch) => {
   dispatch(Creators.createRequest());
-  let response;
 
   try {
-    response = await axios.post('api/debts', {
+    const { data } = await axios.post('api/debts', {
       ...debt,
       balance: String(debt.balance),
       createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
       closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
     });
-  } catch (e) {
-    notify('error', 'Create Debt');
-    dispatch(Creators.createFailure(e));
-  } finally {
-    dispatch(Creators.createSuccess(response.data));
+    dispatch(Creators.createSuccess(data));
 
     if (isOnPath(ROUTE_DEBTS)) {
       dispatch(fetchList());
@@ -69,29 +62,31 @@ export const createDebt = (debt) => async (dispatch) => {
     if (isOnPath(ROUTE_DASHBOARD)) {
       dispatch(updateDashboard());
     }
+  } catch (e) {
+    notify('error', 'Create Debt');
+    dispatch(Creators.createFailure(e));
   }
 };
 
 export const editDebt = (id, debt) => async (dispatch) => {
   dispatch(Creators.editRequest());
-  let response;
 
   try {
-    response = await axios.put(`api/debts/${id}`, {
+    const { data } = await axios.put(`api/debts/${id}`, {
       ...debt,
       balance: String(debt.balance),
       createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
       closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
     });
-  } catch (e) {
-    notify('error', 'Edit Debt');
-    dispatch(Creators.editFailure(e));
-  } finally {
-    dispatch(Creators.editSuccess(response.data));
+
+    dispatch(Creators.editSuccess(data));
 
     if (isOnPath(ROUTE_DEBTS)) {
       dispatch(fetchList());
     }
+  } catch (e) {
+    notify('error', 'Edit Debt');
+    dispatch(Creators.editFailure(e));
   }
 };
 
@@ -117,15 +112,15 @@ export const closeDebt = ({
 
   try {
     await axios.delete(`api/debts/${id}`);
-  } catch (e) {
-    notify('error', 'Close Debt');
-    dispatch(Creators.deleteDebtFailure(e));
-  } finally {
+
     dispatch(Creators.deleteDebtSuccess({ id }));
     notify('success', 'Debt successfully closed!', 'Closed');
 
     if (isOnPath(ROUTE_DEBTS)) {
       dispatch(fetchList());
     }
+  } catch (e) {
+    notify('error', 'Close Debt');
+    dispatch(Creators.deleteDebtFailure(e));
   }
 };
