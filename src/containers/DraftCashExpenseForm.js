@@ -21,7 +21,12 @@ import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const DraftCashExpenseForm = ({
-  isSaving, isOpen, onSubmit, toggleModal, accountOptions,
+  isSaving,
+  isOpen,
+  onSubmit,
+  toggleModal,
+  accountOptions,
+  categoryUnknown,
 }) => {
   const { code } = useBaseCurrency();
   const [form, setForm] = useState({
@@ -29,7 +34,7 @@ const DraftCashExpenseForm = ({
       type: EXPENSE_TYPE,
       amount: '',
       account: '',
-      category: 'Unknown',
+      category: categoryUnknown || '',
       executedAt: moment().format(MOMENT_DATETIME_FORMAT),
       note: '',
       compensations: [],
@@ -168,6 +173,7 @@ DraftCashExpenseForm.defaultProps = {
 };
 
 DraftCashExpenseForm.propTypes = {
+  categoryUnknown: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
@@ -175,10 +181,11 @@ DraftCashExpenseForm.propTypes = {
   accountOptions: PropTypes.array,
 };
 
-const mapStateToProps = ({ ui, account }) => ({
+const mapStateToProps = ({ ui, account, category }) => ({
   isOpen: ui.isDraftExpenseModalOpened,
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER),
   accountOptions: account.filter(({ archivedAt }) => !archivedAt),
+  categoryOptions: category.list.find(({ name, type }) => type === EXPENSE_TYPE && name === 'Unknown')?.id,
 });
 
 export default connect(mapStateToProps, {
