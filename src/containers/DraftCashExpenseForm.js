@@ -185,7 +185,7 @@ const mapStateToProps = ({ ui, account, category }) => ({
   isOpen: ui.isDraftExpenseModalOpened,
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER),
   accountOptions: account.filter(({ archivedAt }) => !archivedAt),
-  categoryOptions: category.list.find(({ name, type }) => type === EXPENSE_TYPE && name === 'Unknown')?.id,
+  categoryUnknown: category.list.find(({ name, type }) => type === EXPENSE_TYPE && name === 'Unknown')?.id,
 });
 
 export default connect(mapStateToProps, {
