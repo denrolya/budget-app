@@ -18,7 +18,10 @@ import {
   COMPENSATION_TRANSACTION_CATEGORY_NAME,
   DEBT_TRANSACTION_CATEGORY_NAME,
   EXPENSE_TYPE,
-  INCOME_TYPE, INITIAL_FORM_DATA, TRANSACTION_TYPES, VALIDATION_SCHEMA,
+  INCOME_TYPE,
+  INITIAL_FORM_DATA,
+  TRANSACTION_TYPES,
+  VALIDATION_SCHEMA,
 } from 'src/constants/transactions';
 import { isActionLoading } from 'src/services/common';
 
@@ -38,27 +41,33 @@ const TransactionForm = ({
     validationSchema: VALIDATION_SCHEMA,
   });
 
-  useEffect(() => {
-    let { category } = model;
+  const formatCategory = (category) => {
+    let result;
     if (category?.id) {
-      category = category.id;
-    } else if (typeof model.category === 'string' || model.category instanceof String) {
-      category = categoryOptions.find(({ name, type }) => type === model.type && name === model.category)?.id || '';
+      result = category.id;
+    } else if (typeof category === 'string' || category instanceof String) {
+      result = categoryOptions.find(({ name, type }) => type === model.type && name === category)?.id || '';
     } else {
-      category = INITIAL_FORM_DATA.category;
+      result = INITIAL_FORM_DATA.category;
     }
 
+    return result;
+  };
+
+  useEffect(() => {
     setForm({
       ...form,
       initialValues: {
         ...INITIAL_FORM_DATA,
         ...model,
-        category,
+        category: formatCategory(model.category),
         account: model.account?.id ? model.account.id : model.account,
         executedAt: moment(model.executedAt).format(MOMENT_DATETIME_FORMAT),
         compensations: model?.compensations?.map((c) => ({
           ...c,
           executedAt: moment(c.executedAt).format(MOMENT_DATETIME_FORMAT),
+          category: formatCategory(c.category),
+          account: c.account?.id ? c.account.id : c.account,
         })),
       },
     });
@@ -84,10 +93,13 @@ const TransactionForm = ({
         validationSchema={form.validationSchema}
         onSubmit={handleSubmit}
       >
-        {(model) => {
-          const {
-            values, touched, errors, handleBlur, setFieldValue,
-          } = model;
+        {({
+          values,
+          touched,
+          errors,
+          handleBlur,
+          setFieldValue,
+        }) => {
           const {
             type, category, amount, account, note, executedAt, compensations, isDraft,
           } = values;
@@ -103,9 +115,10 @@ const TransactionForm = ({
             executedAt,
             account: '',
             amount: 0,
-            category: categoryOptions.find(({ name, type }) => type === INCOME_TYPE && category === DEBT_TRANSACTION_CATEGORY_NAME
-              ? name === DEBT_TRANSACTION_CATEGORY_NAME
-              : name === COMPENSATION_TRANSACTION_CATEGORY_NAME)?.id,
+            category: categoryOptions
+              .find(({ name, type }) => type === INCOME_TYPE && category === DEBT_TRANSACTION_CATEGORY_NAME
+                ? name === DEBT_TRANSACTION_CATEGORY_NAME
+                : name === COMPENSATION_TRANSACTION_CATEGORY_NAME)?.id,
             type: INCOME_TYPE,
             note: note ? `[Compensation]: ${note}` : '',
           });
