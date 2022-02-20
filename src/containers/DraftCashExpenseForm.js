@@ -34,7 +34,7 @@ const DraftCashExpenseForm = ({
       type: EXPENSE_TYPE,
       amount: '',
       account: '',
-      category: categoryUnknown || '',
+      category: '',
       executedAt: moment().format(MOMENT_DATETIME_FORMAT),
       note: '',
       compensations: [],
@@ -48,10 +48,11 @@ const DraftCashExpenseForm = ({
       ...form,
       initialValues: {
         ...form.initialValues,
+        category: categoryUnknown || '',
         account: find(accountOptions, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code)?.id,
       },
     });
-  }, []);
+  }, [categoryUnknown]);
 
   useEffect(() => {
     setForm({
@@ -82,87 +83,85 @@ const DraftCashExpenseForm = ({
         validationSchema={form.validationSchema}
         onSubmit={handleSubmit}
       >
-        {(model) => {
-          const {
-            values, touched, errors, setFieldValue,
-          } = model;
-          const { amount, account, note } = values;
+        {({
+          values: { amount, account, note },
+          touched,
+          errors,
+          setFieldValue,
+        }) => (
+          <Form role="form">
+            {form.initialValues.isDraft && <h3 className="text-warning">Draft</h3>}
 
-          return (
-            <Form role="form">
-              {form.initialValues.isDraft && <h3 className="text-warning">Draft</h3>}
+            <FormGroup row className="mb-md-0">
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="amount">Amount*</Label>
+                  <Field
+                    autoFocus
+                    id="amount"
+                    name="amount"
+                    type="number"
+                    step="any"
+                    placeholder="Enter the amount"
+                    as={Input}
+                    min={0}
+                    invalid={touched.amount && !!errors.amount}
+                    value={amount}
+                  />
+                  <ErrorMessage component="div" name="amount" className="invalid-feedback" />
+                </FormGroup>
+              </Col>
 
-              <FormGroup row className="mb-md-0">
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="amount">Amount*</Label>
-                    <Field
-                      autoFocus
-                      id="amount"
-                      name="amount"
-                      type="number"
-                      step="any"
-                      placeholder="Enter the amount"
-                      as={Input}
-                      min={0}
-                      invalid={touched.amount && !!errors.amount}
-                      value={amount}
-                    />
-                    <ErrorMessage component="div" name="amount" className="invalid-feedback" />
-                  </FormGroup>
-                </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="accountSelect">
+                    Account*
+                  </Label>
+                  <Input
+                    type="select"
+                    name="account"
+                    id="accountSelect"
+                    value={account}
+                    onChange={({ target }) => setFieldValue('account', target.value)}
+                  >
+                    <option value="">----------------</option>
+                    {accountOptions.map(({ id, name, archivedAt }) => (
+                      <option key={`account-option-${id}`} value={id}>
+                        {name}
+                        {' '}
+                        {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
+                      </option>
+                    ))}
+                  </Input>
+                  <ErrorMessage component="div" name="account" className="invalid-feedback" />
+                </FormGroup>
+              </Col>
+            </FormGroup>
 
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="accountSelect">
-                      Account*
-                    </Label>
-                    <Input
-                      type="select"
-                      name="account"
-                      id="accountSelect"
-                      value={account}
-                      onChange={({ target }) => setFieldValue('account', target.value)}
-                    >
-                      <option value="">----------------</option>
-                      {accountOptions.map(({ id, name, archivedAt }) => (
-                        <option key={`account-option-${id}`} value={id}>
-                          {name}
-                          {' '}
-                          {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
-                        </option>
-                      ))}
-                    </Input>
-                    <ErrorMessage component="div" name="account" className="invalid-feedback" />
-                  </FormGroup>
-                </Col>
-              </FormGroup>
-
-              <FormGroup>
-                <Label for="note">Note</Label>
-                <Field
-                  type="textarea"
-                  name="note"
-                  id="note"
-                  className="form-control-alternative"
-                  as={Input}
-                  invalid={touched.note && !!errors.note}
-                  value={note}
-                />
-                <ErrorMessage component="div" name="note" className="invalid-feedback" />
-              </FormGroup>
-
-              <LoadingButton
-                block
-                type="submit"
-                color="primary"
-                label="Submit"
-                className="mr-1"
-                isLoading={isSaving}
+            <FormGroup>
+              <Label for="note">Note</Label>
+              <Field
+                type="textarea"
+                name="note"
+                id="note"
+                className="form-control-alternative"
+                as={Input}
+                invalid={touched.note && !!errors.note}
+                value={note}
               />
-            </Form>
-          );
-        }}
+              <ErrorMessage component="div" name="note" className="invalid-feedback" />
+            </FormGroup>
+
+            <LoadingButton
+              block
+              type="submit"
+              color="primary"
+              label="Submit"
+              className="mr-1"
+              isLoading={isSaving}
+            />
+          </Form>
+        )}
       </Formik>
     </ModalForm>
   );
@@ -185,7 +184,7 @@ const mapStateToProps = ({ ui, account, category }) => ({
   isOpen: ui.isDraftExpenseModalOpened,
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER),
   accountOptions: account.filter(({ archivedAt }) => !archivedAt),
-  categoryUnknown: category.list.find(({ name, type }) => type === EXPENSE_TYPE && name === 'Unknown')?.id,
+  categoryUnknown: find(category.list, ({ name, type }) => type === EXPENSE_TYPE && name === 'Unknown')?.id,
 });
 
 export default connect(mapStateToProps, {
