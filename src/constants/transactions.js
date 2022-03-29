@@ -23,7 +23,7 @@ export const INITIAL_FORM_DATA = {
 export const VALIDATION_SCHEMA = Yup.object({
   type: Yup.string().oneOf([EXPENSE_TYPE, INCOME_TYPE]).required('Required field'),
   account: Yup.number().required('Required field'),
-  amount: Yup.number().min(1, 'Invalid amount entered').required('Required field'),
+  amount: Yup.number().min(0, 'Invalid amount entered').required('Required field'),
   category: Yup.string().required('Required field'),
   executedAt: Yup.string().required('Required field'),
   note: Yup.string(),

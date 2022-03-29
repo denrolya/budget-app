@@ -7,11 +7,17 @@ import { CURRENCIES } from 'src/constants/currency';
 import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 import Layout from 'src/containers/Layout';
 import {
-  ROUTE_ACCOUNTS, ROUTE_CATEGORIES, ROUTE_CURRENCY_CONVERTER,
+  ROUTE_ACCOUNTS,
+  ROUTE_CATEGORIES,
+  ROUTE_CURRENCY_CONVERTER,
   ROUTE_DASHBOARD,
   ROUTE_DEBTS,
-  ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REPORT, ROUTE_TEST_PAGE,
-  ROUTE_TRANSACTIONS, ROUTE_TRANSACTIONS_CALENDAR,
+  ROUTE_LOGIN,
+  ROUTE_PROFILE,
+  ROUTE_REPORT,
+  ROUTE_TEST_PAGE,
+  ROUTE_TRANSACTIONS,
+  ROUTE_TRANSACTIONS_CALENDAR,
   ROUTE_TRANSFERS,
 } from 'src/constants/routes';
 import Login from 'src/containers/Login';
