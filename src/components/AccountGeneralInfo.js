@@ -101,7 +101,7 @@ const AccountGeneralInfo = ({
               })}
             >
               <span className="h2">
-                <MoneyValue currency={currency} amount={balance} />
+                <MoneyValue currency={currency} amount={balance} maximumFractionDigits={currency === 'BTC' ? 10 : 2} />
               </span>
             </p>
           </Col>

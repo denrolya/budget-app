@@ -15,16 +15,16 @@ export const MOMENT_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const ANNUAL_REPORT_RANGES = generateYearRanges(FIRST_AVAILABLE_YEAR);
 
 export const DATERANGE_PICKER_RANGES = {
-  Yesterday: [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
-  Today: [moment(), moment()],
-  'Last Week': [moment().startOf('isoWeek').subtract(1, 'week'), moment().endOf('isoWeek').subtract(1, 'week')],
-  'This Week': [moment().startOf('isoWeek'), moment().endOf('isoWeek')],
-  'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-  'This Month': [moment().startOf('month'), moment().endOf('month')],
-  'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-  'This Year': [moment().startOf('year'), moment().endOf('year')],
-  Winter: [moment().month('December').subtract(1, 'year').startOf('month'), moment().month('February').endOf('month')],
-  Spring: [moment().month('March').startOf('month'), moment().month('May').endOf('month')],
-  Summer: [moment().month('June').startOf('month'), moment().month('August').endOf('month')],
-  Autumn: [moment().month('September').startOf('month'), moment().month('November').endOf('month')],
+  Yesterday: [moment().subtract(1, 'day'), moment().subtract(1, 'day').add(1, 'day')],
+  Today: [moment(), moment().add(1, 'day')],
+  'Last Week': [moment().startOf('isoWeek').subtract(1, 'week'), moment().endOf('isoWeek').subtract(1, 'week').add(1, 'day')],
+  'This Week': [moment().startOf('isoWeek'), moment().endOf('isoWeek').add(1, 'day')],
+  'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'day')],
+  'This Month': [moment().startOf('month'), moment().endOf('month').add(1, 'day')],
+  'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year').add(1, 'day')],
+  'This Year': [moment().startOf('year'), moment().endOf('year').add(1, 'day')],
+  Winter: [moment().month('December').subtract(1, 'year').startOf('month'), moment().month('February').endOf('month').add(1, 'day')],
+  Spring: [moment().month('March').startOf('month'), moment().month('May').endOf('month').add(1, 'day')],
+  Summer: [moment().month('June').startOf('month'), moment().month('August').endOf('month').add(1, 'day')],
+  Autumn: [moment().month('September').startOf('month'), moment().month('November').endOf('month').add(1, 'day')],
 };
