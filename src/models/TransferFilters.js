@@ -3,14 +3,12 @@ import isEqual from 'lodash/isEqual';
 import has from 'lodash/has';
 import sortBy from 'lodash/sortBy';
 import isNil from 'lodash/isNil';
-import moment, { isMoment } from 'moment-timezone';
+import moment from 'moment-timezone';
 import { stringify } from 'query-string';
 
-import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-
 export const DEFAULT_VALUES = {
-  from: moment().startOf('month').format(MOMENT_DATE_FORMAT),
-  to: moment().endOf('month').format(MOMENT_DATE_FORMAT),
+  from: moment().startOf('month'),
+  to: moment().endOf('month'),
   accounts: [],
   withCanceled: false,
 };
@@ -70,7 +68,7 @@ class TransferFilters extends Record(DEFAULT_VALUES) {
     switch (name) {
       case 'from':
       case 'to':
-        return isMoment(value) ? value.format(MOMENT_DATE_FORMAT) : value;
+        return value;
       case 'accounts':
         return value.map((el) => (has(el, 'name') ? el.name : el));
       default:

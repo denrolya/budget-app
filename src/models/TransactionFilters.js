@@ -12,8 +12,8 @@ import { TRANSACTION_TYPES } from 'src/constants/transactions';
 
 export const DEFAULT_VALUES = {
   types: [],
-  from: moment().startOf('month').format(MOMENT_DATE_FORMAT),
-  to: moment().endOf('month').format(MOMENT_DATE_FORMAT),
+  from: moment().startOf('month'),
+  to: moment().endOf('month'),
   accounts: [],
   categories: [],
   withCanceled: false,
@@ -112,7 +112,7 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
         return !isEqual(value, TRANSACTION_TYPES) ? value : DEFAULT_VALUES.types;
       case 'from':
       case 'to':
-        return isMoment(value) ? value.format(MOMENT_DATE_FORMAT) : value;
+        return !isMoment(value) ? moment(value) : value;
       case 'accounts':
       case 'categories':
         return uniq(value.map((el) => el?.id ? parseInt(el.id, 10) : el));
@@ -125,7 +125,9 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
     const queryParams = {};
 
     Object.keys(DEFAULT_VALUES).forEach((name) => {
-      if (!this.isDefault(name)) {
+      if (['from', 'to'].includes(name) && !this.isDefault(name)) {
+        queryParams[name] = this.get(name).format(MOMENT_DATE_FORMAT);
+      } else if (!this.isDefault(name)) {
         queryParams[name] = this.get(name);
       }
     });
@@ -134,9 +136,13 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
   }
 
   isDefault(name) {
-    return Array.isArray(this.get(name))
-      ? isEqual(sortBy(this.get(name)), sortBy(DEFAULT_VALUES[name]))
-      : isEqual(this.get(name), DEFAULT_VALUES[name]);
+    if (Array.isArray(this.get(name))) {
+      return isEqual(sortBy(this.get(name)), sortBy(DEFAULT_VALUES[name]));
+    } if (isMoment(this.get(name))) {
+      return this.get(name).isSame(DEFAULT_VALUES[name]);
+    }
+
+    return isEqual(this.get(name), DEFAULT_VALUES[name]);
   }
 }
 

@@ -4,7 +4,7 @@ import capitalize from 'voca/capitalize';
 
 import axios from 'src/services/http';
 import { notify } from 'src/store/actions/global';
-import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
 import { AVAILABLE_STATISTICS } from 'src/constants/dashboard';
 
@@ -30,8 +30,8 @@ export const fetchStatistics = ({
 }) => async (dispatch, getState) => {
   const state = getState().dashboard[name];
   let params = {
-    'executedAt[after]': state.from.format(MOMENT_DATE_FORMAT),
-    'executedAt[before]': state.to.format(MOMENT_DATE_FORMAT),
+    'executedAt[after]': state.from.format(MOMENT_DATETIME_FORMAT),
+    'executedAt[before]': state.to.format(MOMENT_DATETIME_FORMAT),
     interval: state.interval,
   };
 
@@ -59,8 +59,8 @@ export const fetchStatistics = ({
       const getPreviousPeriodDataRequest = axios.get(path, {
         params: {
           ...params,
-          'executedAt[after]': previousPeriod.from,
-          'executedAt[before]': previousPeriod.to,
+          'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
+          'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
         },
       });
 
@@ -109,8 +109,8 @@ const customHandlers = {
     const getPreviousPeriodDataRequest = axios.get(path, {
       params: {
         ...params,
-        'executedAt[after]': previousPeriod.from,
-        'executedAt[before]': previousPeriod.to,
+        'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
+        'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
       },
     });
 

@@ -1,6 +1,7 @@
 import find from 'lodash/find';
 import { parse, stringify } from 'query-string';
 import { matchPath } from 'react-router-dom';
+import moment from 'moment-timezone';
 
 import history from 'src/services/history';
 import {
@@ -132,8 +133,8 @@ export const getTransactionListQueryParams = (queryString) => ({
   perPage: getQueryParam(queryString, 'perPage', parseInt),
   page: getQueryParam(queryString, 'page', parseInt),
   types: getQueryParam(queryString, 'types', (v) => (Array.isArray(v) ? v : [v])),
-  from: getQueryParam(queryString, 'from'),
-  to: getQueryParam(queryString, 'to'),
+  from: getQueryParam(queryString, 'from', (v) => moment(v)),
+  to: getQueryParam(queryString, 'to', (v) => moment(v)),
   accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
   categories: getQueryParam(queryString, 'categories', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
   withCanceled: getQueryParam(queryString, 'withCanceled', (v) => v === 'true'),
@@ -141,8 +142,8 @@ export const getTransactionListQueryParams = (queryString) => ({
 });
 
 export const getTransferListQueryParams = (queryString) => ({
-  from: getQueryParam(queryString, 'from'),
-  to: getQueryParam(queryString, 'to'),
+  from: getQueryParam(queryString, 'from', (v) => moment(v)),
+  to: getQueryParam(queryString, 'to', (v) => moment(v)),
   perPage: getQueryParam(queryString, 'perPage', parseInt),
   page: getQueryParam(queryString, 'page', parseInt),
   accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? v : [v])),

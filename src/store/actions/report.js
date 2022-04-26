@@ -3,7 +3,7 @@ import camelCase from 'voca/camel_case';
 import capitalize from 'voca/capitalize';
 import { createActions } from 'reduxsauce';
 
-import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
 
 export const AVAILABLE_STATISTICS = [
@@ -47,8 +47,8 @@ export const setStatistics = (name, newModel) => (dispatch) => {
 export const fetchStatistics = (name) => (dispatch, getState) => {
   const state = getState().report[name];
   const params = {
-    'executedAt[after]': state.from.format(MOMENT_DATE_FORMAT),
-    'executedAt[before]': state.to.format(MOMENT_DATE_FORMAT),
+    'executedAt[after]': state.from.format(MOMENT_DATETIME_FORMAT),
+    'executedAt[before]': state.to.format(MOMENT_DATETIME_FORMAT),
     interval: state.interval,
   };
 
@@ -78,8 +78,8 @@ const customHandlers = {
     const getPreviousPeriodDataRequest = axios.get(path, {
       params: {
         ...params,
-        'executedAt[after]': previousPeriod.from,
-        'executedAt[before]': previousPeriod.to,
+        'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
+        'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
       },
     });
 

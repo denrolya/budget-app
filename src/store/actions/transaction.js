@@ -12,7 +12,7 @@ import Pagination from 'src/models/Pagination';
 import { ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import TransactionFilters from 'src/models/TransactionFilters';
 import history from 'src/services/history';
-import { SERVER_TIMEZONE } from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
@@ -81,8 +81,8 @@ export const fetchList = () => async (dispatch, getState) => {
       page,
       'category.id': categories,
       'account.id': accounts,
-      'executedAt[after]': from,
-      'executedAt[before]': to,
+      'executedAt[after]': from.clone().format(MOMENT_DATETIME_FORMAT),
+      'executedAt[before]': to.clone().format(MOMENT_DATETIME_FORMAT),
       withDeleted: withCanceled ? 1 : 0,
       isDraft: onlyDrafts ? 1 : 0,
     };

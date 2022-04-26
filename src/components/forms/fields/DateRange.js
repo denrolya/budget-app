@@ -10,7 +10,11 @@ import { rangeToString } from 'src/services/common';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 
 const DateRange = ({
-  from, to, onApply, ranges, size,
+  from,
+  to,
+  onApply,
+  ranges,
+  size,
 }) => {
   const handleDateRangeFilters = ({ target: { value } }) => {
     let [startDate, endDate] = value.split(' - ');
@@ -54,8 +58,8 @@ const DateRange = ({
 };
 
 DateRange.propTypes = {
-  from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
+  from: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   onApply: PropTypes.func.isRequired,
   size: PropTypes.string,
   ranges: PropTypes.object,

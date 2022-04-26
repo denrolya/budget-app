@@ -341,14 +341,11 @@ export const generatePreviousPeriod = (from, to) => {
 
   return {
     from: isCurrentMonth
-      ? from.clone().subtract(1, 'months').format(MOMENT_DATE_FORMAT)
-      : from
-        .clone()
-        .subtract(to.diff(from, 'days') + 1, 'days')
-        .format(MOMENT_DATE_FORMAT),
+      ? from.clone().subtract(1, 'months')
+      : from.clone().subtract(to.diff(from, 'days') + 1, 'days'),
     to: isCurrentMonth
-      ? from.clone().subtract(1, 'days').format(MOMENT_DATE_FORMAT)
-      : from.clone().subtract(1, 'days').format(MOMENT_DATE_FORMAT),
+      ? from.clone().subtract(1, 'days')
+      : from.clone().subtract(1, 'days'),
   };
 };
 

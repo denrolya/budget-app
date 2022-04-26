@@ -18,7 +18,7 @@ import Pagination from 'src/models/Pagination';
 import TransferFilters from 'src/models/TransferFilters';
 import { ROUTE_TRANSFERS } from 'src/constants/routes';
 import history from 'src/services/history';
-import { SERVER_TIMEZONE } from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
@@ -74,8 +74,8 @@ export const fetchList = () => async (dispatch, getState) => {
     const params = {
       perPage,
       page,
-      'executedAt[after]': from,
-      'executedAt[before]': to,
+      'executedAt[after]': from.format(MOMENT_DATETIME_FORMAT),
+      'executedAt[before]': to.format(MOMENT_DATETIME_FORMAT),
     };
     const { data } = await axios.get('api/transfers', { params });
     dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems']));
