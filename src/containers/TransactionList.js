@@ -6,7 +6,12 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import {
-  Button, Card, CardHeader, CardBody, Row, Collapse, Col,
+  Card,
+  CardHeader,
+  CardBody,
+  Row,
+  Collapse,
+  Col,
 } from 'reactstrap';
 
 import TransactionFilters from 'src/components/TransactionFilters';
@@ -25,7 +30,6 @@ import {
 } from 'src/store/actions/transaction';
 import Pagination from 'src/models/Pagination';
 import TransactionsTable from 'src/components/tables/TransactionsTable';
-import TransactionsGrid from 'src/components/dataGrid/TransactionsGrid';
 import LoadingCard from 'src/components/cards/LoadingCard';
 
 const TransactionList = ({
@@ -47,7 +51,6 @@ const TransactionList = ({
   const { search } = useLocation();
   const firstUpdate = useRef(true);
   const toggleTransactionForm = useTransactionForm();
-  const [isGridSelected, selectGrid] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(!window.isMobile);
 
   useEffect(() => {
@@ -87,44 +90,16 @@ const TransactionList = ({
         <Col xs={12} sm={12} md={8} lg={9}>
           <LoadingCard inverse isLoading={isLoading} className="card-transactions card-table mb-0">
             <CardBody className="p-0">
-              { ((window.isDev && isGridSelected) || (!window.isDev && !window.isMobile)) && (
-                <TransactionsGrid
-                  data={data}
-                  pagination={pagination}
-                  totalValue={totalValue}
-                  setPage={setPage}
-                  setPerPage={setPerPage}
-                  setFilters={setFilters}
-                  editTransaction={toggleTransactionEdition}
-                  deleteTransaction={deleteTransaction}
-                />
-              ) }
-
-              { ((window.isDev && !isGridSelected) || (!window.isDev && window.isMobile)) && (
-                <TransactionsTable
-                  data={data}
-                  pagination={pagination}
-                  totalValue={totalValue}
-                  setPage={setPage}
-                  setPerPage={setPerPage}
-                  setFilters={setFilters}
-                  editTransaction={toggleTransactionEdition}
-                  deleteTransaction={deleteTransaction}
-                />
-              )}
-
-              {window.isDev && (
-                <Button
-                  block
-                  color="primary"
-                  size="sm"
-                  className="btn-simple"
-                  active={isGridSelected}
-                  onClick={() => selectGrid(!isGridSelected)}
-                >
-                  Grid
-                </Button>
-              )}
+              <TransactionsTable
+                data={data}
+                pagination={pagination}
+                totalValue={totalValue}
+                setPage={setPage}
+                setPerPage={setPerPage}
+                setFilters={setFilters}
+                editTransaction={toggleTransactionEdition}
+                deleteTransaction={deleteTransaction}
+              />
             </CardBody>
           </LoadingCard>
         </Col>

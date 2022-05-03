@@ -112,7 +112,7 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
         return !isEqual(value, TRANSACTION_TYPES) ? value : DEFAULT_VALUES.types;
       case 'from':
       case 'to':
-        return !isMoment(value) ? moment(value) : value;
+        return !isMoment(value) ? moment(value, MOMENT_DATE_FORMAT) : value;
       case 'accounts':
       case 'categories':
         return uniq(value.map((el) => el?.id ? parseInt(el.id, 10) : el));

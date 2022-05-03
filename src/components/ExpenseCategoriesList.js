@@ -45,7 +45,7 @@ const ExpenseCategoriesList = ({
         <ListGroup flush>
           {selectedSubtree.children.map(({
             model: {
-              name, icon, total, previous,
+              id, name, icon, total, previous,
             },
           }, key) => {
             const amountToPreviousPeriodRatio = amountInPercentage(previous, total, 0);
@@ -91,7 +91,7 @@ const ExpenseCategoriesList = ({
                         from.format(MOMENT_DATE_FORMAT),
                         to.format(MOMENT_DATE_FORMAT),
                         [],
-                        [name],
+                        [id],
                       )}
                     >
                       <Button size="sm" color="info" className="btn-link btn-icon btn-simple m-0">

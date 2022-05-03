@@ -24,7 +24,11 @@ import { setStatistics, updateDashboard } from 'src/store/actions/dashboard';
 import MoneyValue from 'src/components/MoneyValue';
 
 const Dashboard = ({
-  ui, statistics, updateDashboard, setStatistics, categories,
+  ui,
+  statistics,
+  updateDashboard,
+  setStatistics,
+  categories,
 }) => {
   useEffect(() => {
     updateDashboard();

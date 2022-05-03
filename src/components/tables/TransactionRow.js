@@ -32,8 +32,6 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
       <td
         className={cn('fit', 'text-nowrap', {
           'opacity-6': !!canceledAt,
-          'text-muted': !note,
-          'text-white cursor-info': note,
         })}
         id={`transaction-account-cell-${id}`}
       >
@@ -42,15 +40,13 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
         <span className="text-muted font-size-smaller d-block d-md-none text-left">
           <TransactionDate showTimeIcon showDate={false} date={executedAt} />
         </span>
-        {note && (
-          <UncontrolledTooltip placement="right" target={`transaction-account-cell-${id}`}>
-            {note}
-          </UncontrolledTooltip>
-        )}
       </td>
 
       <td className="d-none d-md-table-cell">
         <TransactionCategory category={category} />
+        <p className="text-info opacity-7 small">
+          {note}
+        </p>
       </td>
 
       <td
