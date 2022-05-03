@@ -5,6 +5,7 @@ import get from 'lodash/get';
 import moment from 'moment-timezone';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import isString from 'lodash/isString';
 import { connect } from 'react-redux';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import {
@@ -45,7 +46,7 @@ const TransactionForm = ({
     let result;
     if (category?.id) {
       result = category.id;
-    } else if (typeof category === 'string' || category instanceof String) {
+    } else if (isString(category)) {
       result = categoryOptions.find(({ name, type }) => type === model.type && name === category)?.id || '';
     } else {
       result = INITIAL_FORM_DATA.category;
@@ -101,7 +102,14 @@ const TransactionForm = ({
           setFieldValue,
         }) => {
           const {
-            type, category, amount, account, note, executedAt, compensations, isDraft,
+            type,
+            category,
+            amount,
+            account,
+            note,
+            executedAt,
+            compensations,
+            isDraft,
           } = values;
           // eslint-disable-next-line react-hooks/rules-of-hooks
           useEffect(() => {
@@ -145,7 +153,6 @@ const TransactionForm = ({
 
               <FormGroup>
                 <Typeahead
-                  allowNew
                   id="category"
                   className="form-control-typeahead"
                   name="category"

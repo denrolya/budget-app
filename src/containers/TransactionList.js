@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import React, {
   useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
@@ -14,6 +15,7 @@ import {
   Col,
 } from 'reactstrap';
 
+import NoTransactionsMessage from 'src/components/messages/NoTransactionsMessage';
 import TransactionFilters from 'src/components/TransactionFilters';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { isActionLoading } from 'src/services/common';
@@ -89,17 +91,24 @@ const TransactionList = ({
       <Row>
         <Col xs={12} sm={12} md={8} lg={9}>
           <LoadingCard inverse isLoading={isLoading} className="card-transactions card-table mb-0">
-            <CardBody className="p-0">
-              <TransactionsTable
-                data={data}
-                pagination={pagination}
-                totalValue={totalValue}
-                setPage={setPage}
-                setPerPage={setPerPage}
-                setFilters={setFilters}
-                editTransaction={toggleTransactionEdition}
-                deleteTransaction={deleteTransaction}
-              />
+            <CardBody
+              className={cn({
+                'p-0': data.length > 0,
+              })}
+            >
+              {data.length > 0 && (
+                <TransactionsTable
+                  data={data}
+                  pagination={pagination}
+                  totalValue={totalValue}
+                  setPage={setPage}
+                  setPerPage={setPerPage}
+                  setFilters={setFilters}
+                  editTransaction={toggleTransactionEdition}
+                  deleteTransaction={deleteTransaction}
+                />
+              )}
+              {data.length === 0 && <NoTransactionsMessage />}
             </CardBody>
           </LoadingCard>
         </Col>
