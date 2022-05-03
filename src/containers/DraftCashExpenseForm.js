@@ -48,7 +48,7 @@ const DraftCashExpenseForm = ({
       ...form,
       initialValues: {
         ...form.initialValues,
-        category: categoryUnknown || '',
+        category: categoryUnknown,
         account: find(accountOptions, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code)?.id,
       },
     });
@@ -169,15 +169,16 @@ const DraftCashExpenseForm = ({
 
 DraftCashExpenseForm.defaultProps = {
   accountOptions: [],
+  categoryUnknown: '',
 };
 
 DraftCashExpenseForm.propTypes = {
-  categoryUnknown: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   accountOptions: PropTypes.array,
+  categoryUnknown: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 const mapStateToProps = ({ ui, account, category }) => ({

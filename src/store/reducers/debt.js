@@ -14,10 +14,16 @@ const HANDLERS = {
   // eslint-disable-next-line default-param-last
   [Types.CREATE_SUCCESS]: (state = INITIAL_STATE, { debt }) => [
     ...state,
-    debt,
+    {
+      ...debt,
+      transactions: initializeTransactionsList(debt.transactions),
+    },
   ],
   // eslint-disable-next-line default-param-last
-  [Types.EDIT_SUCCESS]: (state = INITIAL_STATE, { debt }) => state.map((d) => d.id === debt.id ? debt : d),
+  [Types.EDIT_SUCCESS]: (state = INITIAL_STATE, { debt }) => state.map((d) => d.id === debt.id ? {
+    ...debt,
+    transactions: initializeTransactionsList(debt.transactions),
+  } : d),
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

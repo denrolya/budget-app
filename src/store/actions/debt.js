@@ -81,7 +81,7 @@ export const editDebt = (id, debt) => async (dispatch) => {
 
     dispatch(Creators.editSuccess(data));
 
-    if (isOnPath(ROUTE_DEBTS)) {
+    if (isOnPath(`/${ROUTE_DEBTS}`)) {
       dispatch(fetchList());
     }
   } catch (e) {
