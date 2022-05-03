@@ -177,13 +177,12 @@ const Layout = ({
 
 Layout.defaultProps = {
   accounts: [],
-  colorScheme: 'blue',
+  colorScheme: 'gray',
   totalDebt: 0,
 };
 
 Layout.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
-
   fetchAccounts: PropTypes.func.isRequired,
   fetchCategories: PropTypes.func.isRequired,
   fetchDebts: PropTypes.func.isRequired,
@@ -209,7 +208,7 @@ Layout.propTypes = {
   toggleTransferModal: PropTypes.func.isRequired,
   updateDashboard: PropTypes.func.isRequired,
   accounts: PropTypes.array,
-  colorScheme: PropTypes.string,
+  colorScheme: PropTypes.oneOf(['blue', 'gray', 'indigo', 'lightblue', 'primary', 'green']),
   totalDebt: PropTypes.number,
 };
 
