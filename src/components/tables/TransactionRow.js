@@ -44,9 +44,11 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
 
       <td className="d-none d-md-table-cell">
         <TransactionCategory category={category} />
-        <p className="text-info opacity-7 small">
-          {note}
-        </p>
+        { note && (
+          <p className="text-info opacity-7 small">
+            {note}
+          </p>
+        )}
       </td>
 
       <td
