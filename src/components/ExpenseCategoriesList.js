@@ -25,7 +25,11 @@ import { generateLinkToExpenses } from 'src/services/routing';
 import { HEX_COLORS } from 'src/constants/color';
 
 const ExpenseCategoriesList = ({
-  data, selectedCategory, onCategorySelect, from, to,
+  data,
+  selectedCategory,
+  onCategorySelect,
+  from,
+  to,
 }) => {
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 

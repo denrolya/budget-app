@@ -21,7 +21,7 @@ export const AVAILABLE_STATISTICS = [{
   name: 'food',
   path: 'api/transactions/statistics/sum',
   additionalParams: {
-    category_deep: [1],
+    categoryDeep: [1],
     type: EXPENSE_TYPE,
   },
   fetchPreviousPeriod: true,
@@ -29,7 +29,7 @@ export const AVAILABLE_STATISTICS = [{
   name: 'rent',
   path: 'api/transactions/statistics/sum',
   additionalParams: {
-    category_deep: [2, 18], // Rent, Utilities
+    categoryDeep: [2, 18], // Rent, Utilities
     type: EXPENSE_TYPE,
   },
   fetchPreviousPeriod: true,

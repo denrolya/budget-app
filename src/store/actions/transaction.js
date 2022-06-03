@@ -79,7 +79,7 @@ export const fetchList = () => async (dispatch, getState) => {
       type: types[0], // TODO: To be handled properly
       perPage,
       page,
-      'category.id': categories,
+      categoryDeep: categories,
       'account.id': accounts,
       'executedAt[after]': from.clone().format(MOMENT_DATETIME_FORMAT),
       'executedAt[before]': to.clone().format(MOMENT_DATETIME_FORMAT),
