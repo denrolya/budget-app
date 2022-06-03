@@ -23,7 +23,12 @@ import AccountColorForm from 'src/components/forms/AccountColorForm';
 import { copyToClipboard } from 'src/services/common';
 
 const AccountGeneralInfo = ({
-  data, exchangeRates, onArchive, onRestore, onNameChange, onColorChange,
+  data,
+  exchangeRates,
+  onArchive,
+  onRestore,
+  onNameChange,
+  onColorChange,
 }) => {
   const {
     balance,

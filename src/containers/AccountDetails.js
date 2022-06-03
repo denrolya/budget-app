@@ -18,7 +18,10 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { notify } from 'src/store/actions/global';
 
 const AccountDetails = ({
-  exchangeRates, updateName, updateColor, toggleArchived,
+  exchangeRates,
+  updateName,
+  updateColor,
+  toggleArchived,
 }) => {
   const { id = null } = useParams();
   const { code } = useBaseCurrency();
@@ -114,7 +117,7 @@ const AccountDetails = ({
             </CardBody>
           </LoadingCard>
         </Col>
-        <Col xs={12} md={8}>
+        <Col xs={12} md={9}>
           <h4 className="mb-2">Transactions</h4>
           <LoadingCard isLoading={isLoading}>
             <CardBody>

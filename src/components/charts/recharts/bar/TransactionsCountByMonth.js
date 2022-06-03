@@ -18,6 +18,7 @@ const CustomTooltip = ({ active, payload }) => {
         {payload[0].value}
         {' '}
         transactions in
+        {' '}
         {payload[0].payload.date.format('MMMM')}
       </p>
     </Card>

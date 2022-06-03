@@ -6,7 +6,6 @@ import {
   DropdownMenu,
   DropdownToggle,
   UncontrolledButtonDropdown,
-  UncontrolledTooltip,
 } from 'reactstrap';
 
 import AccountName from 'src/components/AccountName';
@@ -15,7 +14,14 @@ import TransactionDate from 'src/components/TransactionDate';
 import { isExpense } from 'src/services/common';
 import TransactionCategory from 'src/components/TransactionCategory';
 
-const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
+const TransactionRow = ({
+  transaction,
+  showActions,
+  showFullCategoryPath,
+  showNote,
+  handleEdit,
+  handleDelete,
+}) => {
   const {
     id, account, amount, convertedValues, note, category, executedAt, canceledAt,
   } = transaction;
@@ -43,8 +49,8 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
       </td>
 
       <td className="d-none d-md-table-cell">
-        <TransactionCategory category={category} />
-        { note && (
+        <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
+        { (showNote && note) && (
           <p className="text-info opacity-7 small">
             {note}
           </p>
@@ -68,7 +74,7 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
         </span>
 
         <small className="text-nowrap d-block d-md-none">
-          <TransactionCategory category={category} />
+          <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
         </small>
       </td>
 
@@ -76,7 +82,7 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
         <TransactionDate showTimeIcon showDate={false} date={executedAt} />
       </td>
 
-      {(handleEdit || handleDelete) && (
+      {showActions && ((handleEdit || handleDelete) && (
         <td className="text-right text-nowrap w-50px">
           <UncontrolledButtonDropdown>
             <DropdownToggle caret className="btn-icon btn-link">
@@ -122,13 +128,22 @@ const TransactionRow = ({ transaction, handleEdit, handleDelete }) => {
             </DropdownMenu>
           </UncontrolledButtonDropdown>
         </td>
-      )}
+      ))}
     </tr>
   );
 };
 
+TransactionRow.defaultProps = {
+  showNote: true,
+  showActions: true,
+  showFullCategoryPath: true,
+};
+
 TransactionRow.propTypes = {
   transaction: PropTypes.object.isRequired,
+  showNote: PropTypes.bool,
+  showActions: PropTypes.bool,
+  showFullCategoryPath: PropTypes.bool,
   handleEdit: PropTypes.func,
   handleDelete: PropTypes.func,
 };

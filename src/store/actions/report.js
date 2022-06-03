@@ -8,19 +8,19 @@ import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/se
 
 export const AVAILABLE_STATISTICS = [
   'moneyFlow',
-  'mainIncomeSource',
-  'mainExpenseCategoriesReview',
-  'newIncomeCategories',
-  'newExpenseCategories',
-  'totalIncomeExpense',
-  'foodExpenses',
-  'foodExpensesMinMax',
-  'expenseCategoriesTree',
-  'groceriesAverage',
-  'accountExpenseDistribution',
-  'expenseCategoriesByWeekdays',
-  'utilityCostsByInterval',
-  'totalExpensesByInterval',
+  // 'mainIncomeSource',
+  // 'mainExpenseCategoriesReview',
+  // 'newIncomeCategories',
+  // 'newExpenseCategories',
+  // 'totalIncomeExpense',
+  // 'foodExpenses',
+  // 'foodExpensesMinMax',
+  // 'expenseCategoriesTree',
+  // 'groceriesAverage',
+  // 'accountExpenseDistribution',
+  // 'expenseCategoriesByWeekdays',
+  // 'utilityCostsByInterval',
+  // 'totalExpensesByInterval',
 ];
 
 export const { Types, Creators } = createActions({

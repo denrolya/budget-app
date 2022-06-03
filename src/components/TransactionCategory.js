@@ -1,25 +1,29 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const TransactionCategory = ({ category: { fullPath, icon } }) => {
+const TransactionCategory = ({ showFullPath, category: { fullPath, icon } }) => {
   const path = [...fullPath];
   const lastCategory = path.reverse().pop();
 
   return (
     <span className="d-inline-block">
-      {path.length > 0 && (
+      {(showFullPath && path.length > 0) && (
         <span className="d-none d-sm-inline text-muted small">
           {path.join(' / ')}
           {' / '}
         </span>
       )}
       <span>
-        {icon && <i className={icon} aria-hidden />}
+        {icon && <i aria-hidden className={icon} />}
         {' '}
         {lastCategory}
       </span>
     </span>
   );
+};
+
+TransactionCategory.defaultProps = {
+  showFullPath: true,
 };
 
 TransactionCategory.propTypes = {
@@ -28,6 +32,7 @@ TransactionCategory.propTypes = {
     icon: PropTypes.string,
     fullPath: PropTypes.array,
   }).isRequired,
+  showFullPath: PropTypes.bool,
 };
 
 export default TransactionCategory;

@@ -14,6 +14,9 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import Pagination from 'src/models/Pagination';
 
 const TransactionsTable = ({
+  showNote,
+  showActions,
+  showFullCategoryPath,
   size,
   data,
   pagination,
@@ -57,7 +60,7 @@ const TransactionsTable = ({
                   'text-success': isYesterday(date),
                 })}
               >
-                <i className="ion-md-calendar" aria-hidden />
+                <i aria-hidden className="ion-md-calendar" />
                 {' '}
                 {isToday(date) && 'Today'}
                 {isYesterday(date) && 'Yesterday'}
@@ -74,6 +77,9 @@ const TransactionsTable = ({
                   {transactions.map((transaction) => (
                     <TransactionRow
                       key={transaction.id}
+                      showNote={showNote}
+                      showActions={showActions}
+                      showFullCategoryPath={showFullCategoryPath}
                       transaction={transaction}
                       handleEdit={editTransaction}
                       handleDelete={deleteTransaction}
@@ -115,9 +121,15 @@ const TransactionsTable = ({
 TransactionsTable.defaultProps = {
   size: 'sm',
   totalValue: 0,
+  showNote: true,
+  showActions: true,
+  showFullCategoryPath: true,
 };
 
 TransactionsTable.propTypes = {
+  showNote: PropTypes.bool,
+  showActions: PropTypes.bool,
+  showFullCategoryPath: PropTypes.bool,
   size: PropTypes.string,
   data: PropTypes.array,
   pagination: PropTypes.instanceOf(Pagination),

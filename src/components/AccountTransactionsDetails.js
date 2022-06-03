@@ -19,18 +19,21 @@ const AccountTransactionsDetails = ({ account }) => {
   }, [logs]);
 
   const transactionsCountByMonths = useMemo(() => {
-    const result = {};
+    const result = [];
     logs.forEach(({ date }) => {
-      if (result[date.month()] === undefined) {
-        result[date.month()] = 0;
+      const index = result.findIndex((el) => el.date.isSame(date.startOf('month')));
+
+      if (index !== -1) {
+        result[index].value += 1;
+      } else {
+        result.push({
+          date: date.startOf('month'),
+          value: 1,
+        });
       }
-      result[date.month()] += 1;
     });
 
-    return Object.keys(result).map((month) => ({
-      date: moment().month(month),
-      value: result[month],
-    }));
+    return result;
   }, [logs]);
 
   const lastMonthTransactionsCount = useMemo(
@@ -44,7 +47,7 @@ const AccountTransactionsDetails = ({ account }) => {
   return (
     <section>
       <Row>
-        <Col xs={12} md={6}>
+        <Col xs={12} md={5}>
           <Row className="mb-3">
             <Col xs={4} className="d-flex flex-column justify-content-between">
               <span className="h5 mb-2">Last Tr.</span>
@@ -89,23 +92,27 @@ const AccountTransactionsDetails = ({ account }) => {
             </Col>
           </Row>
         </Col>
-        <Col xs={12} md={6}>
+        <Col xs={12} md={7}>
           <span className="h5 mb-2 d-block">Latest Transactions</span>
           <div className="preview">
             <div className="preview-inner">
               {account?.latestTransactions && (
-                <TransactionsTable data={latestTransactions} editTransaction={() => {}} deleteTransaction={() => {}} />
+                <TransactionsTable
+                  showFullCategoryPath={false}
+                  showActions={false}
+                  showNote={false}
+                  data={latestTransactions}
+                />
               )}
             </div>
           </div>
 
           <p className="text-center py-3">
-            <Button color="link">
-              <Link to={generateLinkToAccountTransactionsPage(id)}>
+            <Link to={generateLinkToAccountTransactionsPage(id)}>
+              <Button color="primary" className="btn-simple" size="sm">
                 See all Transactions
-                {'>'}
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </p>
         </Col>
       </Row>

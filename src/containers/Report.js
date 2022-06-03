@@ -35,7 +35,11 @@ import IconStatisticsCard from 'src/components/cards/statistics/IconStatisticsCa
  * TODO: Go through each card and see if can be reduced
  */
 const Report = ({
-  ui, statistics, updateReport, setStatistics, setPeriod,
+  ui,
+  statistics,
+  updateReport,
+  setStatistics,
+  setPeriod,
 }) => {
   useEffect(() => {
     updateReport();
@@ -319,7 +323,7 @@ Report.propTypes = {
   setPeriod: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ ui, report: { statistics } }) => ({
+const mapStateToProps = ({ ui, report: statistics }) => ({
   statistics,
   ui,
 });
