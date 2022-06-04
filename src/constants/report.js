@@ -46,6 +46,14 @@ export const AVAILABLE_STATISTICS = [
     path: 'api/transactions/statistics/groceries',
     additionalParams: {
       categoryDeep: [66],
+      type: EXPENSE_TYPE,
+    },
+  }, {
+    name: 'foodExpensesMinMax',
+    path: 'api/transactions/statistics/min-max',
+    additionalParams: {
+      categoryDeep: [1],
+      type: EXPENSE_TYPE,
     },
   },
   // 'mainIncomeSource',
