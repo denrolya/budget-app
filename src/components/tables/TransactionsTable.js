@@ -47,7 +47,7 @@ const TransactionsTable = ({
 
         return (
           <React.Fragment key={date}>
-            <p
+            <div
               id={`date-${date.format(MOMENT_DATE_FORMAT)}`}
               className="text-nowrap text-white cursor-pointer p-1 pl-3"
               style={{
@@ -70,7 +70,7 @@ const TransactionsTable = ({
               <Badge pill className="float-right" color={sum > 0 ? 'success' : 'danger'}>
                 <MoneyValue amount={sum} />
               </Badge>
-            </p>
+            </div>
             <UncontrolledCollapse defaultOpen toggler={`date-${date.format(MOMENT_DATE_FORMAT)}`}>
               <Table className="table--border-top-0" size={size}>
                 <tbody>

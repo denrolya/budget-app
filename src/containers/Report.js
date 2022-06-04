@@ -277,6 +277,7 @@ const Report = ({
                 footer={(
                   <>
                     Mostly on
+                    {' '}
                     {moment().isoWeekday(statistics.groceriesAverage.data.dayOfWeek).format('dddd')}
                   </>
                 )}

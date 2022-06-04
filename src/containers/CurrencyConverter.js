@@ -4,7 +4,6 @@ import {
   Table, Container, Row, Col, Form, FormGroup, Label, Input, Card, Button,
 } from 'reactstrap';
 import { ErrorMessage, Field, Formik } from 'formik';
-import MoneyValue from 'src/components/MoneyValue';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

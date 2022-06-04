@@ -3,17 +3,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import MoneyValue from 'src/components/MoneyValue';
-import {
-  ACCOUNT_TYPE_BANK_CARD,
-  ACCOUNT_TYPE_BASIC,
-  ACCOUNT_TYPE_CASH,
-  ACCOUNT_TYPE_INTERNET,
-} from 'src/constants/account';
 
 const AccountName = ({
-  colored, account: {
-    name, color, balance, icon, convertedValues, currency,
-  }, showBalance, showIcon,
+  colored,
+  account: {
+    name,
+    color,
+    balance,
+    icon,
+    convertedValues,
+    currency,
+  },
+  showBalance,
+  showIcon,
 }) => (
   <>
     {showIcon && (
