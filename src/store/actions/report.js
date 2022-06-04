@@ -4,27 +4,11 @@ import capitalize from 'voca/capitalize';
 import { createActions } from 'reduxsauce';
 
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import { AVAILABLE_STATISTICS } from 'src/constants/report';
 import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
 
-export const AVAILABLE_STATISTICS = [
-  'moneyFlow',
-  // 'mainIncomeSource',
-  // 'mainExpenseCategoriesReview',
-  // 'newIncomeCategories',
-  // 'newExpenseCategories',
-  // 'totalIncomeExpense',
-  // 'foodExpenses',
-  // 'foodExpensesMinMax',
-  // 'expenseCategoriesTree',
-  // 'groceriesAverage',
-  // 'accountExpenseDistribution',
-  // 'expenseCategoriesByWeekdays',
-  // 'utilityCostsByInterval',
-  // 'totalExpensesByInterval',
-];
-
 export const { Types, Creators } = createActions({
-  ...AVAILABLE_STATISTICS.map((name) => ({
+  ...AVAILABLE_STATISTICS.map(({ name }) => ({
     [`fetchStatistics${capitalize(camelCase(name))}Request`]: null,
     [`fetchStatistics${capitalize(camelCase(name))}Success`]: [`${name}`],
     [`fetchStatistics${capitalize(camelCase(name))}Failure`]: ['message'],
@@ -44,23 +28,55 @@ export const setStatistics = (name, newModel) => (dispatch) => {
   dispatch(fetchStatistics(name));
 };
 
-export const fetchStatistics = (name) => (dispatch, getState) => {
+export const fetchStatistics = ({
+  name, path, additionalParams, fetchPreviousPeriod,
+}) => async (dispatch, getState) => {
   const state = getState().report[name];
-  const params = {
+  let params = {
     'executedAt[after]': state.from.format(MOMENT_DATETIME_FORMAT),
     'executedAt[before]': state.to.format(MOMENT_DATETIME_FORMAT),
     interval: state.interval,
   };
 
+  if (additionalParams) {
+    params = {
+      ...params,
+      ...additionalParams,
+    };
+  }
+
   if (customHandlers[name]) {
-    dispatch(customHandlers[name]());
+    dispatch(customHandlers[name](path, params));
+    return;
   }
 
   dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
 
   try {
-    const { data } = axios.get('', { params });
-    dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data));
+    if (fetchPreviousPeriod) {
+      const getSelectedPeriodDataRequest = axios.get(path, { params });
+
+      const { from, to } = getState().report.expenseCategoriesTree;
+      const previousPeriod = generatePreviousPeriod(from, to);
+
+      const getPreviousPeriodDataRequest = axios.get(path, {
+        params: {
+          ...params,
+          'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
+          'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
+        },
+      });
+
+      const [currentResponse, previousResponse] = await axios.all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest]);
+
+      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]({
+        current: currentResponse.data?.['hydra:member'][0],
+        previous: previousResponse.data?.['hydra:member'][0],
+      }));
+    } else {
+      const { data } = await axios.get(path, { params });
+      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0]));
+    }
   } catch (e) {
     dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
   }
@@ -72,7 +88,7 @@ const customHandlers = {
 
     const getSelectedPeriodDataRequest = axios.get(path, { params });
 
-    const { from, to } = getState().dashboard.expenseCategoriesTree;
+    const { from, to } = getState().report.expenseCategoriesTree;
     const previousPeriod = generatePreviousPeriod(from, to);
 
     const getPreviousPeriodDataRequest = axios.get(path, {
@@ -99,4 +115,4 @@ const customHandlers = {
   },
 };
 
-export const updateReport = () => (dispatch) => AVAILABLE_STATISTICS.map((name) => dispatch(fetchStatistics(name)));
+export const updateReport = () => (dispatch) => AVAILABLE_STATISTICS.map((el) => dispatch(fetchStatistics(el)));

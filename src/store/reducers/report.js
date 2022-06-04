@@ -2,10 +2,10 @@ import { createReducer } from 'reduxsauce';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
-import { INITIAL_STATE } from 'src/constants/report';
-import { AVAILABLE_STATISTICS, Types } from 'src/store/actions/report';
+import { AVAILABLE_STATISTICS, INITIAL_STATE } from 'src/constants/report';
+import { Types } from 'src/store/actions/report';
 
-const generateStatisticsHandlers = () => AVAILABLE_STATISTICS.map((name) => ({
+const generateStatisticsHandlers = () => AVAILABLE_STATISTICS.map(({ name }) => ({
   // eslint-disable-next-line default-param-last
   [Types[`FETCH_STATISTICS_${upperCase(snakeCase(name))}_SUCCESS`]]: (state = INITIAL_STATE, action) => ({
     ...state,

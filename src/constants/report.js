@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TreeModel from 'tree-model';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
@@ -7,6 +8,51 @@ import { randomFloat, randomColor, randomMoneyFlowData } from 'src/services/comm
 
 const startOfYear = moment().startOf('year');
 const endOfYear = moment().endOf('year');
+
+export const AVAILABLE_STATISTICS = [
+  {
+    name: 'moneyFlow',
+    path: 'api/transactions/statistics/money-flow',
+  }, {
+    name: 'foodExpenses',
+    path: 'api/transactions/statistics/sum',
+    additionalParams: {
+      categoryDeep: [1],
+      type: EXPENSE_TYPE,
+    },
+    fetchPreviousPeriod: true,
+  }, {
+    name: 'expenseCategoriesTree',
+    path: 'api/transactions/statistics/categories-tree',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
+  }, {
+    name: 'totalIncome',
+    path: 'api/transactions/statistics/sum',
+    additionalParams: {
+      type: INCOME_TYPE,
+    },
+    fetchPreviousPeriod: true,
+  }, {
+    name: 'totalExpense',
+    path: 'api/transactions/statistics/sum',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
+    fetchPreviousPeriod: true,
+  },
+  // 'mainIncomeSource',
+  // 'mainExpenseCategoriesReview',
+  // 'newIncomeCategories',
+  // 'newExpenseCategories',
+  // 'foodExpensesMinMax',
+  // 'groceriesAverage',
+  // 'accountExpenseDistribution',
+  // 'expenseCategoriesByWeekdays',
+  // 'utilityCostsByInterval',
+  // 'totalExpensesByInterval',
+];
 
 export const INITIAL_STATE = {
   moneyFlow: new TimeperiodIntervalStatistics({
@@ -181,18 +227,20 @@ export const INITIAL_STATE = {
       },
     ],
   }),
-  totalIncomeExpense: new TimeperiodStatistics({
+  totalIncome: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
     data: {
-      current: {
-        expense: randomFloat(),
-        income: randomFloat(),
-      },
-      previous: {
-        expense: randomFloat(),
-        income: randomFloat(),
-      },
+      current: randomFloat(),
+      previous: randomFloat(),
+    },
+  }),
+  totalExpense: new TimeperiodStatistics({
+    from: startOfYear,
+    to: endOfYear,
+    data: {
+      current: randomFloat(),
+      previous: randomFloat(),
     },
   }),
   percentageSpentFromIncome: new TimeperiodStatistics({

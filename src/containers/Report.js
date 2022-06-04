@@ -85,7 +85,7 @@ const Report = ({
       />
       <hr />
 
-      <div>
+      <section>
         <h1>Incomes</h1>
         <Masonry
           breakpointCols={{
@@ -97,17 +97,17 @@ const Report = ({
           columnClassName="my-masonry-grid_column"
         >
           <SimpleStatisticsCard
-            isLoading={isStatisticsActionLoading('totalIncomeExpense')}
+            isLoading={isStatisticsActionLoading('totalIncome')}
             title="Total Income"
             content={
-              <MoneyValue bold maximumFractionDigits={0} amount={statistics.totalIncomeExpense.data.current.income} />
+              <MoneyValue bold maximumFractionDigits={0} amount={statistics.totalIncome.data.current} />
             }
             footer={(
               <AmountSinceLastPeriodMessage
                 invertedColors
                 period={previousPeriodText}
-                previous={statistics.totalIncomeExpense.data.previous.income}
-                current={statistics.totalIncomeExpense.data.current.income}
+                previous={statistics.totalIncome.data.previous}
+                current={statistics.totalIncome.data.current}
               />
             )}
           />
@@ -124,21 +124,21 @@ const Report = ({
           )}
 
           <SimpleStatisticsCard
-            isLoading={isStatisticsActionLoading('totalIncomeExpense')}
+            isLoading={isStatisticsActionLoading('totalIncome')}
             title="Daily income"
             content={(
               <MoneyValue
                 bold
                 maximumFractionDigits={0}
-                amount={statistics.totalIncomeExpense.data.current.income / diffInDays}
+                amount={statistics.totalIncome.data.current / diffInDays}
               />
             )}
             footer={(
               <AmountSinceLastPeriodMessage
                 invertedColors
                 period={previousPeriodText}
-                previous={statistics.totalIncomeExpense.data.previous.income / diffInDays}
-                current={statistics.totalIncomeExpense.data.current.income / diffInDays}
+                previous={statistics.totalIncome.data.previous / diffInDays}
+                current={statistics.totalIncome.data.current / diffInDays}
               />
             )}
           />
@@ -149,8 +149,8 @@ const Report = ({
           onUpdate={(model) => setStatistics('newIncomeCategories', model)}
         />
         <hr />
-      </div>
-      <div>
+      </section>
+      <section>
         <h1>Expenses</h1>
 
         <h3>General expenses</h3>
@@ -165,16 +165,16 @@ const Report = ({
           columnClassName="my-masonry-grid_column"
         >
           <SimpleStatisticsCard
-            isLoading={isStatisticsActionLoading('totalIncomeExpense')}
+            isLoading={isStatisticsActionLoading('totalExpense')}
             title="Total Expense"
             content={
-              <MoneyValue bold maximumFractionDigits={0} amount={statistics.totalIncomeExpense.data.current.expense} />
+              <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(statistics.totalExpense.data.current)} />
             }
             footer={(
               <AmountSinceLastPeriodMessage
                 period={previousPeriodText}
-                previous={statistics.totalIncomeExpense.data.previous.expense}
-                current={statistics.totalIncomeExpense.data.current.expense}
+                previous={Math.abs(statistics.totalExpense.data.previous)}
+                current={Math.abs(statistics.totalExpense.data.current)}
               />
             )}
           />
@@ -191,12 +191,12 @@ const Report = ({
             onUpdate={(model) => setStatistics('mainExpenseCategoriesReview', model)}
           />
 
-          {statistics.totalIncomeExpense.data.current.income && statistics.totalIncomeExpense.data.current.expense && (
+          {statistics.totalIncome.data.current && statistics.totalExpense.data.current && (
             <PercentageSpentFromIncomeCard
-              isLoading={isStatisticsActionLoading('totalIncomeExpense')}
+              isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')}
               percentage={amountInPercentage(
-                statistics.totalIncomeExpense.data.current.income,
-                statistics.totalIncomeExpense.data.current.expense,
+                statistics.totalIncome.data.current,
+                Math.abs(statistics.totalExpense.data.current),
                 0,
               )}
             />
@@ -226,7 +226,7 @@ const Report = ({
           showDailyAnnual
           isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
           model={statistics.expenseCategoriesTree}
-          onUpdate={(model) => setStatistics('expenseCategoriesTree', model)}
+          onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
         />
 
         <h3>Food expenses</h3>
@@ -236,12 +236,12 @@ const Report = ({
             <SimpleStatisticsCard
               title="Food expenses"
               isLoading={isStatisticsActionLoading('foodExpenses')}
-              content={<MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpenses.data.current} />}
+              content={<MoneyValue bold maximumFractionDigits={0} amount={Math.abs(statistics.foodExpenses.data.current)} />}
               footer={(
                 <AmountSinceLastPeriodMessage
                   period={previousPeriodText}
-                  previous={statistics.foodExpenses.data.previous}
-                  current={statistics.foodExpenses.data.current}
+                  previous={Math.abs(statistics.foodExpenses.data.previous)}
+                  current={Math.abs(statistics.foodExpenses.data.current)}
                 />
               )}
             />
@@ -288,13 +288,13 @@ const Report = ({
               title="Food expenses"
               isLoading={isStatisticsActionLoading('foodExpenses')}
               content={
-                <MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpenses.data.current / diffInDays} />
+                <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(statistics.foodExpenses.data.current) / diffInDays} />
               }
               footer={(
                 <AmountSinceLastPeriodMessage
                   period={previousPeriodText}
-                  previous={statistics.foodExpenses.data.previous / diffInDays}
-                  current={statistics.foodExpenses.data.current / diffInDays}
+                  previous={Math.abs(statistics.foodExpenses.data.previous) / diffInDays}
+                  current={Math.abs(statistics.foodExpenses.data.current) / diffInDays}
                 />
               )}
             />
@@ -310,7 +310,8 @@ const Report = ({
         />
 
         <hr />
-      </div>
+      </section>
+
     </>
   );
 };
