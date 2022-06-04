@@ -7,7 +7,14 @@ import { CURRENCIES } from 'src/constants/currency';
 
 /* eslint-disable no-param-reassign */
 const MoneyValue = ({
-  currency, amount, values, showSymbol, showSign, maximumFractionDigits, className, bold,
+  currency,
+  amount,
+  values,
+  showSymbol,
+  showSign,
+  maximumFractionDigits,
+  className,
+  bold,
 }) => {
   const baseCurrency = useBaseCurrency();
   const symbol = currency ? CURRENCIES[currency].symbol : baseCurrency.symbol;
@@ -15,7 +22,17 @@ const MoneyValue = ({
 
   const absAmount = Math.abs(amount).toLocaleString(undefined, { maximumFractionDigits });
 
-  const amountString = `${amount < 0 ? ' - ' : ''} ${showSymbol ? symbol : ''} ${absAmount}`;
+  const amountString = (
+    <>
+      {amount < 0 ? ' - ' : ''}
+      {' '}
+      <span>{showSymbol ? symbol : ''}</span>
+      <span>
+        {' '}
+        {absAmount}
+      </span>
+    </>
+  );
   const valueString = !!value
     && `${value < 0 ? ' - ' : ''} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, {
       maximumFractionDigits,
@@ -23,7 +40,7 @@ const MoneyValue = ({
 
   return (
     <span
-      className={cn('text-nowrap', 'd-inline-block', {
+      className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric', {
         'font-weight-bold': bold,
         [className]: !!className,
       })}

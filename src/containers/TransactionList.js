@@ -90,7 +90,7 @@ const TransactionList = ({
 
       <Row>
         <Col xs={12} sm={12} md={8} lg={9}>
-          <LoadingCard inverse isLoading={isLoading} className="card-transactions card-table mb-0">
+          <LoadingCard inverse className="card-transactions card-table mb-0" isLoading={isLoading}>
             <CardBody
               className={cn({
                 'p-0': data.length > 0,

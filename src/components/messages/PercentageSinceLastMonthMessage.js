@@ -10,7 +10,7 @@ const PercentageSinceLastMonthMessage = ({
 
   return (
     <>
-      <strong className={cn(textColor(percentage, invertedColors))}>
+      <strong className={cn('font-style-numeric', textColor(percentage, invertedColors))}>
         {percentage > 0 ? '-' : '+'}
         {percentage}
         %

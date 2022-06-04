@@ -134,8 +134,8 @@ const DebtList = ({
                   </small>
                 </Col>
 
-                <Col xs={6} className="text-danger text-currency text-nowrap text-center font-weight-bold">
-                  <MoneyValue amount={Math.abs(balance)} currency={currency} values={convertedValues} />
+                <Col xs={6} className="text-danger text-nowrap text-center">
+                  <MoneyValue bold amount={Math.abs(balance)} currency={currency} values={convertedValues} />
                 </Col>
 
                 <Col xs={3} className="text-nowrap text-right">

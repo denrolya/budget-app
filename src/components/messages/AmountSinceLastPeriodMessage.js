@@ -14,7 +14,7 @@ const AmountSinceLastPeriodMessage = ({
 
   return (
     <>
-      <strong className={cn(textColor(percentage, invertedColors))}>
+      <strong className={cn('font-style-numeric', textColor(percentage, invertedColors))}>
         <span>
           {diff > 0 && '+'}
           {diff < 0 && '-'}

@@ -48,7 +48,7 @@ const TransfersTable = ({ data, deleteTransfer }) => (
             </td>
 
             <td id={`transfer-rate-${transfer.id}`} className="text-right">
-              <span className="text-currency">
+              <span className="font-style-numeric">
                 <strong className="d-block">
                   {transfer.from.currency.symbol}
                   {' '}

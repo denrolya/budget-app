@@ -35,7 +35,7 @@ const AccountName = ({
             amount={balance}
             values={convertedValues}
             currency={currency}
-            className={cn('text-currency', 'font-size-larger', 'font-weight-bold', {
+            className={cn('font-size-larger', 'font-weight-bold', {
               'text-white': balance === 0,
               'text-danger': balance < 0,
               'text-success': balance > 0,

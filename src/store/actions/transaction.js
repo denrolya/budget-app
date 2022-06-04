@@ -87,8 +87,10 @@ export const fetchList = () => async (dispatch, getState) => {
       isDraft: onlyDrafts ? 1 : 0,
     };
 
-    const { data } = await axios.get('api/transactions', { params });
-    dispatch(Creators.fetchListSuccess(data['hydra:member'], data['hydra:totalItems'], 0));
+    const { data: transactions } = await axios.get('api/transactions', { params });
+    const { data: totalValue } = await axios.get('api/transactions/statistics/sum', { params });
+
+    dispatch(Creators.fetchListSuccess(transactions['hydra:member'], transactions['hydra:totalItems'], totalValue['hydra:member']));
   } catch (e) {
     notify('error', 'Fetch Transaction List');
     dispatch(Creators.fetchListFailure(e));

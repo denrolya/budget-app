@@ -63,7 +63,7 @@ const TransactionRow = ({
         })}
       >
         <span
-          className={cn('d-block', 'text-currency', {
+          className={cn('d-block', 'font-style-numeric', {
             'text-danger': isExpense(transaction),
             'text-success': !isExpense(transaction),
           })}

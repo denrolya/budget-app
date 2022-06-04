@@ -63,15 +63,15 @@ const DebtsTable = ({
               {moment(createdAt).format(MOMENT_DATE_FORMAT)}
             </small>
           </div>
-          <div id={`debt-balance-${id}`} className="text-right text-danger text-currency text-nowrap font-weight-bold">
-            <span className="d-block text-currency font-weight-bold">
+          <div id={`debt-balance-${id}`} className="text-right text-danger font-style-numeric text-nowrap font-weight-bold">
+            <span className="d-block font-style-numeric font-weight-bold">
               {currency.symbol}
               {' '}
               {Math.abs(balance.toFixed(2))}
             </span>
             {' '}
             {currency.symbol !== symbol && (
-              <small className="d-block text-currency">
+              <small className="d-block font-style-numeric">
                 <MoneyValue amount={value} />
               </small>
             )}

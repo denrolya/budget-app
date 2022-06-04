@@ -41,7 +41,7 @@ const AccountsTable = ({ accounts, handleArchivation }) => (
 
           <td className="text-right text-nowrap">
             <span
-              className={cn('d-block', 'text-currency', 'font-weight-bold', {
+              className={cn('d-block', 'font-style-numeric', 'font-weight-bold', {
                 'text-white': account.balance === 0,
                 'text-danger': account.balance < 0,
                 'text-success': account.balance > 0,

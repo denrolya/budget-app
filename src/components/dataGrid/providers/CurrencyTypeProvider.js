@@ -11,7 +11,7 @@ const CurrencyTypeProvider = (props) => {
     value,
   }) => row ? (
     <span
-      className={cn('text-currency', {
+      className={cn('font-style-numeric', {
         'text-danger': isExpense(row),
         'text-success': !isExpense(row),
       })}
@@ -22,7 +22,7 @@ const CurrencyTypeProvider = (props) => {
     </span>
   ) : (
     <span
-      className={cn('text-currency', {
+      className={cn('font-style-numeric', {
         'text-danger': value <= 0,
         'text-success': value > 0,
       })}
