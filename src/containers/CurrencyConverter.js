@@ -4,6 +4,7 @@ import {
   Table, Container, Row, Col, Form, FormGroup, Label, Input, Card, Button,
 } from 'reactstrap';
 import { ErrorMessage, Field, Formik } from 'formik';
+import MoneyValue from 'src/components/MoneyValue';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,9 +19,18 @@ const CURRENCIES = {
   BTC: 'Bitcoin',
 };
 
+const CURRENCY_TUPLES = [
+  ['EUR', 'UAH'],
+  ['USD', 'UAH'],
+  ['HUF', 'UAH'],
+  ['EUR', 'USD'],
+  ['BTC', 'USD'],
+  ['BTC', 'EUR'],
+];
+const EXAMPLES = [1, 2, 5, 10, 25, 50, 100, 250, 500, 1000, 5000, 20000];
+
 const CurrencyConverter = ({ exchangeRates }) => {
   const currencyCodes = Object.keys(CURRENCIES);
-  const EXAMPLES = [1, 2, 5, 10, 25, 50, 100, 250, 500, 1000, 5000, 20000];
 
   const initialValues = {
     amount: 0,
@@ -46,9 +56,17 @@ const CurrencyConverter = ({ exchangeRates }) => {
         </title>
       </Helmet>
 
-      <Formik enableReinitialize initialValues={initialValues} validationSchema={validationSchema}>
+      <Formik
+        enableReinitialize
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={undefined}
+      >
         {({
-          values, touched, errors, setFieldValue,
+          values,
+          touched,
+          errors,
+          setFieldValue,
         }) => {
           const { amount, from, to } = values;
           const result = convert(exchangeRates, amount, from, to).toString();
@@ -60,18 +78,9 @@ const CurrencyConverter = ({ exchangeRates }) => {
 
           const swapCurrencies = () => setFromTo(to, from);
 
-          const tuples = [
-            ['EUR', 'UAH'],
-            ['USD', 'UAH'],
-            ['HUF', 'UAH'],
-            ['EUR', 'USD'],
-            ['BTC', 'USD'],
-            ['BTC', 'EUR'],
-          ];
-
           return (
             <Container>
-              {tuples.map(([f, t]) => (
+              {CURRENCY_TUPLES.map(([f, t]) => (
                 <Button
                   color="primary"
                   size="sm"
@@ -87,7 +96,7 @@ const CurrencyConverter = ({ exchangeRates }) => {
                 >
                   {f}
                   {' '}
-                  <i className="ion-ios-swap" aria-hidden />
+                  <i aria-hidden className="ion-ios-swap" />
                   {' '}
                   {t}
                 </Button>
@@ -155,7 +164,7 @@ const CurrencyConverter = ({ exchangeRates }) => {
               {!!amount && (
                 <>
                   <div className="mb-5">
-                    <h3>
+                    <h3 className="font-style-numeric">
                       {amount}
                       {' '}
                       {CURRENCIES[from]}
@@ -163,14 +172,16 @@ const CurrencyConverter = ({ exchangeRates }) => {
                       {' '}
                       =
                     </h3>
-                    <h2>
-                      {result.slice(0, result.indexOf('.') + 3)}
-                      <span className="text-muted">{result.slice(result.indexOf('.') + 3)}</span>
+                    <h2 className="font-style-numeric">
+                      <span className="font-style-numeric">
+                        {result.slice(0, result.indexOf('.') + 3)}
+                        <span className="text-muted">{result.slice(result.indexOf('.') + 3)}</span>
+                      </span>
                       {' '}
                       {CURRENCIES[to]}
                       {result > 1 && 's'}
                     </h2>
-                    <p>
+                    <p className="font-style-numeric">
                       1
                       {' '}
                       {from}
@@ -181,7 +192,7 @@ const CurrencyConverter = ({ exchangeRates }) => {
                       {' '}
                       {to}
                     </p>
-                    <p>
+                    <p className="font-style-numeric">
                       1
                       {' '}
                       {to}
@@ -200,13 +211,13 @@ const CurrencyConverter = ({ exchangeRates }) => {
                           <tbody>
                             {EXAMPLES.map((number) => (
                               <tr key={number}>
-                                <td className="text-center">
+                                <td className="text-center font-style-numeric">
                                   {number}
                                   {' '}
                                   {from}
                                 </td>
-                                <td className="text-center">
-                                  {parseFloat(convert(number, from, to).toFixed(2)).toLocaleString()}
+                                <td className="text-center font-style-numeric">
+                                  {parseFloat(convert(exchangeRates, number, from, to).toFixed(2)).toLocaleString()}
                                   {' '}
                                   {to}
                                 </td>
@@ -222,13 +233,13 @@ const CurrencyConverter = ({ exchangeRates }) => {
                           <tbody>
                             {EXAMPLES.map((number) => (
                               <tr key={number}>
-                                <td className="text-center">
+                                <td className="text-center font-style-numeric">
                                   {number}
                                   {' '}
                                   {to}
                                 </td>
-                                <td className="text-center">
-                                  {parseFloat(convert(number, to, from).toFixed(2)).toLocaleString()}
+                                <td className="text-center font-style-numeric">
+                                  {parseFloat(convert(exchangeRates, number, to, from).toFixed(2)).toLocaleString()}
                                   {' '}
                                   {from}
                                 </td>

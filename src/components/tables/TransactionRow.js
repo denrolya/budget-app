@@ -37,7 +37,7 @@ const TransactionRow = ({
 
       <td
         className={cn('fit', 'text-nowrap', {
-          'opacity-6': !!canceledAt,
+          'text-muted': !!canceledAt,
         })}
         id={`transaction-account-cell-${id}`}
       >
@@ -51,7 +51,7 @@ const TransactionRow = ({
       <td className="d-none d-md-table-cell">
         <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
         { (showNote && note) && (
-          <p className="text-info opacity-7 small">
+          <p className="text-muted small">
             {note}
           </p>
         )}
@@ -59,7 +59,7 @@ const TransactionRow = ({
 
       <td
         className={cn('text-nowrap', 'text-right', 'text-md-center', 'w-130px', {
-          'opacity-6': !!canceledAt,
+          'text-muted': !!canceledAt,
         })}
       >
         <span
