@@ -10,6 +10,7 @@ import {
 
 import AddNewButton from 'src/components/AddNewButton';
 import DateRange from 'src/components/forms/fields/DateRange';
+import NoTransfersMessage from 'src/components/messages/NotTransfersMessage';
 import PaginationRow from 'src/components/PaginationRow';
 import TransfersTable from 'src/components/tables/TransfersTable';
 import { isActionLoading } from 'src/services/common';
@@ -75,19 +76,12 @@ const TransferList = ({
             </Row>
           </CardHeader>
           <CardBody>
-            <Form className="form transaction-filters">
+            <Form className="form transaction-filters mb-4">
               <FormGroup className="mb-0">
                 <DateRange from={from} to={to} onApply={applyDateRangeFilter} />
               </FormGroup>
             </Form>
-            {!isLoading && data.size === 0 && (
-              <div className="d-flex h-100">
-                <h4 className="justify-content-center align-self-center mx-auto text-center">
-                  No transfers found!
-                  <small className="text-muted d-block">Register some, or select another date range.</small>
-                </h4>
-              </div>
-            )}
+            {(!isLoading && data.size === 0) && <NoTransfersMessage />}
 
             {data.size > 0 && <TransfersTable data={data} deleteTransfer={deleteTransfer} />}
           </CardBody>
