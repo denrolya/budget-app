@@ -282,7 +282,7 @@ const Report = ({
                   title="Average groceries bill"
                   isLoading={isStatisticsActionLoading('groceriesAverage')}
                   content={
-                    <MoneyValue bold maximumFractionDigits={0} amount={statistics.groceriesAverage.data.average} />
+                    <MoneyValue bold maximumFractionDigits={0} amount={statistics.groceriesAverage.data.value} />
                   }
                   footer={(
                     <>

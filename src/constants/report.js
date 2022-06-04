@@ -44,7 +44,7 @@ export const AVAILABLE_STATISTICS = [
     fetchPreviousPeriod: true,
   }, {
     name: 'groceriesAverage',
-    path: 'api/transactions/statistics/groceries',
+    path: 'api/transactions/statistics/avg-weekly',
     additionalParams: {
       categoryDeep: [66],
       type: EXPENSE_TYPE,
@@ -155,8 +155,8 @@ export const INITIAL_STATE = {
     from: startOfYear,
     to: endOfYear,
     data: {
-      average: 0,
-      dayOfWeek: 'Monday',
+      value: 0,
+      dayOfWeek: 1,
     },
   }),
   mainExpenseCategoriesReview: new TimeperiodStatistics({
