@@ -55,12 +55,16 @@ export const AVAILABLE_STATISTICS = [
       categoryDeep: [1],
       type: EXPENSE_TYPE,
     },
+  }, {
+    name: 'mainIncomeSource',
+    path: 'api/transactions/statistics/top-value-category',
+    additionalParams: {
+      type: INCOME_TYPE,
+    },
   },
-  // 'mainIncomeSource',
   // 'mainExpenseCategoriesReview',
   // 'newIncomeCategories',
   // 'newExpenseCategories',
-  // 'foodExpensesMinMax',
   // 'accountExpenseDistribution',
   // 'expenseCategoriesByWeekdays',
   // 'utilityCostsByInterval',
