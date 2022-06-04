@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TreeModel from 'tree-model';
 
@@ -61,6 +62,12 @@ export const AVAILABLE_STATISTICS = [
     additionalParams: {
       type: INCOME_TYPE,
     },
+  }, {
+    name: 'accountExpenseDistribution',
+    path: 'api/transactions/statistics/account-distribution',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
   },
   // 'mainExpenseCategoriesReview',
   // 'newIncomeCategories',
@@ -96,6 +103,8 @@ export const INITIAL_STATE = {
           id: 1,
           name: 'Cash (₴)',
           symbol: '₴',
+          type: ACCOUNT_TYPE_CASH,
+          currency: 'UAH',
           color: randomColor(),
         },
         value: randomFloat(),
@@ -106,6 +115,8 @@ export const INITIAL_STATE = {
           id: 2,
           name: 'Cash ($)',
           symbol: '$',
+          type: ACCOUNT_TYPE_CASH,
+          currency: 'USD',
           color: randomColor(),
         },
         value: randomFloat(),

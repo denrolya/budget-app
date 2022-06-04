@@ -50,12 +50,13 @@ const CustomTooltip = ({ active, payload, total }) => {
 
 CustomTooltip.defaultProps = {
   active: false,
+  payload: [],
 };
 
 CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  payload: PropTypes.array.isRequired,
   total: PropTypes.number.isRequired,
+  active: PropTypes.bool,
+  payload: PropTypes.array,
 };
 
 const AccountDistribution = ({ data, height }) => {
@@ -100,7 +101,6 @@ AccountDistribution.propTypes = {
     account: PropTypes.shape({
       type: PropTypes.oneOf([ACCOUNT_TYPE_BANK_CARD, ACCOUNT_TYPE_INTERNET, ACCOUNT_TYPE_CASH, ACCOUNT_TYPE_BASIC])
         .isRequired,
-      icon: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       currency: PropTypes.string.isRequired,
       color: PropTypes.string,
