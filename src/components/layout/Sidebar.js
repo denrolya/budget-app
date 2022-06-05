@@ -24,13 +24,14 @@ const Sidebar = ({
   const totalAccountsValue = useMemo(() => sumBy(accounts, ({ convertedValues }) => convertedValues[code]), [accounts]);
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
 
-  const accountsWithBalanceOrdered = useMemo(
-    () => orderBy(accounts, 'name').filter(({ convertedValues }) => Math.abs(convertedValues[code]) >= 0.5),
+  const visibleAccountsOrderedByBalance = useMemo(
+    () => orderBy(accounts, 'name')
+      .filter(({ isDisplayedOnSidebar, convertedValues }) => isDisplayedOnSidebar && Math.abs(convertedValues[code]) >= 0.5),
     [accounts],
   );
 
-  const handleCurrencyChange = (currency) => {
-    Swal.fire({
+  const handleCurrencyChange = async (currency) => {
+    const { value } = await Swal.fire({
       icon: 'question',
       title: `Switch to ${currency.code} (${currency.symbol})`,
       text: 'You are switching base currency. Almost no changes in DB.',
@@ -41,12 +42,14 @@ const Sidebar = ({
       cancelButtonClass: 'btn btn-success',
       reverseButtons: true,
       buttonsStyling: false,
-    }).then(({ value }) => {
-      if (value) {
-        onCurrencySwitch(currency.code);
-        updateDashboard();
-      }
     });
+
+    if (!value) {
+      return;
+    }
+
+    await onCurrencySwitch(currency.code);
+    updateDashboard();
   };
 
   return (
@@ -112,7 +115,7 @@ const Sidebar = ({
           <NavItem tag="li">
             <hr />
           </NavItem>
-          {accountsWithBalanceOrdered.map((account) => (
+          {visibleAccountsOrderedByBalance.map((account) => (
             <NavItem tag="li" key={account.name}>
               <NavLink
                 className="nav-link text-capitalize text-white"
