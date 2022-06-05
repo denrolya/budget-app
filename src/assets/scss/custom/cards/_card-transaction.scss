@@ -1,7 +1,9 @@
 .card-transactions {
-  .table-full-width {
-    overflow: auto;
-    position: relative;
-    padding-bottom: 0 !important;
+  &__date-header {
+    background-color: #171928;
+
+    &:first-child {
+      @include border-radius($card-inner-border-radius $card-inner-border-radius 0 0);
+    }
   }
 }

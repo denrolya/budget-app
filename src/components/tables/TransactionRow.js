@@ -1,15 +1,10 @@
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
-import {
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledButtonDropdown,
-} from 'reactstrap';
 
 import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
+import TransactionActions from 'src/components/tables/TransactionActions';
 import TransactionDate from 'src/components/TransactionDate';
 import { isExpense } from 'src/services/common';
 import TransactionCategory from 'src/components/TransactionCategory';
@@ -19,12 +14,16 @@ const TransactionRow = ({
   showActions,
   showFullCategoryPath,
   showNote,
-  handleEdit,
-  handleDelete,
+  onEdit,
+  onDelete,
+  onCancel,
+  onRestore,
 }) => {
   const {
     id, account, amount, convertedValues, note, category, executedAt, canceledAt,
   } = transaction;
+
+  const isCanceled = !!canceledAt;
 
   return (
     <tr>
@@ -36,10 +35,10 @@ const TransactionRow = ({
       </td>
 
       <td
-        className={cn('fit', 'text-nowrap', {
-          'text-muted': !!canceledAt,
-        })}
         id={`transaction-account-cell-${id}`}
+        className={cn('fit', 'text-nowrap', {
+          'text-muted': isCanceled,
+        })}
       >
         <AccountName account={account} />
 
@@ -59,7 +58,7 @@ const TransactionRow = ({
 
       <td
         className={cn('text-nowrap', 'text-right', 'text-md-center', 'w-130px', {
-          'text-muted': !!canceledAt,
+          'text-muted': isCanceled,
         })}
       >
         <span
@@ -82,53 +81,17 @@ const TransactionRow = ({
         <TransactionDate showTimeIcon showDate={false} date={executedAt} />
       </td>
 
-      {showActions && ((handleEdit || handleDelete) && (
+      {showActions && (
         <td className="text-right text-nowrap w-50px">
-          <UncontrolledButtonDropdown>
-            <DropdownToggle caret className="btn-icon btn-link">
-              <i className="tim-icons icon-settings-gear-63" aria-hidden />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem header>
-                Actions [#
-                {transaction.id}
-                ]
-              </DropdownItem>
-              {handleEdit && (
-                <DropdownItem disabled={!!canceledAt} onClick={() => handleEdit(transaction)}>
-                  Edit
-                </DropdownItem>
-              )}
-              {handleDelete && (
-                <>
-                  <DropdownItem divider />
-                  <DropdownItem disabled={!canceledAt} onClick={() => console.log('restore transaction')}>
-                    Restore
-                  </DropdownItem>
-                  <DropdownItem
-                    disabled={!canceledAt}
-                    onClick={() => handleDelete(transaction)}
-                    className={cn({
-                      'text-danger': canceledAt,
-                    })}
-                  >
-                    Remove completely
-                  </DropdownItem>
-                  <DropdownItem
-                    disabled={!!canceledAt}
-                    onClick={() => handleDelete(transaction)}
-                    className={cn({
-                      'text-danger': !canceledAt,
-                    })}
-                  >
-                    Cancel
-                  </DropdownItem>
-                </>
-              )}
-            </DropdownMenu>
-          </UncontrolledButtonDropdown>
+          <TransactionActions
+            isCanceled={isCanceled}
+            onEdit={() => onEdit(transaction)}
+            onRestore={() => onRestore(transaction)}
+            onDelete={() => onDelete(transaction)}
+            onCancel={() => onCancel(transaction)}
+          />
         </td>
-      ))}
+      )}
     </tr>
   );
 };
@@ -144,8 +107,10 @@ TransactionRow.propTypes = {
   showNote: PropTypes.bool,
   showActions: PropTypes.bool,
   showFullCategoryPath: PropTypes.bool,
-  handleEdit: PropTypes.func,
-  handleDelete: PropTypes.func,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
+  onCancel: PropTypes.func,
+  onRestore: PropTypes.func,
 };
 
 export default memo(TransactionRow);

@@ -104,8 +104,8 @@ const TransactionList = ({
                   setPage={setPage}
                   setPerPage={setPerPage}
                   setFilters={setFilters}
-                  editTransaction={toggleTransactionEdition}
-                  deleteTransaction={deleteTransaction}
+                  handleEdit={toggleTransactionEdition}
+                  handleDelete={deleteTransaction}
                 />
               )}
               {data.length === 0 && <NoTransactionsMessage />}

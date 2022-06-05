@@ -90,7 +90,7 @@ export const fetchList = () => async (dispatch, getState) => {
     const { data: transactions } = await axios.get('api/transactions', { params });
     const { data: totalValue } = await axios.get('api/transactions/statistics/sum', { params });
 
-    dispatch(Creators.fetchListSuccess(transactions['hydra:member'], transactions['hydra:totalItems'], totalValue['hydra:member']));
+    dispatch(Creators.fetchListSuccess(transactions['hydra:member'], transactions['hydra:totalItems'], totalValue['hydra:member'][0]));
   } catch (e) {
     notify('error', 'Fetch Transaction List');
     dispatch(Creators.fetchListFailure(e));

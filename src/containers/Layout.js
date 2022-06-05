@@ -143,7 +143,7 @@ const Layout = ({
             toggleSidebar={toggleSidebar}
             isSidebarOpened={isSidebarOpened}
           />
-          <div className="content pb-0">
+          <div className="content">
             {isVitalDataLoaded && (
               <Outlet />
             ) }

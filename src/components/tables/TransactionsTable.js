@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Table, Badge, UncontrolledCollapse } from 'reactstrap';
 import uniqBy from 'lodash/uniqBy';
 import sumBy from 'lodash/sumBy';
@@ -23,20 +23,20 @@ const TransactionsTable = ({
   totalValue,
   setPage,
   setPerPage,
-  deleteTransaction,
-  editTransaction,
+  handleDelete,
+  handleEdit,
 }) => {
   const { code } = useBaseCurrency();
-  const dates = uniqBy(
+  const dates = useMemo(() => uniqBy(
     data.map(({ executedAt }) => executedAt.clone().startOf('day')),
     (date) => date.format(),
-  ).sort((a, b) => a.isBefore(b));
+  ).sort((a, b) => a.isBefore(b)), [data]);
 
   return (
     <>
       {dates.map((date) => {
         const transactions = data.filter(({ executedAt }) => executedAt.clone().startOf('day').isSame(date));
-        const sum = sumBy(
+        const totalDailyValue = sumBy(
           transactions.filter((t) => !isExpense(t)),
           ({ convertedValues }) => convertedValues[code],
         )
@@ -49,13 +49,10 @@ const TransactionsTable = ({
           <React.Fragment key={date}>
             <div
               id={`date-${date.format(MOMENT_DATE_FORMAT)}`}
-              className="text-nowrap text-white cursor-pointer p-1 pl-3"
-              style={{
-                backgroundColor: '#171928',
-              }}
+              className="text-nowrap text-white cursor-pointer p-1 pl-3 d-flex justify-content-between align-center card-transactions__date-header"
             >
-              <span
-                className={cn('font-15px', 'm-auto', {
+              <p
+                className={cn('font-15px', {
                   'text-primary': isToday(date),
                   'text-success': isYesterday(date),
                 })}
@@ -65,10 +62,10 @@ const TransactionsTable = ({
                 {isToday(date) && 'Today'}
                 {isYesterday(date) && 'Yesterday'}
                 {!isToday(date) && !isYesterday(date) && date.format(MOMENT_VIEW_DATE_FORMAT)}
-              </span>
+              </p>
               {' '}
-              <Badge pill className="float-right" color={sum > 0 ? 'success' : 'danger'}>
-                <MoneyValue amount={sum} />
+              <Badge pill className="float-right" color={totalDailyValue > 0 ? 'success' : 'danger'}>
+                <MoneyValue amount={totalDailyValue} />
               </Badge>
             </div>
             <UncontrolledCollapse defaultOpen toggler={`date-${date.format(MOMENT_DATE_FORMAT)}`}>
@@ -81,8 +78,10 @@ const TransactionsTable = ({
                       showActions={showActions}
                       showFullCategoryPath={showFullCategoryPath}
                       transaction={transaction}
-                      handleEdit={editTransaction}
-                      handleDelete={deleteTransaction}
+                      onEdit={handleEdit}
+                      onCancel={handleDelete}
+                      onRestore={(t) => console.log(`Restore transaction ${t.id}`)}
+                      onDelete={handleDelete}
                     />
                   ))}
                 </tbody>
@@ -136,8 +135,8 @@ TransactionsTable.propTypes = {
   totalValue: PropTypes.number,
   setPage: PropTypes.func,
   setPerPage: PropTypes.func,
-  deleteTransaction: PropTypes.func,
-  editTransaction: PropTypes.func,
+  handleDelete: PropTypes.func,
+  handleEdit: PropTypes.func,
 };
 
 export default TransactionsTable;
