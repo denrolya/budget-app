@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 
 import axios from 'src/services/http';
 import { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/services/routing';
-import { confirmTransactionCancellation, confirmTransactionDeletion } from 'src/services/transaction';
+import { transactionCancellationPrompt, transactionDeletionPrompt } from 'src/services/prompts';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
@@ -170,8 +170,8 @@ export const editTransaction = (id, type, transaction) => async (dispatch, getSt
  */
 export const deleteTransaction = (transaction) => async (dispatch, getState) => {
   const { isConfirmed } = transaction.canceledAt
-    ? await confirmTransactionDeletion(transaction)
-    : await confirmTransactionCancellation(transaction);
+    ? await transactionDeletionPrompt(transaction)
+    : await transactionCancellationPrompt(transaction);
 
   if (!isConfirmed) {
     return;

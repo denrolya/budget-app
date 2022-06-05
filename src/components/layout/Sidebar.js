@@ -7,7 +7,6 @@ import { Button, Nav, NavItem } from 'reactstrap';
 import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
 import sumBy from 'lodash/sumBy';
-import Swal from 'sweetalert2';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { ROUTE_ACCOUNTS, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
@@ -15,6 +14,7 @@ import { generateLinkToAccountTransactionsPage, routes } from 'src/services/rout
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import AccountName from 'src/components/AccountName';
 import { CURRENCIES } from 'src/constants/currency';
+import { switchCurrencyPrompt } from 'src/services/prompts';
 
 const Sidebar = ({
   accounts, totalDebt, isLoading, onCurrencySwitch, updateDashboard,
@@ -30,25 +30,14 @@ const Sidebar = ({
   );
 
   const handleCurrencyChange = async (currency) => {
-    const { value } = await Swal.fire({
-      icon: 'question',
-      title: `Switch to ${currency.code} (${currency.symbol})`,
-      text: 'You are switching base currency. Almost no changes in DB.',
-      showCancelButton: true,
-      confirmButtonText: `Switch to ${currency.code}`,
-      cancelButtonText: `Keep ${code}`,
-      confirmButtonClass: 'btn btn-warning',
-      cancelButtonClass: 'btn btn-success',
-      reverseButtons: true,
-      buttonsStyling: false,
-    });
+    const { isConfirmed } = await switchCurrencyPrompt(code, currency);
 
-    if (!value) {
+    if (!isConfirmed) {
       return;
     }
 
     await onCurrencySwitch(currency.code);
-    updateDashboard();
+    await updateDashboard();
   };
 
   return (

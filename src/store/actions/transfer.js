@@ -1,7 +1,7 @@
 import { createActions } from 'reduxsauce';
-import Swal from 'sweetalert2';
 import moment from 'moment-timezone';
 
+import { transferDeletionPrompt } from 'src/services/prompts';
 import axios from 'src/services/http';
 import {
   getTransferListQueryParams,
@@ -120,22 +120,14 @@ export const registerTransfer = (transfer) => async (dispatch) => {
   }
 };
 
-export const deleteTransfer = ({ id }) => async (dispatch) => {
-  const { isConfirmed } = await Swal.fire({
-    title: 'Delete transfer',
-    text: `Are you sure you want to delete transfer #${id}?`,
-    showCancelButton: true,
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Cancel',
-    confirmButtonClass: 'btn btn-danger',
-    cancelButtonClass: 'btn btn-success',
-    reverseButtons: true,
-    buttonsStyling: false,
-  });
+export const deleteTransfer = (transfer) => async (dispatch) => {
+  const { isConfirmed } = await transferDeletionPrompt(transfer);
 
   if (!isConfirmed) {
     return;
   }
+
+  const { id } = transfer;
 
   dispatch(Creators.deleteRequest());
 

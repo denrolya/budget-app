@@ -2,69 +2,6 @@ import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import React from 'react';
 import { Badge } from 'reactstrap';
-import Swal from 'sweetalert2';
-
-import { CURRENCIES } from 'src/constants/currency';
-import { MOMENT_VIEW_TIME_FORMAT } from 'src/constants/datetime';
-
-/**
- * Shows cancellation confirmation alert
- *
- * @param {Object} account
- * @param {number} amount
- * @param {string} type
- * @returns {Promise<SweetAlertResult>}
- */
-export const confirmTransactionCancellation = ({ account, amount, type }) => Swal.fire({
-  title: 'Cancel Transaction',
-  text: `Are you sure you want to delete this ${type}?(${CURRENCIES[account.currency].symbol} ${amount})`,
-  showCancelButton: true,
-  confirmButtonText: 'Yes, cancel this transaction',
-  cancelButtonText: 'No, keep it',
-  confirmButtonClass: 'btn btn-danger',
-  cancelButtonClass: 'btn btn-success',
-  reverseButtons: true,
-  buttonsStyling: false,
-});
-
-/**
- * Shows deletion confirmation alert
- *
- * @param {Object} account
- * @param {number} amount
- * @param {string} type
- * @returns {Promise<SweetAlertResult>}
- */
-export const confirmTransactionDeletion = ({ account, amount, type }) => Swal.fire({
-  title: 'Irrevocably DELETE',
-  text: `Are you sure you want to delete this ${type} FOREVER?(${CURRENCIES[account.currency].symbol} ${amount})`,
-  showCancelButton: true,
-  confirmButtonText: 'DELETE',
-  cancelButtonText: 'OMG, no',
-  confirmButtonClass: 'btn btn-danger',
-  cancelButtonClass: 'btn btn-success',
-  reverseButtons: true,
-  buttonsStyling: false,
-});
-
-/**
- * Shows removal alert
- *
- * @param {number} id
- * @param {name} name
- * @returns {Promise<"sweetalert2".SweetAlertResult>}
- */
-export const confirmCategoryRemoval = ({ name }) => Swal.fire({
-  title: 'Remove category',
-  text: `Are you sure you want to completely remove category '${name}'? This involves transaction deletion, for all users!!!`,
-  showCancelButton: true,
-  confirmButtonText: 'Yes, remove category & transactions!',
-  cancelButtonText: 'Cancel',
-  confirmButtonClass: 'btn btn-danger',
-  cancelButtonClass: 'btn btn-success',
-  reverseButtons: true,
-  buttonsStyling: false,
-});
 
 export const listToTree = (list) => {
   const map = {}; let node; const roots = []; let
@@ -88,11 +25,6 @@ export const listToTree = (list) => {
   return roots;
 };
 
-/**
- *
- * @param {Array} tree
- * @returns {Array}
- */
 export const createCategoriesTree = (tree) => orderBy(
   tree.map((c) => {
     if (c.children.length > 0) {
@@ -135,10 +67,6 @@ export const createCategoriesTree = (tree) => orderBy(
   'desc',
 );
 
-/**
- * @param {array} transactions
- * @returns {array}
- */
 export const initializeList = (transactions) => transactions.map(({ executedAt, canceledAt, ...rest }) => ({
   ...rest,
   executedAt: moment(executedAt),

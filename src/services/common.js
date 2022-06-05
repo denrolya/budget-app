@@ -1,5 +1,4 @@
 import moment from 'moment-timezone';
-import Swal from 'sweetalert2';
 import sumBy from 'lodash/sumBy';
 import TreeModel from 'tree-model';
 
@@ -297,41 +296,6 @@ export const generateCategoriesStatisticsTree = (current, previous) => {
 
   return treeData;
 };
-
-export const confirmAccountArchivation = (account) => Swal.fire({
-  title: `Archive ${account.name}`,
-  text: 'All the transactions remain. NOTHING is DELETED! Account can be restored later.',
-  showCancelButton: true,
-  confirmButtonText: 'Archive',
-  cancelButtonText: 'Cancel',
-  confirmButtonClass: 'btn btn-simple btn-warning',
-  cancelButtonClass: 'btn btn-simple btn-info',
-  reverseButtons: true,
-  buttonsStyling: false,
-});
-
-export const confirmAccountRestoration = (account) => Swal.fire({
-  title: `Restore ${account.name}`,
-  text: 'Is this account in use again?',
-  showCancelButton: true,
-  confirmButtonText: 'Restore',
-  cancelButtonText: 'Cancel',
-  confirmButtonClass: 'btn btn-success',
-  cancelButtonClass: 'btn btn-info',
-  reverseButtons: true,
-  buttonsStyling: false,
-});
-
-export const confirmAccountNameChange = (account, newName) => Swal.fire({
-  title: `Change ${account.name} to ${newName}?`,
-  showCancelButton: true,
-  confirmButtonText: 'Change',
-  cancelButtonText: 'Cancel',
-  confirmButtonClass: 'btn btn-warning',
-  cancelButtonClass: 'btn btn-info',
-  reverseButtons: true,
-  buttonsStyling: false,
-});
 
 export const ratio = (p) => (p < 100 ? 100 - p : p - 100);
 

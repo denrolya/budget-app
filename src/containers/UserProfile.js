@@ -6,33 +6,24 @@ import filter from 'lodash/filter';
 import {
   Button, Card, CardBody, CardFooter, CardHeader, CardText, Col, Row,
 } from 'reactstrap';
-import Swal from 'sweetalert2';
 
 import { switchBaseCurrency } from 'src/store/actions/user';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { CURRENCIES } from 'src/constants/currency';
 import avatar from 'src/assets/img/emilyz.jpg';
+import { switchCurrencyPrompt } from 'src/services/prompts';
 
 const UserProfile = ({ availableCurrencies, switchBaseCurrency }) => {
   const { symbol, code } = useBaseCurrency();
 
-  const onCurrencyChange = (currency) => {
-    Swal.fire({
-      icon: 'question',
-      title: `Switch to ${currency.code} (${currency.symbol})`,
-      text: 'You are switching base currency. Almost no changes in DB.',
-      showCancelButton: true,
-      confirmButtonText: `Switch to ${currency.code}`,
-      cancelButtonText: `Keep ${code}`,
-      confirmButtonClass: 'btn btn-warning',
-      cancelButtonClass: 'btn btn-success',
-      reverseButtons: true,
-      buttonsStyling: false,
-    }).then(({ value }) => {
-      if (value) {
-        switchBaseCurrency(currency);
-      }
-    });
+  const onCurrencyChange = async (currency) => {
+    const { isConfirmed } = await switchCurrencyPrompt(code, currency);
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    switchBaseCurrency(currency);
   };
 
   return (

@@ -7,7 +7,11 @@ import { Row, Col, CardBody } from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
 import CenteredMessage from 'src/components/messages/CenteredMessage';
-import { confirmAccountArchivation, confirmAccountNameChange, confirmAccountRestoration } from 'src/services/common';
+import {
+  accountArchivationPrompt,
+  accountNameChangePrompt,
+  accountRestorationPrompt,
+} from 'src/services/prompts';
 import {
   toggleArchived, fetchDetail, updateName, updateColor,
 } from 'src/store/actions/account';
@@ -52,7 +56,7 @@ const AccountDetails = ({
   }, [id]);
 
   const onArchiveClick = async (account) => {
-    const { isConfirmed } = await confirmAccountArchivation(account);
+    const { isConfirmed } = await accountArchivationPrompt(account);
     if (!isConfirmed) {
       return;
     }
@@ -62,7 +66,7 @@ const AccountDetails = ({
   };
 
   const onRestoreClick = async (account) => {
-    const { isConfirmed } = await confirmAccountRestoration(account);
+    const { isConfirmed } = await accountRestorationPrompt(account);
     if (!isConfirmed) {
       return;
     }
@@ -72,7 +76,7 @@ const AccountDetails = ({
   };
 
   const onNameChange = async (account, newName) => {
-    const { isConfirmed } = await confirmAccountNameChange(account, newName);
+    const { isConfirmed } = await accountNameChangePrompt(account, newName);
     if (!isConfirmed) {
       return;
     }

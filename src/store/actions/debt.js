@@ -2,7 +2,7 @@ import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import { createActions } from 'reduxsauce';
 import { SERVER_TIMEZONE } from 'src/constants/datetime';
-import Swal from 'sweetalert2';
+import { closeDebtPrompt } from 'src/services/prompts';
 
 import { ROUTE_DASHBOARD, ROUTE_DEBTS } from 'src/constants/routes';
 import axios from 'src/services/http';
@@ -93,21 +93,12 @@ export const editDebt = (id, debt) => async (dispatch) => {
 export const closeDebt = ({
   id, debtor, currency, balance,
 }) => async (dispatch) => {
-  const { isConfirmed } = await Swal.fire({
-    title: 'Close this debt',
-    text: `Are you sure you want to close ${debtor}'s debt?(${currency.symbol} ${balance})`,
-    showCancelButton: true,
-    confirmButtonText: 'Yes, close this debt!',
-    cancelButtonText: 'No, keep it',
-    confirmButtonClass: 'btn btn-danger',
-    cancelButtonClass: 'btn btn-success',
-    reverseButtons: false,
-    buttonsStyling: false,
-  });
+  const { isConfirmed } = await closeDebtPrompt(debtor, currency, balance);
 
   if (!isConfirmed) {
     return;
   }
+
   dispatch(Creators.deleteDebtRequest());
 
   try {

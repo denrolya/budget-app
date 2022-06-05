@@ -2,7 +2,7 @@ import orderBy from 'lodash/orderBy';
 import { createActions } from 'reduxsauce';
 
 import axios from 'src/services/http';
-import { confirmCategoryRemoval } from 'src/services/transaction';
+import { categoryRemovalPrompt } from 'src/services/prompts';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(
@@ -92,8 +92,10 @@ export const edit = (id, type, data) => (dispatch) => {
     });
 };
 
-export const remove = (category) => (dispatch) => confirmCategoryRemoval(category).then(({ value }) => {
-  if (!value) {
+export const remove = (category) => async (dispatch) => {
+  const { isConfirmed } = await categoryRemovalPrompt(category);
+
+  if (!isConfirmed) {
     return {};
   }
 
@@ -109,4 +111,4 @@ export const remove = (category) => (dispatch) => confirmCategoryRemoval(categor
       notify('error', 'Category Delete');
       dispatch(Creators.removeFailure(message));
     });
-});
+};
