@@ -66,29 +66,12 @@
 
     @include form-control-placeholder(rgba($black, 0.4), 1);
 
-    .has-danger {
-      .form-control,
-      .input-group-prepend .input-group-text {
-        border-color: $danger-states;
-      }
-    }
-
     .input-group-prepend .input-group-text {
-      border-color: rgba($black-states, 0.2);
       color: $black-states;
     }
 
     .form-control {
       color: $black;
-      border-color: rgba($black-states, 0.2);
-
-      ~ .input-group-prepend .input-group-text {
-        border-color: $primary;
-      }
-
-      &:focus {
-        border-color: $primary;
-      }
     }
   }
 

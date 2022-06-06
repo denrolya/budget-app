@@ -37,7 +37,7 @@
   }
 
   label {
-    color: rgba($white, 0.6);
+    color: $opacity-8;
   }
 
   &-title {
@@ -109,8 +109,8 @@
 
     @include form-control-placeholder(rgba($black, 0.4), 1);
 
-    .has-danger {
-      .form-control, .input-group-prepend .input-group-text {
+    .form-control {
+      &.is-invalid {
         border-color: $danger-states;
       }
     }
@@ -118,6 +118,10 @@
     .input-group-prepend .input-group-text {
       border-color: rgba($black-states, 0.2);
       color: $black-states;
+    }
+
+    .input-group:focus-within .input-group-prepend .input-group-text {
+      border-color: $primary;
     }
 
     .form-control, .form-select {

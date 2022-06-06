@@ -57,6 +57,10 @@ const DateRange = ({
   );
 };
 
+DateRange.defaultProps = {
+  size: undefined,
+};
+
 DateRange.propTypes = {
   from: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,

@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import Masonry from 'react-masonry-css';
@@ -30,10 +30,6 @@ import SimpleStatisticsCard from 'src/components/cards/statistics/SimpleStatisti
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
 import IconStatisticsCard from 'src/components/cards/statistics/IconStatisticsCard';
 
-/**
- * TODO: Expenses by season should be calculated taken from moneyflow
- * TODO: Go through each card and see if can be reduced
- */
 const Report = ({
   ui,
   statistics,
@@ -48,9 +44,15 @@ const Report = ({
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
 
   const { from, to } = statistics.mainExpenseCategoriesReview;
-  const diffInDays = statistics.mainExpenseCategoriesReview.diffIn('days');
+  const diffInDays = useMemo(
+    () => statistics.mainExpenseCategoriesReview.diffIn('days'),
+    [from, to],
+  );
   const previousYear = from.year() - 1;
-  const previousPeriodText = (previousYear === moment().year() - 1) ? `last year(${previousYear})` : previousYear;
+  const previousPeriodText = useMemo(
+    () => (previousYear === moment().year() - 1) ? `last year(${previousYear})` : previousYear,
+    [previousYear],
+  );
 
   return (
     <>
@@ -175,9 +177,13 @@ const Report = ({
             <SimpleStatisticsCard
               isLoading={isStatisticsActionLoading('totalExpense')}
               title="Total Expense"
-              content={
-                <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(statistics.totalExpense.data.current)} />
-              }
+              content={(
+                <MoneyValue
+                  bold
+                  maximumFractionDigits={0}
+                  amount={Math.abs(statistics.totalExpense.data.current)}
+                />
+              )}
               footer={(
                 <AmountSinceLastPeriodMessage
                   period={previousPeriodText}
@@ -298,9 +304,13 @@ const Report = ({
               <SimpleStatisticsCard
                 title="Food expenses"
                 isLoading={isStatisticsActionLoading('foodExpenses')}
-                content={
-                  <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(statistics.foodExpenses.data.current) / diffInDays} />
-                }
+                content={(
+                  <MoneyValue
+                    bold
+                    maximumFractionDigits={0}
+                    amount={Math.abs(statistics.foodExpenses.data.current) / diffInDays}
+                  />
+                )}
                 footer={(
                   <AmountSinceLastPeriodMessage
                     period={previousPeriodText}

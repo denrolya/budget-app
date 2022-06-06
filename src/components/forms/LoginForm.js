@@ -1,7 +1,6 @@
-import cn from 'classnames';
 import { ErrorMessage, Field, Formik } from 'formik';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button,
   Card,
@@ -20,7 +19,6 @@ import * as Yup from 'yup';
 import loginCardBg from 'src/assets/img/login-card.png';
 
 const LoginForm = ({ isLoading, logIn }) => {
-  const [selected, selectField] = useState();
   const initialValues = {
     username: '',
     password: '',
@@ -38,19 +36,18 @@ const LoginForm = ({ isLoading, logIn }) => {
         <CardTitle tag="h1">Log In</CardTitle>
       </CardHeader>
       <CardBody>
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => logIn(values)}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={(values) => logIn(values)}
+        >
           {(model) => (
             <Form onSubmit={model.handleSubmit}>
               <FormGroup>
-                <InputGroup
-                  className={cn('mb-0', {
-                    'has-danger': model.touched.username && !!model.errors.username,
-                    'input-group-focus': selected === 'username',
-                  })}
-                >
+                <InputGroup className="mb-0">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
-                      <i className="fa fa-user" aria-hidden />
+                      <i aria-hidden className="fa fa-user" />
                     </InputGroupText>
                   </InputGroupAddon>
                   <Field
@@ -60,23 +57,17 @@ const LoginForm = ({ isLoading, logIn }) => {
                     name="username"
                     id="username"
                     placeholder="Username"
-                    onFocus={() => selectField('username')}
-                    onBlur={() => selectField()}
+                    invalid={model.touched.username && !!model.errors.username}
                     value={model.values.username}
                   />
                 </InputGroup>
                 <ErrorMessage component="div" name="username" className="invalid-feedback" />
               </FormGroup>
               <FormGroup>
-                <InputGroup
-                  className={cn('mb-0', {
-                    'has-danger': model.touched.password && !!model.errors.password,
-                    'input-group-focus': selected === 'password',
-                  })}
-                >
+                <InputGroup className="mb-0">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
-                      <i className="fa fa-lock" aria-hidden />
+                      <i aria-hidden className="fa fa-lock" />
                     </InputGroupText>
                   </InputGroupAddon>
                   <Field
@@ -85,15 +76,15 @@ const LoginForm = ({ isLoading, logIn }) => {
                     name="password"
                     id="password"
                     placeholder="Password"
-                    onFocus={() => selectField('password')}
-                    onBlur={() => selectField()}
+                    invalid={model.touched.password && !!model.errors.password}
                     value={model.values.password}
                   />
                 </InputGroup>
                 <ErrorMessage component="div" name="password" className="invalid-feedback" />
               </FormGroup>
               <Button block type="submit" className="mb-3" color="primary" size="lg" disabled={isLoading}>
-                {!isLoading ? 'Log In' : <i className="tim-icons icon-refresh-02 fa-spin" />}
+                {isLoading && <i aria-hidden className="tim-icons icon-refresh-02 fa-spin" />}
+                {!isLoading && 'Log In' }
               </Button>
             </Form>
           )}

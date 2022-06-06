@@ -31,7 +31,7 @@ const AccountList = ({ list }) => {
         </title>
       </Helmet>
 
-      {list.length > 0 && <AccountSelector accounts={list} onChange={(v) => navigate(`${v}`)} selected={id} />}
+      {list.length > 0 && <AccountSelector accounts={list} onChange={(v) => navigate(`${v}`)} selected={id || ''} />}
 
       { id && <Outlet /> }
     </>
