@@ -40,20 +40,7 @@ const TransactionFilters = ({
             </Label>
           </FormGroup>
         </div>
-        <div className="ml-3">
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="checkbox"
-                checked={model.withCanceled}
-                onChange={() => onModelChange(model.set('withCanceled', !model.withCanceled))}
-              />
-              <span className="form-check-sign" />
-              {' '}
-              With canceled
-            </Label>
-          </FormGroup>
-        </div>
+        <div className="ml-3" />
       </FormGroup>
 
       <FormGroup className="mb-4">

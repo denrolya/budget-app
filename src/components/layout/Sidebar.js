@@ -68,7 +68,7 @@ const Sidebar = ({
         </div>
         <Nav className="mt-0">
           {sidebarRoutes.map(({ name, path, icon }) => (
-            <NavItem tag="li" key={`nav-item-route-${name}`} active={!!matchPath(path, pathname)}>
+            <NavItem tag="li" key={`nav-item-route-${name}`}>
               <NavLink className="nav-link text-white" to={path}>
                 <i aria-hidden className={icon} />
                 <p>{name}</p>

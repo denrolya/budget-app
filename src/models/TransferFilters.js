@@ -10,7 +10,6 @@ export const DEFAULT_VALUES = {
   from: moment().startOf('month'),
   to: moment().endOf('month'),
   accounts: [],
-  withCanceled: false,
 };
 
 class TransferFilters extends Record(DEFAULT_VALUES) {
@@ -19,14 +18,13 @@ class TransferFilters extends Record(DEFAULT_VALUES) {
 
     if (finalValues) {
       const {
-        from, to, accounts, withCanceled,
+        from, to, accounts,
       } = finalValues;
 
       finalValues = {
         from: TransferFilters.normalize('from', from),
         to: TransferFilters.normalize('to', to),
         accounts: TransferFilters.normalize('accounts', accounts),
-        withCanceled: TransferFilters.normalize('withCanceled', withCanceled),
       };
     }
 

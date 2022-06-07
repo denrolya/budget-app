@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 
 import axios from 'src/utils/http';
 import { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/utils/routing';
-import { transactionCancellationPrompt, transactionDeletionPrompt } from 'src/utils/prompts';
+import { transactionDeletionPrompt } from 'src/utils/prompts';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
@@ -69,7 +69,6 @@ export const fetchList = () => async (dispatch, getState) => {
         to,
         accounts,
         categories,
-        withCanceled,
         onlyDrafts,
         types,
       },
@@ -83,7 +82,6 @@ export const fetchList = () => async (dispatch, getState) => {
       'account.id': accounts,
       'executedAt[after]': from.clone().format(MOMENT_DATETIME_FORMAT),
       'executedAt[before]': to.clone().format(MOMENT_DATETIME_FORMAT),
-      withDeleted: withCanceled ? 1 : 0,
       isDraft: onlyDrafts ? 1 : 0,
     };
 
@@ -165,13 +163,8 @@ export const editTransaction = (id, type, transaction) => async (dispatch, getSt
   }
 };
 
-/**
- * TODO: Refactor; Simplify, remove conditions for canceled and not canceled transactions; split maybe in 2 functions
- */
 export const deleteTransaction = (transaction) => async (dispatch, getState) => {
-  const { isConfirmed } = transaction.canceledAt
-    ? await transactionDeletionPrompt(transaction)
-    : await transactionCancellationPrompt(transaction);
+  const { isConfirmed } = await transactionDeletionPrompt(transaction);
 
   if (!isConfirmed) {
     return;
@@ -184,11 +177,7 @@ export const deleteTransaction = (transaction) => async (dispatch, getState) => 
 
     dispatch(Creators.deleteSuccess(transaction.id));
 
-    notify(
-      'success',
-      `Transaction ${transaction.canceledAt ? 'deleted!' : 'canceled'}`,
-      transaction.canceledAt ? 'DELETED' : 'Canceled',
-    );
+    notify('success', 'Transaction deleted!', 'DELETED');
 
     if (isOnDashboardPage()) {
       dispatch(updateDashboard());

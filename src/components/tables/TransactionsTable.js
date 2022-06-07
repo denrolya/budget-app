@@ -50,7 +50,7 @@ const TransactionsTable = ({
           <React.Fragment key={date}>
             <div
               id={`date-${date.format(MOMENT_DATE_FORMAT)}`}
-              className="text-nowrap text-white cursor-pointer p-1 pl-3 d-flex justify-content-between align-center card-transactions__date-header"
+              className="text-nowrap text-white cursor-pointer py-1 px-3 d-flex justify-content-between align-center card-transactions__date-header"
             >
               <p
                 className={cn('font-15px', {
@@ -66,7 +66,7 @@ const TransactionsTable = ({
               </p>
               {' '}
               <Badge pill className="float-right" color={totalDailyValue > 0 ? 'success' : 'danger'}>
-                <MoneyValue amount={totalDailyValue} />
+                <MoneyValue bold amount={totalDailyValue} />
               </Badge>
             </div>
             <UncontrolledCollapse defaultOpen toggler={`date-${date.format(MOMENT_DATE_FORMAT)}`}>
@@ -80,7 +80,6 @@ const TransactionsTable = ({
                       showFullCategoryPath={showFullCategoryPath}
                       transaction={transaction}
                       onEdit={handleEdit}
-                      onCancel={handleDelete}
                       onRestore={(t) => console.log(`Restore transaction ${t.id}`)}
                       onDelete={handleDelete}
                     />
@@ -93,7 +92,7 @@ const TransactionsTable = ({
       })}
 
       {pagination && (
-        <>
+        <div className="px-3 py-1">
           <PaginationRow model={pagination} setPage={setPage} setPerPage={setPerPage} />
 
           <p className="text-muted text-right text-nowrap small">
@@ -107,12 +106,10 @@ const TransactionsTable = ({
                 'text-danger': totalValue < 0,
               })}
             >
-              <u className="strong">
-                <MoneyValue amount={Math.abs(totalValue)} />
-              </u>
+              <MoneyValue bold amount={Math.abs(totalValue)} />
             </span>
           </p>
-        </>
+        </div>
       )}
     </>
   );

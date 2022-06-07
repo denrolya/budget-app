@@ -16,7 +16,6 @@ export const DEFAULT_VALUES = {
   to: moment().endOf('month'),
   accounts: [],
   categories: [],
-  withCanceled: false,
   onlyDrafts: false,
 };
 
@@ -26,7 +25,7 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
 
     if (finalValues) {
       const {
-        types, from, to, categories, accounts, withCanceled, onlyDrafts,
+        types, from, to, categories, accounts, onlyDrafts,
       } = finalValues;
 
       finalValues = {
@@ -35,7 +34,6 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
         to: TransactionFilters.normalize('to', to),
         categories: TransactionFilters.normalize('categories', categories),
         accounts: TransactionFilters.normalize('accounts', accounts),
-        withCanceled: TransactionFilters.normalize('withCanceled', withCanceled),
         onlyDrafts: TransactionFilters.normalize('onlyDrafts', onlyDrafts),
       };
     }

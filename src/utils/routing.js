@@ -138,7 +138,6 @@ export const getTransactionListQueryParams = (queryString) => ({
   to: getQueryParam(queryString, 'to', (v) => moment(v, MOMENT_DATE_FORMAT)),
   accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
   categories: getQueryParam(queryString, 'categories', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
-  withCanceled: getQueryParam(queryString, 'withCanceled', (v) => v === 'true'),
   onlyDrafts: getQueryParam(queryString, 'onlyDrafts', (v) => v === 'true'),
 });
 
@@ -148,7 +147,6 @@ export const getTransferListQueryParams = (queryString) => ({
   perPage: getQueryParam(queryString, 'perPage', parseInt),
   page: getQueryParam(queryString, 'page', parseInt),
   accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? v : [v])),
-  withCanceled: getQueryParam(queryString, 'withCanceled', (v) => v === 'true'),
 });
 
 /**

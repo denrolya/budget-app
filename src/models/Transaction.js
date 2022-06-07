@@ -15,7 +15,6 @@ const DEFAULT_VALUES = {
   category: undefined,
   note: '',
   executedAt: moment(),
-  canceledAt: null,
   compensations: new List(),
 };
 
@@ -27,7 +26,6 @@ class Transaction extends Record(DEFAULT_VALUES) {
 
     if (constructorProps) {
       constructorProps.executedAt = moment(constructorProps.executedAt);
-      constructorProps.canceledAt = constructorProps.canceledAt ? moment(constructorProps.canceledAt) : null;
       constructorProps.account = constructorProps.account && new Account(constructorProps.account);
       constructorProps.category = constructorProps.category && new Category(constructorProps.category);
     }

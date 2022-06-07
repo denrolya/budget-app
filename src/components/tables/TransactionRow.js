@@ -1,10 +1,10 @@
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
+import { Button } from 'reactstrap';
 
 import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
-import TransactionActions from 'src/components/tables/TransactionActions';
 import TransactionDate from 'src/components/TransactionDate';
 import { isExpense } from 'src/utils/common';
 import TransactionCategory from 'src/components/TransactionCategory';
@@ -16,14 +16,11 @@ const TransactionRow = ({
   showNote,
   onEdit,
   onDelete,
-  onCancel,
   onRestore,
 }) => {
   const {
-    id, account, amount, convertedValues, note, category, executedAt, canceledAt,
+    id, account, amount, convertedValues, note, category, executedAt,
   } = transaction;
-
-  const isCanceled = !!canceledAt;
 
   return (
     <tr>
@@ -34,12 +31,7 @@ const TransactionRow = ({
         </code>
       </td>
 
-      <td
-        id={`transaction-account-cell-${id}`}
-        className={cn('fit', 'text-nowrap', {
-          'text-muted': isCanceled,
-        })}
-      >
+      <td className="fit text-nowrap" id={`transaction-account-cell-${id}`}>
         <AccountName account={account} />
 
         <span className="text-muted font-size-smaller d-block d-md-none text-left">
@@ -56,11 +48,7 @@ const TransactionRow = ({
         )}
       </td>
 
-      <td
-        className={cn('text-nowrap', 'text-right', 'text-md-center', 'w-130px', {
-          'text-muted': isCanceled,
-        })}
-      >
+      <td className={cn('text-nowrap', 'text-right', 'text-md-center', 'w-130px')}>
         <span
           className={cn('d-block', 'font-style-numeric', {
             'text-danger': isExpense(transaction),
@@ -83,13 +71,12 @@ const TransactionRow = ({
 
       {showActions && (
         <td className="text-right text-nowrap w-50px">
-          <TransactionActions
-            isCanceled={isCanceled}
-            onEdit={() => onEdit(transaction)}
-            onRestore={() => onRestore(transaction)}
-            onDelete={() => onDelete(transaction)}
-            onCancel={() => onCancel(transaction)}
-          />
+          <Button size="sm" className="btn-link px-2" color="warning" onClick={() => onEdit(transaction)}>
+            <i aria-hidden className="tim-icons icon-pencil" />
+          </Button>
+          <Button size="sm" className="btn-link px-2" color="warning" onClick={() => onDelete(transaction)}>
+            <i aria-hidden className="tim-icons icon-trash-simple" />
+          </Button>
         </td>
       )}
     </tr>
@@ -109,7 +96,6 @@ TransactionRow.propTypes = {
   showFullCategoryPath: PropTypes.bool,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
-  onCancel: PropTypes.func,
   onRestore: PropTypes.func,
 };
 
