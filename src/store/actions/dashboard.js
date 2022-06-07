@@ -89,7 +89,7 @@ const customHandlers = {
       const { data } = await axios.get(path, {
         params: {
           ...params,
-          categories,
+          categoryDeep: categories,
         },
       });
 

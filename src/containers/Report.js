@@ -181,14 +181,14 @@ const Report = ({
                 <MoneyValue
                   bold
                   maximumFractionDigits={0}
-                  amount={Math.abs(statistics.totalExpense.data.current)}
+                  amount={statistics.totalExpense.data.current}
                 />
               )}
               footer={(
                 <AmountSinceLastPeriodMessage
                   period={previousPeriodText}
-                  previous={Math.abs(statistics.totalExpense.data.previous)}
-                  current={Math.abs(statistics.totalExpense.data.current)}
+                  previous={statistics.totalExpense.data.previous}
+                  current={statistics.totalExpense.data.current}
                 />
               )}
             />
@@ -210,7 +210,7 @@ const Report = ({
                 isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')}
                 percentage={amountInPercentage(
                   statistics.totalIncome.data.current,
-                  Math.abs(statistics.totalExpense.data.current),
+                  statistics.totalExpense.data.current,
                   0,
                 )}
               />
@@ -252,12 +252,12 @@ const Report = ({
               <SimpleStatisticsCard
                 title="Food expenses"
                 isLoading={isStatisticsActionLoading('foodExpenses')}
-                content={<MoneyValue bold maximumFractionDigits={0} amount={Math.abs(statistics.foodExpenses.data.current)} />}
+                content={<MoneyValue bold maximumFractionDigits={0} amount={statistics.foodExpenses.data.current} />}
                 footer={(
                   <AmountSinceLastPeriodMessage
                     period={previousPeriodText}
-                    previous={Math.abs(statistics.foodExpenses.data.previous)}
-                    current={Math.abs(statistics.foodExpenses.data.current)}
+                    previous={statistics.foodExpenses.data.previous}
+                    current={statistics.foodExpenses.data.current}
                   />
                 )}
               />
@@ -308,14 +308,14 @@ const Report = ({
                   <MoneyValue
                     bold
                     maximumFractionDigits={0}
-                    amount={Math.abs(statistics.foodExpenses.data.current) / diffInDays}
+                    amount={statistics.foodExpenses.data.current / diffInDays}
                   />
                 )}
                 footer={(
                   <AmountSinceLastPeriodMessage
                     period={previousPeriodText}
-                    previous={Math.abs(statistics.foodExpenses.data.previous) / diffInDays}
-                    current={Math.abs(statistics.foodExpenses.data.current) / diffInDays}
+                    previous={statistics.foodExpenses.data.previous / diffInDays}
+                    current={statistics.foodExpenses.data.current / diffInDays}
                   />
                 )}
               />

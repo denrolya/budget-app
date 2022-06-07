@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import {
   Col, FormGroup, Input, Label,
 } from 'reactstrap';
+import { useUnknownExpenseCategory } from 'src/contexts/CategoriesContext';
 import { isActionLoading } from 'src/services/common';
 import { toggleDraftExpenseModal } from 'src/store/actions/ui';
 
@@ -26,9 +27,9 @@ const DraftCashExpenseForm = ({
   onSubmit,
   toggleModal,
   accountOptions,
-  categoryUnknown,
 }) => {
   const { code } = useBaseCurrency();
+  const unknownExpenseCategory = useUnknownExpenseCategory();
   const [form, setForm] = useState({
     initialValues: {
       type: EXPENSE_TYPE,
@@ -48,11 +49,11 @@ const DraftCashExpenseForm = ({
       ...form,
       initialValues: {
         ...form.initialValues,
-        category: categoryUnknown,
+        category: unknownExpenseCategory,
         account: find(accountOptions, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code)?.id,
       },
     });
-  }, [categoryUnknown]);
+  }, [unknownExpenseCategory]);
 
   useEffect(() => {
     setForm({
@@ -169,7 +170,6 @@ const DraftCashExpenseForm = ({
 
 DraftCashExpenseForm.defaultProps = {
   accountOptions: [],
-  categoryUnknown: '',
 };
 
 DraftCashExpenseForm.propTypes = {
@@ -178,14 +178,12 @@ DraftCashExpenseForm.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   accountOptions: PropTypes.array,
-  categoryUnknown: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-const mapStateToProps = ({ ui, account, category }) => ({
+const mapStateToProps = ({ ui, account }) => ({
   isOpen: ui.isDraftExpenseModalOpened,
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER),
   accountOptions: account.filter(({ archivedAt }) => !archivedAt),
-  categoryUnknown: find(category.list, ({ name, type }) => type === EXPENSE_TYPE && name === 'Unknown')?.id,
 });
 
 export default connect(mapStateToProps, {

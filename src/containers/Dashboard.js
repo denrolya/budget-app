@@ -28,7 +28,6 @@ const Dashboard = ({
   statistics,
   updateDashboard,
   setStatistics,
-  categories,
 }) => {
   useEffect(() => {
     updateDashboard();
@@ -196,7 +195,6 @@ const Dashboard = ({
         <Row>
           <Col>
             <TransactionCategoriesTimelineCard
-              categories={categories}
               isLoading={isStatisticsActionLoading('categoriesTimeline')}
               model={statistics.categoriesTimeline}
               onUpdate={(newModel) => setStatistics('categoriesTimeline', newModel)}
@@ -209,7 +207,6 @@ const Dashboard = ({
 };
 
 Dashboard.defaultProps = {
-  categories: [],
 };
 
 Dashboard.propTypes = {
@@ -217,17 +214,14 @@ Dashboard.propTypes = {
   statistics: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDashboard: PropTypes.func.isRequired,
-  categories: PropTypes.array,
 };
 
 const mapStateToProps = ({
   dashboard: statistics,
-  category: { list: categories },
   ui,
 }) => ({
   statistics,
   ui,
-  categories,
 });
 
 export default connect(mapStateToProps, {

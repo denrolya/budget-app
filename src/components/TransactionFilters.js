@@ -6,13 +6,15 @@ import {
 } from 'reactstrap';
 
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
+import { useCategories } from 'src/contexts/CategoriesContext';
 import TransactionFiltersModel from 'src/models/TransactionFilters';
 import DateRange from 'src/components/forms/fields/DateRange';
 import AccountName from 'src/components/AccountName';
 
 const TransactionFilters = ({
-  accounts, categories, onModelChange, model,
+  accounts, onModelChange, model,
 }) => {
+  const categories = useCategories();
   const typeaheads = [];
 
   const { from, to } = model;
@@ -126,14 +128,12 @@ const TransactionFilters = ({
 
 TransactionFilters.defaultProps = {
   accounts: [],
-  categories: [],
 };
 
 TransactionFilters.propTypes = {
   model: PropTypes.instanceOf(TransactionFiltersModel).isRequired,
   onModelChange: PropTypes.func.isRequired,
   accounts: PropTypes.array,
-  categories: PropTypes.array,
 };
 
 export default TransactionFilters;

@@ -32,6 +32,7 @@ export const AVAILABLE_STATISTICS = [
     name: 'totalIncome',
     path: 'api/transactions/statistics/sum',
     additionalParams: {
+      interval: '1 month',
       type: INCOME_TYPE,
     },
     fetchPreviousPeriod: true,
@@ -66,6 +67,14 @@ export const AVAILABLE_STATISTICS = [
     name: 'accountExpenseDistribution',
     path: 'api/transactions/statistics/account-distribution',
     additionalParams: {
+      type: EXPENSE_TYPE,
+    },
+  }, {
+    name: 'utilityCostsByInterval',
+    path: 'api/transactions/statistics/categories-timeline',
+    additionalParams: {
+      interval: '3 months',
+      categoryDeep: [4, 18, 132, 133],
       type: EXPENSE_TYPE,
     },
   },
@@ -361,33 +370,25 @@ export const INITIAL_STATE = {
     })),
   }),
   utilityCostsByInterval: new TimeperiodIntervalStatistics({
-    interval: 'quarter',
-    data: [
-      {
-        name: 'Utilities',
-        icon: 'mdi mdi-water-pump',
-        color: 'rgba(0, 242, 125, 1)',
-        values: [1, 2, 3, 4].map(() => randomFloat()),
-      },
-      {
-        name: 'Gas',
-        icon: 'mdi mdi-radiator',
-        color: 'rgba(255, 170, 0, 1)',
-        values: [1, 2, 3, 4].map(() => randomFloat()),
-      },
-      {
-        name: 'Water utilities costs',
-        icon: 'mdi mdi-hand-water',
-        color: 'rgba(80, 137, 249, 1)',
-        values: [1, 2, 3, 4].map(() => randomFloat()),
-      },
-      {
-        name: 'Electricity',
-        icon: 'mdi mdi-flash-circle',
-        color: 'rgba(210, 210, 42, 1)',
-        values: [1, 2, 3, 4].map(() => randomFloat()),
-      },
-    ],
+    interval: '3 months',
+    data: {
+      Utilities: [1, 2, 3, 4].map(() => ({
+        date: '',
+        value: randomFloat(),
+      })),
+      Gas: [1, 2, 3, 4].map(() => ({
+        date: '',
+        value: randomFloat(),
+      })),
+      'Water utilities costs': [1, 2, 3, 4].map(() => ({
+        date: '',
+        value: randomFloat(),
+      })),
+      Electricity: [1, 2, 3, 4].map(() => ({
+        date: '',
+        value: randomFloat(),
+      })),
+    },
   }),
   totalExpensesByInterval: new TimeperiodIntervalStatistics({
     interval: 'quarter',

@@ -13,8 +13,9 @@ import AddNewButton from 'src/components/AddNewButton';
 import CategoryForm from 'src/components/forms/CategoryForm';
 import ModalForm from 'src/components/forms/ModalForm';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
+import { useExpenseCategories, useIncomeCategories } from 'src/contexts/CategoriesContext';
 import { isActionLoading } from 'src/services/common';
-import { generateLinkToExpenses, generateLinkToTransactionPage } from 'src/services/routing';
+import { generateLinkToTransactionPage } from 'src/services/routing';
 import { createCategoriesTree, listToTree } from 'src/services/transaction';
 import {
   create, edit, remove, setParent, fetchList,
@@ -25,7 +26,6 @@ import 'react-sortable-tree/style.css';
 
 const CategoryList = ({
   setParent,
-  list,
   isSavingCategory,
   create,
   edit,
@@ -33,6 +33,8 @@ const CategoryList = ({
   fetchList,
   isLoading,
 }) => {
+  const expenseCategories = useExpenseCategories();
+  const incomeCategories = useIncomeCategories();
   const [tree, setTree] = useState();
   const [selectedCategory, selectCategory] = useState();
   const [isFormOpened, setIsFormOpened] = useState(false);
@@ -49,10 +51,10 @@ const CategoryList = ({
 
   useEffect(() => {
     setTree({
-      [EXPENSE_TYPE]: createCategoriesTree(listToTree(list.filter(({ type }) => type === EXPENSE_TYPE))),
-      [INCOME_TYPE]: createCategoriesTree(listToTree(list.filter(({ type }) => type === INCOME_TYPE))),
+      [EXPENSE_TYPE]: createCategoriesTree(listToTree(expenseCategories)),
+      [INCOME_TYPE]: createCategoriesTree(listToTree(incomeCategories)),
     });
-  }, [list]);
+  }, [expenseCategories, incomeCategories]);
 
   const reorderNodes = ({
     node, nextParentNode, prevPath, nextPath,
@@ -168,7 +170,6 @@ const CategoryList = ({
 };
 
 CategoryList.propTypes = {
-  list: PropTypes.array.isRequired,
   isSavingCategory: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   setParent: PropTypes.func.isRequired,
@@ -178,8 +179,7 @@ CategoryList.propTypes = {
   fetchList: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ category: { list }, ui }) => ({
-  list,
+const mapStateToProps = ({ ui }) => ({
   isSavingCategory: isActionLoading(ui.CATEGORY_CREATE) || isActionLoading(ui.CATEGORY_EDIT),
   isLoading: isActionLoading(ui.CATEGORY_FETCH_TREE),
 });

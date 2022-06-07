@@ -7,12 +7,14 @@ import { Button, Row, Col } from 'reactstrap';
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import { TRANSACTION_TYPES, TRANSACTIONS_CATEGORIES_PRESETS as PRESETS } from 'src/constants/transactions';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
+import { useCategories } from 'src/contexts/CategoriesContext';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
 
 export const TransactionCategoriesTimelineCard = ({
-  isLoading, model, onUpdate, categories,
+  isLoading, model, onUpdate,
 }) => {
+  const categories = useCategories();
   const typeaheads = [];
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLineChart, setIsLineChart] = useState(true);
@@ -90,7 +92,6 @@ export const TransactionCategoriesTimelineCard = ({
 };
 
 TransactionCategoriesTimelineCard.defaultProps = {
-  categories: [],
   isLoading: false,
 };
 
@@ -98,7 +99,6 @@ TransactionCategoriesTimelineCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
   onUpdate: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  categories: PropTypes.array,
 };
 
 export default TransactionCategoriesTimelineCard;

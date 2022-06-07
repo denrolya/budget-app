@@ -16,7 +16,6 @@ import ModalForm from 'src/components/forms/ModalForm';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import {
-  COMPENSATION_TRANSACTION_CATEGORY_NAME,
   DEBT_TRANSACTION_CATEGORY_NAME,
   EXPENSE_TYPE,
   INCOME_TYPE,
@@ -24,11 +23,11 @@ import {
   TRANSACTION_TYPES,
   VALIDATION_SCHEMA,
 } from 'src/constants/transactions';
+import { useCategories, useCompensationIncomeCategory, useDebtIncomeCategory } from 'src/contexts/CategoriesContext';
 import { isActionLoading } from 'src/services/common';
 
 const TransactionForm = ({
   accountOptions,
-  categoryOptions,
   title,
   model,
   isSaving,
@@ -36,6 +35,9 @@ const TransactionForm = ({
   onSubmit,
   toggleModal,
 }) => {
+  const categoryOptions = useCategories();
+  const debtIncomeCategory = useDebtIncomeCategory();
+  const compensationIncomeCategory = useCompensationIncomeCategory();
   const isEditMode = !!model.id;
   const [form, setForm] = useState({
     initialValues: INITIAL_FORM_DATA,
@@ -123,10 +125,7 @@ const TransactionForm = ({
             executedAt,
             account: '',
             amount: 0,
-            category: categoryOptions
-              .find(({ name, type }) => type === INCOME_TYPE && category === DEBT_TRANSACTION_CATEGORY_NAME
-                ? name === DEBT_TRANSACTION_CATEGORY_NAME
-                : name === COMPENSATION_TRANSACTION_CATEGORY_NAME)?.id,
+            category: (category === DEBT_TRANSACTION_CATEGORY_NAME ? debtIncomeCategory : compensationIncomeCategory)?.id,
             type: INCOME_TYPE,
             note: note ? `[Compensation]: ${note}` : '',
           });
@@ -384,7 +383,6 @@ const TransactionForm = ({
 
 TransactionForm.defaultProps = {
   accountOptions: [],
-  categoryOptions: [],
   model: INITIAL_FORM_DATA,
   title: 'New transaction',
 };
@@ -395,15 +393,13 @@ TransactionForm.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   accountOptions: PropTypes.array,
-  categoryOptions: PropTypes.array,
   model: PropTypes.object,
   title: PropTypes.string,
 };
 
-const mapStateToProps = ({ ui, account, category }) => ({
+const mapStateToProps = ({ ui, account }) => ({
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER) || isActionLoading(ui.TRANSACTION_EDIT),
   accountOptions: account.filter(({ archivedAt }) => !archivedAt),
-  categoryOptions: category.list,
 });
 
 export default connect(mapStateToProps)(TransactionForm);

@@ -30,16 +30,21 @@ export const { Types, Creators } = createActions(
   { prefix: 'CATEGORY_' },
 );
 
-export const fetchList = () => (dispatch) => {
+export const fetchList = () => async (dispatch) => {
+  let result = [];
   dispatch(Creators.fetchListRequest());
 
-  return axios
-    .get('api/categories')
-    .then(({ data }) => dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'id', 'asc'))))
-    .catch(({ message }) => {
-      notify('error', 'Fetch Category List');
-      dispatch(Creators.fetchListFailure(message));
-    });
+  try {
+    const response = await axios.get('api/categories');
+    const categories = orderBy(response.data['hydra:member'], 'id', 'asc');
+    dispatch(Creators.fetchListSuccess(categories));
+    result = categories;
+  } catch (e) {
+    notify('error', 'Fetch Category List');
+    dispatch(Creators.fetchListFailure(e.message));
+  }
+
+  return result;
 };
 
 export const setParent = (category, parentCategory) => (dispatch) => {
