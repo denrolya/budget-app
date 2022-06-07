@@ -1,7 +1,67 @@
 import orderBy from 'lodash/orderBy';
-import moment from 'moment-timezone';
+import sumBy from 'lodash/sumBy';
 import React from 'react';
 import { Badge } from 'reactstrap';
+import TreeModel from 'tree-model';
+
+export const generateCategoriesStatisticsTree = (current, previous) => {
+  const tree = new TreeModel({
+    modelComparatorFn: (a, b) => b.total - a.total,
+  });
+  const treeData = tree.parse({
+    name: 'All categories',
+    total: sumBy(current, 'total'),
+    children: current,
+  });
+
+  treeData.walk((node) => {
+    const {
+      model: { name, icon, value },
+    } = node;
+    if (value) {
+      const newNode = tree.parse({
+        icon,
+        name,
+        total: value,
+      });
+      node.addChild(newNode);
+    }
+  });
+
+  if (previous) {
+    const previousTreeData = tree.parse({
+      name: 'All categories',
+      total: sumBy(previous, 'total'),
+      children: previous,
+    });
+
+    previousTreeData.walk((node) => {
+      const {
+        model: { name, icon, value },
+      } = node;
+      if (value) {
+        const newNode = tree.parse({
+          icon,
+          name,
+          total: value,
+        });
+        node.addChild(newNode);
+      }
+    });
+
+    treeData.all().forEach((node) => {
+      const sameNodeInPreviousTree = previousTreeData.first(
+        (n) => n.model.name === node.model.name && n.getPath().length === node.getPath().length,
+      );
+      if (sameNodeInPreviousTree) {
+        // eslint-disable-next-line no-param-reassign
+        node.model.previous = sameNodeInPreviousTree.model.total;
+      }
+    });
+  }
+
+  return treeData;
+};
 
 export const listToTree = (list) => {
   const map = {}; let node; const roots = []; let
@@ -66,9 +126,3 @@ export const createCategoriesTree = (tree) => orderBy(
   ({ children }) => children.length,
   'desc',
 );
-
-export const initializeList = (transactions) => transactions.map(({ executedAt, canceledAt, ...rest }) => ({
-  ...rest,
-  executedAt: moment(executedAt),
-  canceledAt: canceledAt ? moment(canceledAt) : null,
-}));

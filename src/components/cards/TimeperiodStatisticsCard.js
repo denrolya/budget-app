@@ -8,7 +8,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { rangeToString } from 'src/services/common';
+import { rangeToString } from 'src/utils/datetime';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import IntervalSwitch from 'src/components/IntervalSwitch';

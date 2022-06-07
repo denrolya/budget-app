@@ -1,6 +1,6 @@
 import { createReducer } from 'reduxsauce';
 
-import { initializeList as initializeTransactionsList } from 'src/services/transaction';
+import { initializeList as initializeTransactionsList } from 'src/utils/transaction';
 import { Types } from 'src/store/actions/debt';
 
 const INITIAL_STATE = [];

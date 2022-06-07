@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { amountInPercentage, ratio, textColor } from 'src/services/common';
+import { amountInPercentage, ratio, textColor } from 'src/utils/common';
 
 const PercentageSinceLastMonthMessage = ({
   previous, current, invertedColors, period, text,

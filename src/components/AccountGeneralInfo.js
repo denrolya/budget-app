@@ -10,7 +10,7 @@ import {
 import AccountBalance from 'src/components/charts/recharts/area/AccountBalance';
 import MoneyValue from 'src/components/MoneyValue';
 import { useRates } from 'src/contexts/ExchangeRatesContext';
-import { convert, generateExchangeRatesStatistics } from 'src/services/currency';
+import { convert, generateExchangeRatesStatistics } from 'src/utils/currency';
 import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import TransactionCategoriesRadial from 'src/components/charts/recharts/radial/TransactionCategoriesRadial';
 import {
@@ -21,7 +21,7 @@ import {
 } from 'src/constants/account';
 import AccountNameForm from 'src/components/forms/AccountNameForm';
 import AccountColorForm from 'src/components/forms/AccountColorForm';
-import { copyToClipboard } from 'src/services/common';
+import { copyToClipboard } from 'src/utils/common';
 
 const AccountGeneralInfo = ({
   data,

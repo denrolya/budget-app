@@ -1,5 +1,3 @@
-export const convert = (rates, amount, from, to) => (1 / rates[from]) * amount * rates[to];
-
 const USD_UAH = {
   from: 'USD',
   to: 'UAH',
@@ -73,6 +71,8 @@ export const generateExchangeRatesStatistics = (baseCurrency) => {
 
   return result;
 };
+
+export const convert = (rates, amount, from, to) => (1 / rates[from]) * amount * rates[to];
 
 export const generateConvertedValues = (rates, originalCurrency, value) => {
   const currencies = Object.keys(rates);

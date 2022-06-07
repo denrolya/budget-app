@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { isActionResolved } from 'src/services/common';
+import { isActionResolved } from 'src/utils/common';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import AccountsContext from 'src/contexts/AccountsContext';
 

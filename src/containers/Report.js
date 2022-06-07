@@ -11,7 +11,8 @@ import { Row, Col, UncontrolledCollapse } from 'reactstrap';
 
 import { ANNUAL_REPORT_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 
-import { amountInPercentage, isActionLoading, rangeToString } from 'src/services/common';
+import { amountInPercentage, isActionLoading } from 'src/utils/common';
+import { rangeToString } from 'src/utils/datetime';
 
 import { setStatistics, updateReport, setPeriod } from 'src/store/actions/report';
 

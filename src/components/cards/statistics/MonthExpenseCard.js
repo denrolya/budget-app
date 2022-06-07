@@ -7,7 +7,7 @@ import {
 } from 'reactstrap';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
-import { revenueExpenseRatioColor } from 'src/services/common';
+import { revenueExpenseRatioColor } from 'src/utils/common';
 import PreviousMonthStatisticsCell from 'src/components/tables/PreviousMonthStatisticsCell';
 import LoadingCard from 'src/components/cards/LoadingCard';
 

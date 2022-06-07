@@ -1,12 +1,12 @@
-import axios from 'src/services/http';
+import axios from 'src/utils/http';
 import { createActions } from 'reduxsauce';
 
 import { ROUTE_LOGIN } from 'src/constants/routes';
 import {
   getToken, getUser, isTokenPresentAndValid, parseJWT, setToken, setUser,
-} from 'src/services/auth';
+} from 'src/utils/auth';
 import { RESET_ACTION } from 'src/store/actions/global';
-import history from 'src/services/history';
+import history from 'src/utils/history';
 
 export const { Types, Creators } = createActions(
   {

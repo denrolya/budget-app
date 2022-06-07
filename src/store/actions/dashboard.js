@@ -2,10 +2,11 @@ import { createActions } from 'reduxsauce';
 import camelCase from 'voca/camel_case';
 import capitalize from 'voca/capitalize';
 
-import axios from 'src/services/http';
+import axios from 'src/utils/http';
 import { notify } from 'src/store/actions/global';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
-import { generateCategoriesStatisticsTree, generatePreviousPeriod } from 'src/services/common';
+import { generateCategoriesStatisticsTree } from 'src/utils/category';
+import { generatePreviousPeriod } from 'src/utils/datetime';
 import { AVAILABLE_STATISTICS } from 'src/constants/dashboard';
 
 export const { Types, Creators } = createActions(

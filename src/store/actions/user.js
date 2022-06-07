@@ -1,8 +1,8 @@
 import { createActions } from 'reduxsauce';
 
-import { getUser, setUser } from 'src/services/auth';
-import axios from 'src/services/http';
-import { isOnDashboardPage } from 'src/services/routing';
+import { getUser, setUser } from 'src/utils/auth';
+import axios from 'src/utils/http';
+import { isOnDashboardPage } from 'src/utils/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 

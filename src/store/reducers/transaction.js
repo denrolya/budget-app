@@ -1,6 +1,6 @@
 import { createReducer } from 'reduxsauce';
 
-import { initializeList as initializeTransactionsList } from 'src/services/transaction';
+import { initializeList as initializeTransactionsList } from 'src/utils/transaction';
 import { Types } from 'src/store/actions/transaction';
 import Pagination from 'src/models/Pagination';
 import TransactionFilters from 'src/models/TransactionFilters';

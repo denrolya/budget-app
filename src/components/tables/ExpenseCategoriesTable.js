@@ -14,8 +14,8 @@ import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import {
   amountInPercentage, arrowIcon, expenseRatioColor, ratio,
-} from 'src/services/common';
-import { generateLinkToExpenses } from 'src/services/routing';
+} from 'src/utils/common';
+import { generateLinkToExpenses } from 'src/utils/routing';
 
 const ExpenseCategoriesTable = ({
   data,

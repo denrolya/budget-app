@@ -6,7 +6,7 @@ import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
 import TransactionActions from 'src/components/tables/TransactionActions';
 import TransactionDate from 'src/components/TransactionDate';
-import { isExpense } from 'src/services/common';
+import { isExpense } from 'src/utils/common';
 import TransactionCategory from 'src/components/TransactionCategory';
 
 const TransactionRow = ({

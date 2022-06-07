@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 
 import LoadingButton from 'src/components/LoadingButton';
 import { createAccount } from 'src/store/actions/account';
-import { isActionLoading } from 'src/services/common';
+import { isActionLoading } from 'src/utils/common';
 import {
   ACCOUNT_TYPE_BANK_CARD,
   ACCOUNT_TYPE_BASIC,

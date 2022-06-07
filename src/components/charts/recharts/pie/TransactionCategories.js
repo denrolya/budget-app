@@ -6,7 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
 
-import { amountInPercentage, expenseRatioColor } from 'src/services/common';
+import { amountInPercentage, expenseRatioColor } from 'src/utils/common';
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
 

@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { Card, CardFooter, CardHeader } from 'reactstrap';
 
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { amountInPercentage } from 'src/services/common';
-import { generateLinkToExpenses } from 'src/services/routing';
+import { amountInPercentage } from 'src/utils/common';
+import { generateLinkToExpenses } from 'src/utils/routing';
 
 const MonthExpenseCard = ({ twoMonthsAgo, monthAgo, currentMonthProjected }) => {
   const percentage = monthAgo > 0 ? amountInPercentage(monthAgo, currentMonthProjected) - 100 : 0;

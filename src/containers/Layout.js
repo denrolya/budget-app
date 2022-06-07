@@ -18,7 +18,7 @@ import AccountsProvider from 'src/contexts/providers/AccountsProvider';
 import CategoriesProvider from 'src/contexts/providers/CategoriesProvider';
 import ExchangeRatesProvider from 'src/contexts/providers/ExchangeRatesProvider';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
-import { isActionLoading, isActionResolved, copyTokenToClipboard } from 'src/services/common';
+import { isActionLoading, isActionResolved, copyTokenToClipboard } from 'src/utils/common';
 import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { fetchList as fetchDebts } from 'src/store/actions/debt';

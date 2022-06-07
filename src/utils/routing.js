@@ -4,7 +4,7 @@ import { matchPath } from 'react-router-dom';
 import moment from 'moment-timezone';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 
-import history from 'src/services/history';
+import history from 'src/utils/history';
 import {
   ROUTE_ACCOUNTS,
   ROUTE_CATEGORIES,
@@ -29,7 +29,7 @@ import TransactionList from 'src/containers/TransactionList';
 import TransferList from 'src/containers/TransferList';
 import CurrencyConverter from 'src/containers/CurrencyConverter';
 import UserProfile from 'src/containers/UserProfile';
-import { isDev } from 'src/services/common';
+import { isDev } from 'src/utils/common';
 import TestPage from 'src/containers/TestPage';
 
 export const routes = [

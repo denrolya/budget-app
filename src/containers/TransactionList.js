@@ -18,7 +18,7 @@ import {
 import NoTransactionsMessage from 'src/components/messages/NoTransactionsMessage';
 import TransactionFilters from 'src/components/TransactionFilters';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
-import { isActionLoading } from 'src/services/common';
+import { isActionLoading } from 'src/utils/common';
 import {
   setPage,
   setPerPage,

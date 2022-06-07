@@ -2,7 +2,7 @@ import { createActions } from 'reduxsauce';
 import moment from 'moment-timezone';
 
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import axios from 'src/services/http';
+import axios from 'src/utils/http';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(

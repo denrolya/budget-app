@@ -2,11 +2,11 @@ import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import { createActions } from 'reduxsauce';
 import { SERVER_TIMEZONE } from 'src/constants/datetime';
-import { closeDebtPrompt } from 'src/services/prompts';
+import { closeDebtPrompt } from 'src/utils/prompts';
 
 import { ROUTE_DASHBOARD, ROUTE_DEBTS } from 'src/constants/routes';
-import axios from 'src/services/http';
-import { isOnPath } from 'src/services/routing';
+import axios from 'src/utils/http';
+import { isOnPath } from 'src/utils/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 

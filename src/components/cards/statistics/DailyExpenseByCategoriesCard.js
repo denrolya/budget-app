@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import MoneyValue from 'src/components/MoneyValue';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
-import { amountInPercentage, arrowIcon, textColor } from 'src/services/common';
+import { amountInPercentage, arrowIcon, textColor } from 'src/utils/common';
 
 /** TODO: Adjust trend icon & color; Compare to same data last year(in colors, maybe...) */
 const DailyExpenseByCategoriesCard = ({ isLoading, model, onUpdate }) => {

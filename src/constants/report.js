@@ -5,7 +5,7 @@ import TreeModel from 'tree-model';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import { randomFloat, randomColor, randomMoneyFlowData } from 'src/services/common';
+import { randomFloat, randomColor, randomMoneyFlowData } from 'src/utils/randomData';
 
 const startOfYear = moment().startOf('year');
 const endOfYear = moment().endOf('year');

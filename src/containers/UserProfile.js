@@ -11,7 +11,7 @@ import { switchBaseCurrency } from 'src/store/actions/user';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { CURRENCIES } from 'src/constants/currency';
 import avatar from 'src/assets/img/emilyz.jpg';
-import { switchCurrencyPrompt } from 'src/services/prompts';
+import { switchCurrencyPrompt } from 'src/utils/prompts';
 
 const UserProfile = ({ availableCurrencies, switchBaseCurrency }) => {
   const { symbol, code } = useBaseCurrency();

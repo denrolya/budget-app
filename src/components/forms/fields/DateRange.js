@@ -6,7 +6,7 @@ import {
   Input, InputGroup, InputGroupAddon, InputGroupText,
 } from 'reactstrap';
 
-import { rangeToString } from 'src/services/common';
+import { rangeToString } from 'src/utils/datetime';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 
 const DateRange = ({

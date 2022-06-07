@@ -6,7 +6,7 @@ import 'src/assets/scss/index.scss';
 import 'src/middlewares/axios';
 import 'src/middlewares/toastr';
 import store from 'src/store/store';
-import history from 'src/services/history';
+import history from 'src/utils/history';
 import App from 'src/containers/App';
 import { assertAuthorization } from 'src/store/actions/auth';
 

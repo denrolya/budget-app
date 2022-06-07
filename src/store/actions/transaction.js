@@ -1,9 +1,9 @@
 import { createActions } from 'reduxsauce';
 import moment from 'moment-timezone';
 
-import axios from 'src/services/http';
-import { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/services/routing';
-import { transactionCancellationPrompt, transactionDeletionPrompt } from 'src/services/prompts';
+import axios from 'src/utils/http';
+import { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/utils/routing';
+import { transactionCancellationPrompt, transactionDeletionPrompt } from 'src/utils/prompts';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
@@ -11,7 +11,7 @@ import { fetchList as fetchDebts } from 'src/store/actions/debt';
 import Pagination from 'src/models/Pagination';
 import { ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import TransactionFilters from 'src/models/TransactionFilters';
-import history from 'src/services/history';
+import history from 'src/utils/history';
 import { MOMENT_DATETIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(

@@ -2,7 +2,7 @@ import cn from 'classnames';
 import React from 'react';
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
 
-import { isExpense } from 'src/services/common';
+import { isExpense } from 'src/utils/common';
 import MoneyValue from 'src/components/MoneyValue';
 
 const CurrencyTypeProvider = (props) => {

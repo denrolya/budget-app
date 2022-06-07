@@ -1,8 +1,8 @@
 import orderBy from 'lodash/orderBy';
 import { createActions } from 'reduxsauce';
 
-import axios from 'src/services/http';
-import { categoryRemovalPrompt } from 'src/services/prompts';
+import axios from 'src/utils/http';
+import { categoryRemovalPrompt } from 'src/utils/prompts';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(

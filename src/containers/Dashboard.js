@@ -13,13 +13,13 @@ import CardsSet from 'src/components/CardsSet';
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
 import PercentageSinceLastMonthMessage from 'src/components/messages/PercentageSinceLastMonthMessage';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { generateLinkToExpenses } from 'src/services/routing';
+import { generateLinkToExpenses } from 'src/utils/routing';
 import ExpenseCategoriesCard from 'src/components/cards/ExpenseCategoriesCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/TransactionCategoriesTimelineCard';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
-import { isActionLoading } from 'src/services/common';
+import { isActionLoading } from 'src/utils/common';
 import { setStatistics, updateDashboard } from 'src/store/actions/dashboard';
 import MoneyValue from 'src/components/MoneyValue';
 

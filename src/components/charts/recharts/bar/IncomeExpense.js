@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import axios from 'src/services/http';
+import axios from 'src/utils/http';
 import moment from 'moment-timezone';
 import xor from 'lodash/xor';
 import React, { useEffect, useState } from 'react';

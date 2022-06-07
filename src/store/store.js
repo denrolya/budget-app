@@ -3,7 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 import { createRouterMiddleware } from '@lagunovsky/redux-react-router';
 
-import history from 'src/services/history';
+import history from 'src/utils/history';
 import reducer from 'src/store/reducer';
 
 const routerMiddleware = createRouterMiddleware(history);

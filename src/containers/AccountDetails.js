@@ -11,12 +11,12 @@ import {
   accountArchivationPrompt,
   accountNameChangePrompt,
   accountRestorationPrompt,
-} from 'src/services/prompts';
+} from 'src/utils/prompts';
 import {
   toggleArchived, fetchDetail, updateName, updateColor,
 } from 'src/store/actions/account';
 import AccountGeneralInfo from 'src/components/AccountGeneralInfo';
-import { formatDetails } from 'src/services/account';
+import { formatDetails } from 'src/utils/account';
 import AccountTransactionsDetails from 'src/components/AccountTransactionsDetails';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { notify } from 'src/store/actions/global';

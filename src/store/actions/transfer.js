@@ -1,14 +1,14 @@
 import { createActions } from 'reduxsauce';
 import moment from 'moment-timezone';
 
-import { transferDeletionPrompt } from 'src/services/prompts';
-import axios from 'src/services/http';
+import { transferDeletionPrompt } from 'src/utils/prompts';
+import axios from 'src/utils/http';
 import {
   getTransferListQueryParams,
   isOnDashboardPage,
   isOnTransactionsPage,
   isOnTransfersPage,
-} from 'src/services/routing';
+} from 'src/utils/routing';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
@@ -17,7 +17,7 @@ import { fetchList as fetchTransactionList } from 'src/store/actions/transaction
 import Pagination from 'src/models/Pagination';
 import TransferFilters from 'src/models/TransferFilters';
 import { ROUTE_TRANSFERS } from 'src/constants/routes';
-import history from 'src/services/history';
+import history from 'src/utils/history';
 import { MOMENT_DATETIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(

@@ -9,7 +9,8 @@ import MoneyValue from 'src/components/MoneyValue';
 import PaginationRow from 'src/components/PaginationRow';
 import TransactionRow from 'src/components/tables/TransactionRow';
 import { MOMENT_VIEW_DATE_FORMAT, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { isToday, isYesterday, isExpense } from 'src/services/common';
+import { isExpense } from 'src/utils/common';
+import { isToday, isYesterday } from 'src/utils/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import Pagination from 'src/models/Pagination';
 

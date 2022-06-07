@@ -7,7 +7,7 @@ import { ErrorMessage, Field, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { useRates } from 'src/contexts/ExchangeRatesContext';
-import { convert } from 'src/services/currency';
+import { convert } from 'src/utils/currency';
 
 const CURRENCIES = {
   EUR: 'Euro',

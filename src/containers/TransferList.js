@@ -20,7 +20,7 @@ import DateRange from 'src/components/forms/fields/DateRange';
 import NoTransfersMessage from 'src/components/messages/NotTransfersMessage';
 import PaginationRow from 'src/components/PaginationRow';
 import TransfersTable from 'src/components/tables/TransfersTable';
-import { isActionLoading } from 'src/services/common';
+import { isActionLoading } from 'src/utils/common';
 import {
   deleteTransfer,
   setFilters,

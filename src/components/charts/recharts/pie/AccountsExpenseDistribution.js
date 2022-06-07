@@ -6,7 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
 
-import { amountInPercentage } from 'src/services/common';
+import { amountInPercentage } from 'src/utils/common';
 import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
 import {

@@ -1,11 +1,11 @@
 import { SERVER_TIMEZONE } from 'src/constants/datetime';
-import { generateConvertedValues } from 'src/services/currency';
-import axios from 'src/services/http';
+import { generateConvertedValues } from 'src/utils/currency';
+import axios from 'src/utils/http';
 import orderBy from 'lodash/orderBy';
 import { createActions } from 'reduxsauce';
 import moment from 'moment-timezone';
 
-import { isOnDashboardPage } from 'src/services/routing';
+import { isOnDashboardPage } from 'src/utils/routing';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(

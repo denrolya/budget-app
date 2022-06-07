@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Col, Container, Row } from 'reactstrap';
 
 import LoginForm from 'src/components/forms/LoginForm';
-import { isActionLoading } from 'src/services/common';
+import { isActionLoading } from 'src/utils/common';
 import { loginUser } from 'src/store/actions/auth';
 
 const Login = ({ isLoading, loginUser }) => (

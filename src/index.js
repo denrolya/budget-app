@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Root from 'src/containers/Root';
 import reportWebVitals from 'src/reportWebVitals';
-import { isDev, isMobile } from 'src/services/common';
+import { isDev, isMobile } from 'src/utils/common';
 
 window.isMobile = isMobile();
 window.isDev = isDev();

@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { amountInPercentage, textColor } from 'src/services/common';
+import { amountInPercentage, textColor } from 'src/utils/common';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const AmountSinceLastPeriodMessage = ({

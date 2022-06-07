@@ -10,11 +10,11 @@ import sumBy from 'lodash/sumBy';
 import MoneyValue from 'src/components/MoneyValue';
 import { ROUTE_ACCOUNTS, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import { useActiveAccounts } from 'src/contexts/AccountsContext';
-import { generateLinkToAccountTransactionsPage, routes } from 'src/services/routing';
+import { generateLinkToAccountTransactionsPage, routes } from 'src/utils/routing';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import AccountName from 'src/components/AccountName';
 import { CURRENCIES } from 'src/constants/currency';
-import { switchCurrencyPrompt } from 'src/services/prompts';
+import { switchCurrencyPrompt } from 'src/utils/prompts';
 
 const Sidebar = ({
   totalDebt, isLoading, onCurrencySwitch, updateDashboard,
@@ -22,8 +22,16 @@ const Sidebar = ({
   const accounts = useActiveAccounts();
   const { pathname } = useLocation();
   const { symbol, code } = useBaseCurrency();
-  const totalAccountsValue = useMemo(() => sumBy(accounts, ({ convertedValues }) => convertedValues[code]), [accounts]);
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
+  const totalAccountsValue = useMemo(
+    () => sumBy(accounts, ({ convertedValues }) => convertedValues[code]),
+    [accounts],
+  );
+
+  const sidebarRoutes = useMemo(
+    () => routes.filter(({ isInSidebar }) => isInSidebar),
+    [routes],
+  );
 
   const visibleAccounts = useMemo(
     () => orderBy(accounts, 'name').filter(({ isDisplayedOnSidebar }) => isDisplayedOnSidebar),
@@ -59,16 +67,14 @@ const Sidebar = ({
           ))}
         </div>
         <Nav className="mt-0">
-          {routes
-            .filter(({ redirect, isInSidebar }) => !redirect && isInSidebar)
-            .map(({ name, path, icon }) => (
-              <NavItem tag="li" key={`nav-item-route-${name}`} active={!!matchPath(path, pathname)}>
-                <NavLink className="nav-link text-white" to={path}>
-                  <i aria-hidden className={icon} />
-                  <p>{name}</p>
-                </NavLink>
-              </NavItem>
-            ))}
+          {sidebarRoutes.map(({ name, path, icon }) => (
+            <NavItem tag="li" key={`nav-item-route-${name}`} active={!!matchPath(path, pathname)}>
+              <NavLink className="nav-link text-white" to={path}>
+                <i aria-hidden className={icon} />
+                <p>{name}</p>
+              </NavLink>
+            </NavItem>
+          ))}
           <NavItem tag="li">
             <hr />
           </NavItem>
@@ -89,8 +95,7 @@ const Sidebar = ({
                 {' '}
                 {!isLoading && (
                   <span
-                    style={{ fontSize: 'larger' }}
-                    className={cn({
+                    className={cn('font-size-larger', {
                       'text-white': totalDebt === 0,
                       'text-danger': totalDebt !== 0,
                     })}

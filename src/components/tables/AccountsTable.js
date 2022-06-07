@@ -11,7 +11,7 @@ import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
 import TransactionDate from 'src/components/TransactionDate';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
-import { generateLinkToTransactionPage } from 'src/services/routing';
+import { generateLinkToTransactionPage } from 'src/utils/routing';
 import accountType from 'src/types/account';
 import AccountBalance from 'src/components/charts/recharts/AccountBalance';
 

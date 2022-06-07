@@ -25,7 +25,7 @@ import {
 } from 'src/constants/transactions';
 import { useActiveAccounts } from 'src/contexts/AccountsContext';
 import { useCategories, useCompensationIncomeCategory, useDebtIncomeCategory } from 'src/contexts/CategoriesContext';
-import { isActionLoading } from 'src/services/common';
+import { isActionLoading } from 'src/utils/common';
 
 const TransactionForm = ({
   title,

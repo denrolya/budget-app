@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import { useActiveAccounts, useDefaultCashAccount } from 'src/contexts/AccountsContext';
 import { useUnknownExpenseCategory } from 'src/contexts/CategoriesContext';
-import { isActionLoading } from 'src/services/common';
+import { isActionLoading } from 'src/utils/common';
 import { toggleDraftExpenseModal } from 'src/store/actions/ui';
 
 import { registerTransaction } from 'src/store/actions/transaction';

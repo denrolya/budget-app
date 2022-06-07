@@ -6,7 +6,7 @@ import {
   MOMENT_VIEW_DATE_WITH_YEAR_FORMAT,
   MOMENT_VIEW_TIME_FORMAT,
 } from 'src/constants/datetime';
-import { isCurrentYear, isMoreThanHourAgo } from 'src/services/common';
+import { isCurrentYear, isMoreThanHourAgo } from 'src/utils/datetime';
 
 const TransactionDate = ({
   date, showDate, showTime, showTimeIcon,

@@ -3,9 +3,9 @@ import sumBy from 'lodash/sumBy';
 import React from 'react';
 import moment from 'moment-timezone';
 
-import { initializeList } from 'src/services/transaction';
+import { initializeList } from 'src/utils/transaction';
 import { RAINBOW_COLORS } from 'src/constants/color';
-import { amountInPercentage } from 'src/services/common';
+import { amountInPercentage } from 'src/utils/common';
 import { CURRENCIES } from 'src/constants/currency';
 
 export const formatDetails = (data, baseCurrencyCode) => {

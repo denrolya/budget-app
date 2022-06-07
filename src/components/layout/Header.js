@@ -14,7 +14,7 @@ import {
   UncontrolledDropdown,
 } from 'reactstrap';
 
-import { getBrandText, isOnDashboardPage } from 'src/services/routing';
+import { getBrandText, isOnDashboardPage } from 'src/utils/routing';
 import AddNewButton from 'src/components/AddNewButton';
 import logo from 'src/assets/img/logo.png';
 

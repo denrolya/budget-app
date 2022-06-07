@@ -8,8 +8,8 @@ import {
 } from 'reactstrap';
 
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { amountInPercentage, expenseIconColorFromPercentage } from 'src/services/common';
-import { generateLinkToExpenses } from 'src/services/routing';
+import { amountInPercentage, expenseIconColorFromPercentage } from 'src/utils/common';
+import { generateLinkToExpenses } from 'src/utils/routing';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 

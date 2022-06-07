@@ -14,9 +14,9 @@ import CategoryForm from 'src/components/forms/CategoryForm';
 import ModalForm from 'src/components/forms/ModalForm';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import { useExpenseCategories, useIncomeCategories } from 'src/contexts/CategoriesContext';
-import { isActionLoading } from 'src/services/common';
-import { generateLinkToTransactionPage } from 'src/services/routing';
-import { createCategoriesTree, listToTree } from 'src/services/transaction';
+import { isActionLoading } from 'src/utils/common';
+import { generateLinkToTransactionPage } from 'src/utils/routing';
+import { createCategoriesTree, listToTree } from 'src/utils/category';
 import {
   create, edit, remove, setParent, fetchList,
 } from 'src/store/actions/category';

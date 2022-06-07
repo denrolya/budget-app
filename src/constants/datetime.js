@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 
-import { generateYearRanges } from 'src/services/datetime';
+import { generateYearRanges } from 'src/utils/datetime';
 
 export const FIRST_AVAILABLE_YEAR = 2015;
 export const SERVER_TIMEZONE = 'UTC';

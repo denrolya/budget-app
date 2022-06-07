@@ -5,7 +5,7 @@ import React from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
-import { amountInPercentage } from 'src/services/common';
+import { amountInPercentage } from 'src/utils/common';
 
 const PreviousMonthStatisticsCell = ({ currentMonthValue, previousMonthValue, numberOfMonthAgo }) => {
   const { symbol } = useBaseCurrency();
