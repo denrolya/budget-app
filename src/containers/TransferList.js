@@ -2,13 +2,20 @@ import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, { useLayoutEffect, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import LoadingOverlay from 'react-loading-overlay';
 import { connect } from 'react-redux';
 import {
-  Card, CardBody, CardFooter, CardHeader, CardTitle, Col, Form, FormGroup, Row,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Col,
+  Form,
+  FormGroup,
+  Row,
 } from 'reactstrap';
 
 import AddNewButton from 'src/components/AddNewButton';
+import LoadingCard from 'src/components/cards/LoadingCard';
 import DateRange from 'src/components/forms/fields/DateRange';
 import NoTransfersMessage from 'src/components/messages/NotTransfersMessage';
 import PaginationRow from 'src/components/PaginationRow';
@@ -63,34 +70,32 @@ const TransferList = ({
         </title>
       </Helmet>
 
-      <Card>
-        <LoadingOverlay spinner active={isLoading} className="h-100 overlay-rounded">
-          <CardHeader>
-            <Row>
-              <Col xs={6} md={6} className="text-left">
-                <CardTitle tag="h2">Transfers</CardTitle>
-              </Col>
-              <Col className="text-right">
-                <AddNewButton onClick={toggleTransferModal} size="sm" />
-              </Col>
-            </Row>
-          </CardHeader>
-          <CardBody>
-            <Form className="form transaction-filters mb-4">
-              <FormGroup className="mb-0">
-                <DateRange from={from} to={to} onApply={applyDateRangeFilter} />
-              </FormGroup>
-            </Form>
-            {(!isLoading && data.size === 0) && <NoTransfersMessage />}
+      <LoadingCard isLoading={isLoading}>
+        <CardHeader>
+          <Row>
+            <Col xs={6} md={6} className="text-left">
+              <CardTitle tag="h2">Transfers</CardTitle>
+            </Col>
+            <Col className="text-right">
+              <AddNewButton onClick={toggleTransferModal} size="sm" />
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form className="form transaction-filters mb-4">
+            <FormGroup className="mb-0">
+              <DateRange from={from} to={to} onApply={applyDateRangeFilter} />
+            </FormGroup>
+          </Form>
+          {(!isLoading && data.size === 0) && <NoTransfersMessage />}
 
-            {data.size > 0 && <TransfersTable data={data} deleteTransfer={deleteTransfer} />}
-          </CardBody>
+          {data.size > 0 && <TransfersTable data={data} deleteTransfer={deleteTransfer} />}
+        </CardBody>
 
-          <CardFooter className="pt-0">
-            <PaginationRow model={pagination} setPage={setPage} setPerPage={setPerPage} />
-          </CardFooter>
-        </LoadingOverlay>
-      </Card>
+        <CardFooter className="pt-0">
+          <PaginationRow model={pagination} setPage={setPage} setPerPage={setPerPage} />
+        </CardFooter>
+      </LoadingCard>
     </>
   );
 };

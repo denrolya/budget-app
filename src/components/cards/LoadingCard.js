@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Card } from 'reactstrap';
 import cn from 'classnames';
 import LoadingOverlay from 'react-loading-overlay';
+LoadingOverlay.propTypes = undefined;
 
 /* eslint-disable react/jsx-props-no-spreading */
 const LoadingCard = ({
