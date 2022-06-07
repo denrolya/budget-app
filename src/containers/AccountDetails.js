@@ -22,7 +22,6 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { notify } from 'src/store/actions/global';
 
 const AccountDetails = ({
-  exchangeRates,
   updateName,
   updateColor,
   toggleArchived,
@@ -108,7 +107,6 @@ const AccountDetails = ({
               {hasData && (
                 <AccountGeneralInfo
                   data={accountDetails}
-                  exchangeRates={exchangeRates}
                   onNameChange={onNameChange}
                   onColorChange={onColorChange}
                   onArchive={onArchiveClick}
@@ -145,12 +143,9 @@ AccountDetails.propTypes = {
   toggleArchived: PropTypes.func.isRequired,
   updateName: PropTypes.func.isRequired,
   updateColor: PropTypes.func.isRequired,
-  exchangeRates: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({ exchangeRates }) => ({ exchangeRates });
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   toggleArchived,
   updateName,
   updateColor,

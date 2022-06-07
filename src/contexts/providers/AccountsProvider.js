@@ -7,17 +7,7 @@ import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import AccountsContext from 'src/contexts/AccountsContext';
 
 const AccountsProvider = ({ accounts, fetchAccounts, children }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      await fetchAccounts();
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     setData(
@@ -30,12 +20,8 @@ const AccountsProvider = ({ accounts, fetchAccounts, children }) => {
   }, [accounts]);
 
   useEffect(() => {
-    fetchData();
+    fetchAccounts();
   }, []);
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <AccountsContext.Provider value={data}>

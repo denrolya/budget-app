@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { connect } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
@@ -16,8 +16,9 @@ import Sidebar from 'src/components/layout/Sidebar';
 import { ROUTE_DASHBOARD, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import AccountsProvider from 'src/contexts/providers/AccountsProvider';
 import CategoriesProvider from 'src/contexts/providers/CategoriesProvider';
+import ExchangeRatesProvider from 'src/contexts/providers/ExchangeRatesProvider';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
-import { isActionLoading, copyToClipboard } from 'src/services/common';
+import { isActionLoading, isActionResolved, copyToClipboard } from 'src/services/common';
 import { getBrandText } from 'src/services/routing';
 import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
@@ -35,7 +36,6 @@ import {
   toggleDraftExpenseModal,
   toggleTransferModal,
 } from 'src/store/actions/ui';
-import { fetch as fetchExchangeRates } from 'src/store/actions/exchangeRates';
 import DraftCashExpenseForm from 'src/containers/DraftCashExpenseForm';
 
 const Layout = ({
@@ -60,12 +60,11 @@ const Layout = ({
   isAccountModalOpened,
   isTransferRequestInProgress,
   isAssetsLoading,
+  isVitalDataLoaded,
   updateDashboard,
   registerTransaction,
   fetchDebts,
-  fetchExchangeRates,
 }) => {
-  const [isVitalDataLoaded, setIsVitalDataLoaded] = useState(false);
   const toggleTransactionForm = useTransactionForm();
   const toggleNewTransaction = () => toggleTransactionForm({
     onSubmit: ({ type, ...values }) => registerTransaction(type, values),
@@ -79,107 +78,103 @@ const Layout = ({
     preventDefaultTouchmoveEvent: false,
   });
 
-  const fetchData = async () => {
-    await fetchDebts();
-    await fetchExchangeRates();
-    setIsVitalDataLoaded(true);
-  };
-
   useEffect(() => {
-    fetchData();
+    fetchDebts();
   }, []);
 
   const copyTokenToClipboard = () => copyToClipboard(localStorage.getItem('token'));
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <AccountsProvider>
-      <CategoriesProvider>
-        <Hotkeys keyName="shift+t" onKeyUp={toggleNewTransaction} />
-        <Hotkeys keyName="shift+e" onKeyUp={toggleDraftExpenseModal} />
-        <Hotkeys keyName="shift+r" onKeyUp={toggleTransferModal} />
-        <Hotkeys keyName="shift+d" onKeyUp={toggleDebtModal} />
-        <Hotkeys keyName="shift+a" onKeyUp={toggleAccountModal} />
-        <Hotkeys keyName="t" onKeyUp={() => navigate(ROUTE_TRANSACTIONS)} />
-        <Hotkeys keyName="h" onKeyUp={() => navigate(ROUTE_DASHBOARD)} />
-        <Hotkeys keyName="d" onKeyUp={() => navigate(ROUTE_DEBTS)} />
-
-        <div
-          {...swipeHandlers}
-          data-color={colorScheme}
-          className={cn('wrapper', {
-            'nav-open': isSidebarOpened,
-            'white-content': !isDarkModeOn,
-          })}
-        >
-          <Sidebar
-            totalDebt={totalDebt}
-            isLoading={isAssetsLoading}
-            onCurrencySwitch={switchBaseCurrency}
-            updateDashboard={updateDashboard}
-          />
+    <ExchangeRatesProvider>
+      <AccountsProvider>
+        <CategoriesProvider>
+          <Hotkeys keyName="shift+t" onKeyUp={toggleNewTransaction} />
+          <Hotkeys keyName="shift+e" onKeyUp={toggleDraftExpenseModal} />
+          <Hotkeys keyName="shift+r" onKeyUp={toggleTransferModal} />
+          <Hotkeys keyName="shift+d" onKeyUp={toggleDebtModal} />
+          <Hotkeys keyName="shift+a" onKeyUp={toggleAccountModal} />
+          <Hotkeys keyName="t" onKeyUp={() => navigate(ROUTE_TRANSACTIONS)} />
+          <Hotkeys keyName="h" onKeyUp={() => navigate(ROUTE_DASHBOARD)} />
+          <Hotkeys keyName="d" onKeyUp={() => navigate(ROUTE_DEBTS)} />
 
           <div
-            className="main-panel"
-            role="main"
+            {...swipeHandlers}
             data-color={colorScheme}
-            onClick={() => isSidebarOpened && toggleSidebar()}
+            className={cn('wrapper', {
+              'nav-open': isSidebarOpened,
+              'white-content': !isDarkModeOn,
+            })}
           >
-            <Header
+            <Sidebar
+              totalDebt={totalDebt}
+              isLoading={isAssetsLoading}
               onCurrencySwitch={switchBaseCurrency}
-              onTokenCopyClick={copyTokenToClipboard}
-              brandText={getBrandText(pathname)}
-              logoutUser={logoutUser}
               updateDashboard={updateDashboard}
-              toggle={toggleHeader}
-              toggleDarkMode={toggleDarkMode}
-              toggleTransactionModal={toggleNewTransaction}
-              isOpened={isHeaderOpened}
-              toggleSidebar={toggleSidebar}
-              isSidebarOpened={isSidebarOpened}
             />
-            <div className="content">
-              {isVitalDataLoaded && (
-                <Outlet />
-              ) }
+
+            <div
+              className="main-panel"
+              role="main"
+              data-color={colorScheme}
+              onClick={() => isSidebarOpened && toggleSidebar()}
+            >
+              <Header
+                onCurrencySwitch={switchBaseCurrency}
+                onTokenCopyClick={copyTokenToClipboard}
+                brandText={getBrandText(pathname)}
+                logoutUser={logoutUser}
+                updateDashboard={updateDashboard}
+                toggle={toggleHeader}
+                toggleDarkMode={toggleDarkMode}
+                toggleTransactionModal={toggleNewTransaction}
+                isOpened={isHeaderOpened}
+                toggleSidebar={toggleSidebar}
+                isSidebarOpened={isSidebarOpened}
+              />
+              <div className="content">
+                {isVitalDataLoaded && (
+                  <Outlet />
+                ) }
+              </div>
             </div>
           </div>
-        </div>
 
-        <DraftCashExpenseForm />
+          <DraftCashExpenseForm />
 
-        <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
-          <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
-        </ModalForm>
+          <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
+            <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
+          </ModalForm>
 
-        <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
+          <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
 
-        <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
-          <AccountForm toggleModal={toggleAccountModal} />
-        </ModalForm>
+          <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
+            <AccountForm toggleModal={toggleAccountModal} />
+          </ModalForm>
 
-        <button
-          type="button"
-          className="fixed-plugin"
-          onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
-        >
-          <i aria-hidden className="fa fa-plus fa-2x" />
-        </button>
-      </CategoriesProvider>
-    </AccountsProvider>
+          <button
+            type="button"
+            className="fixed-plugin"
+            onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
+          >
+            <i aria-hidden className="fa fa-plus fa-2x" />
+          </button>
+        </CategoriesProvider>
+      </AccountsProvider>
+    </ExchangeRatesProvider>
   );
   /* eslint-enable react/jsx-props-no-spreading */
 };
 
 Layout.defaultProps = {
   colorScheme: 'gray',
+  isVitalDataLoaded: false,
   totalDebt: 0,
 };
 
 Layout.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
   fetchDebts: PropTypes.func.isRequired,
-  fetchExchangeRates: PropTypes.func.isRequired,
   isAccountModalOpened: PropTypes.bool.isRequired,
   isAssetsLoading: PropTypes.bool.isRequired,
   isDarkModeOn: PropTypes.bool.isRequired,
@@ -202,6 +197,7 @@ Layout.propTypes = {
   updateDashboard: PropTypes.func.isRequired,
   colorScheme: PropTypes.oneOf(['blue', 'gray', 'indigo', 'lightblue', 'primary', 'green']),
   totalDebt: PropTypes.number,
+  isVitalDataLoaded: PropTypes.bool,
 };
 
 const mapStateToProps = ({
@@ -216,6 +212,7 @@ const mapStateToProps = ({
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
   totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.baseCurrency]),
   isAssetsLoading: isActionLoading(ui.ACCOUNT_FETCH_LIST) || isActionLoading(ui.DEBT_FETCH_LIST),
+  isVitalDataLoaded: isActionResolved(ui.ACCOUNT_FETCH_LIST) && isActionResolved(ui.DEBT_FETCH_LIST) && isActionResolved(ui.EXCHANGE_RATES_FETCH),
 });
 
 export default connect(mapStateToProps, {
@@ -233,5 +230,4 @@ export default connect(mapStateToProps, {
   registerTransaction,
   switchBaseCurrency,
   fetchDebts,
-  fetchExchangeRates,
 })(Layout);

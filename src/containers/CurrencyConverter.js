@@ -5,9 +5,8 @@ import {
 } from 'reactstrap';
 import { ErrorMessage, Field, Formik } from 'formik';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
+import { useRates } from 'src/contexts/ExchangeRatesContext';
 import { convert } from 'src/services/currency';
 
 const CURRENCIES = {
@@ -28,7 +27,8 @@ const CURRENCY_TUPLES = [
 ];
 const EXAMPLES = [1, 2, 5, 10, 25, 50, 100, 250, 500, 1000, 5000, 20000];
 
-const CurrencyConverter = ({ exchangeRates }) => {
+const CurrencyConverter = () => {
+  const exchangeRates = useRates();
   const currencyCodes = Object.keys(CURRENCIES);
 
   const initialValues = {
@@ -259,10 +259,6 @@ const CurrencyConverter = ({ exchangeRates }) => {
   );
 };
 
-CurrencyConverter.propTypes = {
-  exchangeRates: PropTypes.object,
-};
+CurrencyConverter.propTypes = {};
 
-const mapStateToProps = ({ exchangeRates }) => ({ exchangeRates });
-
-export default connect(mapStateToProps)(CurrencyConverter);
+export default CurrencyConverter;

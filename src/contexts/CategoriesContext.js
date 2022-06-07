@@ -5,6 +5,9 @@ import {
   EXPENSE_TYPE,
 } from 'src/constants/transactions';
 
+/**
+ * TODO: should contain loading status inside context that should be used in the layout
+ */
 const CategoriesContext = createContext({
   categories: [],
   expense: [],

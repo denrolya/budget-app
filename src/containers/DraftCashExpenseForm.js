@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {
   ErrorMessage, Field, Formik, Form,
 } from 'formik';
-import find from 'lodash/find';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import {
@@ -19,8 +18,6 @@ import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { EXPENSE_TYPE, VALIDATION_SCHEMA } from 'src/constants/transactions';
 import ModalForm from 'src/components/forms/ModalForm';
-import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
-import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const DraftCashExpenseForm = ({
   isSaving,

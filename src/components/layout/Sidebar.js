@@ -1,11 +1,10 @@
 import filter from 'lodash/filter';
-import React, { memo, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 import { NavLink, useLocation, matchPath } from 'react-router-dom';
 import { Button, Nav, NavItem } from 'reactstrap';
 import orderBy from 'lodash/orderBy';
-import isEqual from 'lodash/isEqual';
 import sumBy from 'lodash/sumBy';
 
 import MoneyValue from 'src/components/MoneyValue';

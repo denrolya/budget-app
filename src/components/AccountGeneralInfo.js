@@ -9,6 +9,7 @@ import {
 
 import AccountBalance from 'src/components/charts/recharts/area/AccountBalance';
 import MoneyValue from 'src/components/MoneyValue';
+import { useRates } from 'src/contexts/ExchangeRatesContext';
 import { convert, generateExchangeRatesStatistics } from 'src/services/currency';
 import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import TransactionCategoriesRadial from 'src/components/charts/recharts/radial/TransactionCategoriesRadial';
@@ -24,7 +25,6 @@ import { copyToClipboard } from 'src/services/common';
 
 const AccountGeneralInfo = ({
   data,
-  exchangeRates,
   onArchive,
   onRestore,
   onNameChange,
@@ -44,6 +44,7 @@ const AccountGeneralInfo = ({
     topExpenseCategories,
     topIncomeCategories,
   } = data;
+  const exchangeRates = useRates();
 
   const exchangeData = generateExchangeRatesStatistics(currency);
 
@@ -206,9 +207,7 @@ const AccountGeneralInfo = ({
   );
 };
 
-AccountGeneralInfo.defaultProps = {
-  exchangeRates: {},
-};
+AccountGeneralInfo.defaultProps = {};
 
 AccountGeneralInfo.propTypes = {
   data: PropTypes.shape({
@@ -234,7 +233,6 @@ AccountGeneralInfo.propTypes = {
   onRestore: PropTypes.func.isRequired,
   onNameChange: PropTypes.func.isRequired,
   onColorChange: PropTypes.func.isRequired,
-  exchangeRates: PropTypes.object,
 };
 
 export default AccountGeneralInfo;
