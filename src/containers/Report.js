@@ -5,6 +5,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
+import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 import { Row, Col, UncontrolledCollapse } from 'reactstrap';
@@ -38,9 +39,15 @@ const Report = ({
   setStatistics,
   setPeriod,
 }) => {
+  const { code } = useBaseCurrency();
+
   useEffect(() => {
     updateReport();
   }, []);
+
+  useEffect(() => {
+    updateReport();
+  }, [code]);
 
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
 

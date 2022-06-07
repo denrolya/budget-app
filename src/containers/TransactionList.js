@@ -17,6 +17,7 @@ import {
 
 import NoTransactionsMessage from 'src/components/messages/NoTransactionsMessage';
 import TransactionFilters from 'src/components/TransactionFilters';
+import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { isActionLoading } from 'src/utils/common';
 import {
@@ -51,6 +52,7 @@ const TransactionList = ({
   const { search } = useLocation();
   const firstUpdate = useRef(true);
   const toggleTransactionForm = useTransactionForm();
+  const { code } = useBaseCurrency();
   const [isFiltersOpen, setIsFiltersOpen] = useState(!window.isMobile);
 
   useEffect(() => {
@@ -62,6 +64,10 @@ const TransactionList = ({
 
     return () => resetPagination();
   }, []);
+
+  useEffect(() => {
+    fetchList();
+  }, [code]);
 
   useLayoutEffect(() => {
     if (firstUpdate.current) {

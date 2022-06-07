@@ -2,8 +2,6 @@ import { createActions } from 'reduxsauce';
 
 import { getUser, setBaseCurrency } from 'src/utils/auth';
 import axios from 'src/utils/http';
-import { isOnDashboardPage } from 'src/utils/routing';
-import { updateDashboard } from 'src/store/actions/dashboard';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(
@@ -29,10 +27,6 @@ export const switchBaseCurrency = (currency) => async (dispatch) => {
 
     setBaseCurrency(currency);
     notify('success', 'Switched currency');
-
-    if (isOnDashboardPage()) {
-      dispatch(updateDashboard());
-    }
   } catch (e) {
     notify('error', 'Switch Base Currency');
     dispatch(Creators.switchBaseCurrencyFailure(e));

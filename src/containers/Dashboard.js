@@ -29,10 +29,15 @@ const Dashboard = ({
   updateDashboard,
   setStatistics,
 }) => {
+  const { symbol, code } = useBaseCurrency();
+
   useEffect(() => {
     updateDashboard();
   }, []);
-  const { symbol } = useBaseCurrency();
+
+  useEffect(() => {
+    updateDashboard();
+  }, [code]);
 
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
 
