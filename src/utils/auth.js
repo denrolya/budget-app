@@ -10,6 +10,11 @@ export const getUser = () => JSON.parse(localStorage.getItem('user'));
 
 export const setUser = (user) => localStorage.setItem('user', JSON.stringify(user));
 
+export const setBaseCurrency = (baseCurrency) => localStorage.setItem('user', JSON.stringify({
+  ...getUser(),
+  baseCurrency,
+}));
+
 export const getToken = () => localStorage.getItem('token');
 
 export const setToken = (token) => localStorage.setItem('token', token);

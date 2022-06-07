@@ -1,9 +1,10 @@
-import { CURRENCIES } from 'src/constants/currency';
 import Swal from 'sweetalert2';
+
+import { CURRENCIES } from 'src/constants/currency';
 
 const BUTTON_INFO = 'btn btn-simple btn-info';
 const BUTTON_SUCCESS = 'btn btn-simple btn-success';
-const BUTTON_WARNING = 'btn btn-simple btn-warnings';
+const BUTTON_WARNING = 'btn btn-simple btn-warning';
 const BUTTON_DANGER = 'btn btn-simple btn-danger';
 
 const DEFAULT_PROPS = {
