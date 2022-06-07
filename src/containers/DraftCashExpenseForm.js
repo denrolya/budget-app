@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import {
   Col, FormGroup, Input, Label,
 } from 'reactstrap';
+import { useActiveAccounts, useDefaultCashAccount } from 'src/contexts/AccountsContext';
 import { useUnknownExpenseCategory } from 'src/contexts/CategoriesContext';
 import { isActionLoading } from 'src/services/common';
 import { toggleDraftExpenseModal } from 'src/store/actions/ui';
@@ -26,9 +27,9 @@ const DraftCashExpenseForm = ({
   isOpen,
   onSubmit,
   toggleModal,
-  accountOptions,
 }) => {
-  const { code } = useBaseCurrency();
+  const accountOptions = useActiveAccounts();
+  const defaultCashAccount = useDefaultCashAccount();
   const unknownExpenseCategory = useUnknownExpenseCategory();
   const [form, setForm] = useState({
     initialValues: {
@@ -50,7 +51,7 @@ const DraftCashExpenseForm = ({
       initialValues: {
         ...form.initialValues,
         category: unknownExpenseCategory,
-        account: find(accountOptions, ({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code)?.id,
+        account: defaultCashAccount,
       },
     });
   }, [unknownExpenseCategory]);
@@ -168,22 +169,18 @@ const DraftCashExpenseForm = ({
   );
 };
 
-DraftCashExpenseForm.defaultProps = {
-  accountOptions: [],
-};
+DraftCashExpenseForm.defaultProps = {};
 
 DraftCashExpenseForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  accountOptions: PropTypes.array,
 };
 
-const mapStateToProps = ({ ui, account }) => ({
+const mapStateToProps = ({ ui }) => ({
   isOpen: ui.isDraftExpenseModalOpened,
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER),
-  accountOptions: account.filter(({ archivedAt }) => !archivedAt),
 });
 
 export default connect(mapStateToProps, {

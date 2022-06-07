@@ -23,11 +23,11 @@ import {
   TRANSACTION_TYPES,
   VALIDATION_SCHEMA,
 } from 'src/constants/transactions';
+import { useActiveAccounts } from 'src/contexts/AccountsContext';
 import { useCategories, useCompensationIncomeCategory, useDebtIncomeCategory } from 'src/contexts/CategoriesContext';
 import { isActionLoading } from 'src/services/common';
 
 const TransactionForm = ({
-  accountOptions,
   title,
   model,
   isSaving,
@@ -35,6 +35,7 @@ const TransactionForm = ({
   onSubmit,
   toggleModal,
 }) => {
+  const accountOptions = useActiveAccounts();
   const categoryOptions = useCategories();
   const debtIncomeCategory = useDebtIncomeCategory();
   const compensationIncomeCategory = useCompensationIncomeCategory();
@@ -382,7 +383,6 @@ const TransactionForm = ({
 };
 
 TransactionForm.defaultProps = {
-  accountOptions: [],
   model: INITIAL_FORM_DATA,
   title: 'New transaction',
 };
@@ -392,14 +392,12 @@ TransactionForm.propTypes = {
   isSaving: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  accountOptions: PropTypes.array,
   model: PropTypes.object,
   title: PropTypes.string,
 };
 
-const mapStateToProps = ({ ui, account }) => ({
+const mapStateToProps = ({ ui }) => ({
   isSaving: isActionLoading(ui.TRANSACTION_REGISTER) || isActionLoading(ui.TRANSACTION_EDIT),
-  accountOptions: account.filter(({ archivedAt }) => !archivedAt),
 });
 
 export default connect(mapStateToProps)(TransactionForm);

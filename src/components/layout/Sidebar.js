@@ -10,6 +10,7 @@ import sumBy from 'lodash/sumBy';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { ROUTE_ACCOUNTS, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
+import { useActiveAccounts } from 'src/contexts/AccountsContext';
 import { generateLinkToAccountTransactionsPage, routes } from 'src/services/routing';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import AccountName from 'src/components/AccountName';
@@ -17,8 +18,9 @@ import { CURRENCIES } from 'src/constants/currency';
 import { switchCurrencyPrompt } from 'src/services/prompts';
 
 const Sidebar = ({
-  accounts, totalDebt, isLoading, onCurrencySwitch, updateDashboard,
+  totalDebt, isLoading, onCurrencySwitch, updateDashboard,
 }) => {
+  const accounts = useActiveAccounts();
   const { pathname } = useLocation();
   const { symbol, code } = useBaseCurrency();
   const totalAccountsValue = useMemo(() => sumBy(accounts, ({ convertedValues }) => convertedValues[code]), [accounts]);
@@ -140,7 +142,6 @@ const Sidebar = ({
 };
 
 Sidebar.defaultProps = {
-  accounts: [],
   isLoading: false,
   totalDebt: 0,
 };
@@ -148,12 +149,8 @@ Sidebar.defaultProps = {
 Sidebar.propTypes = {
   updateDashboard: PropTypes.func.isRequired,
   onCurrencySwitch: PropTypes.func.isRequired,
-  accounts: PropTypes.array,
   totalDebt: PropTypes.number,
   isLoading: PropTypes.bool,
 };
 
-export default memo(
-  Sidebar,
-  (pp, np) => isEqual(pp.accounts, np.accounts) && isEqual(pp.totalDebt, np.totalDebt) && pp.isLoading === np.isLoading,
-);
+export default Sidebar;

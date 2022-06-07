@@ -5,16 +5,13 @@ import { fetchList as fetchCategories } from 'src/store/actions/category';
 
 import CategoriesContext from 'src/contexts/CategoriesContext';
 
-const CategoriesProvider = ({ fetchCategories, children }) => {
+const CategoriesProvider = ({ categories, fetchCategories, children }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      setCategories(
-        await fetchCategories(),
-      );
+      await fetchCategories();
     } finally {
       setIsLoading(false);
     }
@@ -41,11 +38,18 @@ const CategoriesProvider = ({ fetchCategories, children }) => {
   );
 };
 
+CategoriesProvider.defaultProps = {
+  categories: [],
+};
+
 CategoriesProvider.propTypes = {
   fetchCategories: PropTypes.func.isRequired,
   children: PropTypes.any.isRequired,
+  categories: PropTypes.array,
 };
 
-export default connect(null, {
+const mapStateToProps = ({ category: { list: categories } }) => ({ categories });
+
+export default connect(mapStateToProps, {
   fetchCategories,
 })(CategoriesProvider);

@@ -1,15 +1,14 @@
-import orderBy from 'lodash/orderBy';
-import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 import AccountSelector from 'src/components/AccountSelector';
+import { useAccounts } from 'src/contexts/AccountsContext';
 
-const AccountList = ({ list }) => {
+const AccountList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const list = useAccounts();
 
   useEffect(() => {
     if (list.length > 0) {
@@ -40,12 +39,6 @@ const AccountList = ({ list }) => {
 
 AccountList.defaultProps = {};
 
-AccountList.propTypes = {
-  list: PropTypes.array.isRequired,
-};
+AccountList.propTypes = {};
 
-const mapStateToProps = ({ account }) => ({
-  list: orderBy(account, ['archivedAt', 'lastTransactionAt'], ['desc', 'desc']),
-});
-
-export default connect(mapStateToProps)(AccountList);
+export default AccountList;

@@ -29,15 +29,20 @@ export const { Types, Creators } = createActions(
 );
 
 export const fetchList = () => async (dispatch) => {
+  let result = [];
   dispatch(Creators.fetchListRequest());
 
   try {
     const { data } = await axios.get('api/accounts');
-    dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], ['archivedAt', 'lastTransactionAt'], ['desc', 'desc'])));
+    const accounts = orderBy(data['hydra:member'], ['archivedAt', 'lastTransactionAt'], ['desc', 'desc']);
+    dispatch(Creators.fetchListSuccess(accounts));
+    result = accounts;
   } catch (e) {
     notify('error', 'Account Fetch List');
     dispatch(Creators.fetchListFailure(e.message));
   }
+
+  return result;
 };
 
 export const createAccount = (data) => async (dispatch) => {
