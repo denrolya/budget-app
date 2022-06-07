@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchList as fetchCategories } from 'src/store/actions/category';
 
@@ -31,18 +31,12 @@ const CategoriesProvider = ({ categories, fetchCategories, children }) => {
     };
   }, []);
 
-  const data = useMemo(() => ({
-    income: categories.filter(({ type }) => type === 'income'),
-    expense: categories.filter(({ type }) => type === 'expense'),
-    categories,
-  }), [categories]);
-
   if (isLoading) {
     return null;
   }
 
   return (
-    <CategoriesContext.Provider value={data}>
+    <CategoriesContext.Provider value={categories}>
       { children }
     </CategoriesContext.Provider>
   );

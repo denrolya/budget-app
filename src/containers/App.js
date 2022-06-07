@@ -33,7 +33,6 @@ import TransactionsCalendar from 'src/containers/TransactionsCalendar';
 import TransferList from 'src/containers/TransferList';
 import UserProfile from 'src/containers/UserProfile';
 import AccountDetails from 'src/containers/AccountDetails';
-import TransactionFormProvider from 'src/contexts/TransactionFormProvider';
 
 const App = ({ isAuthenticated, baseCurrency }) => {
   const routes = useMemo(() => [
@@ -69,9 +68,7 @@ const App = ({ isAuthenticated, baseCurrency }) => {
 
   return (
     <BaseCurrencyContext.Provider value={baseCurrency}>
-      <TransactionFormProvider>
-        {useRoutes(routes)}
-      </TransactionFormProvider>
+      {useRoutes(routes)}
     </BaseCurrencyContext.Provider>
   );
 };

@@ -17,7 +17,7 @@ import { ROUTE_DASHBOARD, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/
 import AccountsProvider from 'src/contexts/providers/AccountsProvider';
 import CategoriesProvider from 'src/contexts/providers/CategoriesProvider';
 import ExchangeRatesProvider from 'src/contexts/providers/ExchangeRatesProvider';
-import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
+import TransactionFormProvider, { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { isActionLoading, isActionResolved, copyTokenToClipboard } from 'src/utils/common';
 import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
@@ -85,75 +85,77 @@ const Layout = ({
     <ExchangeRatesProvider>
       <AccountsProvider>
         <CategoriesProvider>
-          <Hotkeys keyName="shift+t" onKeyUp={toggleNewTransaction} />
-          <Hotkeys keyName="shift+e" onKeyUp={toggleDraftExpenseModal} />
-          <Hotkeys keyName="shift+r" onKeyUp={toggleTransferModal} />
-          <Hotkeys keyName="shift+d" onKeyUp={toggleDebtModal} />
-          <Hotkeys keyName="shift+a" onKeyUp={toggleAccountModal} />
-          <Hotkeys keyName="t" onKeyUp={() => navigate(ROUTE_TRANSACTIONS)} />
-          <Hotkeys keyName="h" onKeyUp={() => navigate(ROUTE_DASHBOARD)} />
-          <Hotkeys keyName="d" onKeyUp={() => navigate(ROUTE_DEBTS)} />
-
-          <div
-            {...swipeHandlers}
-            data-color={colorScheme}
-            className={cn('wrapper', {
-              'nav-open': isSidebarOpened,
-              'white-content': !isDarkModeOn,
-            })}
-          >
-            <Sidebar
-              totalDebt={totalDebt}
-              isLoading={isAssetsLoading}
-              onCurrencySwitch={switchBaseCurrency}
-              updateDashboard={updateDashboard}
-            />
+          <TransactionFormProvider>
+            <Hotkeys keyName="shift+t" onKeyUp={toggleNewTransaction} />
+            <Hotkeys keyName="shift+e" onKeyUp={toggleDraftExpenseModal} />
+            <Hotkeys keyName="shift+r" onKeyUp={toggleTransferModal} />
+            <Hotkeys keyName="shift+d" onKeyUp={toggleDebtModal} />
+            <Hotkeys keyName="shift+a" onKeyUp={toggleAccountModal} />
+            <Hotkeys keyName="t" onKeyUp={() => navigate(ROUTE_TRANSACTIONS)} />
+            <Hotkeys keyName="h" onKeyUp={() => navigate(ROUTE_DASHBOARD)} />
+            <Hotkeys keyName="d" onKeyUp={() => navigate(ROUTE_DEBTS)} />
 
             <div
-              className="main-panel"
-              role="main"
+              {...swipeHandlers}
               data-color={colorScheme}
-              onClick={() => isSidebarOpened && toggleSidebar()}
+              className={cn('wrapper', {
+                'nav-open': isSidebarOpened,
+                'white-content': !isDarkModeOn,
+              })}
             >
-              <Header
+              <Sidebar
+                totalDebt={totalDebt}
+                isLoading={isAssetsLoading}
                 onCurrencySwitch={switchBaseCurrency}
-                onTokenCopyClick={copyTokenToClipboard}
-                logoutUser={logoutUser}
                 updateDashboard={updateDashboard}
-                toggle={toggleHeader}
-                toggleDarkMode={toggleDarkMode}
-                toggleTransactionModal={toggleNewTransaction}
-                isOpened={isHeaderOpened}
-                toggleSidebar={toggleSidebar}
-                isSidebarOpened={isSidebarOpened}
               />
-              <div className="content">
-                {(isVitalDataLoaded) && (
-                  <Outlet />
-                ) }
+
+              <div
+                className="main-panel"
+                role="main"
+                data-color={colorScheme}
+                onClick={() => isSidebarOpened && toggleSidebar()}
+              >
+                <Header
+                  onCurrencySwitch={switchBaseCurrency}
+                  onTokenCopyClick={copyTokenToClipboard}
+                  logoutUser={logoutUser}
+                  updateDashboard={updateDashboard}
+                  toggle={toggleHeader}
+                  toggleDarkMode={toggleDarkMode}
+                  toggleTransactionModal={toggleNewTransaction}
+                  isOpened={isHeaderOpened}
+                  toggleSidebar={toggleSidebar}
+                  isSidebarOpened={isSidebarOpened}
+                />
+                <div className="content">
+                  {(isVitalDataLoaded) && (
+                    <Outlet />
+                  ) }
+                </div>
               </div>
             </div>
-          </div>
 
-          <DraftCashExpenseForm />
+            <DraftCashExpenseForm />
 
-          <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
-            <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
-          </ModalForm>
+            <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
+              <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
+            </ModalForm>
 
-          <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
+            <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
 
-          <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
-            <AccountForm toggleModal={toggleAccountModal} />
-          </ModalForm>
+            <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
+              <AccountForm toggleModal={toggleAccountModal} />
+            </ModalForm>
 
-          <button
-            type="button"
-            className="fixed-plugin"
-            onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
-          >
-            <i aria-hidden className="fa fa-plus fa-2x" />
-          </button>
+            <button
+              type="button"
+              className="fixed-plugin"
+              onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
+            >
+              <i aria-hidden className="fa fa-plus fa-2x" />
+            </button>
+          </TransactionFormProvider>
         </CategoriesProvider>
       </AccountsProvider>
     </ExchangeRatesProvider>

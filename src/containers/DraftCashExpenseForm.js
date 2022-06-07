@@ -27,7 +27,7 @@ const DraftCashExpenseForm = ({
 }) => {
   const accountOptions = useActiveAccounts();
   const defaultCashAccount = useDefaultCashAccount();
-  const unknownExpenseCategory = useUnknownExpenseCategory();
+  const unknownExpenseCategory = useUnknownExpenseCategory()?.id;
   const [form, setForm] = useState({
     initialValues: {
       type: EXPENSE_TYPE,

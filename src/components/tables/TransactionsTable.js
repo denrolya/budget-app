@@ -116,25 +116,25 @@ const TransactionsTable = ({
 };
 
 TransactionsTable.defaultProps = {
-  size: 'sm',
-  totalValue: 0,
-  showNote: true,
   showActions: true,
   showFullCategoryPath: true,
+  showNote: true,
+  size: 'sm',
+  totalValue: 0,
 };
 
 TransactionsTable.propTypes = {
-  showNote: PropTypes.bool,
-  showActions: PropTypes.bool,
-  showFullCategoryPath: PropTypes.bool,
-  size: PropTypes.string,
   data: PropTypes.array,
-  pagination: PropTypes.instanceOf(Pagination),
-  totalValue: PropTypes.number,
-  setPage: PropTypes.func,
-  setPerPage: PropTypes.func,
   handleDelete: PropTypes.func,
   handleEdit: PropTypes.func,
+  pagination: PropTypes.instanceOf(Pagination),
+  setPage: PropTypes.func,
+  setPerPage: PropTypes.func,
+  showActions: PropTypes.bool,
+  showFullCategoryPath: PropTypes.bool,
+  showNote: PropTypes.bool,
+  size: PropTypes.string,
+  totalValue: PropTypes.number,
 };
 
 export default TransactionsTable;

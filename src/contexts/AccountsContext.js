@@ -7,7 +7,9 @@ const AccountsContext = createContext([]);
 export const useAccounts = () => useContext(AccountsContext);
 export const useDefaultCashAccount = () => {
   const { code } = useContext(BaseCurrencyContext);
-  useContext(AccountsContext).find(({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code);
+  const accounts = useContext(AccountsContext);
+
+  return accounts.find(({ currency, type }) => type === ACCOUNT_TYPE_CASH && currency === code);
 };
 export const useActiveAccounts = () => useContext(AccountsContext).filter(({ archivedAt }) => !archivedAt);
 export const useArchivedAccounts = () => useContext(AccountsContext).filter(({ archivedAt }) => !!archivedAt);
