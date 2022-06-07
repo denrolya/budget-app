@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { connect } from 'react-redux';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 
 import AccountForm from 'src/components/forms/AccountForm';
@@ -18,8 +18,7 @@ import AccountsProvider from 'src/contexts/providers/AccountsProvider';
 import CategoriesProvider from 'src/contexts/providers/CategoriesProvider';
 import ExchangeRatesProvider from 'src/contexts/providers/ExchangeRatesProvider';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
-import { isActionLoading, isActionResolved, copyToClipboard } from 'src/services/common';
-import { getBrandText } from 'src/services/routing';
+import { isActionLoading, isActionResolved, copyTokenToClipboard } from 'src/services/common';
 import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { fetchList as fetchDebts } from 'src/store/actions/debt';
@@ -69,7 +68,6 @@ const Layout = ({
   const toggleNewTransaction = () => toggleTransactionForm({
     onSubmit: ({ type, ...values }) => registerTransaction(type, values),
   });
-  const { pathname } = useLocation();
   const navigate = useNavigate();
   const swipeHandlers = useSwipeable({
     onSwipedRight: ({ initial }) => initial[0] < 20 && !isSidebarOpened && openSidebar(),
@@ -81,8 +79,6 @@ const Layout = ({
   useEffect(() => {
     fetchDebts();
   }, []);
-
-  const copyTokenToClipboard = () => copyToClipboard(localStorage.getItem('token'));
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -122,7 +118,6 @@ const Layout = ({
               <Header
                 onCurrencySwitch={switchBaseCurrency}
                 onTokenCopyClick={copyTokenToClipboard}
-                brandText={getBrandText(pathname)}
                 logoutUser={logoutUser}
                 updateDashboard={updateDashboard}
                 toggle={toggleHeader}
@@ -133,7 +128,7 @@ const Layout = ({
                 isSidebarOpened={isSidebarOpened}
               />
               <div className="content">
-                {isVitalDataLoaded && (
+                {(isVitalDataLoaded) && (
                   <Outlet />
                 ) }
               </div>

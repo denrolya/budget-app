@@ -331,6 +331,8 @@ export const copyToClipboard = (str) => {
   notify('success', 'Copied to clipboard');
 };
 
+export const copyTokenToClipboard = () => copyToClipboard(localStorage.getItem('token'));
+
 export const rangeToString = (from, to, range = DATERANGE_PICKER_RANGES) => {
   let result = `${from.format(
     from.year() === moment().year() ? MOMENT_VIEW_DATE_FORMAT : MOMENT_VIEW_DATE_WITH_YEAR_FORMAT,

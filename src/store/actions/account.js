@@ -1,4 +1,5 @@
 import { SERVER_TIMEZONE } from 'src/constants/datetime';
+import { generateConvertedValues } from 'src/services/currency';
 import axios from 'src/services/http';
 import orderBy from 'lodash/orderBy';
 import { createActions } from 'reduxsauce';
@@ -28,13 +29,21 @@ export const { Types, Creators } = createActions(
   { prefix: 'ACCOUNT_' },
 );
 
-export const fetchList = () => async (dispatch) => {
+export const fetchList = () => async (dispatch, getState) => {
   let result = [];
+  const { exchangeRates } = getState();
   dispatch(Creators.fetchListRequest());
 
   try {
     const { data } = await axios.get('api/accounts');
-    const accounts = orderBy(data['hydra:member'], ['archivedAt', 'lastTransactionAt'], ['desc', 'desc']);
+    const accounts = orderBy(
+      data['hydra:member'],
+      ['archivedAt', 'lastTransactionAt'],
+      ['desc', 'desc'],
+    ).map((account) => ({
+      ...account,
+      convertedValues: generateConvertedValues(exchangeRates, account.currency, account.balance),
+    }));
     dispatch(Creators.fetchListSuccess(accounts));
     result = accounts;
   } catch (e) {

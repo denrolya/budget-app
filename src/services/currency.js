@@ -73,3 +73,11 @@ export const generateExchangeRatesStatistics = (baseCurrency) => {
 
   return result;
 };
+
+export const generateConvertedValues = (rates, originalCurrency, value) => {
+  const currencies = Object.keys(rates);
+
+  return Object.fromEntries(
+    currencies.map((currency) => [currency, convert(rates, value, originalCurrency, currency)]),
+  );
+};

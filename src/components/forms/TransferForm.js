@@ -8,13 +8,15 @@ import {
 } from 'reactstrap';
 import * as Yup from 'yup';
 
+import { useActiveAccounts } from 'src/contexts/AccountsContext';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { registerTransfer } from 'src/store/actions/transfer';
 
 const TransferForm = ({
-  accountOptions, isLoading, registerTransfer, toggleModal,
+  isLoading, registerTransfer, toggleModal,
 }) => {
+  const accountOptions = useActiveAccounts();
   const initialData = {
     from: '',
     to: '',
@@ -235,21 +237,13 @@ const TransferForm = ({
 };
 
 TransferForm.defaultProps = {
-  accountOptions: [],
   isLoading: false,
 };
 
 TransferForm.propTypes = {
   registerTransfer: PropTypes.func.isRequired,
-  accountOptions: PropTypes.array,
   isLoading: PropTypes.bool,
   toggleModal: PropTypes.func,
 };
 
-const mapStateToProps = ({ account }) => ({
-  accountOptions: account.filter(({ archivedAt }) => !archivedAt),
-});
-
-export default connect(mapStateToProps, {
-  registerTransfer,
-})(TransferForm);
+export default connect(null, { registerTransfer })(TransferForm);

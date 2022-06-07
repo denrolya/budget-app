@@ -8,17 +8,27 @@ import CategoriesContext from 'src/contexts/CategoriesContext';
 const CategoriesProvider = ({ categories, fetchCategories, children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      await fetchCategories();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      if (isMounted) {
+        setIsLoading(true);
+      }
+      try {
+        await fetchCategories();
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const data = useMemo(() => ({

@@ -1,30 +1,22 @@
-import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchList as fetchAccounts } from 'src/store/actions/account';
 
+import { isActionResolved } from 'src/services/common';
+import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import AccountsContext from 'src/contexts/AccountsContext';
 
-const AccountsProvider = ({ accounts, fetchAccounts, children }) => {
-  const [data, setData] = useState([]);
-
+const AccountsProvider = ({
+  accounts, isExchangeRatesLoaded, fetchAccounts, children,
+}) => {
   useEffect(() => {
-    setData(
-      orderBy(
-        accounts,
-        ['archivedAt', 'lastTransactionAt'],
-        ['desc', 'desc'],
-      ),
-    );
-  }, [accounts]);
-
-  useEffect(() => {
-    fetchAccounts();
-  }, []);
+    if (isExchangeRatesLoaded) {
+      fetchAccounts();
+    }
+  }, [isExchangeRatesLoaded]);
 
   return (
-    <AccountsContext.Provider value={data}>
+    <AccountsContext.Provider value={accounts}>
       { children }
     </AccountsContext.Provider>
   );
@@ -32,15 +24,20 @@ const AccountsProvider = ({ accounts, fetchAccounts, children }) => {
 
 AccountsProvider.defaultProps = {
   accounts: [],
+  isExchangeRatesLoaded: false,
 };
 
 AccountsProvider.propTypes = {
   fetchAccounts: PropTypes.func.isRequired,
   children: PropTypes.any.isRequired,
   accounts: PropTypes.array,
+  isExchangeRatesLoaded: PropTypes.bool,
 };
 
-const mapStateToProps = ({ account: { list: accounts } }) => ({ accounts });
+const mapStateToProps = ({ account: { list: accounts }, ui }) => ({
+  accounts,
+  isExchangeRatesLoaded: isActionResolved(ui.EXCHANGE_RATES_FETCH),
+});
 
 export default connect(mapStateToProps, {
   fetchAccounts,
