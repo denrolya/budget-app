@@ -4,6 +4,10 @@
       color: $opacity-8
     }
 
+    input::placeholder {
+      color: $opacity-8
+    }
+
     &-multi.focus {
       border-color: $primary;
       box-shadow: none;
