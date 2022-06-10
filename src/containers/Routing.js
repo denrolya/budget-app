@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useRoutes, Navigate } from 'react-router-dom';
 
-import { CURRENCIES } from 'src/constants/currency';
-import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 import Layout from 'src/containers/Layout';
 import {
   ROUTE_ACCOUNTS,
@@ -32,13 +30,14 @@ import TransactionList from 'src/containers/TransactionList';
 import TransactionsCalendar from 'src/containers/TransactionsCalendar';
 import TransferList from 'src/containers/TransferList';
 import UserProfile from 'src/containers/UserProfile';
+import Providers from 'src/containers/Providers';
 import AccountDetails from 'src/containers/AccountDetails';
 
-const App = ({ isAuthenticated, baseCurrency }) => {
+const Routing = ({ isAuthenticated }) => {
   const routes = useMemo(() => [
     {
       path: '/*',
-      element: isAuthenticated ? <Layout /> : <Navigate to={ROUTE_LOGIN} />,
+      element: isAuthenticated ? <Providers><Layout /></Providers> : <Navigate to={ROUTE_LOGIN} />,
       children: [
         { path: ROUTE_DASHBOARD, element: <Dashboard /> },
         { path: ROUTE_TRANSACTIONS, element: <TransactionList /> },
@@ -66,30 +65,17 @@ const App = ({ isAuthenticated, baseCurrency }) => {
     },
   ], [isAuthenticated]);
 
-  return (
-    <BaseCurrencyContext.Provider value={baseCurrency}>
-      {useRoutes(routes)}
-    </BaseCurrencyContext.Provider>
-  );
+  return useRoutes(routes);
 };
 
-App.defaultProps = {
+Routing.defaultProps = {
   isAuthenticated: false,
 };
 
-App.propTypes = {
-  baseCurrency: PropTypes.shape({
-    code: PropTypes.string.isRequired,
-    symbol: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['fiat', 'crypto']).isRequired,
-  }).isRequired,
+Routing.propTypes = {
   isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = ({ auth: { user, isAuthenticated } }) => ({
-  isAuthenticated,
-  baseCurrency: CURRENCIES[user?.baseCurrency || 'EUR'],
-});
+const mapStateToProps = ({ auth: { isAuthenticated } }) => ({ isAuthenticated });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(Routing);

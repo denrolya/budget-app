@@ -7,7 +7,7 @@ import 'src/middlewares/axios';
 import 'src/middlewares/toastr';
 import store from 'src/store/store';
 import history from 'src/utils/history';
-import App from 'src/containers/App';
+import Routing from 'src/containers/Routing';
 import { assertAuthorization } from 'src/store/actions/auth';
 
 const Root = () => {
@@ -16,7 +16,7 @@ const Root = () => {
   return (
     <Provider store={store}>
       <ReduxRouter history={history} store={store}>
-        <App />
+        <Routing />
       </ReduxRouter>
     </Provider>
   );
