@@ -1,9 +1,9 @@
-import filter from 'lodash/filter';
 import React, { useMemo } from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-import { NavLink, useLocation, matchPath } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Button, Nav, NavItem } from 'reactstrap';
+import filter from 'lodash/filter';
 import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
 
@@ -20,7 +20,6 @@ const Sidebar = ({
   totalDebt, isLoading, onCurrencySwitch, updateDashboard,
 }) => {
   const accounts = useActiveAccounts();
-  const { pathname } = useLocation();
   const { symbol, code } = useBaseCurrency();
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
   const totalAccountsValue = useMemo(
@@ -69,7 +68,7 @@ const Sidebar = ({
         <Nav className="mt-0">
           {sidebarRoutes.map(({ name, path, icon }) => (
             <NavItem tag="li" key={`nav-item-route-${name}`}>
-              <NavLink className="nav-link text-white" to={path}>
+              <NavLink className="nav-link" to={path}>
                 <i aria-hidden className={icon} />
                 <p>{name}</p>
               </NavLink>
@@ -78,8 +77,8 @@ const Sidebar = ({
           <NavItem tag="li">
             <hr />
           </NavItem>
-          <NavItem tag="li" active={!!matchPath(ROUTE_TRANSACTIONS, pathname)}>
-            <NavLink className="nav-link text-white" to={ROUTE_TRANSACTIONS}>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_TRANSACTIONS}>
               <i aria-hidden className="mdi mdi-format-list-bulleted" />
               <p className="text-capitalize">All Transactions</p>
             </NavLink>
@@ -87,8 +86,8 @@ const Sidebar = ({
           <NavItem tag="li">
             <hr />
           </NavItem>
-          <NavItem tag="li" active={!!matchPath(ROUTE_DEBTS, pathname)}>
-            <NavLink className="nav-link text-white" to={ROUTE_DEBTS}>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_DEBTS}>
               <i aria-hidden className="ion-ios-bookmarks" />
               <p className="text-capitalize">
                 Debts
@@ -112,15 +111,15 @@ const Sidebar = ({
           {visibleAccounts.map((account) => (
             <NavItem tag="li" key={account.name}>
               <NavLink
-                className="nav-link text-capitalize text-white"
+                className="nav-link text-capitalize"
                 to={generateLinkToAccountTransactionsPage(account.id)}
               >
                 <AccountName showBalance account={account} />
               </NavLink>
             </NavItem>
           ))}
-          <NavItem tag="li" active={!!matchPath(ROUTE_ACCOUNTS, pathname)}>
-            <NavLink className="nav-link text-capitalize text-white" to={ROUTE_ACCOUNTS}>
+          <NavItem tag="li">
+            <NavLink className="nav-link text-capitalize" to={ROUTE_ACCOUNTS}>
               <i aria-hidden className="mdi mdi-wallet-travel" />
 
               <div className="d-flex flex-column">

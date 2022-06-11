@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -77,8 +78,36 @@ const ExpensesBySeason = ({ data }) => {
   const onSectorEnter = (_, index) => setActive(index);
 
   useEffect(() => {
+    const result = [0, 0, 0, 0];
+    data.forEach(({ date, expense }) => {
+      const month = moment.unix(date).month();
+      switch (month) {
+        case 1:
+        case 2:
+        case 12:
+          result[0] += expense;
+          break;
+        case 3:
+        case 4:
+        case 5:
+          result[1] += expense;
+          break;
+        case 6:
+        case 7:
+        case 8:
+          result[2] += expense;
+          break;
+        case 9:
+        case 10:
+        case 11:
+          result[3] += expense;
+          break;
+          // no default
+      }
+    });
+
     setChartData(
-      data.map((value, k) => ({
+      result.map((value, k) => ({
         ...chartData[k],
         value,
       })),

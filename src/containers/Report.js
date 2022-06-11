@@ -41,14 +41,6 @@ const Report = ({
 }) => {
   const { code } = useBaseCurrency();
 
-  useEffect(() => {
-    updateReport();
-  }, []);
-
-  useEffect(() => {
-    updateReport();
-  }, [code]);
-
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
 
   const { from, to } = statistics.mainExpenseCategoriesReview;
@@ -61,6 +53,14 @@ const Report = ({
     () => (previousYear === moment().year() - 1) ? `last year(${previousYear})` : previousYear,
     [previousYear],
   );
+
+  useEffect(() => {
+    updateReport();
+  }, [code]);
+
+  useEffect(() => {
+    updateReport();
+  }, [from.year()]);
 
   return (
     <>
@@ -202,9 +202,8 @@ const Report = ({
             />
 
             <TotalExpensesByIntervalCard
-              isLoading={isStatisticsActionLoading('totalExpensesByInterval')}
-              model={statistics.totalExpensesByInterval}
-              onUpdate={(model) => setStatistics('totalExpensesByInterval', model)}
+              isLoading={isStatisticsActionLoading('moneyFlow')}
+              model={statistics.moneyFlow}
             />
 
             <ExpenseCategoriesReviewCard

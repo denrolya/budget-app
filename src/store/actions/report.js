@@ -19,10 +19,7 @@ export const { Types, Creators } = createActions({
   setPeriod: ['startYear', 'endYear'],
 }, { prefix: 'REPORT_' });
 
-export const setPeriod = (startYear, endYear) => (dispatch) => {
-  dispatch(Creators.setPeriod(startYear, endYear));
-  dispatch(updateReport());
-};
+export const setPeriod = (startYear, endYear) => (dispatch) => dispatch(Creators.setPeriod(startYear, endYear));
 
 export const setStatistics = (name, newModel) => (dispatch) => {
   dispatch(Creators.setStatistics(name, newModel));

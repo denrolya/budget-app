@@ -76,21 +76,6 @@ const AccountGeneralInfo = ({
               <div className="d-block d-md-none text-nowrap">{name}</div>
             </div>
 
-            {data.iban && (
-              <span
-                className="h4 mb-1 text-uppercase cursor-copy d-inline-block"
-                onClick={() => copyToClipboard(data.iban)}
-              >
-                {data.iban}
-              </span>
-            )}
-
-            {data.cardNumber && (
-              <h4 className="mb-1 cursor-copy d-inline-block" onClick={() => copyToClipboard(data.cardNumber)}>
-                {data.cardNumber.match(/.{1,4}/g).join(' ')}
-              </h4>
-            )}
-
             <h5 className="mb-1">
               <i aria-hidden className="ion-ios-calendar" />
               {' '}
@@ -112,37 +97,83 @@ const AccountGeneralInfo = ({
             </p>
           </Col>
         </Row>
+        <hr />
       </section>
 
       {logs.length > 0 && (
         <section className="mb-2">
           <AccountBalance account={data} />
-        </section>
-      )}
-
-      {(exchangeData.length > 0) && (
-        <section>
-          <h3 className="mb-1">Exchange Rates</h3>
-          {isEmpty(exchangeRates) && (
-            <code className="text-muted">
-              <Button size="sm" color="warning" className="btn-link">
-                <i aria-hidden className="ion-ios-refresh" />
-              </Button>
-              {' '}
-              No exchange rates.
-            </code>
-          )}
-          {!isEmpty(exchangeRates) && exchangeData.map(({ from, to, amount }) => (
-            <p key={`exchange-data-${from}-${to}`}>
-              <MoneyValue bold currency={from} amount={amount} />
-              {' = '}
-              <MoneyValue bold currency={to} amount={convert(exchangeRates, amount, from, to)} />
-            </p>
-          ))}
-
           <hr />
         </section>
       )}
+
+      <section>
+        <div className="d-flex justify-content-between">
+          {(exchangeData.length > 0) && (
+            <div>
+              <h3 className="mb-1">Exchange Rates</h3>
+              {isEmpty(exchangeRates) && (
+                <code className="text-muted">
+                  <Button size="sm" color="warning" className="btn-link">
+                    <i aria-hidden className="ion-ios-refresh" />
+                  </Button>
+                  {' '}
+                  No exchange rates.
+                </code>
+              )}
+              {!isEmpty(exchangeRates) && exchangeData.map(({ from, to, amount }) => (
+                <p key={`exchange-data-${from}-${to}`}>
+                  <MoneyValue bold currency={from} amount={amount} />
+                  {' = '}
+                  <MoneyValue bold currency={to} amount={convert(exchangeRates, amount, from, to)} />
+                </p>
+              ))}
+            </div>
+          )}
+
+          {type === ACCOUNT_TYPE_BANK_CARD && (
+            <div className="text-right">
+              <dl>
+                {data.iban && (
+                  <>
+                    <dt>IBAN: </dt>
+                    <dd
+                      className="cursor-copy"
+                      onClick={() => copyToClipboard(data.iban)}
+                    >
+                      {data.iban}
+                    </dd>
+                  </>
+                )}
+                {data.cardNumber && (
+                  <>
+                    <dt>Card number: </dt>
+                    <dd
+                      className="cursor-copy"
+                      onClick={() => copyToClipboard(data.cardNumber)}
+                    >
+                      {data.cardNumber.match(/.{1,4}/g).join(' ')}
+                    </dd>
+                  </>
+                )}
+                {data.monobankId && (
+                  <>
+                    <dt>Monobank ID: </dt>
+                    <dd
+                      className="cursor-copy"
+                      onClick={() => copyToClipboard(data.monobankId)}
+                    >
+                      {data.monobankId}
+                    </dd>
+                  </>
+                )}
+              </dl>
+            </div>
+          )}
+        </div>
+
+        <hr />
+      </section>
 
       <section>
         <Row>
@@ -174,17 +205,6 @@ const AccountGeneralInfo = ({
 
         <hr />
       </section>
-
-      {type === ACCOUNT_TYPE_BANK_CARD && data.monobankId && (
-        <section>
-          <p className="cursor-copy" onClick={() => copyToClipboard(data.monobankId)}>
-            MonoBank ID:
-            {' '}
-            {data.monobankId}
-          </p>
-          <hr />
-        </section>
-      )}
 
       {archivedAt && (
         <section>

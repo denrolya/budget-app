@@ -37,7 +37,7 @@
   }
 
   label {
-    color: $opacity-8;
+    color: $body-color;
   }
 
   &-title {
@@ -60,7 +60,7 @@
     }
 
     .card-description, .card-category {
-      color: rgba($white, 0.6);
+      color: $body-color;
     }
 
   }
@@ -72,7 +72,7 @@
 
     padding: 10px 10px;
     border: 0;
-    color: $opacity-8;
+    color: $body-color;
 
     .card-title {
       color: $white;
@@ -80,7 +80,7 @@
     }
 
     .card-category {
-      color: $dark-gray;
+      color: $body-color;
       margin-bottom: 5px;
       font-weight: 300;
     }

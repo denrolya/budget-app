@@ -178,7 +178,7 @@
         color: $white;
       }
 
-      &.active > a:not([data-toggle="collapse"]) {
+      & > a.active:not([data-toggle="collapse"]) {
         background: transparent;
 
         i, p {
@@ -197,7 +197,7 @@
         }
       }
 
-      &.active > a[data-toggle="collapse"] {
+      & > a.active[data-toggle="collapse"] {
         background: transparent;
         box-shadow: none;
         color: $white;

@@ -1,8 +1,8 @@
-import isEqual from 'lodash/isEqual';
-import sum from 'lodash/sum';
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
+import isEqual from 'lodash/isEqual';
+import sum from 'lodash/sum';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { useCategories } from 'src/contexts/CategoriesContext';

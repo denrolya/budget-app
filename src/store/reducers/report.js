@@ -17,13 +17,18 @@ const HANDLERS = {
   ...generateStatisticsHandlers(),
   // eslint-disable-next-line default-param-last
   [Types.SET_PERIOD]: (state = INITIAL_STATE, { startYear, endYear }) => {
-    Object.keys(state).forEach((key) => ({
+    const newState = {
       ...state,
-      [key]: state[key].merge({
-        from: state[key].from.set('year', startYear),
-        to: state[key].to.set('year', endYear),
+    };
+    Object.keys(newState).forEach((key) => ({
+      ...newState,
+      [key]: newState[key].merge({
+        from: newState[key].from.set('year', startYear),
+        to: newState[key].to.set('year', endYear),
       }),
     }));
+
+    return newState;
   },
   // eslint-disable-next-line default-param-last
   [Types.FETCH_STATISTICS_MONEY_FLOW_SUCCESS]: (state = INITIAL_STATE, { moneyFlow }) => ({

@@ -45,7 +45,7 @@ const ExpenseCategoriesList = ({
 
   return (
     <>
-      <div className="table-responsive" style={{ height: 575 }}>
+      <div style={{ height: 575 }}>
         <ListGroup flush>
           {selectedSubtree.children.map(({
             model: {
@@ -66,7 +66,7 @@ const ExpenseCategoriesList = ({
             return (
               <ListGroupItem className="p-1" key={name}>
                 <div className="d-flex justify-content-between align-center">
-                  <div className="btn-link text-white font-weight-light cursor-info" id={`expense-category-${key}`}>
+                  <div className="font-weight-light cursor-info py-2" id={`expense-category-${key}`}>
                     <div className="w-25px mr-2 d-inline-block">
                       <CircularProgressbarWithChildren
                         styles={buildStyles({
@@ -89,36 +89,38 @@ const ExpenseCategoriesList = ({
                     <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
                   </div>
                   <div className="text-nowrap">
-                    <MoneyValue className="mr-1" amount={total} maximumFractionDigits={0} />
-                    <Link
-                      to={generateLinkToExpenses(
-                        from.format(MOMENT_DATE_FORMAT),
-                        to.format(MOMENT_DATE_FORMAT),
-                        [],
-                        [id],
-                      )}
-                    >
-                      <Button size="sm" color="info" className="btn-link btn-icon btn-simple m-0">
-                        <i aria-hidden className="mdi mdi-format-list-bulleted" />
+                    <MoneyValue bold className="mr-1 text-white" amount={total} maximumFractionDigits={0} />
+                    <span>
+                      <Link
+                        to={generateLinkToExpenses(
+                          from.format(MOMENT_DATE_FORMAT),
+                          to.format(MOMENT_DATE_FORMAT),
+                          [],
+                          [id],
+                        )}
+                      >
+                        <Button size="sm" color="info" className="btn-link btn-icon btn-simple m-0">
+                          <i aria-hidden className="mdi mdi-format-list-bulleted" />
+                        </Button>
+                      </Link>
+                      <Button
+                        size="sm"
+                        color="primary"
+                        className="btn-link btn-icon btn-simple m-0"
+                        onClick={() => onCategorySelect(name)}
+                      >
+                        <i aria-hidden className="ion-ios-arrow-dropright" />
                       </Button>
-                    </Link>
-                    <Button
-                      size="sm"
-                      color="primary"
-                      className="btn-link btn-icon btn-simple m-0"
-                      onClick={() => onCategorySelect(name)}
-                    >
-                      <i aria-hidden className="ion-ios-arrow-dropright" />
-                    </Button>
+                    </span>
                   </div>
                 </div>
-                <UncontrolledCollapse toggler={`expense-category-${key}`}>
+                <UncontrolledCollapse toggler={`expense-category-${key}`} className="pl-4">
                   <Table size="sm" bordered={false}>
                     <tbody>
                       {percentageInTotalSum !== false && (
                         <tr>
                           <td>From total expenses:</td>
-                          <td className="text-right">
+                          <td className="text-right font-style-numeric font-weight-bold">
                             {percentageInTotalSum > 0 || percentageInTotalSum === 0
                               ? percentageInTotalSum.toFixed()
                               : percentageInTotalSum.toFixed(1)}
@@ -129,7 +131,7 @@ const ExpenseCategoriesList = ({
                       {amountToPreviousPeriodRatio !== false && (
                         <tr>
                           <td>Previous period:</td>
-                          <td className="text-right">
+                          <td className="text-right font-style-numeric font-weight-bold">
                             <span className={cn('mr-2', `text-${toPreviousRatioColor}`)}>
                               <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />
                               {' '}
@@ -159,7 +161,7 @@ const ExpenseCategoriesList = ({
                                 expense:
                               </td>
                               <td className="text-right">
-                                <MoneyValue amount={total / diff} />
+                                <MoneyValue bold amount={total / diff} />
                               </td>
                             </tr>
                           )

@@ -1,11 +1,7 @@
 .rbt {
   &-input {
-    input {
-      color: $opacity-8
-    }
-
-    input::placeholder {
-      color: $opacity-8
+    input, input::placeholder {
+      color: $opacity-8;
     }
 
     &-multi.focus {

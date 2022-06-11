@@ -162,7 +162,7 @@ const Dashboard = ({
                     {' '}
                   </sup>
                   <span className="h2">
-                    <MoneyValue showSymbol={false} amount={totalIncome} maximumFractionDigits={0} />
+                    <MoneyValue bold showSymbol={false} amount={totalIncome} maximumFractionDigits={0} />
                   </span>
                 </span>
               </CardBody>
@@ -180,7 +180,7 @@ const Dashboard = ({
                     {' '}
                   </sup>
                   <span className="h2">
-                    <MoneyValue showSymbol={false} amount={totalExpense} maximumFractionDigits={0} />
+                    <MoneyValue bold showSymbol={false} amount={totalExpense} maximumFractionDigits={0} />
                   </span>
                 </span>
               </CardBody>

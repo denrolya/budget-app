@@ -108,7 +108,7 @@ TimeperiodStatisticsCard.propTypes = {
     PropTypes.instanceOf(TimeperiodStatistics),
     PropTypes.instanceOf(TimeperiodIntervalStatistics),
   ]).isRequired,
-  onUpdate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func,
   bodyClassName: PropTypes.string,
   className: PropTypes.string,
   isLoading: PropTypes.bool,

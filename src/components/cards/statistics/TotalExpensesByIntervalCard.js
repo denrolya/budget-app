@@ -8,7 +8,7 @@ import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistic
 import ExpensesBySeason from 'src/components/charts/recharts/pie/ExpensesBySeason';
 
 const TotalExpensesByIntervalCard = ({
-  isLoading, model, onUpdate, className, transparent,
+  isLoading, model, className, transparent,
 }) => (
   <TimeperiodStatisticsCard
     className={cn('card-chart', 'card--hover-expand', className)}
@@ -17,7 +17,6 @@ const TotalExpensesByIntervalCard = ({
     transparent={transparent}
     isLoading={isLoading}
     model={model}
-    onUpdate={onUpdate}
   >
     <ExpensesBySeason data={model.data} />
   </TimeperiodStatisticsCard>
@@ -31,7 +30,6 @@ TotalExpensesByIntervalCard.defaultProps = {
 
 TotalExpensesByIntervalCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
-  onUpdate: PropTypes.func.isRequired,
   className: PropTypes.string,
   isLoading: PropTypes.bool,
   transparent: PropTypes.bool,
