@@ -76,13 +76,13 @@ const AccountGeneralInfo = ({
               <div className="d-block d-md-none text-nowrap">{name}</div>
             </div>
 
-            <h5 className="mb-1">
+            <h4 className="mb-1">
               <i aria-hidden className="ion-ios-calendar" />
               {' '}
               Created:
               {' '}
               {moment(data.createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
-            </h5>
+            </h4>
           </Col>
           <Col xs={6} className="text-right">
             <p

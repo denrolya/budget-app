@@ -20,7 +20,7 @@ const MoneyFlowCard = ({ isLoading, model, onUpdate }) => {
       transparent
       showControls
       className="card-chart card-chart-170"
-      bodyClassName="py-0"
+      bodyClassName="p-0"
       title={<span className="d-none d-md-block">Money flow</span>}
       isLoading={isLoading}
       model={model}

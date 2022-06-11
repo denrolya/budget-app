@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Col, Row, Card } from 'reactstrap';
 
-import Breadcrumbs from 'src/components/ExpenseCategoriesBreadcrumbs';
 import ExpenseCategoriesList from 'src/components/ExpenseCategoriesList';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -17,15 +16,15 @@ const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
     <TimeperiodStatisticsCard
       transparent
       className="card-expense-categories"
+      bodyClassName="p-0"
       isLoading={isLoading}
-      title={<Breadcrumbs selectedCategory={selectedCategory} selectCategory={selectCategory} data={model.data} />}
       model={model}
       onUpdate={onUpdate}
     >
       {data.hasChildren() && (
         <Row>
-          <Col className="order-last order-xl-first d-flex flex-column" md={12} lg={12} xl={4}>
-            <Card body>
+          <Col className="order-last order-xl-last" md={12} lg={12} xl={4}>
+            <Card body style={{ flex: 'inherit' }}>
               <ExpenseCategoriesList
                 data={data}
                 onCategorySelect={selectCategory}
@@ -35,7 +34,7 @@ const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
               />
             </Card>
           </Col>
-          <Col className="order-first order-xl-last d-flex justify-content-center pb-4" md={12} lg={12} xl={8}>
+          <Col className="order-first order-xl-first" md={12} lg={12} xl={8}>
             <TransactionCategories data={data} selectedCategory={selectedCategory} onClick={selectCategory} />
           </Col>
         </Row>

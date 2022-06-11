@@ -18,7 +18,7 @@ const CustomTooltip = ({ active, payload, account }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">{payload[0].payload.date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h5>
+      <h4 className="mb-1">{payload[0].payload.date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h4>
       <p
         className={cn('mb-0', {
           'text-success': payload[0].value >= 0,

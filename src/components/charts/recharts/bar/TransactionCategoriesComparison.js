@@ -16,11 +16,11 @@ const CustomTooltip = ({ active, payload, selectedYear }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">
+      <h4 className="mb-1">
         <i aria-hidden className={payload[0].payload.icon} />
         {' '}
         {payload[0].payload.name}
-      </h5>
+      </h4>
       <p className="text-default mb-0">
         {selectedYear - 1}
         :

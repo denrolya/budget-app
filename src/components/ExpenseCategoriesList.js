@@ -5,7 +5,6 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  Progress,
   Button,
   Table,
   UncontrolledCollapse,
@@ -16,6 +15,7 @@ import {
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+import Breadcrumbs from 'src/components/ExpenseCategoriesBreadcrumbs';
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import {
@@ -45,6 +45,8 @@ const ExpenseCategoriesList = ({
 
   return (
     <>
+      <Breadcrumbs selectedCategory={selectedCategory} selectCategory={onCategorySelect} data={data} />
+
       <div style={{ height: 575 }}>
         <ListGroup flush>
           {selectedSubtree.children.map(({
@@ -67,7 +69,7 @@ const ExpenseCategoriesList = ({
               <ListGroupItem className="p-1" key={name}>
                 <div className="d-flex justify-content-between align-center">
                   <div className="font-weight-light cursor-info py-2" id={`expense-category-${key}`}>
-                    <div className="w-25px mr-2 d-inline-block">
+                    <span className="w-25px mr-2 d-inline-block">
                       <CircularProgressbarWithChildren
                         styles={buildStyles({
                           rotation,
@@ -84,7 +86,7 @@ const ExpenseCategoriesList = ({
                           })}
                         />
                       </CircularProgressbarWithChildren>
-                    </div>
+                    </span>
                     {'  '}
                     <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
                   </div>
@@ -114,6 +116,10 @@ const ExpenseCategoriesList = ({
                     </span>
                   </div>
                 </div>
+                <UncontrolledTooltip target={`expense-category-${key}`}>
+                  {percentageInTotalSum.toFixed()}
+                  % from total expenses
+                </UncontrolledTooltip>
                 <UncontrolledCollapse toggler={`expense-category-${key}`} className="pl-4">
                   <Table size="sm" bordered={false}>
                     <tbody>
@@ -176,23 +182,42 @@ const ExpenseCategoriesList = ({
         </ListGroup>
       </div>
 
-      <Table size="sm" bordered={false}>
-        <tbody>
-          <tr>
-            <td className="text-nowrap">
-              <Link
-                className="text-decoration-none d-flex align-items-center"
-                to={generateLinkToExpenses(from.format(MOMENT_DATE_FORMAT), to.format(MOMENT_DATE_FORMAT))}
+      <ListGroup flush className="border-top-0">
+        <ListGroupItem className="p-1 border-top-0">
+          <div className="d-flex justify-content-between align-center font-weight-light">
+            <Link
+              id="expense-category-total"
+              className="align-center"
+              to={generateLinkToExpenses(from.format(MOMENT_DATE_FORMAT), to.format(MOMENT_DATE_FORMAT))}
+            >
+              <span
+                className={cn(
+                  'w-25px',
+                  'mr-2',
+                  'd-inline-block',
+                  'text-center',
+                  `text-${expenseRatioColor(previousPeriodToCurrentRatio)}`,
+                )}
               >
-                <div
-                  className={cn(
-                    'w-25px',
-                    'mr-2',
-                    'd-inline-block',
-                    'text-center',
-                    `text-${expenseRatioColor(previousPeriodToCurrentRatio)}`,
-                  )}
-                >
+                {!selectedSubtree.isRoot() && (
+                  <CircularProgressbarWithChildren
+                    styles={buildStyles({
+                      pathColor: `${HEX_COLORS[expenseRatioColor(percentageFromTotal)]}`,
+                      trailColor: 'transparent',
+                    })}
+                    value={percentageFromTotal}
+                  >
+                    <i
+                      aria-hidden
+                      className={cn({
+                        'ion-ios-paper': selectedSubtree.model.name === data.model.name,
+                        [selectedSubtree.model.icon]: selectedSubtree.model.name !== data.model.name,
+                      })}
+                    />
+                  </CircularProgressbarWithChildren>
+                )}
+
+                {selectedSubtree.isRoot() && (
                   <i
                     aria-hidden
                     className={cn('font-22px', {
@@ -200,48 +225,29 @@ const ExpenseCategoriesList = ({
                       [selectedSubtree.model.icon]: selectedSubtree.model.name !== data.model.name,
                     })}
                   />
-                </div>
-                {'   '}
-                <strong>{selectedSubtree.model.name === data.model.name ? 'Total' : selectedSubtree.model.name}</strong>
-              </Link>
-            </td>
-            <td className="text-right text-nowrap">
-              <span className="text-white">
-                <MoneyValue bold amount={selectedSubtree.model.total} />
+                )}
               </span>
-              {previousPeriodToCurrentRatio !== false && previousPeriodToCurrentRatio !== 100 && (
-                <small
-                  className={cn('cursor-info', 'd-block', `text-${expenseRatioColor(previousPeriodToCurrentRatio)}`)}
-                >
+              <strong>{selectedSubtree.model.name === data.model.name ? 'Total' : selectedSubtree.model.name}</strong>
+            </Link>
+            <div className="text-nowrap text-right d-flex flex-column">
+              <MoneyValue bold className="text-white" amount={selectedSubtree.model.total} />
+              {(previousPeriodToCurrentRatio !== false && previousPeriodToCurrentRatio !== 100) && (
+                <small className={`text-${expenseRatioColor(previousPeriodToCurrentRatio)}`}>
                   <i aria-hidden className={cn(arrowIcon(previousPeriodToCurrentRatio))} />
-                  {` ${ratio(previousPeriodToCurrentRatio)}% `}
-                  <small>
-                    {' | '}
-                    <MoneyValue bold maximumFractionDigits={0} amount={selectedSubtree.model.previous} />
-                  </small>
+                  {` ${ratio(previousPeriodToCurrentRatio)}% | `}
+                  <MoneyValue bold maximumFractionDigits={0} amount={selectedSubtree.model.previous} />
                 </small>
               )}
-            </td>
-          </tr>
-          {!selectedSubtree.isRoot() && (
-            <tr>
-              <td colSpan={2} className="border-top-0 px-0">
-                <div className="mb-1 opacity-7">
-                  <Progress
-                    id="percentageFromTotal"
-                    value={percentageFromTotal}
-                    color={expenseRatioColor(percentageFromTotal)}
-                  />
-                  <UncontrolledTooltip target="percentageFromTotal">
-                    {percentageFromTotal.toFixed()}
-                    % from total expenses
-                  </UncontrolledTooltip>
-                </div>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+            </div>
+          </div>
+        </ListGroupItem>
+      </ListGroup>
+      {!selectedSubtree.isRoot() && (
+        <UncontrolledTooltip target="expense-category-total">
+          {percentageFromTotal.toFixed()}
+          % from total expenses
+        </UncontrolledTooltip>
+      )}
     </>
   );
 };

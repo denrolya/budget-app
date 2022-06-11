@@ -47,11 +47,11 @@ const CustomTooltip = ({ active, payload }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">
+      <h4 className="mb-1">
         <i aria-hidden className={payload[0].payload.icon} />
         {' '}
         {payload[0].payload.name}
-      </h5>
+      </h4>
       <p className={cn('mb-0')}>
         <MoneyValue bold amount={payload[0].payload.value} maximumFractionDigits={0} />
       </p>

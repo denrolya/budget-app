@@ -33,7 +33,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">{date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h5>
+      <h4 className="mb-1">{date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h4>
       <p className="text-success mb-0">
         <MoneyValue bold amount={payload?.[1]?.value} maximumFractionDigits={0} />
       </p>

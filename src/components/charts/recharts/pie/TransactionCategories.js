@@ -22,7 +22,7 @@ const CustomTooltip = ({ active, payload }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5
+      <h4
         className="mb-1"
         style={{
           color: HEX_COLORS[color],
@@ -31,7 +31,7 @@ const CustomTooltip = ({ active, payload }) => {
         <i aria-hidden className={icon} />
         {' '}
         {name}
-      </h5>
+      </h4>
       <p className="mb-0 text-white">
         Selected Period:
         {' '}

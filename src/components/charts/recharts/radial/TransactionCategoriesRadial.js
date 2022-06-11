@@ -15,7 +15,7 @@ const CustomTooltip = ({ active, payload }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">{payload[0].payload.name}</h5>
+      <h4 className="mb-1">{payload[0].payload.name}</h4>
       <p className={cn('mb-0')}>
         <MoneyValue bold amount={payload[0].payload.total} maximumFractionDigits={0} />
       </p>

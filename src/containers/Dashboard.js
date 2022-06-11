@@ -138,7 +138,7 @@ const Dashboard = ({
 
       <div className="dashboard">
         <Row>
-          <Col md={12} lg={12} xl={12} className="d-flex">
+          <Col md={12}>
             <MoneyFlowCard
               isLoading={isStatisticsActionLoading('moneyFlow')}
               model={statistics.moneyFlow}

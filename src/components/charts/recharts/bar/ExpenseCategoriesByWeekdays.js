@@ -18,11 +18,11 @@ const CustomTooltip = ({ active, payload, label }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">
+      <h4 className="mb-1">
         <i aria-hidden className="ion-ios-calendar" />
         { ' '}
         {moment().isoWeekday(label + 1).format('dddd')}
-      </h5>
+      </h4>
       {Object.keys(payload[0].payload.values).map((category) => (
         <p
           className="mb-0"

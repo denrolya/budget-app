@@ -23,19 +23,21 @@ const CustomTooltip = ({ active, payload, label }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-1">
+      <h4 className="mb-1 text-white">
         <i aria-hidden className="ion-ios-calendar" />
         {' '}
         {date.format('MMMM')}
-      </h5>
+      </h4>
       {income && (
-        <p className="text-info mb-0">
-          <MoneyValue bold amount={income.value} maximumFractionDigits={0} />
+        <p className="mb-0">
+          {'Income: '}
+          <MoneyValue bold className="text-info" maximumFractionDigits={0} amount={income.value} />
         </p>
       )}
       {expense && (
-        <p className="text-primary mb-0">
-          <MoneyValue bold amount={Math.abs(expense.value)} maximumFractionDigits={0} />
+        <p className="mb-0">
+          {'Expense: '}
+          <MoneyValue bold className="text-primary" maximumFractionDigits={0} amount={Math.abs(expense.value)} />
         </p>
       )}
     </Card>

@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import {
-  ResponsiveContainer, BarChart, Bar, Tooltip, YAxis, XAxis, CartesianGrid, Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Tooltip,
+  YAxis,
+  XAxis,
+  CartesianGrid,
+  Legend,
 } from 'recharts';
 import color from 'randomcolor';
 import { Card } from 'reactstrap';
@@ -21,7 +28,11 @@ const CustomTooltip = ({ active, payload }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h4 className="mb-1 text-white">{moment.unix(date).format('MMMM')}</h4>
+      <h4 className="mb-1 text-white">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
+        {moment.unix(date).format('MMMM')}
+      </h4>
       {categories.map((category) => (
         <p className="mb-0" key={category}>
           {category}

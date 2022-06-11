@@ -25,14 +25,14 @@ const CustomTooltip = ({ active, payload, total }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5
+      <h4
         className="mb-1"
         style={{
           color: account.color,
         }}
       >
         <AccountName account={account} />
-      </h5>
+      </h4>
       <p className="mb-0 text-white">
         <MoneyValue bold currency={account.currency} amount={amount} maximumFractionDigits={0} />
       </p>

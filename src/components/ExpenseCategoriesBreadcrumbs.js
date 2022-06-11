@@ -13,7 +13,7 @@ const ExpenseCategoriesBreadcrumbs = ({ selectedCategory, data, selectCategory }
       )}
       {selectedCategory}
     </span>
-    <ol className="breadcrumb bg-transparent pt-0 pl-0 d-none d-sm-flex">
+    <ol className="breadcrumb bg-transparent pt-0 pl-0 d-none d-sm-flex mb-0">
       {data
         .first(({ model: { name } }) => name === selectedCategory)
         .getPath()
