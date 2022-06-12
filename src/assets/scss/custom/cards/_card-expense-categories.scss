@@ -19,6 +19,11 @@
   .progress {
     height: 0.1rem;
   }
+
+  &__list {
+    overflow-x: auto;
+    max-height: 575px;
+  }
 }
 
 .wrapper:not(.white-content) .card-expense-categories {

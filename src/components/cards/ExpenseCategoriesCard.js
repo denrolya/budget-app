@@ -12,41 +12,38 @@ const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
   const { from, to, data } = model;
   const [selectedCategory, selectCategory] = useState(data.model.name);
 
+  if (!data.hasChildren()) {
+    return (
+      <CenteredMessage
+        className="mb-4"
+        title="No statistics available for selected period."
+        message="Try to select another date range in upper right corner of this card."
+      />
+    );
+  }
+
   return (
-    <TimeperiodStatisticsCard
-      transparent
-      className="card-expense-categories"
-      bodyClassName="p-0"
-      isLoading={isLoading}
-      model={model}
-      onUpdate={onUpdate}
-    >
-      {data.hasChildren() && (
-        <Row>
-          <Col className="order-last order-xl-last" md={12} lg={12} xl={4}>
-            <Card body style={{ flex: 'inherit' }}>
-              <ExpenseCategoriesList
-                data={data}
-                onCategorySelect={selectCategory}
-                selectedCategory={selectedCategory}
-                from={from}
-                to={to}
-              />
-            </Card>
-          </Col>
-          <Col className="order-first order-xl-first" md={12} lg={12} xl={8}>
-            <TransactionCategories data={data} selectedCategory={selectedCategory} onClick={selectCategory} />
-          </Col>
-        </Row>
-      )}
-      {!data.hasChildren() && (
-        <CenteredMessage
-          className="mb-4"
-          title="No statistics available for selected period."
-          message="Try to select another date range in upper right corner of this card."
-        />
-      )}
-    </TimeperiodStatisticsCard>
+    <Row noGutters>
+      <Col md={12} lg={12} xl={8}>
+        <TransactionCategories data={data} selectedCategory={selectedCategory} onClick={selectCategory} />
+      </Col>
+      <Col md={12} lg={12} xl={4}>
+        <TimeperiodStatisticsCard
+          isLoading={isLoading}
+          className="card-expense-categories"
+          model={model}
+          onUpdate={onUpdate}
+        >
+          <ExpenseCategoriesList
+            data={data}
+            onCategorySelect={selectCategory}
+            selectedCategory={selectedCategory}
+            from={from}
+            to={to}
+          />
+        </TimeperiodStatisticsCard>
+      </Col>
+    </Row>
   );
 };
 

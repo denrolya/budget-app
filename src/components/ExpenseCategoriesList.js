@@ -45,142 +45,140 @@ const ExpenseCategoriesList = ({
 
   return (
     <>
-      <Breadcrumbs selectedCategory={selectedCategory} selectCategory={onCategorySelect} data={data} />
+      <Breadcrumbs selectedCategory={selectedCategory} selectCategory={onCategorySelect} tree={data} />
 
-      <div style={{ height: 575 }}>
-        <ListGroup flush>
-          {selectedSubtree.children.map(({
-            model: {
-              id, name, icon, total, previous,
-            },
-          }, key) => {
-            const amountToPreviousPeriodRatio = amountInPercentage(previous, total, 0);
-            const percentageInTotalSum = amountInPercentage(data.model.total, total, 2);
-            const toPreviousRatioColor = expenseRatioColor(amountToPreviousPeriodRatio);
-            const isTotalAndPreviousZero = total === 0 && previous === 0;
+      <ListGroup flush className="card-expense-categories__list">
+        {selectedSubtree.children.map(({
+          model: {
+            id, name, icon, total, previous,
+          },
+        }, key) => {
+          const amountToPreviousPeriodRatio = amountInPercentage(previous, total, 0);
+          const percentageInTotalSum = amountInPercentage(data.model.total, total, 2);
+          const toPreviousRatioColor = expenseRatioColor(amountToPreviousPeriodRatio);
+          const isTotalAndPreviousZero = total === 0 && previous === 0;
 
-            const rotation = key !== 0
-              ? selectedSubtree.children
-                .slice(0, key)
-                .reduce((acc, el) => acc + amountInPercentage(selectedSubtree.model.total, el.model.total, 2) / 100, 1)
-              : 1;
+          const rotation = key !== 0
+            ? selectedSubtree.children
+              .slice(0, key)
+              .reduce((acc, el) => acc + amountInPercentage(selectedSubtree.model.total, el.model.total, 2) / 100, 1)
+            : 1;
 
-            return (
-              <ListGroupItem className="p-1" key={name}>
-                <div className="d-flex justify-content-between align-center">
-                  <div className="font-weight-light cursor-info py-2" id={`expense-category-${key}`}>
-                    <span className="w-25px mr-2 d-inline-block">
-                      <CircularProgressbarWithChildren
-                        styles={buildStyles({
-                          rotation,
-                          pathColor: `${HEX_COLORS[toPreviousRatioColor]}`,
-                          trailColor: 'transparent',
-                        })}
-                        value={percentageInTotalSum}
-                      >
-                        <i
-                          aria-hidden
-                          className={cn(icon, {
-                            'font-12px': isTotalAndPreviousZero,
-                            'font-15px': !isTotalAndPreviousZero,
-                          })}
-                        />
-                      </CircularProgressbarWithChildren>
-                    </span>
-                    {'  '}
-                    <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
-                  </div>
-                  <div className="text-nowrap">
-                    <MoneyValue bold className="mr-1 text-white" amount={total} maximumFractionDigits={0} />
-                    <span>
-                      <Link
-                        to={generateLinkToExpenses(
-                          from.format(MOMENT_DATE_FORMAT),
-                          to.format(MOMENT_DATE_FORMAT),
-                          [],
-                          [id],
-                        )}
-                      >
-                        <Button size="sm" color="info" className="btn-link btn-icon btn-simple m-0">
-                          <i aria-hidden className="mdi mdi-format-list-bulleted" />
-                        </Button>
-                      </Link>
-                      <Button
-                        size="sm"
-                        color="primary"
-                        className="btn-link btn-icon btn-simple m-0"
-                        onClick={() => onCategorySelect(name)}
-                      >
-                        <i aria-hidden className="ion-ios-arrow-dropright" />
-                      </Button>
-                    </span>
-                  </div>
-                </div>
-                <UncontrolledTooltip target={`expense-category-${key}`}>
-                  {percentageInTotalSum.toFixed()}
-                  % from total expenses
-                </UncontrolledTooltip>
-                <UncontrolledCollapse toggler={`expense-category-${key}`} className="pl-4">
-                  <Table size="sm" bordered={false}>
-                    <tbody>
-                      {percentageInTotalSum !== false && (
-                        <tr>
-                          <td>From total expenses:</td>
-                          <td className="text-right font-style-numeric font-weight-bold">
-                            {percentageInTotalSum > 0 || percentageInTotalSum === 0
-                              ? percentageInTotalSum.toFixed()
-                              : percentageInTotalSum.toFixed(1)}
-                            %
-                          </td>
-                        </tr>
-                      )}
-                      {amountToPreviousPeriodRatio !== false && (
-                        <tr>
-                          <td>Previous period:</td>
-                          <td className="text-right font-style-numeric font-weight-bold">
-                            <span className={cn('mr-2', `text-${toPreviousRatioColor}`)}>
-                              <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />
-                              {' '}
-                              {ratio(amountToPreviousPeriodRatio)}
-                              %
-                            </span>
-                            <MoneyValue maximumFractionDigits={0} amount={previous} />
-                          </td>
-                        </tr>
-                      )}
-                      {[
-                        ['days', 'Daily'],
-                        ['weeks', 'Weekly'],
-                        ['months', 'Monthly'],
-                        ['years', 'Annual'],
-                      ].map(([unitOfTime, title]) => {
-                        const diff = moment().isBetween(from, to)
-                          ? moment().diff(from, unitOfTime) + 1
-                          : to.diff(from, unitOfTime) + 1;
-
-                        return (
-                          diff > 1 && (
-                            <tr key={`${title}-expenses`}>
-                              <td>
-                                {title}
-                                {' '}
-                                expense:
-                              </td>
-                              <td className="text-right">
-                                <MoneyValue bold amount={total / diff} />
-                              </td>
-                            </tr>
-                          )
-                        );
+          return (
+            <ListGroupItem className="p-1" key={name}>
+              <div className="d-flex justify-content-between align-center">
+                <div className="font-weight-light cursor-info py-2" id={`expense-category-${key}`}>
+                  <span className="w-25px mr-2 d-inline-block">
+                    <CircularProgressbarWithChildren
+                      styles={buildStyles({
+                        rotation,
+                        pathColor: `${HEX_COLORS[toPreviousRatioColor]}`,
+                        trailColor: 'transparent',
                       })}
-                    </tbody>
-                  </Table>
-                </UncontrolledCollapse>
-              </ListGroupItem>
-            );
-          })}
-        </ListGroup>
-      </div>
+                      value={percentageInTotalSum}
+                    >
+                      <i
+                        aria-hidden
+                        className={cn(icon, 'text-white', {
+                          'font-12px': isTotalAndPreviousZero,
+                          'font-17px': !isTotalAndPreviousZero,
+                        })}
+                      />
+                    </CircularProgressbarWithChildren>
+                  </span>
+                  {'  '}
+                  <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
+                </div>
+                <div className="text-nowrap">
+                  <MoneyValue bold className="mr-1 text-white" amount={total} maximumFractionDigits={0} />
+                  <span>
+                    <Link
+                      to={generateLinkToExpenses(
+                        from.format(MOMENT_DATE_FORMAT),
+                        to.format(MOMENT_DATE_FORMAT),
+                        [],
+                        [id],
+                      )}
+                    >
+                      <Button size="sm" color="info" className="btn-link btn-icon btn-simple m-0">
+                        <i aria-hidden className="mdi mdi-format-list-bulleted" />
+                      </Button>
+                    </Link>
+                    <Button
+                      size="sm"
+                      color="primary"
+                      className="btn-link btn-icon btn-simple m-0"
+                      onClick={() => onCategorySelect(name)}
+                    >
+                      <i aria-hidden className="ion-ios-arrow-dropright" />
+                    </Button>
+                  </span>
+                </div>
+              </div>
+              <UncontrolledTooltip target={`expense-category-${key}`}>
+                {percentageInTotalSum.toFixed()}
+                % from total expenses
+              </UncontrolledTooltip>
+              <UncontrolledCollapse toggler={`expense-category-${key}`} className="pl-4">
+                <Table size="sm" bordered={false}>
+                  <tbody>
+                    {percentageInTotalSum !== false && (
+                      <tr>
+                        <td>From total expenses:</td>
+                        <td className="text-right font-style-numeric font-weight-bold">
+                          {percentageInTotalSum > 0 || percentageInTotalSum === 0
+                            ? percentageInTotalSum.toFixed()
+                            : percentageInTotalSum.toFixed(1)}
+                          %
+                        </td>
+                      </tr>
+                    )}
+                    {amountToPreviousPeriodRatio !== false && (
+                      <tr>
+                        <td>Previous period:</td>
+                        <td className="text-right font-style-numeric font-weight-bold">
+                          <span className={cn('mr-2', `text-${toPreviousRatioColor}`)}>
+                            <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />
+                            {' '}
+                            {ratio(amountToPreviousPeriodRatio)}
+                            %
+                          </span>
+                          <MoneyValue maximumFractionDigits={0} amount={previous} />
+                        </td>
+                      </tr>
+                    )}
+                    {[
+                      ['days', 'Daily'],
+                      ['weeks', 'Weekly'],
+                      ['months', 'Monthly'],
+                      ['years', 'Annual'],
+                    ].map(([unitOfTime, title]) => {
+                      const diff = moment().isBetween(from, to)
+                        ? moment().diff(from, unitOfTime) + 1
+                        : to.diff(from, unitOfTime) + 1;
+
+                      return (
+                        diff > 1 && (
+                          <tr key={`${title}-expenses`}>
+                            <td>
+                              {title}
+                              {' '}
+                              expense:
+                            </td>
+                            <td className="text-right">
+                              <MoneyValue bold amount={total / diff} />
+                            </td>
+                          </tr>
+                        )
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </UncontrolledCollapse>
+            </ListGroupItem>
+          );
+        })}
+      </ListGroup>
 
       <ListGroup flush className="border-top-0">
         <ListGroupItem className="p-1 border-top-0">

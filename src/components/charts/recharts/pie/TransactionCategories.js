@@ -1,7 +1,11 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Card } from 'reactstrap';
 import {
-  PieChart, Pie, Cell, ResponsiveContainer, Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
 } from 'recharts';
 import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
@@ -32,15 +36,15 @@ const CustomTooltip = ({ active, payload }) => {
         {' '}
         {name}
       </h4>
-      <p className="mb-0 text-white">
+      <p className="mb-0">
         Selected Period:
         {' '}
-        <MoneyValue bold amount={total} maximumFractionDigits={0} />
+        <MoneyValue bold className="text-white" amount={total} maximumFractionDigits={0} />
       </p>
-      <p className="mb-0 text-white">
+      <p className="mb-0">
         Previous Period:
         {' '}
-        <MoneyValue bold amount={previous} maximumFractionDigits={0} />
+        <MoneyValue bold className="text-white" amount={previous} maximumFractionDigits={0} />
       </p>
     </Card>
   );
@@ -71,14 +75,7 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
 
   return (
     <ResponsiveContainer width="100%" height={window.isMobile ? 300 : '100%'}>
-      <PieChart
-        margin={{
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      >
+      <PieChart>
         <defs>
           <filter id="shadow" height="200%">
             <feDropShadow dx="0" dy="10" stdDeviation="10" />
@@ -86,13 +83,13 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
         </defs>
         <Pie
           clockwise
-          data={chartData}
           labelLine={false}
           outerRadius="100%"
           innerRadius="70%"
           startAngle={90}
           endAngle={450}
           dataKey="total"
+          data={chartData}
           onDoubleClick={({ name }) => onClick(name)}
           onMouseEnter={onSectorEnter}
           onMouseLeave={() => setActive()}
@@ -113,29 +110,30 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
         </Pie>
 
         <Pie
-          data={chartData}
           labelLine={false}
           outerRadius="67%"
           innerRadius="40%"
           startAngle={90}
           endAngle={450}
           dataKey="previous"
+          data={chartData}
           onDoubleClick={({ name }) => onClick(name)}
           onMouseEnter={onSectorEnter}
           onMouseLeave={() => setActive()}
         >
-          {chartData.map(({ name, total, previous }, index) => {
-            const color = expenseRatioColor(amountInPercentage(previous, total, 0));
+          {chartData
+            .map(({ name, total, previous }, index) => {
+              const color = expenseRatioColor(amountInPercentage(previous, total, 0));
 
-            return (
-              <Cell
-                key={`account-${name}`}
-                stroke={`${HEX_COLORS[color]}33`}
-                strokeWidth={active === index ? 4 : 2}
-                fill={`${HEX_COLORS[color]}${active === index ? '33' : '11'}`}
-              />
-            );
-          })}
+              return (
+                <Cell
+                  key={`account-${name}`}
+                  stroke={`${HEX_COLORS[color]}33`}
+                  strokeWidth={active === index ? 4 : 2}
+                  fill={`${HEX_COLORS[color]}${active === index ? '33' : '11'}`}
+                />
+              );
+            })}
         </Pie>
         <Tooltip content={<CustomTooltip total={total} />} />
       </PieChart>

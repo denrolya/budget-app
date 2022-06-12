@@ -189,7 +189,7 @@ const Dashboard = ({
         </Row>
 
         <Row>
-          <Col sm={12} className="d-flex">
+          <Col sm={12}>
             <ExpenseCategoriesCard
               isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
               model={statistics.expenseCategoriesTree}
