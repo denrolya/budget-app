@@ -18,7 +18,11 @@ import { isActionLoading } from 'src/utils/common';
 import { generateLinkToTransactionPage } from 'src/utils/routing';
 import { createCategoriesTree, listToTree } from 'src/utils/category';
 import {
-  create, edit, remove, setParent, fetchList,
+  create,
+  edit,
+  remove,
+  setParent,
+  fetchList,
 } from 'src/store/actions/category';
 import LoadingCard from 'src/components/cards/LoadingCard';
 
@@ -51,10 +55,10 @@ const CategoryList = ({
 
   useEffect(() => {
     setTree({
-      [EXPENSE_TYPE]: createCategoriesTree(listToTree(expenseCategories)),
       [INCOME_TYPE]: createCategoriesTree(listToTree(incomeCategories)),
+      [EXPENSE_TYPE]: createCategoriesTree(listToTree(expenseCategories)),
     });
-  }, [expenseCategories, incomeCategories]);
+  }, [expenseCategories.length, incomeCategories.length]);
 
   const reorderNodes = ({
     node, nextParentNode, prevPath, nextPath,

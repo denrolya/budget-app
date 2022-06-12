@@ -64,20 +64,19 @@ export const generateCategoriesStatisticsTree = (current, previous) => {
 };
 
 export const listToTree = (list) => {
-  const map = {}; let node; const roots = []; let
-    i;
+  const map = {}; let node; const roots = []; let i; const arr = [...list];
 
-  for (i = 0; i < list.length; i += 1) {
-    map[list[i]['@id']] = i; // initialize the map
+  for (i = 0; i < arr.length; i += 1) {
+    map[arr[i]['@id']] = i; // initialize the map
     // eslint-disable-next-line no-param-reassign
-    list[i].children = []; // initialize the children
+    arr[i].children = []; // initialize the children
   }
 
-  for (i = 0; i < list.length; i += 1) {
-    node = list[i];
+  for (i = 0; i < arr.length; i += 1) {
+    node = arr[i];
     if (node.parent?.['@id']) {
       // if you have dangling branches check that map[node.parentId] exists
-      list[map[node.parent?.['@id']]]?.children.push(node);
+      arr[map[node.parent?.['@id']]]?.children.push(node);
     } else {
       roots.push(node);
     }
@@ -123,6 +122,6 @@ export const createCategoriesTree = (tree) => orderBy(
       ),
     };
   }),
-  ({ children }) => children.length,
+  ({ name }) => name,
   'desc',
 );
