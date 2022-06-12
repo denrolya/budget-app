@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Col, Row, Card } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 
-import ExpenseCategoriesList from 'src/components/ExpenseCategoriesList';
+import CategoriesList from 'src/components/CategoriesList';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import CenteredMessage from 'src/components/messages/CenteredMessage';
@@ -34,7 +34,7 @@ const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
           model={model}
           onUpdate={onUpdate}
         >
-          <ExpenseCategoriesList
+          <CategoriesList
             data={data}
             onCategorySelect={selectCategory}
             selectedCategory={selectedCategory}

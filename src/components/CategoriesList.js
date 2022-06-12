@@ -15,16 +15,19 @@ import {
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-import Breadcrumbs from 'src/components/ExpenseCategoriesBreadcrumbs';
+import Breadcrumbs from 'src/components/CategoriesBreadcrumbs';
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import {
-  amountInPercentage, arrowIcon, expenseRatioColor, ratio,
+  amountInPercentage,
+  arrowIcon,
+  expenseRatioColor,
+  ratio,
 } from 'src/utils/common';
 import { generateLinkToExpenses } from 'src/utils/routing';
 import { HEX_COLORS } from 'src/constants/color';
 
-const ExpenseCategoriesList = ({
+const CategoriesList = ({
   data,
   selectedCategory,
   onCategorySelect,
@@ -65,10 +68,10 @@ const ExpenseCategoriesList = ({
             : 1;
 
           return (
-            <ListGroupItem className="p-1" key={name}>
+            <ListGroupItem className="p-1 card-expense-categories__list-item" key={name}>
               <div className="d-flex justify-content-between align-center">
-                <div className="font-weight-light cursor-info py-2" id={`expense-category-${key}`}>
-                  <span className="w-25px mr-2 d-inline-block">
+                <div className="font-weight-light cursor-info py-1" id={`category-${key}`}>
+                  <span className="w-25px mr-2 d-inline-block align-center">
                     <CircularProgressbarWithChildren
                       styles={buildStyles({
                         rotation,
@@ -89,9 +92,9 @@ const ExpenseCategoriesList = ({
                   {'  '}
                   <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
                 </div>
-                <div className="text-nowrap">
+                <div className="text-nowrap card-expense-categories__list-item-actions">
                   <MoneyValue bold className="mr-1 text-white" amount={total} maximumFractionDigits={0} />
-                  <span>
+                  <div className="d-inline-block">
                     <Link
                       to={generateLinkToExpenses(
                         from.format(MOMENT_DATE_FORMAT),
@@ -112,14 +115,14 @@ const ExpenseCategoriesList = ({
                     >
                       <i aria-hidden className="ion-ios-arrow-dropright" />
                     </Button>
-                  </span>
+                  </div>
                 </div>
               </div>
-              <UncontrolledTooltip target={`expense-category-${key}`}>
+              <UncontrolledTooltip target={`category-${key}`}>
                 {percentageInTotalSum.toFixed()}
                 % from total expenses
               </UncontrolledTooltip>
-              <UncontrolledCollapse toggler={`expense-category-${key}`} className="pl-4">
+              <UncontrolledCollapse toggler={`category-${key}`} className="pl-4">
                 <Table size="sm" bordered={false}>
                   <tbody>
                     {percentageInTotalSum !== false && (
@@ -250,9 +253,9 @@ const ExpenseCategoriesList = ({
   );
 };
 
-ExpenseCategoriesList.defaultProps = {};
+CategoriesList.defaultProps = {};
 
-ExpenseCategoriesList.propTypes = {
+CategoriesList.propTypes = {
   data: PropTypes.object.isRequired,
   from: PropTypes.object.isRequired,
   to: PropTypes.object.isRequired,
@@ -261,7 +264,7 @@ ExpenseCategoriesList.propTypes = {
 };
 
 export default memo(
-  ExpenseCategoriesList,
+  CategoriesList,
   (pp, np) => isEqual(pp.selectedCategory, np.selectedCategory)
     && isEqual(pp.data, np.data)
     && isEqual(pp.from, np.from)

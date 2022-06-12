@@ -23,6 +23,21 @@
   &__list {
     overflow-x: auto;
     max-height: 575px;
+
+    &-item {
+      overflow: hidden;
+      transition: all 0.2s linear 0s;
+
+      &-actions {
+        transition: all 0.2s linear 0s;
+        position: relative;
+        right: -60px;
+      }
+
+      &:hover .card-expense-categories__list-item-actions {
+        right: 0;
+      }
+    }
   }
 }
 

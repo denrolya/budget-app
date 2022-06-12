@@ -134,23 +134,3 @@
 .is-invalid ~ .invalid-feedback {
   display: block
 }
-
-.element-with-hidden-content {
-  overflow: hidden;
-  transition: all 0.2s linear 0s;
-
-  &__hidden-content {
-    transition: all 0.2s linear 0s;
-    position: absolute;
-    right: -60px;
-    opacity: 1;
-  }
-
-  &:hover {
-    text-indent: -60px;
-    &__hidden-content {
-      transition: .3s;
-      right: 0;
-    }
-  }
-}
