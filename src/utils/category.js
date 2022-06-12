@@ -122,6 +122,6 @@ export const createCategoriesTree = (tree) => orderBy(
       ),
     };
   }),
-  ({ name }) => name,
+  ({ children }) => children.length,
   'desc',
 );
