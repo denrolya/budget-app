@@ -13,7 +13,12 @@ const AccountTransactionsDetails = ({ account }) => {
     id, numberOfTransactions, lastTransactionAt, latestTransactions, logs,
   } = account;
 
+  const hasLogs = logs.length > 0;
+
   const transactionFrequency = useMemo(() => {
+    if (!hasLogs) {
+      return 0;
+    }
     const logPeriodInHours = logs[logs.length - 1].date.diff(logs[0].date, 'hours');
     return Math.round(logPeriodInHours / logs.length);
   }, [logs]);
@@ -70,27 +75,30 @@ const AccountTransactionsDetails = ({ account }) => {
             </Col>
           </Row>
 
-          <Row className="mb-4">
-            <Col>
-              <span className="h5 mb-2 d-block">Transaction frequency over last 12 months</span>
-              <span className="h1 mb-2 font-weight-light d-block">
-                {`Every ${transactionFrequency} hours`}
-              </span>
-            </Col>
-          </Row>
-
-          <span className="h5 mb-2 d-block">Monthly Transactions</span>
-          <Row className="mb-5 gx-0">
-            <Col xs={4} className="d-flex flex-column justify-content-center">
-              <span className="h1 mb-2 font-weight-light d-block text-nowrap">
-                { lastMonthTransactionsCount }
-              </span>
-              <span className="h5 m-0 d-block">Last month</span>
-            </Col>
-            <Col xs={8} className="">
-              <TransactionsCountByMonth data={transactionsCountByMonths} width="100%" height={120} />
-            </Col>
-          </Row>
+          {hasLogs && (
+            <>
+              <Row className="mb-4">
+                <Col>
+                  <span className="h5 mb-2 d-block">Transaction frequency over last 12 months</span>
+                  <span className="h1 mb-2 font-weight-light d-block">
+                    {`Every ${transactionFrequency} hours`}
+                  </span>
+                </Col>
+              </Row>
+              <span className="h5 mb-2 d-block">Monthly Transactions</span>
+              <Row className="mb-5 gx-0">
+                <Col xs={4} className="d-flex flex-column justify-content-center">
+                  <span className="h1 mb-2 font-weight-light d-block text-nowrap">
+                    { lastMonthTransactionsCount }
+                  </span>
+                  <span className="h5 m-0 d-block">Last month</span>
+                </Col>
+                <Col xs={8} className="">
+                  <TransactionsCountByMonth data={transactionsCountByMonths} width="100%" height={120} />
+                </Col>
+              </Row>
+            </>
+          )}
         </Col>
         <Col xs={12} md={7}>
           <span className="h5 mb-2 d-block">Latest Transactions</span>
