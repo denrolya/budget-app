@@ -121,7 +121,10 @@ export const isOnTransfersPage = () => isOnPath(`/${ROUTE_TRANSFERS}`);
 export const isOnTransactionsPage = () => isOnPath(`/${ROUTE_TRANSACTIONS}`);
 
 export const getQueryParam = (queryString, key, callback = false) => {
-  const parsed = parse(queryString);
+  const parsed = parse(queryString, {
+    parseBooleans: true,
+    parseNumbers: true,
+  });
 
   if (!parsed[key]) {
     return null;
@@ -131,21 +134,21 @@ export const getQueryParam = (queryString, key, callback = false) => {
 };
 
 export const getTransactionListQueryParams = (queryString) => ({
-  perPage: getQueryParam(queryString, 'perPage', parseInt),
-  page: getQueryParam(queryString, 'page', parseInt),
+  perPage: getQueryParam(queryString, 'perPage'),
+  page: getQueryParam(queryString, 'page'),
   types: getQueryParam(queryString, 'types', (v) => (Array.isArray(v) ? v : [v])),
   from: getQueryParam(queryString, 'from', (v) => moment(v, MOMENT_DATE_FORMAT)),
   to: getQueryParam(queryString, 'to', (v) => moment(v, MOMENT_DATE_FORMAT)),
-  accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
-  categories: getQueryParam(queryString, 'categories', (v) => (Array.isArray(v) ? parseInt(v, 10) : [parseInt(v, 10)])),
-  onlyDrafts: getQueryParam(queryString, 'onlyDrafts', (v) => v === 'true'),
+  accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? v : [v])),
+  categories: getQueryParam(queryString, 'categories', (v) => (Array.isArray(v) ? v : [v])),
+  onlyDrafts: getQueryParam(queryString, 'onlyDrafts'),
 });
 
 export const getTransferListQueryParams = (queryString) => ({
-  from: getQueryParam(queryString, 'from', (v) => moment(v)),
-  to: getQueryParam(queryString, 'to', (v) => moment(v)),
-  perPage: getQueryParam(queryString, 'perPage', parseInt),
-  page: getQueryParam(queryString, 'page', parseInt),
+  from: getQueryParam(queryString, 'from', (v) => moment(v, MOMENT_DATE_FORMAT)),
+  to: getQueryParam(queryString, 'to', (v) => moment(v, MOMENT_DATE_FORMAT)),
+  perPage: getQueryParam(queryString, 'perPage'),
+  page: getQueryParam(queryString, 'page'),
   accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? v : [v])),
 });
 
