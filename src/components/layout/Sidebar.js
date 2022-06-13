@@ -78,7 +78,7 @@ const Sidebar = ({
             <hr />
           </NavItem>
           <NavItem tag="li">
-            <NavLink className="nav-link" to={ROUTE_TRANSACTIONS}>
+            <NavLink to={ROUTE_TRANSACTIONS} className="nav-link text-capitalize">
               <i aria-hidden className="mdi mdi-format-list-bulleted" />
               <p className="text-capitalize">All Transactions</p>
             </NavLink>
@@ -87,7 +87,7 @@ const Sidebar = ({
             <hr />
           </NavItem>
           <NavItem tag="li">
-            <NavLink className="nav-link" to={ROUTE_DEBTS}>
+            <NavLink to={ROUTE_DEBTS} className="nav-link text-capitalize">
               <i aria-hidden className="ion-ios-bookmarks" />
               <p className="text-capitalize">
                 Debts
@@ -111,7 +111,7 @@ const Sidebar = ({
           {visibleAccounts.map((account) => (
             <NavItem tag="li" key={account.name}>
               <NavLink
-                className="nav-link text-capitalize"
+                className={() => 'nav-link text-capitalize'}
                 to={generateLinkToAccountTransactionsPage(account.id)}
               >
                 <AccountName showBalance account={account} />
@@ -119,7 +119,7 @@ const Sidebar = ({
             </NavItem>
           ))}
           <NavItem tag="li">
-            <NavLink className="nav-link text-capitalize" to={ROUTE_ACCOUNTS}>
+            <NavLink to={ROUTE_ACCOUNTS} className={() => 'nav-link text-capitalize'}>
               <i aria-hidden className="mdi mdi-wallet-travel" />
 
               <div className="d-flex flex-column">
