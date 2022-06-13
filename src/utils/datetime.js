@@ -2,7 +2,7 @@ import times from 'lodash/times';
 import moment from 'moment-timezone';
 
 import {
-  DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT,
+  DATERANGE_PICKER_RANGES,
   MOMENT_VIEW_DATE_FORMAT,
   MOMENT_VIEW_DATE_WITH_YEAR_FORMAT,
 } from 'src/constants/datetime';
@@ -35,8 +35,8 @@ export const rangeToString = (from, to, range = DATERANGE_PICKER_RANGES) => {
 };
 
 export const generatePreviousPeriod = (from, to) => {
-  const isCurrentMonth = from === moment().startOf('month').format(MOMENT_DATE_FORMAT)
-                         && to === moment().endOf('month').format(MOMENT_DATE_FORMAT);
+  const currentMonth = moment().month();
+  const isCurrentMonth = from.month() === currentMonth && to.month() === currentMonth;
 
   return {
     from: isCurrentMonth
