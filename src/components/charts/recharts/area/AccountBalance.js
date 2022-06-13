@@ -18,7 +18,11 @@ const CustomTooltip = ({ active, payload, account }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h4 className="mb-1">{payload[0].payload.date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h4>
+      <h4 className="mb-1 text-white">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
+        {payload[0].payload.date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
+      </h4>
       <p
         className={cn('mb-0', {
           'text-success': payload[0].value >= 0,
@@ -58,8 +62,8 @@ const AccountBalance = ({ account }) => {
         </defs>
 
         <Area
-          dot={false}
           type="monotone"
+          dot={false}
           stroke={HEX_COLORS.success}
           dataKey={`convertedValues.${account.currency}`}
           fill={`url(#${account.id}-gradient)`}

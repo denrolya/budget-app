@@ -75,14 +75,6 @@ const AccountGeneralInfo = ({
 
               <div className="d-block d-md-none text-nowrap">{name}</div>
             </div>
-
-            <h4 className="mb-1">
-              <i aria-hidden className="ion-ios-calendar" />
-              {' '}
-              Created:
-              {' '}
-              {moment(data.createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
-            </h4>
           </Col>
           <Col xs={6} className="text-right">
             <p
@@ -97,6 +89,13 @@ const AccountGeneralInfo = ({
             </p>
           </Col>
         </Row>
+        <h4 className="mb-1">
+          Created:
+          {' '}
+          <i aria-hidden className="ion-ios-calendar" />
+          {' '}
+          {moment(data.createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
+        </h4>
         <hr />
       </section>
 

@@ -16,7 +16,6 @@ const TransactionRow = ({
   showNote,
   onEdit,
   onDelete,
-  onRestore,
 }) => {
   const {
     id, account, amount, convertedValues, note, category, executedAt,
@@ -24,14 +23,14 @@ const TransactionRow = ({
 
   return (
     <tr>
-      <td className="fit text-nowrap d-none d-md-table-cell">
-        <code className="mr-2">
+      <td className="text-nowrap d-none d-md-table-cell" style={{ width: '40px' }}>
+        <code>
           #
           {id}
         </code>
       </td>
 
-      <td className="fit text-nowrap" id={`transaction-account-cell-${id}`}>
+      <td className="fit text-nowrap text-truncate" id={`transaction-account-cell-${id}`}>
         <AccountName account={account} />
 
         <span className="text-muted font-size-smaller d-block d-md-none text-left">
@@ -74,7 +73,7 @@ const TransactionRow = ({
           <Button size="sm" className="btn-link px-2" color="warning" onClick={() => onEdit(transaction)}>
             <i aria-hidden className="tim-icons icon-pencil" />
           </Button>
-          <Button size="sm" className="btn-link px-2" color="warning" onClick={() => onDelete(transaction)}>
+          <Button size="sm" className="btn-link px-2" color="danger" onClick={() => onDelete(transaction)}>
             <i aria-hidden className="tim-icons icon-trash-simple" />
           </Button>
         </td>
@@ -96,7 +95,6 @@ TransactionRow.propTypes = {
   showFullCategoryPath: PropTypes.bool,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
-  onRestore: PropTypes.func,
 };
 
 export default memo(TransactionRow);

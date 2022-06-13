@@ -120,7 +120,7 @@ const TransactionList = ({
           <Card>
             <CardHeader>
               <h5 className="card-category cursor-pointer" onClick={() => setIsFiltersOpen(!isFiltersOpen)}>
-                <i className="ion-ios-funnel" aria-hidden />
+                <i aria-hidden className="ion-ios-funnel" />
                 {' '}
                 Filters
               </h5>

@@ -1,5 +1,6 @@
 import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
+import cn from 'classnames';
 import React from 'react';
 import { Badge } from 'reactstrap';
 import TreeModel from 'tree-model';
@@ -94,8 +95,8 @@ export const createCategoriesTree = (tree) => orderBy(
     return {
       ...c,
       title: (
-        <span title={c.name}>
-          <i className={c.icon} aria-hidden style={{ fontSize: '18px' }} />
+        <span>
+          <i aria-hidden className={cn('font-18px', c.icon)} />
           {'  '}
           <code>
             #

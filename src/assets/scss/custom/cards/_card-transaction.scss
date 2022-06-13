@@ -1,6 +1,6 @@
 .card-transactions {
   &__date-header {
-    background-color: #171928;
+    background-color: $black-states;
 
     &:first-child {
       @include border-radius($card-inner-border-radius $card-inner-border-radius 0 0);

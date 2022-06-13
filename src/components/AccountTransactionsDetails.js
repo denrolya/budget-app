@@ -109,7 +109,7 @@ const AccountTransactionsDetails = ({ account }) => {
 
           <p className="text-center py-3">
             <Link to={generateLinkToAccountTransactionsPage(id)}>
-              <Button color="primary" className="btn-simple" size="sm">
+              <Button color="info" className="btn-simple" size="sm">
                 See all Transactions
               </Button>
             </Link>

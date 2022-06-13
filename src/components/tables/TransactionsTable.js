@@ -50,21 +50,23 @@ const TransactionsTable = ({
           <React.Fragment key={date}>
             <div
               id={`date-${date.format(MOMENT_DATE_FORMAT)}`}
-              className="text-nowrap text-white cursor-pointer py-1 px-3 d-flex justify-content-between align-center card-transactions__date-header"
+              className="text-nowrap cursor-pointer py-1 px-3 d-flex justify-content-between align-center card-transactions__date-header"
             >
               <p
-                className={cn('font-15px', {
+                className={cn({
                   'text-primary': isToday(date),
-                  'text-success': isYesterday(date),
+                  'text-info': isYesterday(date),
+                  'text-white': !isToday(date) && !isYesterday(date),
                 })}
               >
-                <i aria-hidden className="ion-md-calendar" />
+                <i aria-hidden className="ion-ios-calendar" />
                 {' '}
-                {isToday(date) && 'Today'}
-                {isYesterday(date) && 'Yesterday'}
-                {!isToday(date) && !isYesterday(date) && date.format(MOMENT_VIEW_DATE_FORMAT)}
+                <strong>
+                  {isToday(date) && 'Today'}
+                  {isYesterday(date) && 'Yesterday'}
+                  {!isToday(date) && !isYesterday(date) && date.format(MOMENT_VIEW_DATE_FORMAT)}
+                </strong>
               </p>
-              {' '}
               <Badge pill className="float-right" color={totalDailyValue > 0 ? 'success' : 'danger'}>
                 <MoneyValue bold amount={totalDailyValue} />
               </Badge>
@@ -80,7 +82,6 @@ const TransactionsTable = ({
                       showFullCategoryPath={showFullCategoryPath}
                       transaction={transaction}
                       onEdit={handleEdit}
-                      onRestore={(t) => console.log(`Restore transaction ${t.id}`)}
                       onDelete={handleDelete}
                     />
                   ))}
