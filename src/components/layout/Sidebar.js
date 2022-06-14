@@ -99,7 +99,7 @@ const Sidebar = ({
                       'text-danger': totalDebt !== 0,
                     })}
                   >
-                    <MoneyValue bold amount={totalDebt} />
+                    <MoneyValue bold amount={totalDebt} maximumFractionDigits={0} />
                   </span>
                 )}
               </p>
@@ -127,12 +127,13 @@ const Sidebar = ({
                 {!isLoading && (
                   <MoneyValue
                     bold
-                    amount={totalAccountsValue}
                     className={cn('font-size-larger', {
                       'text-white': totalAccountsValue === 0,
                       'text-danger': totalAccountsValue < 0,
                       'text-success': totalAccountsValue > 0,
                     })}
+                    amount={totalAccountsValue}
+                    maximumFractionDigits={0}
                   />
                 )}
               </div>

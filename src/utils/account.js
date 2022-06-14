@@ -22,7 +22,7 @@ export const formatDetails = (data, baseCurrencyCode) => {
     latestTransactions: initializeList(data.latestTransactions).map((t) => ({
       ...t,
       account: pick(data, ['id', 'name', 'type', 'icon', 'balance', 'color', 'currency']),
-    })),
+    })).sort((a, b) => a.executedAt.isBefore(b.executedAt) ? 1 : -1),
     topExpenseCategories: data.topExpenseCategories
       .filter((el) => el.total !== 0)
       .sort((a, b) => b.total - a.total)
