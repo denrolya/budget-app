@@ -49,11 +49,11 @@ const TransactionsTable = ({
         return (
           <React.Fragment key={date}>
             <div
-              id={`date-${date.format(MOMENT_DATE_FORMAT)}`}
               className="text-nowrap cursor-pointer py-1 px-3 d-flex justify-content-between align-center card-transactions__date-header"
+              id={`date-${date.format(MOMENT_DATE_FORMAT)}`}
             >
               <p
-                className={cn({
+                className={cn('mb-0', {
                   'text-primary': isToday(date),
                   'text-info': isYesterday(date),
                   'text-white': !isToday(date) && !isYesterday(date),
