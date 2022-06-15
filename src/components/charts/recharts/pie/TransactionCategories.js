@@ -101,9 +101,9 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
               <Cell
                 filter="url(#shadow)"
                 key={`account-${name}`}
-                stroke={`${HEX_COLORS[color]}`}
+                stroke={HEX_COLORS[color]}
                 strokeWidth={active === index ? 3 : 2}
-                fill={`${HEX_COLORS[color]}${active === index ? '22' : '11'}`}
+                fill={`${HEX_COLORS[color]}${active === index ? '33' : '11'}`}
               />
             );
           })}

@@ -93,19 +93,23 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
           stackId="1"
           hide={!displayValues.includes(EXPENSE_TYPE)}
           dataKey="expense"
-          stroke={HEX_COLORS.primary}
+          stroke={HEX_COLORS.danger}
           strokeWidth={2}
           dot={false}
-          fill="url(#expense-gradient)"
+          barSize={75}
+          fill={`${HEX_COLORS.danger}33`}
+          radius={[8, 8, 0, 0]}
         />
         <Bar
           stackId="1"
           hide={!displayValues.includes(INCOME_TYPE)}
           dataKey="income"
-          stroke={HEX_COLORS.info}
+          stroke={HEX_COLORS.success}
           strokeWidth={2}
           dot={false}
-          fill="url(#income-gradient)"
+          barSize={75}
+          fill={`${HEX_COLORS.success}33`}
+          radius={[8, 8, 0, 0]}
         />
 
         <XAxis

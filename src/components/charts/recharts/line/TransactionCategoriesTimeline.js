@@ -117,6 +117,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
             fillOpacity={1}
             filter="url(#shadow)"
             dot={false}
+            radius={[8, 8, 0, 0]}
             key={category}
             name={category}
             dataKey={`values.${category}`}
