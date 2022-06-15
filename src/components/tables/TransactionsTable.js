@@ -72,7 +72,7 @@ const TransactionsTable = ({
               </Badge>
             </div>
             <UncontrolledCollapse defaultOpen toggler={`date-${date.format(MOMENT_DATE_FORMAT)}`}>
-              <Table className="table--border-top-0" size={size}>
+              <Table className="table--border-top-0 mb-0" size={size}>
                 <tbody>
                   {transactions.map((transaction) => (
                     <TransactionRow
