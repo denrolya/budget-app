@@ -5,7 +5,14 @@ import xor from 'lodash/xor';
 import React, { useEffect, useState } from 'react';
 import { Card, Button } from 'reactstrap';
 import {
-  Bar, BarChart, Brush, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis,
+  Bar,
+  BarChart,
+  Brush,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';

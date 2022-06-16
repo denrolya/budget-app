@@ -31,13 +31,13 @@ const CustomTooltip = ({ active, payload, label }) => {
       {income && (
         <p className="mb-0">
           {'Income: '}
-          <MoneyValue bold className="text-info" maximumFractionDigits={0} amount={income.value} />
+          <MoneyValue bold className="text-success" maximumFractionDigits={0} amount={income.value} />
         </p>
       )}
       {expense && (
         <p className="mb-0">
           {'Expense: '}
-          <MoneyValue bold className="text-primary" maximumFractionDigits={0} amount={Math.abs(expense.value)} />
+          <MoneyValue bold className="text-danger" maximumFractionDigits={0} amount={Math.abs(expense.value)} />
         </p>
       )}
     </Card>
