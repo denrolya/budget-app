@@ -25,7 +25,11 @@ const PercentageSpentFromIncomeCard = ({ isLoading, percentage }) => {
   return (
     <IconStatisticsCard
       title="Spent from income"
-      content={`% ${percentage}`}
+      content={(
+        <span className="font-style-numeric">
+          {`% ${percentage}`}
+        </span>
+      )}
       isLoading={isLoading}
       icon={icon}
       color={color}
