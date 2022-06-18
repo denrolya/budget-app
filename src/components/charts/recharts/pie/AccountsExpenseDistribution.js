@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Card } from 'reactstrap';
 import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip,
 } from 'recharts';
 import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
+import { HEX_COLORS } from 'src/constants/color';
 
 import { amountInPercentage } from 'src/utils/common';
 import AccountName from 'src/components/AccountName';
@@ -60,6 +61,9 @@ CustomTooltip.propTypes = {
 };
 
 const AccountDistribution = ({ data, height }) => {
+  const onSectorEnter = (_, index) => setActive(index);
+  const [active, setActive] = useState();
+
   const total = useMemo(() => sumBy(data, 'value'), [data]);
 
   return (
@@ -75,15 +79,23 @@ const AccountDistribution = ({ data, height }) => {
           </filter>
         </defs>
         <Pie
-          data={data}
           labelLine={false}
           outerRadius={140}
           startAngle={90}
           endAngle={450}
           dataKey="value"
+          data={data}
+          onMouseEnter={onSectorEnter}
+          onMouseLeave={() => setActive()}
         >
-          {data.map(({ account }) => (
-            <Cell filter="url(#shadow)" key={`account-${account.id}`} stroke={account.color} strokeWidth={2} fill={`${account.color}33`} />
+          {data.map(({ account }, index) => (
+            <Cell
+              filter="url(#shadow)"
+              key={`account-${account.id}`}
+              stroke={account.color}
+              strokeWidth={2}
+              fill={`${account.color}${active === index ? '33' : '11'}`}
+            />
           ))}
         </Pie>
         <Tooltip content={<CustomTooltip total={total} />} />

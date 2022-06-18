@@ -189,16 +189,14 @@ const Dashboard = ({
         </Row>
 
         <Row>
-          <Col sm={12}>
+          <Col sm={4}>
             <ExpenseCategoriesCard
               isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
               model={statistics.expenseCategoriesTree}
               onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
             />
           </Col>
-        </Row>
-        <Row>
-          <Col>
+          <Col sm={8}>
             <TransactionCategoriesTimelineCard
               isLoading={isStatisticsActionLoading('categoriesTimeline')}
               model={statistics.categoriesTimeline}

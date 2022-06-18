@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
-import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import snakeCase from 'voca/snake_case';
@@ -101,67 +100,65 @@ const Report = ({
       <section>
         <h1 id="incomes" className="cursor-pointer">Incomes</h1>
         <UncontrolledCollapse defaultOpen toggler="#incomes">
-          <Masonry
-            breakpointCols={{
-              default: 3,
-              700: 2,
-              500: 1,
-            }}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
-          >
-            <SimpleStatisticsCard
-              isLoading={isStatisticsActionLoading('totalIncome')}
-              title="Total Income"
-              content={
-                <MoneyValue bold maximumFractionDigits={0} amount={statistics.totalIncome.data.current} />
-              }
-              footer={(
-                <AmountSinceLastPeriodMessage
-                  invertedColors
-                  period={previousPeriodText}
-                  previous={statistics.totalIncome.data.previous}
-                  current={statistics.totalIncome.data.current}
-                />
-              )}
-            />
-
-            {statistics.mainIncomeSource.data && (
-              <IconStatisticsCard
-                title="Main income source"
-                color="success"
-                className="card--hover-expand"
-                isLoading={isStatisticsActionLoading('mainIncomeSource')}
-                content={statistics.mainIncomeSource.data.name}
-                icon={statistics.mainIncomeSource.data.icon}
+          <Row>
+            <Col xs={4}>
+              <SimpleStatisticsCard
+                isLoading={isStatisticsActionLoading('totalIncome')}
+                title="Total Income"
+                content={
+                  <MoneyValue bold maximumFractionDigits={0} amount={statistics.totalIncome.data.current} />
+                }
+                footer={(
+                  <AmountSinceLastPeriodMessage
+                    invertedColors
+                    period={previousPeriodText}
+                    previous={statistics.totalIncome.data.previous}
+                    current={statistics.totalIncome.data.current}
+                  />
+                )}
               />
-            )}
+            </Col>
 
-            <SimpleStatisticsCard
-              isLoading={isStatisticsActionLoading('totalIncome')}
-              title="Daily income"
-              content={(
-                <MoneyValue
-                  bold
-                  maximumFractionDigits={0}
-                  amount={statistics.totalIncome.data.current / diffInDays}
+            <Col xs={4}>
+              {statistics.mainIncomeSource.data && (
+                <IconStatisticsCard
+                  title="Main income source"
+                  color="success"
+                  className="card--hover-expand"
+                  isLoading={isStatisticsActionLoading('mainIncomeSource')}
+                  content={statistics.mainIncomeSource.data.name}
+                  icon={statistics.mainIncomeSource.data.icon}
                 />
               )}
-              footer={(
-                <AmountSinceLastPeriodMessage
-                  invertedColors
-                  period={previousPeriodText}
-                  previous={statistics.totalIncome.data.previous / diffInDays}
-                  current={statistics.totalIncome.data.current / diffInDays}
-                />
-              )}
-            />
-          </Masonry>
-          <NewIncomeCategoriesCard
-            isLoading={isStatisticsActionLoading('newIncomeCategories')}
-            model={statistics.newIncomeCategories}
-            onUpdate={(model) => setStatistics('newIncomeCategories', model)}
-          />
+              <NewIncomeCategoriesCard
+                isLoading={isStatisticsActionLoading('newIncomeCategories')}
+                model={statistics.newIncomeCategories}
+                onUpdate={(model) => setStatistics('newIncomeCategories', model)}
+              />
+            </Col>
+
+            <Col xs={4}>
+              <SimpleStatisticsCard
+                isLoading={isStatisticsActionLoading('totalIncome')}
+                title="Daily income"
+                content={(
+                  <MoneyValue
+                    bold
+                    maximumFractionDigits={0}
+                    amount={statistics.totalIncome.data.current / diffInDays}
+                  />
+                )}
+                footer={(
+                  <AmountSinceLastPeriodMessage
+                    invertedColors
+                    period={previousPeriodText}
+                    previous={statistics.totalIncome.data.previous / diffInDays}
+                    current={statistics.totalIncome.data.current / diffInDays}
+                  />
+                )}
+              />
+            </Col>
+          </Row>
         </UncontrolledCollapse>
       </section>
 
@@ -173,79 +170,70 @@ const Report = ({
         <h3 id="general-expenses" className="cursor-pointer">General expenses</h3>
 
         <UncontrolledCollapse defaultOpen toggler="#general-expenses">
-          <Masonry
-            breakpointCols={{
-              default: 3,
-              700: 2,
-              500: 1,
-            }}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
-          >
-            <SimpleStatisticsCard
-              isLoading={isStatisticsActionLoading('totalExpense')}
-              title="Total Expense"
-              content={(
-                <MoneyValue
-                  bold
-                  maximumFractionDigits={0}
-                  amount={statistics.totalExpense.data.current}
+          <Row>
+            <Col xs={4}>
+              {statistics.totalIncome.data.current && statistics.totalExpense.data.current && (
+                <PercentageSpentFromIncomeCard
+                  isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')}
+                  percentage={amountInPercentage(
+                    statistics.totalIncome.data.current,
+                    statistics.totalExpense.data.current,
+                    0,
+                  )}
                 />
               )}
-              footer={(
-                <AmountSinceLastPeriodMessage
-                  period={previousPeriodText}
-                  previous={statistics.totalExpense.data.previous}
-                  current={statistics.totalExpense.data.current}
-                />
-              )}
-            />
-
-            <TotalExpensesByIntervalCard
-              isLoading={isStatisticsActionLoading('moneyFlow')}
-              model={statistics.moneyFlow}
-            />
-
-            <ExpenseCategoriesReviewCard
-              isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-              model={statistics.expenseCategoriesTree}
-            />
-
-            {statistics.totalIncome.data.current && statistics.totalExpense.data.current && (
-              <PercentageSpentFromIncomeCard
-                isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')}
-                percentage={amountInPercentage(
-                  statistics.totalIncome.data.current,
-                  statistics.totalExpense.data.current,
-                  0,
+              <TotalExpensesByIntervalCard
+                isLoading={isStatisticsActionLoading('moneyFlow')}
+                model={statistics.moneyFlow}
+              />
+              <NewExpenseCategoriesCard
+                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+                model={statistics.expenseCategoriesTree}
+              />
+              <AccountExpenseDistributionCard
+                isLoading={isStatisticsActionLoading('accountExpenseDistribution')}
+                model={statistics.accountExpenseDistribution}
+                onUpdate={(model) => setStatistics('accountExpenseDistribution', model)}
+              />
+            </Col>
+            <Col xs={4}>
+              <SimpleStatisticsCard
+                isLoading={isStatisticsActionLoading('totalExpense')}
+                title="Total Expense"
+                content={(
+                  <MoneyValue
+                    bold
+                    maximumFractionDigits={0}
+                    amount={statistics.totalExpense.data.current}
+                  />
+                )}
+                footer={(
+                  <AmountSinceLastPeriodMessage
+                    period={previousPeriodText}
+                    previous={statistics.totalExpense.data.previous}
+                    current={statistics.totalExpense.data.current}
+                  />
                 )}
               />
-            )}
-
-            <AccountExpenseDistributionCard
-              isLoading={isStatisticsActionLoading('accountExpenseDistribution')}
-              model={statistics.accountExpenseDistribution}
-              onUpdate={(model) => setStatistics('accountExpenseDistribution', model)}
-            />
-
-            <NewExpenseCategoriesCard
-              isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-              model={statistics.expenseCategoriesTree}
-            />
-
-            <ExpenseCategoriesByWeekdaysCard
-              isLoading={isStatisticsActionLoading('expenseCategoriesByWeekdays')}
-              model={statistics.expenseCategoriesByWeekdays}
-              onUpdate={(model) => setStatistics('expenseCategoriesByWeekdays', model)}
-            />
-          </Masonry>
-
-          <ExpenseCategoriesCard
-            showDailyAnnual
-            isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-            model={statistics.expenseCategoriesTree}
-            onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
-          />
+              <ExpenseCategoriesReviewCard
+                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+                model={statistics.expenseCategoriesTree}
+              />
+              <ExpenseCategoriesByWeekdaysCard
+                isLoading={isStatisticsActionLoading('expenseCategoriesByWeekdays')}
+                model={statistics.expenseCategoriesByWeekdays}
+                onUpdate={(model) => setStatistics('expenseCategoriesByWeekdays', model)}
+              />
+            </Col>
+            <Col xs={4}>
+              <ExpenseCategoriesCard
+                showDailyAnnual
+                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+                model={statistics.expenseCategoriesTree}
+                onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
+              />
+            </Col>
+          </Row>
         </UncontrolledCollapse>
 
         <h3 id="food-expenses" className="cursor-pointer">Food expenses</h3>

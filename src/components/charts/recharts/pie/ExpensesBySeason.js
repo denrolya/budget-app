@@ -2,7 +2,10 @@ import moment from 'moment-timezone';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  PieChart, Pie, Sector, ResponsiveContainer,
+  PieChart,
+  Pie,
+  Sector,
+  ResponsiveContainer,
 } from 'recharts';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
@@ -21,7 +24,7 @@ const renderActiveShape = ({
   value,
 }) => (
   <g>
-    <text x={cx} y={cy} dy={-5} dx={-5} fontSize="30" textAnchor="middle" fill={HEX_COLORS.text}>
+    <text dy={-5} dx={-5} fontSize="30" textAnchor="middle" fill={HEX_COLORS.text} x={cx} y={cy}>
       {symbol}
       {' '}
       {value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
@@ -125,16 +128,16 @@ const ExpensesBySeason = ({ data }) => {
         <Pie
           clockwise
           filter="url(#shadow)"
-          startAngle={270}
-          endAngle={-270}
           stroke="none"
           cx="50%"
           cy="50%"
-          paddingAngle={5}
           innerRadius="85%"
           outerRadius="90%"
           dataKey="value"
           activeIndex={active}
+          startAngle={270}
+          endAngle={-270}
+          paddingAngle={5}
           activeShape={(renderProps) => renderActiveShape({ ...renderProps, symbol })}
           data={chartData}
           symbol={symbol}

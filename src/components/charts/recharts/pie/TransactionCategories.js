@@ -74,7 +74,7 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
   }, [data, selectedCategory]);
 
   return (
-    <ResponsiveContainer width="100%" height={window.isMobile ? 300 : '100%'}>
+    <ResponsiveContainer width="100%" height={300}>
       <PieChart>
         <defs>
           <filter id="shadow" height="200%">
@@ -86,9 +86,9 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
           labelLine={false}
           outerRadius="100%"
           innerRadius="70%"
+          dataKey="total"
           startAngle={90}
           endAngle={450}
-          dataKey="total"
           data={chartData}
           onDoubleClick={({ name }) => onClick(name)}
           onMouseEnter={onSectorEnter}

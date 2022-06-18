@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Col, Row } from 'reactstrap';
 
 import CategoriesList from 'src/components/CategoriesList';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
@@ -23,27 +22,23 @@ const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
   }
 
   return (
-    <Row noGutters>
-      <Col md={12} lg={12} xl={8}>
+    <TimeperiodStatisticsCard
+      isLoading={isLoading}
+      className="card-expense-categories"
+      model={model}
+      onUpdate={onUpdate}
+    >
+      <div>
         <TransactionCategories data={data} selectedCategory={selectedCategory} onClick={selectCategory} />
-      </Col>
-      <Col md={12} lg={12} xl={4}>
-        <TimeperiodStatisticsCard
-          isLoading={isLoading}
-          className="card-expense-categories"
-          model={model}
-          onUpdate={onUpdate}
-        >
-          <CategoriesList
-            data={data}
-            onCategorySelect={selectCategory}
-            selectedCategory={selectedCategory}
-            from={from}
-            to={to}
-          />
-        </TimeperiodStatisticsCard>
-      </Col>
-    </Row>
+      </div>
+      <CategoriesList
+        data={data}
+        onCategorySelect={selectCategory}
+        selectedCategory={selectedCategory}
+        from={from}
+        to={to}
+      />
+    </TimeperiodStatisticsCard>
   );
 };
 
