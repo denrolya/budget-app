@@ -82,24 +82,24 @@ const ExpensesBySeason = ({ data }) => {
     data.forEach(({ date, expense }) => {
       const month = moment.unix(date).month();
       switch (month) {
+        case 0:
         case 1:
-        case 2:
-        case 12:
+        case 11:
           result[0] += expense;
           break;
+        case 2:
         case 3:
         case 4:
-        case 5:
           result[1] += expense;
           break;
+        case 5:
         case 6:
         case 7:
-        case 8:
           result[2] += expense;
           break;
+        case 8:
         case 9:
         case 10:
-        case 11:
           result[3] += expense;
           break;
           // no default

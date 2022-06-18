@@ -207,9 +207,8 @@ const Report = ({
             />
 
             <ExpenseCategoriesReviewCard
-              isLoading={isStatisticsActionLoading('mainExpenseCategoriesReview')}
-              model={statistics.mainExpenseCategoriesReview}
-              onUpdate={(model) => setStatistics('mainExpenseCategoriesReview', model)}
+              isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+              model={statistics.expenseCategoriesTree}
             />
 
             {statistics.totalIncome.data.current && statistics.totalExpense.data.current && (

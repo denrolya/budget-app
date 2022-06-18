@@ -66,14 +66,28 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
           </linearGradient>
         </defs>
 
-        <Bar filter="url(#shadow)" dataKey="previous" fill="url(#previous-gradient)" dot={false} stroke={HEX_COLORS.default} />
-        <Bar filter="url(#shadow)" dataKey="current" fill="url(#current-gradient)" dot={false} stroke={HEX_COLORS.info} />
+        <Bar
+          filter="url(#shadow)"
+          dataKey="previous"
+          fill="url(#previous-gradient)"
+          dot={false}
+          stroke={HEX_COLORS.default}
+          radius={[8, 8, 8, 8]}
+        />
+        <Bar
+          filter="url(#shadow)"
+          dataKey="total"
+          fill="url(#current-gradient)"
+          dot={false}
+          stroke={HEX_COLORS.info}
+          radius={[8, 8, 8, 8]}
+        />
 
         <YAxis
-          dataKey="current"
+          dataKey="previous"
           width={45}
           tick={{ fontSize: 9 }}
-          tickCount={3}
+          tickCount={8}
           axisLine={false}
           tickFormatter={yAxisTickFormatter}
         />
