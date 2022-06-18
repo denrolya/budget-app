@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import {
-  CartesianGrid, Area, AreaChart, ResponsiveContainer, Tooltip, YAxis,
-} from 'recharts';
 import { Card } from 'reactstrap';
+import {
+  CartesianGrid,
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  YAxis,
+} from 'recharts';
 import color from 'randomcolor';
 import PropTypes from 'prop-types';
 import snakeCase from 'voca/snake_case';
@@ -20,11 +25,11 @@ const CustomTooltip = ({ active, payload }) => {
 
   return (
     <Card body className="px-3 py-2">
-      <h5 className="mb-0">
+      <h4 className="mb-1 text-white">
         <i aria-hidden className="ion-ios-calendar" />
         {' '}
         {payload[0].payload.name}
-      </h5>
+      </h4>
       <p>
         <MoneyValue bold amount={payload[0].value} maximumFractionDigits={0} />
       </p>

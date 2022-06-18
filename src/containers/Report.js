@@ -229,10 +229,8 @@ const Report = ({
             />
 
             <NewExpenseCategoriesCard
-              key="newExpenseCategories"
-              isLoading={isStatisticsActionLoading('newExpenseCategories')}
-              model={statistics.newExpenseCategories}
-              onUpdate={(model) => setStatistics('newExpenseCategories', model)}
+              isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+              model={statistics.expenseCategoriesTree}
             />
 
             <ExpenseCategoriesByWeekdaysCard

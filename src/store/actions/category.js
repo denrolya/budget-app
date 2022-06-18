@@ -1,4 +1,5 @@
 import orderBy from 'lodash/orderBy';
+import moment from 'moment-timezone';
 import { createActions } from 'reduxsauce';
 
 import axios from 'src/utils/http';
@@ -35,7 +36,14 @@ export const fetchList = () => async (dispatch) => {
 
   try {
     const response = await axios.get('api/categories');
-    const categories = orderBy(response.data['hydra:member'], 'id', 'asc');
+    const categories = orderBy(
+      response.data['hydra:member'],
+      'id',
+      'asc',
+    ).map(({ createdAt, ...cat }) => ({
+      ...cat,
+      createdAt: moment(createdAt),
+    }));
     dispatch(Creators.fetchListSuccess(categories));
   } catch (e) {
     notify('error', 'Fetch Category List');

@@ -34,7 +34,7 @@ const UtilityCostsByIntervalCard = ({
           <>
             <i aria-hidden className={icon} style={{ color }} />
             {' '}
-            <MoneyValue amount={total} maximumFractionDigits={0} />
+            <MoneyValue bold amount={total} maximumFractionDigits={0} />
           </>
         )}
         footer={<UtilityCosts name={name} data={values} color={color} />}

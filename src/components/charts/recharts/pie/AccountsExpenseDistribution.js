@@ -37,7 +37,7 @@ const CustomTooltip = ({ active, payload, total }) => {
         <MoneyValue bold currency={account.currency} amount={amount} maximumFractionDigits={0} />
       </p>
       <p className="mb-0">
-        <span className="font-weight-bold">
+        <span className="font-weight-bold font-style-numeric">
           {amountInPercentage(total, value, 0)}
           %
         </span>

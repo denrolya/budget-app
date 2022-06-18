@@ -27,7 +27,7 @@ const ExpenseCategoriesReviewCard = ({
   return (
     <TimeperiodStatisticsCard
       title="Main expense categories"
-      className="card-chart card--hover-expand"
+      className="card-chart"
       showControls={false}
       isLoading={isLoading}
       model={model}
