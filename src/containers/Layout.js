@@ -130,25 +130,29 @@ const Layout = ({
         </div>
       </div>
 
-      <DraftCashExpenseForm />
+      {isVitalDataLoaded && (
+        <>
+          <DraftCashExpenseForm />
 
-      <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
-        <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
-      </ModalForm>
+          <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
+            <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
+          </ModalForm>
 
-      <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
+          <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
 
-      <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
-        <AccountForm toggleModal={toggleAccountModal} />
-      </ModalForm>
+          <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
+            <AccountForm toggleModal={toggleAccountModal} />
+          </ModalForm>
 
-      <button
-        type="button"
-        className="fixed-plugin"
-        onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
-      >
-        <i aria-hidden className="fa fa-plus fa-2x" />
-      </button>
+          <button
+            type="button"
+            className="fixed-plugin"
+            onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
+          >
+            <i aria-hidden className="fa fa-plus fa-2x" />
+          </button>
+        </>
+      )}
     </>
   );
   /* eslint-enable react/jsx-props-no-spreading */

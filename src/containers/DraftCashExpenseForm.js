@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import {
   Col, FormGroup, Input, Label,
 } from 'reactstrap';
-import { useActiveAccounts, useDefaultCashAccount } from 'src/contexts/AccountsContext';
+import { useAccounts, useDefaultCashAccount } from 'src/contexts/AccountsContext';
 import { useUnknownExpenseCategory } from 'src/contexts/CategoriesContext';
 import { isActionLoading } from 'src/utils/common';
 import { toggleDraftExpenseModal } from 'src/store/actions/ui';
@@ -16,7 +16,7 @@ import { toggleDraftExpenseModal } from 'src/store/actions/ui';
 import { registerTransaction } from 'src/store/actions/transaction';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
-import { EXPENSE_TYPE, VALIDATION_SCHEMA } from 'src/constants/transactions';
+import { INITIAL_FORM_DATA, VALIDATION_SCHEMA } from 'src/constants/transactions';
 import ModalForm from 'src/components/forms/ModalForm';
 
 const DraftCashExpenseForm = ({
@@ -25,33 +25,18 @@ const DraftCashExpenseForm = ({
   onSubmit,
   toggleModal,
 }) => {
-  const accountOptions = useActiveAccounts();
-  const defaultCashAccount = useDefaultCashAccount();
+  const accountOptions = useAccounts();
+  const defaultCashAccount = useDefaultCashAccount()?.id;
   const unknownExpenseCategory = useUnknownExpenseCategory()?.id;
   const [form, setForm] = useState({
     initialValues: {
-      type: EXPENSE_TYPE,
-      amount: '',
-      account: '',
-      category: '',
-      executedAt: moment().format(MOMENT_DATETIME_FORMAT),
-      note: '',
-      compensations: [],
+      ...INITIAL_FORM_DATA,
+      account: defaultCashAccount,
+      category: unknownExpenseCategory,
       isDraft: true,
     },
     validationSchema: VALIDATION_SCHEMA,
   });
-
-  useEffect(() => {
-    setForm({
-      ...form,
-      initialValues: {
-        ...form.initialValues,
-        category: unknownExpenseCategory,
-        account: defaultCashAccount,
-      },
-    });
-  }, [unknownExpenseCategory]);
 
   useEffect(() => {
     setForm({
@@ -97,13 +82,13 @@ const DraftCashExpenseForm = ({
                   <Label for="amount">Amount*</Label>
                   <Field
                     autoFocus
+                    min={0}
                     id="amount"
                     name="amount"
                     type="number"
                     step="any"
                     placeholder="Enter the amount"
                     as={Input}
-                    min={0}
                     invalid={touched.amount && !!errors.amount}
                     value={amount}
                   />
@@ -113,9 +98,7 @@ const DraftCashExpenseForm = ({
 
               <Col md={6}>
                 <FormGroup>
-                  <Label for="accountSelect">
-                    Account*
-                  </Label>
+                  <Label for="accountSelect">Account*</Label>
                   <Input
                     type="select"
                     name="account"
@@ -123,9 +106,9 @@ const DraftCashExpenseForm = ({
                     value={account}
                     onChange={({ target }) => setFieldValue('account', target.value)}
                   >
-                    <option value="">----------------</option>
+                    <option value="">------------</option>
                     {accountOptions.map(({ id, name, archivedAt }) => (
-                      <option key={`account-option-${id}`} value={id}>
+                      <option key={`account-option-${id}`} value={parseInt(id, 10)}>
                         {name}
                         {' '}
                         {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
