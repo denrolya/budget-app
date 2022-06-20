@@ -109,28 +109,32 @@ const TransactionCategoriesTimeline = ({ data }) => {
             </feMerge>
           </filter>
         </defs>
+
         <CartesianGrid opacity={0.2} vertical={false} stroke={HEX_COLORS.text} />
-        {Object.keys(data).map((category) => (
-          <Bar
-            type="monotone"
-            strokeWidth={2}
-            fillOpacity={1}
-            filter="url(#shadow)"
-            dot={false}
-            radius={[8, 8, 8, 8]}
-            key={category}
-            name={category}
-            dataKey={`values.${category}`}
-            stroke={color({
+        {Object
+          .keys(data)
+          .map((category) => {
+            const hexColor = color({
               luminosity: 'dark',
               seed: category,
-            })}
-            fill={color({
-              luminosity: 'dark',
-              seed: category,
-            })}
-          />
-        ))}
+            });
+            console.log(hexColor);
+            return (
+              <Bar
+                type="monotone"
+                strokeWidth={2}
+                fillOpacity={1}
+                filter="url(#shadow)"
+                dot={false}
+                radius={[8, 8, 8, 8]}
+                key={category}
+                name={category}
+                dataKey={`values.${category}`}
+                stroke={hexColor}
+                fill={`${hexColor}33`}
+              />
+            );
+          })}
 
         <YAxis
           axisLine={false}

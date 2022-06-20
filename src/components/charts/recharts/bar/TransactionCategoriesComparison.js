@@ -21,15 +21,19 @@ const CustomTooltip = ({ active, payload, selectedYear }) => {
         {' '}
         {payload[0].payload.name}
       </h4>
-      <p className="text-default mb-0">
+      <p className="mb-0">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
         {selectedYear - 1}
-        :
-        <MoneyValue bold amount={payload?.[0]?.value} maximumFractionDigits={0} />
+        {': '}
+        <MoneyValue bold className="text-default" amount={payload?.[0]?.value} maximumFractionDigits={0} />
       </p>
-      <p className="text-info mb-0">
+      <p className="mb-0">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
         {selectedYear}
-        :
-        <MoneyValue bold amount={Math.abs(payload?.[1]?.value)} maximumFractionDigits={0} />
+        {': '}
+        <MoneyValue bold className="text-info" amount={Math.abs(payload?.[1]?.value)} maximumFractionDigits={0} />
       </p>
     </Card>
   );
@@ -56,30 +60,24 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
           <filter id="shadow" height="200%">
             <feDropShadow dx="0" dy="10" stdDeviation="10" />
           </filter>
-          <linearGradient id="previous-gradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={`${HEX_COLORS.default}`} stopOpacity={0.2} />
-            <stop offset="50%" stopColor={`${HEX_COLORS.default}11`} stopOpacity={0.4} />
-          </linearGradient>
-          <linearGradient id="current-gradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={HEX_COLORS.info} stopOpacity={0.4} />
-            <stop offset="50%" stopColor={`${HEX_COLORS.info}11`} stopOpacity={0.2} />
-          </linearGradient>
         </defs>
 
         <Bar
           filter="url(#shadow)"
           dataKey="previous"
-          fill="url(#previous-gradient)"
+          fill={`${HEX_COLORS.default}33`}
           dot={false}
           stroke={HEX_COLORS.default}
+          strokeWidth={2}
           radius={[8, 8, 8, 8]}
         />
         <Bar
           filter="url(#shadow)"
           dataKey="total"
-          fill="url(#current-gradient)"
+          fill={`${HEX_COLORS.info}33`}
           dot={false}
           stroke={HEX_COLORS.info}
+          strokeWidth={2}
           radius={[8, 8, 8, 8]}
         />
 
