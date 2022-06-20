@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ExchangeRatesContext from 'src/contexts/ExchangeRatesContext';
@@ -6,35 +6,17 @@ import ExchangeRatesContext from 'src/contexts/ExchangeRatesContext';
 import { fetch as fetchExchangeRates } from 'src/store/actions/exchangeRates';
 
 const ExchangeRatesProvider = ({ exchangeRates, fetchExchangeRates, children }) => {
-  const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
-    let isMounted = true;
-
     const fetchData = async () => {
-      if (isMounted) {
-        setIsLoading(true);
-      }
-
       try {
         await fetchExchangeRates();
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+      } catch (e) {
+        console.error(e);
       }
     };
 
     fetchData();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <ExchangeRatesContext.Provider value={exchangeRates}>

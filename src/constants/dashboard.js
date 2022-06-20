@@ -35,7 +35,7 @@ export const AVAILABLE_STATISTICS = [{
   fetchPreviousPeriod: true,
 }, {
   name: 'expenseCategoriesTree',
-  path: 'api/transactions/statistics/categories-tree',
+  path: 'api/categories/tree',
   additionalParams: {
     type: EXPENSE_TYPE,
   },

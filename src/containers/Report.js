@@ -55,11 +55,7 @@ const Report = ({
 
   useEffect(() => {
     updateReport();
-  }, [code]);
-
-  useEffect(() => {
-    updateReport();
-  }, [from.year()]);
+  }, [code, from.year()]);
 
   return (
     <>

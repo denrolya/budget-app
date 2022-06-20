@@ -1,4 +1,5 @@
 import { createActions } from 'reduxsauce';
+import { EXPENSE_TYPE } from 'src/constants/transactions';
 import camelCase from 'voca/camel_case';
 import capitalize from 'voca/capitalize';
 
@@ -102,16 +103,22 @@ const customHandlers = {
   expenseCategoriesTree: (path, params) => async (dispatch, getState) => {
     dispatch(Creators.fetchStatisticsExpenseCategoriesTreeRequest());
 
-    const getSelectedPeriodDataRequest = axios.get(path, { params });
+    const getSelectedPeriodDataRequest = axios.get(path, {
+      params: {
+        type: EXPENSE_TYPE,
+        'transactions.executedAt[after]': params['executedAt[after]'],
+        'transactions.executedAt[before]': params['executedAt[before]'],
+      },
+    });
 
     const { from, to } = getState().dashboard.expenseCategoriesTree;
     const previousPeriod = generatePreviousPeriod(from, to);
 
     const getPreviousPeriodDataRequest = axios.get(path, {
       params: {
-        ...params,
-        'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
-        'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
+        type: EXPENSE_TYPE,
+        'transactions.executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
+        'transactions.executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
       },
     });
 

@@ -33,10 +33,6 @@ const Dashboard = ({
 
   useEffect(() => {
     updateDashboard();
-  }, []);
-
-  useEffect(() => {
-    updateDashboard();
   }, [code]);
 
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);

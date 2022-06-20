@@ -127,7 +127,7 @@ export const randomMoneyFlowData = () => {
   while (endOfYear.diff(startOfYear, 'days') >= 0) {
     result.push({
       date: startOfYear.clone().unix(),
-      expense: -randomFloat(),
+      expense: randomFloat(),
       income: randomFloat(),
     });
 

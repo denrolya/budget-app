@@ -65,9 +65,9 @@ const TransactionList = ({
     return () => resetPagination();
   }, []);
 
-  useEffect(() => {
-    fetchList();
-  }, [code]);
+  // useEffect(() => {
+  //   fetchList();
+  // }, [code]);
 
   useLayoutEffect(() => {
     if (firstUpdate.current) {
