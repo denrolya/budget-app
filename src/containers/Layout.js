@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Hotkeys from 'react-hot-keys';
 import { connect } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router-dom';
@@ -15,10 +15,9 @@ import Header from 'src/components/layout/Header';
 import Sidebar from 'src/components/layout/Sidebar';
 import { ROUTE_DASHBOARD, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
-import { isActionLoading, isActionResolved, copyTokenToClipboard } from 'src/utils/common';
+import { isActionLoading, copyTokenToClipboard } from 'src/utils/common';
 import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
-import { fetchList as fetchDebts } from 'src/store/actions/debt';
 import { registerTransaction } from 'src/store/actions/transaction';
 import { switchBaseCurrency } from 'src/store/actions/user';
 import {
@@ -56,10 +55,8 @@ const Layout = ({
   isAccountModalOpened,
   isTransferRequestInProgress,
   isAssetsLoading,
-  isVitalDataLoaded,
   updateDashboard,
   registerTransaction,
-  fetchDebts,
 }) => {
   const toggleTransactionForm = useTransactionForm();
   const toggleNewTransaction = () => toggleTransactionForm({
@@ -72,10 +69,6 @@ const Layout = ({
     delta: 40,
     preventDefaultTouchmoveEvent: false,
   });
-
-  useEffect(() => {
-    fetchDebts();
-  }, []);
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -123,36 +116,30 @@ const Layout = ({
             isSidebarOpened={isSidebarOpened}
           />
           <div className="content">
-            {(isVitalDataLoaded) && (
-              <Outlet />
-            ) }
+            <Outlet />
           </div>
         </div>
       </div>
 
-      {isVitalDataLoaded && (
-        <>
-          <DraftCashExpenseForm />
+      <DraftCashExpenseForm />
 
-          <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
-            <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
-          </ModalForm>
+      <ModalForm title="Add Transfer" isOpen={isTransferModalOpened} toggleModal={toggleTransferModal}>
+        <TransferForm isLoading={isTransferRequestInProgress} toggleModal={toggleTransferModal} />
+      </ModalForm>
 
-          <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
+      <DebtForm title="New Debt" isOpen={isDebtModalOpened} toggleModal={toggleDebtModal} />
 
-          <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
-            <AccountForm toggleModal={toggleAccountModal} />
-          </ModalForm>
+      <ModalForm title="Add Account" isOpen={isAccountModalOpened} toggleModal={toggleAccountModal}>
+        <AccountForm toggleModal={toggleAccountModal} />
+      </ModalForm>
 
-          <button
-            type="button"
-            className="fixed-plugin"
-            onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
-          >
-            <i aria-hidden className="fa fa-plus fa-2x" />
-          </button>
-        </>
-      )}
+      <button
+        type="button"
+        className="fixed-plugin"
+        onClick={window.isMobile ? toggleDraftExpenseModal : toggleNewTransaction}
+      >
+        <i aria-hidden className="fa fa-plus fa-2x" />
+      </button>
     </>
   );
   /* eslint-enable react/jsx-props-no-spreading */
@@ -160,13 +147,11 @@ const Layout = ({
 
 Layout.defaultProps = {
   colorScheme: 'gray',
-  isVitalDataLoaded: false,
   totalDebt: 0,
 };
 
 Layout.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
-  fetchDebts: PropTypes.func.isRequired,
   isAccountModalOpened: PropTypes.bool.isRequired,
   isAssetsLoading: PropTypes.bool.isRequired,
   isDarkModeOn: PropTypes.bool.isRequired,
@@ -189,7 +174,6 @@ Layout.propTypes = {
   updateDashboard: PropTypes.func.isRequired,
   colorScheme: PropTypes.oneOf(['blue', 'gray', 'indigo', 'lightblue', 'primary', 'green']),
   totalDebt: PropTypes.number,
-  isVitalDataLoaded: PropTypes.bool,
 };
 
 const mapStateToProps = ({
@@ -204,7 +188,6 @@ const mapStateToProps = ({
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
   totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.baseCurrency]),
   isAssetsLoading: isActionLoading(ui.ACCOUNT_FETCH_LIST) || isActionLoading(ui.DEBT_FETCH_LIST),
-  isVitalDataLoaded: isActionResolved(ui.ACCOUNT_FETCH_LIST) && isActionResolved(ui.DEBT_FETCH_LIST) && isActionResolved(ui.EXCHANGE_RATES_FETCH),
 });
 
 export default connect(mapStateToProps, {
@@ -221,5 +204,4 @@ export default connect(mapStateToProps, {
   updateDashboard,
   registerTransaction,
   switchBaseCurrency,
-  fetchDebts,
 })(Layout);
