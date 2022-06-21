@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import { Card } from 'reactstrap';
 import cn from 'classnames';
 import {
-  Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 
 import { MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
@@ -11,12 +17,10 @@ import MoneyValue from 'src/components/MoneyValue';
 import { CURRENCIES } from 'src/constants/currency';
 import { HEX_COLORS } from 'src/constants/color';
 
-const CustomTooltip = ({ active, payload, account }) => {
-  if (!active) {
-    return null;
-  }
+const AccountBalance = ({ account }) => {
+  const yAxisTickFormatter = (val) => `${CURRENCIES[account.currency].symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
-  return (
+  const tooltipFormatter = ({ active, payload }) => (active && payload?.length) && (
     <Card body className="px-3 py-2">
       <h4 className="mb-1 text-white">
         <i aria-hidden className="ion-ios-calendar" />
@@ -29,35 +33,18 @@ const CustomTooltip = ({ active, payload, account }) => {
           'text-danger': payload[0].value < 0,
         })}
       >
-        <MoneyValue bold amount={payload[0].value} currency={account.currency} maximumFractionDigits={0} />
+        <MoneyValue bold maximumFractionDigits={0} amount={payload[0].value} currency={account.currency} />
       </p>
     </Card>
   );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-  payload: [],
-};
-
-CustomTooltip.propTypes = {
-  account: PropTypes.shape({
-    currency: PropTypes.string.isRequired,
-  }).isRequired,
-  payload: PropTypes.array,
-  active: PropTypes.bool,
-};
-
-const AccountBalance = ({ account }) => {
-  const yAxisTickFormatter = (val) => `${CURRENCIES[account.currency].symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
   return (
     <ResponsiveContainer width="100%" height={200}>
       <AreaChart data={account.logs}>
         <defs>
           <linearGradient id={`${account.id}-gradient`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={HEX_COLORS.success} stopOpacity={0.4} />
-            <stop offset="75%" stopColor={`${HEX_COLORS.success}11`} stopOpacity={0.2} />
+            <stop offset="0%" stopOpacity={0.4} stopColor={HEX_COLORS.success} />
+            <stop offset="75%" stopOpacity={0.2} stopColor={`${HEX_COLORS.success}11`} />
           </linearGradient>
         </defs>
 
@@ -82,7 +69,7 @@ const AccountBalance = ({ account }) => {
 
         <CartesianGrid opacity={0.1} vertical={false} stroke={HEX_COLORS.text} />
 
-        <Tooltip content={<CustomTooltip account={account} />} />
+        <Tooltip content={tooltipFormatter} />
       </AreaChart>
     </ResponsiveContainer>
   );

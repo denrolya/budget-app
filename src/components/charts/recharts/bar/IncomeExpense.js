@@ -31,36 +31,6 @@ const INTERVALS = {
   '10y': [moment().subtract(10, 'years'), moment()],
 };
 
-const CustomTooltip = ({ active, payload, label }) => {
-  if (!active) {
-    return null;
-  }
-
-  const date = moment.unix(label);
-
-  return (
-    <Card body className="px-3 py-2">
-      <h4 className="mb-1">{date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h4>
-      <p className="text-success mb-0">
-        <MoneyValue bold amount={payload?.[1]?.value} maximumFractionDigits={0} />
-      </p>
-      <p className="text-danger mb-0">
-        <MoneyValue bold amount={Math.abs(payload?.[0]?.value)} maximumFractionDigits={0} />
-      </p>
-    </Card>
-  );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-};
-
-CustomTooltip.propTypes = {
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  payload: PropTypes.array.isRequired,
-  active: PropTypes.bool,
-};
-
 /**
  * TODO: Format ticks & tooltips by interval
  */
@@ -87,6 +57,18 @@ const MoneyFlowChart = () => {
 
     return index % 7 ? '' : date.format('MMMM');
   };
+
+  const tooltipFormatter = ({ active, payload, label }) => (active && payload?.length) && (
+    <Card body className="px-3 py-2">
+      <h4 className="mb-1">{moment.unix(label).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h4>
+      <p className="text-success mb-0">
+        <MoneyValue bold maximumFractionDigits={0} amount={payload?.[1]?.value} />
+      </p>
+      <p className="text-danger mb-0">
+        <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.value)} />
+      </p>
+    </Card>
+  );
 
   return (
     <div>
@@ -141,7 +123,7 @@ const MoneyFlowChart = () => {
 
             <CartesianGrid opacity={0.1} vertical={false} />
             <Legend onClick={({ value }) => toggleDisplayType(value)} />
-            <Tooltip cursor={false} content={<CustomTooltip />} />
+            <Tooltip cursor={false} content={tooltipFormatter} />
           </BarChart>
         </ResponsiveContainer>
       )}

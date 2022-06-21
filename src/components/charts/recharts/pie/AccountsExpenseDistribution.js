@@ -5,7 +5,6 @@ import {
 } from 'recharts';
 import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
-import { HEX_COLORS } from 'src/constants/color';
 
 import { amountInPercentage } from 'src/utils/common';
 import AccountName from 'src/components/AccountName';
@@ -17,54 +16,43 @@ import {
   ACCOUNT_TYPE_INTERNET,
 } from 'src/constants/account';
 
-const CustomTooltip = ({ active, payload, total }) => {
-  if (!active) {
-    return null;
-  }
-
-  const { account, amount, value } = payload[0].payload;
-
-  return (
-    <Card body className="px-3 py-2">
-      <h4
-        className="mb-1"
-        style={{
-          color: account.color,
-        }}
-      >
-        <AccountName account={account} />
-      </h4>
-      <p className="mb-0 text-white">
-        <MoneyValue bold currency={account.currency} amount={amount} maximumFractionDigits={0} />
-      </p>
-      <p className="mb-0">
-        <span className="font-weight-bold font-style-numeric">
-          {amountInPercentage(total, value, 0)}
-          %
-        </span>
-        {' '}
-        from total
-      </p>
-    </Card>
-  );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-  payload: [],
-};
-
-CustomTooltip.propTypes = {
-  total: PropTypes.number.isRequired,
-  active: PropTypes.bool,
-  payload: PropTypes.array,
-};
-
 const AccountDistribution = ({ data, height }) => {
   const onSectorEnter = (_, index) => setActive(index);
   const [active, setActive] = useState();
 
   const total = useMemo(() => sumBy(data, 'value'), [data]);
+
+  const tooltipFormatter = ({ active, payload }) => {
+    if (!active || !payload?.length) {
+      return null;
+    }
+
+    const { account, amount, value } = payload[0].payload;
+
+    return (
+      <Card body className="px-3 py-2">
+        <h4
+          className="mb-1"
+          style={{
+            color: account.color,
+          }}
+        >
+          <AccountName account={account} />
+        </h4>
+        <p className="mb-0 text-white">
+          <MoneyValue bold currency={account.currency} amount={amount} maximumFractionDigits={0} />
+        </p>
+        <p className="mb-0">
+          <span className="font-weight-bold font-style-numeric">
+            {amountInPercentage(total, value, 0)}
+            %
+          </span>
+          {' '}
+          from total
+        </p>
+      </Card>
+    );
+  };
 
   return (
     <ResponsiveContainer width="100%" height={height}>
@@ -98,7 +86,7 @@ const AccountDistribution = ({ data, height }) => {
             />
           ))}
         </Pie>
-        <Tooltip content={<CustomTooltip total={total} />} />
+        <Tooltip content={tooltipFormatter} />
       </PieChart>
     </ResponsiveContainer>
   );

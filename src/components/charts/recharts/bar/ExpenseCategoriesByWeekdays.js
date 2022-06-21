@@ -11,12 +11,12 @@ import {
 import MoneyValue from 'src/components/MoneyValue';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
-const CustomTooltip = ({ active, payload, label }) => {
-  if (!active) {
-    return null;
-  }
+const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
+  const { symbol } = useBaseCurrency();
 
-  return (
+  const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+
+  const tooltipFormatter = ({ active, payload, label }) => (active && payload?.length) && (
     <Card body className="px-3 py-2">
       <h4 className="mb-1">
         <i aria-hidden className="ion-ios-calendar" />
@@ -39,22 +39,6 @@ const CustomTooltip = ({ active, payload, label }) => {
       ))}
     </Card>
   );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-};
-
-CustomTooltip.propTypes = {
-  payload: PropTypes.array.isRequired,
-  active: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
-  const { symbol } = useBaseCurrency();
-
-  const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -93,7 +77,7 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
           axisLine={false}
           tickFormatter={yAxisTickFormatter}
         />
-        <Tooltip cursor={false} content={<CustomTooltip />} />
+        <Tooltip cursor={false} content={tooltipFormatter} />
       </BarChart>
     </ResponsiveContainer>
   );

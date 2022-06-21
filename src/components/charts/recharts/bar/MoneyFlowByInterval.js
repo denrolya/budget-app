@@ -11,50 +11,6 @@ import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import { HEX_COLORS } from 'src/constants/color';
 
-const CustomTooltip = ({ active, payload, label }) => {
-  if (!active) {
-    return null;
-  }
-
-  const expense = payload.find(({ name }) => name === EXPENSE_TYPE);
-  const income = payload.find(({ name }) => name === INCOME_TYPE);
-
-  const date = moment.unix(label);
-
-  return (
-    <Card body className="px-3 py-2">
-      <h4 className="mb-1 text-white">
-        <i aria-hidden className="ion-ios-calendar" />
-        {' '}
-        {date.format('MMMM')}
-      </h4>
-      {income && (
-        <p className="mb-0">
-          {'Income: '}
-          <MoneyValue bold className="text-success" maximumFractionDigits={0} amount={income.value} />
-        </p>
-      )}
-      {expense && (
-        <p className="mb-0">
-          {'Expense: '}
-          <MoneyValue bold className="text-danger" maximumFractionDigits={0} amount={Math.abs(expense.value)} />
-        </p>
-      )}
-    </Card>
-  );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-  payload: [],
-};
-
-CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  payload: PropTypes.array,
-};
-
 /**
  * TODO: Format ticks & tooltips by interval
  */
@@ -64,8 +20,6 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
   const [displayValues, setDisplayValues] = useState(TRANSACTION_TYPES);
   const toggleDisplayType = (type) => setDisplayValues(xor(displayValues, [type]));
 
-  const xTickFormatter = (val) => moment.unix(val).format('MMMM');
-
   useEffect(() => {
     setChartData(
       data.map(({ expense, ...rest }) => ({
@@ -74,6 +28,41 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
       })),
     );
   }, [data]);
+
+  const xTickFormatter = (val) => moment.unix(val).format('MMMM');
+
+  const tooltipFormatter = ({ active, payload, label }) => {
+    if (!active) {
+      return null;
+    }
+
+    const expense = payload.find(({ name }) => name === EXPENSE_TYPE);
+    const income = payload.find(({ name }) => name === INCOME_TYPE);
+
+    const date = moment.unix(label);
+
+    return (
+      <Card body className="px-3 py-2">
+        <h4 className="mb-1 text-white">
+          <i aria-hidden className="ion-ios-calendar" />
+          {' '}
+          {date.format('MMMM')}
+        </h4>
+        {income && (
+          <p className="mb-0">
+            {'Income: '}
+            <MoneyValue bold className="text-success" maximumFractionDigits={0} amount={income.value} />
+          </p>
+        )}
+        {expense && (
+          <p className="mb-0">
+            {'Expense: '}
+            <MoneyValue bold className="text-danger" maximumFractionDigits={0} amount={Math.abs(expense.value)} />
+          </p>
+        )}
+      </Card>
+    );
+  };
 
   return chartData.length > 0 && (
     <ResponsiveContainer width="100%" height={height}>
@@ -122,7 +111,7 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
 
         <CartesianGrid opacity={0.1} vertical={false} stroke={HEX_COLORS.text} />
         <Legend onClick={({ value }) => toggleDisplayType(value)} />
-        <Tooltip cursor={false} content={<CustomTooltip displayValues={displayValues} />} />
+        <Tooltip cursor={false} content={tooltipFormatter} />
       </BarChart>
     </ResponsiveContainer>
   );

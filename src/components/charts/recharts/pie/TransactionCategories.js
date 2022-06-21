@@ -14,52 +14,6 @@ import { amountInPercentage, expenseRatioColor } from 'src/utils/common';
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
 
-const CustomTooltip = ({ active, payload }) => {
-  if (!active) {
-    return null;
-  }
-
-  const {
-    previous, total, name, icon,
-  } = payload[0].payload;
-  const color = expenseRatioColor(amountInPercentage(previous, total, 0));
-
-  return (
-    <Card body className="px-3 py-2">
-      <h4
-        className="mb-1"
-        style={{
-          color: HEX_COLORS[color],
-        }}
-      >
-        <i aria-hidden className={icon} />
-        {' '}
-        {name}
-      </h4>
-      <p className="mb-0">
-        Selected Period:
-        {' '}
-        <MoneyValue bold className="text-white" amount={total} maximumFractionDigits={0} />
-      </p>
-      <p className="mb-0">
-        Previous Period:
-        {' '}
-        <MoneyValue bold className="text-white" amount={previous} maximumFractionDigits={0} />
-      </p>
-    </Card>
-  );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-  payload: [],
-};
-
-CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  payload: PropTypes.array,
-};
-
 const TransactionCategories = ({ data, selectedCategory, onClick }) => {
   const total = useMemo(() => sumBy(data, 'value'), [data]);
   const [chartData, setChartData] = useState([]);
@@ -72,6 +26,42 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
       selectedSubtree.children.map((node) => node.model).reverse(),
     );
   }, [data, selectedCategory]);
+
+  const tooltipFormatter = ({ active, payload }) => {
+    if (!active || !payload?.length) {
+      return null;
+    }
+
+    const {
+      previous, total, name, icon,
+    } = payload[0].payload;
+    const color = expenseRatioColor(amountInPercentage(previous, total, 0));
+
+    return (
+      <Card body className="px-3 py-2">
+        <h4
+          className="mb-1"
+          style={{
+            color: HEX_COLORS[color],
+          }}
+        >
+          <i aria-hidden className={icon} />
+          {' '}
+          {name}
+        </h4>
+        <p className="mb-0">
+          Selected Period:
+          {' '}
+          <MoneyValue bold className="text-white" amount={total} maximumFractionDigits={0} />
+        </p>
+        <p className="mb-0">
+          Previous Period:
+          {' '}
+          <MoneyValue bold className="text-white" amount={previous} maximumFractionDigits={0} />
+        </p>
+      </Card>
+    );
+  };
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -135,7 +125,7 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
               );
             })}
         </Pie>
-        <Tooltip content={<CustomTooltip total={total} />} />
+        <Tooltip content={tooltipFormatter} />
       </PieChart>
     </ResponsiveContainer>
   );

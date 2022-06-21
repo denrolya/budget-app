@@ -9,12 +9,12 @@ import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
-const CustomTooltip = ({ active, payload, selectedYear }) => {
-  if (!active) {
-    return null;
-  }
+const TransactionCategoriesComparison = ({ data, selectedYear }) => {
+  const { symbol } = useBaseCurrency();
 
-  return (
+  const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+
+  const tooltipFormatter = ({ active, payload }) => (active && payload?.length) && (
     <Card body className="px-3 py-2">
       <h4 className="mb-1 text-white">
         <i aria-hidden className={payload[0].payload.icon} />
@@ -37,21 +37,6 @@ const CustomTooltip = ({ active, payload, selectedYear }) => {
       </p>
     </Card>
   );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-};
-
-CustomTooltip.propTypes = {
-  payload: PropTypes.array.isRequired,
-  selectedYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  active: PropTypes.bool,
-};
-
-const TransactionCategoriesComparison = ({ data, selectedYear }) => {
-  const { symbol } = useBaseCurrency();
-  const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -92,7 +77,7 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
         <XAxis dataKey="name" axisLine={false} />
 
         <CartesianGrid opacity={0.1} vertical={false} />
-        <Tooltip cursor={false} content={<CustomTooltip selectedYear={selectedYear} />} />
+        <Tooltip cursor={false} content={selectedYear} />
       </BarChart>
     </ResponsiveContainer>
   );

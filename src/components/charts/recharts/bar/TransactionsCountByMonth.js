@@ -1,18 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar,
+  ResponsiveContainer,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Bar,
 } from 'recharts';
 import { Card } from 'reactstrap';
 
 import { HEX_COLORS } from 'src/constants/color';
 
-const CustomTooltip = ({ active, payload }) => {
-  if (!active) {
-    return null;
-  }
-
-  return (
+const TransactionsCountByMonth = ({ height, width, data }) => {
+  const tooltipFormatter = ({ active, payload }) => (active && payload?.length) && (
     <Card body className="px-3 py-2">
       <p className="mb-0">
         {payload[0].value}
@@ -23,44 +25,34 @@ const CustomTooltip = ({ active, payload }) => {
       </p>
     </Card>
   );
+
+  return (
+    <ResponsiveContainer width={width} height={height}>
+      <BarChart data={data} barGap="90%" barCategoryGap="70%">
+        <defs>
+          <filter id="shadow" height="200%">
+            <feDropShadow dx="0" dy="10" stdDeviation="10" />
+          </filter>
+        </defs>
+        <CartesianGrid vertical={false} stroke={HEX_COLORS.default} />
+
+        <YAxis
+          dataKey="value"
+          tickCount={3}
+          stroke={HEX_COLORS.text}
+          tick={{ fontSize: 9 }}
+          width={20}
+          axisLine={false}
+          tickLine={false}
+        />
+        <XAxis hide dataKey="date" axisLine={false} tickLine={false} />
+
+        <Tooltip cursor={false} content={tooltipFormatter} />
+        <Bar filter="url(#shadow)" dataKey="value" width={5} fill={HEX_COLORS.secondary} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
 };
-
-CustomTooltip.defaultProps = {
-  active: false,
-  payload: [],
-};
-
-CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  payload: PropTypes.array,
-};
-
-const TransactionsCountByMonth = ({ height, width, data }) => (
-  <ResponsiveContainer width={width} height={height}>
-    <BarChart data={data} barGap="90%" barCategoryGap="70%">
-      <defs>
-        <filter id="shadow" height="200%">
-          <feDropShadow dx="0" dy="10" stdDeviation="10" />
-        </filter>
-      </defs>
-      <CartesianGrid vertical={false} stroke={HEX_COLORS.default} />
-
-      <YAxis
-        dataKey="value"
-        tickCount={3}
-        stroke={HEX_COLORS.text}
-        tick={{ fontSize: 9 }}
-        width={20}
-        axisLine={false}
-        tickLine={false}
-      />
-      <XAxis hide dataKey="date" axisLine={false} tickLine={false} />
-
-      <Tooltip cursor={false} content={<CustomTooltip />} />
-      <Bar filter="url(#shadow)" dataKey="value" width={5} fill={HEX_COLORS.secondary} />
-    </BarChart>
-  </ResponsiveContainer>
-);
 
 TransactionsCountByMonth.defaultProps = {
   height: 400,

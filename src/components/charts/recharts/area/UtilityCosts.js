@@ -18,34 +18,6 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const SEASONS = ['Winter', 'Spring', 'Summer', 'Autumn'];
 
-const CustomTooltip = ({ active, payload }) => {
-  if (!active) {
-    return null;
-  }
-
-  return (
-    <Card body className="px-3 py-2">
-      <h4 className="mb-1 text-white">
-        <i aria-hidden className="ion-ios-calendar" />
-        {' '}
-        {payload[0].payload.name}
-      </h4>
-      <p>
-        <MoneyValue bold amount={payload[0].value} maximumFractionDigits={0} />
-      </p>
-    </Card>
-  );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-};
-
-CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  payload: PropTypes.array,
-};
-
 const UtilityCosts = ({ data, name, color }) => {
   const { symbol } = useBaseCurrency();
   const [chartData, setChartData] = useState([]);
@@ -60,6 +32,19 @@ const UtilityCosts = ({ data, name, color }) => {
   }, [data]);
 
   const yAxisTickFormatter = (val) => `${symbol} ${val}`;
+
+  const tooltipFormatter = ({ active, payload }) => (active && payload?.length) && (
+    <Card body className="px-3 py-2">
+      <h4 className="mb-1 text-white">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
+        {payload[0].payload.name}
+      </h4>
+      <p>
+        <MoneyValue bold amount={payload[0].value} maximumFractionDigits={0} />
+      </p>
+    </Card>
+  );
 
   return (
     <ResponsiveContainer width="100%" height={150}>
@@ -91,7 +76,7 @@ const UtilityCosts = ({ data, name, color }) => {
           tickFormatter={yAxisTickFormatter}
         />
 
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={tooltipFormatter} />
       </AreaChart>
     </ResponsiveContainer>
   );

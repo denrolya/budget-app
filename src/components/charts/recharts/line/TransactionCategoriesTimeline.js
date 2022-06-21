@@ -18,51 +18,6 @@ import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
-const CustomTooltip = ({ active, payload }) => {
-  if (!active) {
-    return null;
-  }
-
-  const { date, values } = payload[0].payload;
-  const categories = Object.keys(values);
-
-  return (
-    <Card body className="px-3 py-2">
-      <h4 className="mb-1 text-white">
-        <i aria-hidden className="ion-ios-calendar" />
-        {' '}
-        {moment.unix(date).format('MMMM')}
-      </h4>
-      {categories.map((category) => (
-        <p className="mb-0" key={category}>
-          {category}
-          :
-          {' '}
-          <span
-            style={{
-              color: color({
-                luminosity: 'bright',
-                seed: category,
-              }),
-            }}
-          >
-            <MoneyValue bold amount={values[category]} maximumFractionDigits={0} />
-          </span>
-        </p>
-      ))}
-    </Card>
-  );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-};
-
-CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  payload: PropTypes.array,
-};
-
 const TransactionCategoriesTimeline = ({ data }) => {
   const { symbol } = useBaseCurrency();
   const [chartData, setChartData] = useState();
@@ -88,6 +43,42 @@ const TransactionCategoriesTimeline = ({ data }) => {
   }, [data]);
 
   const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+
+  const tooltipFormatter = ({ active, payload }) => {
+    if (!active || !payload?.length) {
+      return null;
+    }
+
+    const { date, values } = payload[0].payload;
+    const categories = Object.keys(values);
+
+    return (
+      <Card body className="px-3 py-2">
+        <h4 className="mb-1 text-white">
+          <i aria-hidden className="ion-ios-calendar" />
+          {' '}
+          {moment.unix(date).format('MMMM')}
+        </h4>
+        {categories.map((category) => (
+          <p className="mb-0" key={category}>
+            {category}
+            :
+            {' '}
+            <span
+              style={{
+                color: color({
+                  luminosity: 'bright',
+                  seed: category,
+                }),
+              }}
+            >
+              <MoneyValue bold amount={values[category]} maximumFractionDigits={0} />
+            </span>
+          </p>
+        ))}
+      </Card>
+    );
+  };
 
   return (
     <ResponsiveContainer width="100%" height={250}>
@@ -147,7 +138,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
         <XAxis hide dataKey="date" axisLine={false} tickLine={false} stroke={HEX_COLORS.text} />
 
         <Legend iconType="square" verticalAlign="top" />
-        <Tooltip cursor={false} content={<CustomTooltip />} />
+        <Tooltip cursor={false} content={tooltipFormatter} />
       </BarChart>
     </ResponsiveContainer>
   );
