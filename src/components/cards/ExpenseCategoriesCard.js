@@ -7,7 +7,7 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import CenteredMessage from 'src/components/messages/CenteredMessage';
 import TransactionCategories from 'src/components/charts/recharts/pie/TransactionCategories';
 
-const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
+const CategoryTreeCard = ({ isLoading, model, onUpdate }) => {
   const { from, to, data } = model;
   const [selectedCategory, selectCategory] = useState(data.model.name);
 
@@ -42,14 +42,14 @@ const ExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
   );
 };
 
-ExpenseCategoriesCard.defaultProps = {
+CategoryTreeCard.defaultProps = {
   isLoading: false,
 };
 
-ExpenseCategoriesCard.propTypes = {
+CategoryTreeCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
   onUpdate: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
 };
 
-export default ExpenseCategoriesCard;
+export default CategoryTreeCard;

@@ -1,11 +1,12 @@
-import { EXPENSE_TYPE } from 'src/constants/transactions';
 import axios from 'src/utils/http';
 import camelCase from 'voca/camel_case';
 import capitalize from 'voca/capitalize';
 import { createActions } from 'reduxsauce';
 
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { AVAILABLE_STATISTICS } from 'src/constants/report';
+
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
 import { generatePreviousPeriod } from 'src/utils/datetime';
 
@@ -116,6 +117,42 @@ const customHandlers = {
       );
     } catch (e) {
       dispatch(Creators.fetchStatisticsExpenseCategoriesTreeFailure(e));
+    }
+  },
+  incomeCategoriesTree: (path, params) => async (dispatch, getState) => {
+    dispatch(Creators.fetchStatisticsIncomeCategoriesTreeRequest());
+
+    const getSelectedPeriodDataRequest = axios.get(path, {
+      params: {
+        type: INCOME_TYPE,
+        'transactions.executedAt[after]': params['executedAt[after]'],
+        'transactions.executedAt[before]': params['executedAt[before]'],
+      },
+    });
+
+    const { from, to } = getState().report.expenseCategoriesTree;
+    const previousPeriod = generatePreviousPeriod(from, to);
+
+    const getPreviousPeriodDataRequest = axios.get(path, {
+      params: {
+        type: INCOME_TYPE,
+        'transactions.executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
+        'transactions.executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
+      },
+    });
+
+    try {
+      const [current, previous] = await axios.all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest]);
+      const currentPeriodData = current.data?.['hydra:member'][0];
+      const previousPeriodData = previous.data?.['hydra:member'][0];
+
+      dispatch(
+        Creators.fetchStatisticsIncomeCategoriesTreeSuccess(
+          generateCategoriesStatisticsTree(currentPeriodData, previousPeriodData),
+        ),
+      );
+    } catch (e) {
+      dispatch(Creators.fetchStatisticsIncomeCategoriesTreeFailure(e));
     }
   },
 };

@@ -29,6 +29,12 @@ export const AVAILABLE_STATISTICS = [
       type: EXPENSE_TYPE,
     },
   }, {
+    name: 'incomeCategoriesTree',
+    path: 'api/categories/tree',
+    additionalParams: {
+      type: INCOME_TYPE,
+    },
+  }, {
     name: 'totalIncome',
     path: 'api/transactions/statistics/sum',
     additionalParams: {
@@ -78,13 +84,9 @@ export const AVAILABLE_STATISTICS = [
       type: EXPENSE_TYPE,
     },
   },
-  // 'mainExpenseCategoriesReview',
   // 'newIncomeCategories',
   // 'newExpenseCategories',
-  // 'accountExpenseDistribution',
   // 'expenseCategoriesByWeekdays',
-  // 'utilityCostsByInterval',
-  // 'totalExpensesByInterval',
 ];
 
 export const INITIAL_STATE = {
@@ -142,6 +144,11 @@ export const INITIAL_STATE = {
     },
   }),
   expenseCategoriesTree: new TimeperiodStatistics({
+    from: startOfYear,
+    to: endOfYear,
+    data: new TreeModel().parse({ name: 'All categories' }),
+  }),
+  incomeCategoriesTree: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
     data: new TreeModel().parse({ name: 'All categories' }),

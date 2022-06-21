@@ -5,13 +5,15 @@ import upperCase from 'voca/upper_case';
 import { Types } from 'src/store/actions/dashboard';
 import { AVAILABLE_STATISTICS, INITIAL_STATE } from 'src/constants/dashboard';
 
-const generateStatisticsHandlers = () => AVAILABLE_STATISTICS.map(({ name }) => ({
+const generateStatisticsHandlers = () => AVAILABLE_STATISTICS
+  .map(({ name }) => ({
   // eslint-disable-next-line default-param-last
-  [Types[`FETCH_STATISTICS_${upperCase(snakeCase(name))}_SUCCESS`]]: (state = INITIAL_STATE, action) => ({
-    ...state,
-    [name]: state[name].set('data', action[name]),
-  }),
-})).reduce((acc, curr) => Object.assign(acc, curr), {});
+    [Types[`FETCH_STATISTICS_${upperCase(snakeCase(name))}_SUCCESS`]]: (state = INITIAL_STATE, action) => ({
+      ...state,
+      [name]: state[name].set('data', action[name]),
+    }),
+  }))
+  .reduce((acc, curr) => Object.assign(acc, curr), {});
 
 const HANDLERS = {
   ...generateStatisticsHandlers(),

@@ -113,6 +113,12 @@ const Report = ({
                   />
                 )}
               />
+              <ExpenseCategoriesCard
+                showDailyAnnual
+                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
+                model={statistics.incomeCategoriesTree}
+                onUpdate={(newModel) => setStatistics('incomeCategoriesTree', newModel)}
+              />
             </Col>
 
             <Col xs={4}>
