@@ -1,37 +1,16 @@
-import cn from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Card } from 'reactstrap';
 import {
-  RadialBarChart, RadialBar, Legend, ResponsiveContainer, Tooltip, PolarAngleAxis,
+  RadialBarChart,
+  RadialBar,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  PolarAngleAxis,
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
-
-const CustomTooltip = ({ active, payload }) => {
-  if (!active) {
-    return null;
-  }
-
-  return (
-    <Card body className="px-3 py-2">
-      <h4 className="mb-1">{payload[0].payload.name}</h4>
-      <p className={cn('mb-0')}>
-        <MoneyValue bold amount={payload[0].payload.total} maximumFractionDigits={0} />
-      </p>
-    </Card>
-  );
-};
-
-CustomTooltip.defaultProps = {
-  active: false,
-  payload: [],
-};
-
-CustomTooltip.propTypes = {
-  active: PropTypes.bool,
-  payload: PropTypes.array,
-};
 
 const TransactionCategoriesRadial = ({ data }) => {
   const [chartData, setChartData] = useState([]);
@@ -46,6 +25,28 @@ const TransactionCategoriesRadial = ({ data }) => {
   useEffect(() => {
     setChartData(data);
   }, [data]);
+
+  const legendFormatter = (value, entry) => (
+    <>
+      <i aria-hidden className={entry.payload.icon} />
+      {'  '}
+      {entry.payload.name}
+      {': '}
+      <MoneyValue bold maximumFractionDigits={0} amount={entry.payload.total} />
+    </>
+  );
+
+  const tooltipFormatter = ({ active, payload }) => (active && payload && payload.length) && (
+    <Card body className="px-3 py-2">
+      <h4 className="mb-1" style={{ color: payload[0].payload.fill }}>
+        <i aria-hidden className={payload[0].payload.icon} />
+        {' '}
+        {payload[0].payload.name}
+        {': '}
+        <MoneyValue bold amount={payload[0].payload.total} maximumFractionDigits={0} />
+      </h4>
+    </Card>
+  );
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -86,16 +87,18 @@ const TransactionCategoriesRadial = ({ data }) => {
           minAngle={15}
           label={false}
         />
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={tooltipFormatter} />
         {showLegend && (
           <Legend
-            iconSize={10}
+            iconSize={0}
             align="left"
             layout="vertical"
             verticalAlign="middle"
+            iconType="circle"
             wrapperStyle={{
               lineHeight: '24px',
             }}
+            formatter={legendFormatter}
           />
         )}
       </RadialBarChart>

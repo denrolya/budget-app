@@ -118,7 +118,6 @@ const TransactionCategoriesTimeline = ({ data }) => {
               luminosity: 'dark',
               seed: category,
             });
-            console.log(hexColor);
             return (
               <Bar
                 type="monotone"
