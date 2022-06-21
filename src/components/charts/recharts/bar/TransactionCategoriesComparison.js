@@ -26,14 +26,24 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
         {' '}
         {selectedYear - 1}
         {': '}
-        <MoneyValue bold className="text-default" amount={payload?.[0]?.value} maximumFractionDigits={0} />
+        <MoneyValue
+          bold
+          className="text-danger"
+          maximumFractionDigits={0}
+          amount={payload?.[0]?.value}
+        />
       </p>
       <p className="mb-0">
         <i aria-hidden className="ion-ios-calendar" />
         {' '}
         {selectedYear}
         {': '}
-        <MoneyValue bold className="text-info" amount={Math.abs(payload?.[1]?.value)} maximumFractionDigits={0} />
+        <MoneyValue
+          bold
+          className="text-success"
+          maximumFractionDigits={0}
+          amount={Math.abs(payload?.[1]?.value)}
+        />
       </p>
     </Card>
   );
@@ -50,18 +60,18 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
         <Bar
           filter="url(#shadow)"
           dataKey="previous"
-          fill={`${HEX_COLORS.default}33`}
+          fill={`${HEX_COLORS.danger}33`}
           dot={false}
-          stroke={HEX_COLORS.default}
+          stroke={HEX_COLORS.danger}
           strokeWidth={2}
           radius={[8, 8, 8, 8]}
         />
         <Bar
           filter="url(#shadow)"
           dataKey="total"
-          fill={`${HEX_COLORS.info}33`}
+          fill={`${HEX_COLORS.success}33`}
           dot={false}
-          stroke={HEX_COLORS.info}
+          stroke={HEX_COLORS.success}
           strokeWidth={2}
           radius={[8, 8, 8, 8]}
         />
