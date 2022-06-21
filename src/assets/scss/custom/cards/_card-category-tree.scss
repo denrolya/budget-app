@@ -1,4 +1,4 @@
-.card-expense-categories {
+.card-category-tree {
   .breadcrumb {
     &-item {
       &.active {
@@ -34,14 +34,14 @@
         right: -60px;
       }
 
-      &:hover .card-expense-categories__list-item-actions {
+      &:hover .card-category-tree__list-item-actions {
         right: 0;
       }
     }
   }
 }
 
-.wrapper:not(.white-content) .card-expense-categories {
+.wrapper:not(.white-content) .card-category-tree {
   a {
     color: rgba(255, 255, 255, 0.7) !important;
 

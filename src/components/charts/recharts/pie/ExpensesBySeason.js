@@ -24,7 +24,16 @@ const renderActiveShape = ({
   value,
 }) => (
   <g>
-    <text dy={-5} dx={-5} fontSize="30" textAnchor="middle" fill={HEX_COLORS.text} x={cx} y={cy}>
+    <text
+      dy={-5}
+      dx={-5}
+      fontSize="30"
+      textAnchor="middle"
+      fill={HEX_COLORS.white}
+      fontFamily="'Roboto Condensed', sans-serif"
+      x={cx}
+      y={cy}
+    >
       {symbol}
       {' '}
       {value.toLocaleString(undefined, { maximumFractionDigits: 0 })}

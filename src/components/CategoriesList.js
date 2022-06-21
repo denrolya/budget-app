@@ -18,6 +18,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import Breadcrumbs from 'src/components/CategoriesBreadcrumbs';
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import {
   amountInPercentage,
   arrowIcon,
@@ -33,6 +34,7 @@ const CategoriesList = ({
   onCategorySelect,
   from,
   to,
+  type,
 }) => {
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 
@@ -50,7 +52,7 @@ const CategoriesList = ({
     <>
       <Breadcrumbs selectedCategory={selectedCategory} selectCategory={onCategorySelect} tree={data} />
 
-      <ListGroup flush className="card-expense-categories__list">
+      <ListGroup flush className="card-category-tree__list">
         {selectedSubtree.children.map(({
           model: {
             id, name, icon, total, previous,
@@ -68,7 +70,7 @@ const CategoriesList = ({
             : 1;
 
           return (
-            <ListGroupItem className="p-1 card-expense-categories__list-item" key={name}>
+            <ListGroupItem className="p-1 card-category-tree__list-item" key={name}>
               <div className="d-flex justify-content-between align-center">
                 <div className="font-weight-light cursor-info py-1" id={`category-${key}`}>
                   <span className="w-25px mr-2 d-inline-block align-center">
@@ -92,7 +94,7 @@ const CategoriesList = ({
                   {'  '}
                   <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
                 </div>
-                <div className="text-nowrap card-expense-categories__list-item-actions">
+                <div className="text-nowrap card-category-tree__list-item-actions">
                   <MoneyValue bold className="mr-1 text-white" amount={total} maximumFractionDigits={0} />
                   <div className="d-inline-block">
                     <Link
@@ -136,20 +138,20 @@ const CategoriesList = ({
                         </td>
                       </tr>
                     )}
-                    {amountToPreviousPeriodRatio !== false && (
-                      <tr>
-                        <td>Previous period:</td>
-                        <td className="text-right font-style-numeric font-weight-bold">
+                    <tr>
+                      <td>Previous period:</td>
+                      <td className="text-right font-style-numeric font-weight-bold">
+                        {amountToPreviousPeriodRatio !== false && (
                           <span className={cn('mr-2', `text-${toPreviousRatioColor}`)}>
                             <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />
                             {' '}
                             {ratio(amountToPreviousPeriodRatio)}
                             %
                           </span>
-                          <MoneyValue maximumFractionDigits={0} amount={previous} />
-                        </td>
-                      </tr>
-                    )}
+                        )}
+                        <MoneyValue maximumFractionDigits={0} amount={previous} />
+                      </td>
+                    </tr>
                     {[
                       ['days', 'Daily'],
                       ['weeks', 'Weekly'],
@@ -253,7 +255,9 @@ const CategoriesList = ({
   );
 };
 
-CategoriesList.defaultProps = {};
+CategoriesList.defaultProps = {
+  type: EXPENSE_TYPE,
+};
 
 CategoriesList.propTypes = {
   data: PropTypes.object.isRequired,
@@ -261,6 +265,7 @@ CategoriesList.propTypes = {
   to: PropTypes.object.isRequired,
   selectedCategory: PropTypes.string.isRequired,
   onCategorySelect: PropTypes.func.isRequired,
+  type: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
 };
 
 export default memo(

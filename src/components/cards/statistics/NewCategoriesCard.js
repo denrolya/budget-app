@@ -2,21 +2,29 @@ import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Progress, Table } from 'reactstrap';
 import isEqual from 'lodash/isEqual';
+import MoneyValue from 'src/components/MoneyValue';
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 
-import { useExpenseCategories } from 'src/contexts/CategoriesContext';
+import { useCategories, useExpenseCategories, useIncomeCategories } from 'src/contexts/CategoriesContext';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { amountInPercentage } from 'src/utils/common';
 
 /** TODO: Style table as in daily expenses */
-const NewExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
+const NewCategoriesCard = ({
+  isLoading,
+  model,
+  onUpdate,
+  type,
+}) => {
   const { from } = model;
 
-  const expenseCategories = useExpenseCategories();
+  const categories = useCategories();
+
   const newCategories = useMemo(
-    () => expenseCategories.filter(({ createdAt }) => createdAt.year() === from.year()),
-    [expenseCategories, from.year()],
+    () => categories.filter(({ type: catType, createdAt }) => catType === type && createdAt.year() === from.year()),
+    [type, categories, from.year()],
   );
 
   const data = useMemo(
@@ -26,9 +34,13 @@ const NewExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
     [isLoading],
   );
 
+  if (data.length === 0) {
+    return null;
+  }
+
   return (
     <TimeperiodStatisticsCard
-      title="New expense categories"
+      title={`New ${type} categories`}
       className="card--hover-expand"
       showControls={false}
       isLoading={isLoading}
@@ -45,10 +57,15 @@ const NewExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
                 <td>
                   <i aria-hidden className={icon} />
                 </td>
-                <td>{name}</td>
+                <td>
+                  {name}
+                  {': '}
+                  <MoneyValue bold amount={total} maximumFractionDigits={total > 1 ? 0 : 2} />
+                </td>
                 <td>
                   <small className="d-block font-style-numeric">
-                    {percentage.toFixed(percentage > 1 ? 0 : 1)}
+                    {percentage === 0 && '0'}
+                    {percentage !== 0 && percentage.toFixed(percentage > 1 ? 0 : 1)}
                     %
                   </small>
                   <Progress striped color="danger" value={percentage} />
@@ -62,17 +79,18 @@ const NewExpenseCategoriesCard = ({ isLoading, model, onUpdate }) => {
   );
 };
 
-NewExpenseCategoriesCard.defaultProps = {
+NewCategoriesCard.defaultProps = {
   isLoading: false,
 };
 
-NewExpenseCategoriesCard.propTypes = {
+NewCategoriesCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
   onUpdate: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  type: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]).isRequired,
 };
 
 export default memo(
-  NewExpenseCategoriesCard,
+  NewCategoriesCard,
   (prevProps, nextProps) => isEqual(prevProps.model.data, nextProps.model.data) && isEqual(prevProps.isLoading, nextProps.isLoading),
 );

@@ -4,27 +4,27 @@ import React, { useEffect, useMemo } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 import { Row, Col, UncontrolledCollapse } from 'reactstrap';
 
 import { ANNUAL_REPORT_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { INCOME_TYPE, EXPENSE_TYPE } from 'src/constants/transactions';
 
 import { amountInPercentage, isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 
+import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { setStatistics, updateReport, setPeriod } from 'src/store/actions/report';
 
 import AccountExpenseDistributionCard from 'src/components/cards/statistics/AccountExpenseDistributionCard';
 import ExpenseCategoriesByWeekdaysCard from 'src/components/cards/statistics/ExpenseCategoriesByWeekdaysCard';
 import ExpenseCategoriesReviewCard from 'src/components/cards/statistics/ExpenseCategoriesReviewCard';
-import NewExpenseCategoriesCard from 'src/components/cards/statistics/NewExpenseCategoriesCard';
-import NewIncomeCategoriesCard from 'src/components/cards/statistics/NewIncomeCategoriesCard';
+import NewCategoriesCard from 'src/components/cards/statistics/NewCategoriesCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/PercentageSpentFromIncomeCard';
 import TotalExpensesByIntervalCard from 'src/components/cards/statistics/TotalExpensesByIntervalCard';
 import UtilityCostsByIntervalCard from 'src/components/cards/statistics/UtilityCostsByIntervalCard';
-import ExpenseCategoriesCard from 'src/components/cards/ExpenseCategoriesCard';
+import CategoryTreeCard from 'src/components/cards/CategoryTreeCard';
 import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
 import MoneyValue from 'src/components/MoneyValue';
 import SimpleStatisticsCard from 'src/components/cards/statistics/SimpleStatisticsCard';
@@ -113,33 +113,6 @@ const Report = ({
                   />
                 )}
               />
-              <ExpenseCategoriesCard
-                showDailyAnnual
-                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
-                model={statistics.incomeCategoriesTree}
-                onUpdate={(newModel) => setStatistics('incomeCategoriesTree', newModel)}
-              />
-            </Col>
-
-            <Col xs={4}>
-              {statistics.mainIncomeSource.data && (
-                <IconStatisticsCard
-                  title="Main income source"
-                  color="success"
-                  className="card--hover-expand"
-                  isLoading={isStatisticsActionLoading('mainIncomeSource')}
-                  content={statistics.mainIncomeSource.data.name}
-                  icon={statistics.mainIncomeSource.data.icon}
-                />
-              )}
-              <NewIncomeCategoriesCard
-                isLoading={isStatisticsActionLoading('newIncomeCategories')}
-                model={statistics.newIncomeCategories}
-                onUpdate={(model) => setStatistics('newIncomeCategories', model)}
-              />
-            </Col>
-
-            <Col xs={4}>
               <SimpleStatisticsCard
                 isLoading={isStatisticsActionLoading('totalIncome')}
                 title="Daily income"
@@ -160,6 +133,32 @@ const Report = ({
                 )}
               />
             </Col>
+            <Col xs={4}>
+              <CategoryTreeCard
+                showDailyAnnual
+                type={INCOME_TYPE}
+                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
+                model={statistics.incomeCategoriesTree}
+                onUpdate={(newModel) => setStatistics('incomeCategoriesTree', newModel)}
+              />
+            </Col>
+            <Col xs={4}>
+              {statistics.mainIncomeSource.data && (
+                <IconStatisticsCard
+                  title="Main income source"
+                  color="success"
+                  className="card--hover-expand"
+                  isLoading={isStatisticsActionLoading('mainIncomeSource')}
+                  content={statistics.mainIncomeSource.data.name}
+                  icon={statistics.mainIncomeSource.data.icon}
+                />
+              )}
+              <NewCategoriesCard
+                type={INCOME_TYPE}
+                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
+                model={statistics.incomeCategoriesTree}
+              />
+            </Col>
           </Row>
         </UncontrolledCollapse>
       </section>
@@ -173,6 +172,14 @@ const Report = ({
 
         <UncontrolledCollapse defaultOpen toggler="#general-expenses">
           <Row>
+            <Col xs={4}>
+              <CategoryTreeCard
+                showDailyAnnual
+                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
+                model={statistics.expenseCategoriesTree}
+                onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
+              />
+            </Col>
             <Col xs={4}>
               {statistics.totalIncome.data.current && statistics.totalExpense.data.current && (
                 <PercentageSpentFromIncomeCard
@@ -188,7 +195,8 @@ const Report = ({
                 isLoading={isStatisticsActionLoading('moneyFlow')}
                 model={statistics.moneyFlow}
               />
-              <NewExpenseCategoriesCard
+              <NewCategoriesCard
+                type={EXPENSE_TYPE}
                 isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
                 model={statistics.expenseCategoriesTree}
               />
@@ -225,14 +233,6 @@ const Report = ({
                 isLoading={isStatisticsActionLoading('expenseCategoriesByWeekdays')}
                 model={statistics.expenseCategoriesByWeekdays}
                 onUpdate={(model) => setStatistics('expenseCategoriesByWeekdays', model)}
-              />
-            </Col>
-            <Col xs={4}>
-              <ExpenseCategoriesCard
-                showDailyAnnual
-                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-                model={statistics.expenseCategoriesTree}
-                onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
               />
             </Col>
           </Row>

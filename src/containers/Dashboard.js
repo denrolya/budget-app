@@ -14,7 +14,7 @@ import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLas
 import PercentageSinceLastMonthMessage from 'src/components/messages/PercentageSinceLastMonthMessage';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { generateLinkToExpenses } from 'src/utils/routing';
-import ExpenseCategoriesCard from 'src/components/cards/ExpenseCategoriesCard';
+import CategoryTreeCard from 'src/components/cards/CategoryTreeCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/TransactionCategoriesTimelineCard';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
@@ -186,7 +186,7 @@ const Dashboard = ({
 
         <Row>
           <Col sm={4}>
-            <ExpenseCategoriesCard
+            <CategoryTreeCard
               isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
               model={statistics.expenseCategoriesTree}
               onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
