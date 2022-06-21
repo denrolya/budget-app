@@ -77,7 +77,7 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
         <XAxis dataKey="name" axisLine={false} />
 
         <CartesianGrid opacity={0.1} vertical={false} />
-        <Tooltip cursor={false} content={selectedYear} />
+        <Tooltip cursor={false} content={tooltipFormatter} />
       </BarChart>
     </ResponsiveContainer>
   );
