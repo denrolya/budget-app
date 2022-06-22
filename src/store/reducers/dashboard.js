@@ -30,11 +30,6 @@ const HANDLERS = {
       categoriesTimeline,
     ),
   }),
-  // eslint-disable-next-line default-param-last
-  [Types.FETCH_STATISTICS_MONEY_FLOW_SUCCESS]: (state = INITIAL_STATE, { moneyFlow }) => ({
-    ...state,
-    moneyFlow: state.moneyFlow.set('data', moneyFlow),
-  }),
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

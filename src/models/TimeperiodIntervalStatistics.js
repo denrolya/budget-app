@@ -8,6 +8,12 @@ export const DEFAULT_VALUES = {
   data: null,
 };
 
-class TimeperiodIntervalStatistics extends Record(DEFAULT_VALUES) {}
+class TimeperiodIntervalStatistics extends Record(DEFAULT_VALUES) {
+  diffIn(unitOfTime = 'days') {
+    return moment().isBetween(this.from, this.to)
+      ? moment().diff(this.from, unitOfTime) + 1
+      : this.to.diff(this.from, unitOfTime) + 1;
+  }
+}
 
 export default TimeperiodIntervalStatistics;

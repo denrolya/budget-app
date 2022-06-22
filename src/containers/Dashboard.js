@@ -65,7 +65,7 @@ const Dashboard = ({
     {
       key: 'short-statistics-food',
       item: () => {
-        const { from, to, data } = statistics.food;
+        const { from, to, data } = statistics.foodExpenses;
         const current = Math.abs(data.current);
         const previous = Math.abs(data.previous);
         return (
@@ -87,7 +87,7 @@ const Dashboard = ({
     {
       key: 'short-statistics-rent',
       item: () => {
-        const { from, to, data } = statistics.rent;
+        const { from, to, data } = statistics.rentExpenses;
         const current = Math.abs(data.current);
         const previous = Math.abs(data.previous);
         return (

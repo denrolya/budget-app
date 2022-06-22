@@ -2,8 +2,8 @@ import { createReducer } from 'reduxsauce';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
-import { AVAILABLE_STATISTICS, INITIAL_STATE } from 'src/constants/report';
 import { Types } from 'src/store/actions/report';
+import { AVAILABLE_STATISTICS, INITIAL_STATE } from 'src/constants/report';
 
 const generateStatisticsHandlers = () => AVAILABLE_STATISTICS
   .map(({ name }) => ({
@@ -32,11 +32,6 @@ const HANDLERS = {
 
     return newState;
   },
-  // eslint-disable-next-line default-param-last
-  [Types.FETCH_STATISTICS_MONEY_FLOW_SUCCESS]: (state = INITIAL_STATE, { moneyFlow }) => ({
-    ...state,
-    moneyFlow: state.moneyFlow.set('data', moneyFlow),
-  }),
   // eslint-disable-next-line default-param-last
   [Types.SET_STATISTICS]: (state = INITIAL_STATE, { name, newModel }) => ({
     ...state,

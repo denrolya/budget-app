@@ -84,8 +84,6 @@ export const AVAILABLE_STATISTICS = [
       type: EXPENSE_TYPE,
     },
   },
-  // 'newIncomeCategories',
-  // 'newExpenseCategories',
   // 'expenseCategoriesByWeekdays',
 ];
 
@@ -99,7 +97,6 @@ export const INITIAL_STATE = {
     from: startOfYear,
     to: endOfYear,
     data: {
-      // TEST DATA
       icon: 'ion-ios-download',
       name: 'Salary',
       value: randomFloat(),
@@ -175,102 +172,6 @@ export const INITIAL_STATE = {
       dayOfWeek: 1,
     },
   }),
-  mainExpenseCategoriesReview: new TimeperiodStatistics({
-    from: startOfYear,
-    to: endOfYear,
-    data: [
-      {
-        icon: 'ion-ios-restaurant',
-        name: 'Food & Drinks',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-      {
-        icon: 'ion-ios-home',
-        name: 'Rent',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-      {
-        icon: 'ion-ios-home',
-        name: 'Rent',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-      {
-        icon: 'mdi mdi-water-pump',
-        name: 'Utilities',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-      {
-        icon: 'ion-ios-cart',
-        name: 'Groceries',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-      {
-        icon: 'ion-ios-restaurant',
-        name: 'Eating Out',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-      {
-        icon: 'ion-ios-paper',
-        name: 'Tax',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-      {
-        icon: 'ion-ios-basket',
-        name: 'Shopping',
-        current: randomFloat(),
-        previous: randomFloat(),
-      },
-    ],
-  }),
-  newIncomeCategories: new TimeperiodStatistics({
-    from: startOfYear,
-    to: endOfYear,
-    data: [
-      {
-        name: 'Return on Investment',
-        icon: 'ion-ios-repeat',
-        value: randomFloat(),
-        percentage: randomFloat(0, 100),
-      },
-      {
-        name: 'Cashback',
-        icon: 'ion-ios-repeat',
-        value: randomFloat(),
-        percentage: randomFloat(0, 100),
-      },
-    ],
-  }),
-  newExpenseCategories: new TimeperiodStatistics({
-    from: startOfYear,
-    to: endOfYear,
-    data: [
-      {
-        name: 'Activities',
-        icon: 'ion-ios-people',
-        value: randomFloat(),
-        percentage: randomFloat(0, 100),
-      },
-      {
-        name: 'Education',
-        icon: 'ion-ios-school',
-        value: randomFloat(),
-        percentage: randomFloat(0, 100),
-      },
-      {
-        name: 'Fuel',
-        icon: 'mdi mdi-fuel',
-        value: randomFloat(),
-        percentage: randomFloat(0, 100),
-      },
-    ],
-  }),
   totalIncome: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
@@ -286,11 +187,6 @@ export const INITIAL_STATE = {
       current: randomFloat(),
       previous: randomFloat(),
     },
-  }),
-  percentageSpentFromIncome: new TimeperiodStatistics({
-    from: startOfYear,
-    to: endOfYear,
-    data: randomFloat(0, 100),
   }),
   dailyExpenseByCategories: new TimeperiodStatistics({
     from: startOfYear,

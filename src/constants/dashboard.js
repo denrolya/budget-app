@@ -18,7 +18,7 @@ export const AVAILABLE_STATISTICS = [{
   },
   fetchPreviousPeriod: true,
 }, {
-  name: 'food',
+  name: 'foodExpenses',
   path: 'api/transactions/statistics/sum',
   additionalParams: {
     categoryDeep: [1],
@@ -26,7 +26,7 @@ export const AVAILABLE_STATISTICS = [{
   },
   fetchPreviousPeriod: true,
 }, {
-  name: 'rent',
+  name: 'rentExpenses',
   path: 'api/transactions/statistics/sum',
   additionalParams: {
     categoryDeep: [2, 18], // Rent, Utilities
@@ -54,13 +54,13 @@ export const INITIAL_STATE = {
       previous: 0,
     },
   }),
-  food: new TimeperiodStatistics({
+  foodExpenses: new TimeperiodStatistics({
     data: {
       current: 0,
       previous: 0,
     },
   }),
-  rent: new TimeperiodStatistics({
+  rentExpenses: new TimeperiodStatistics({
     data: {
       current: 0,
       previous: 0,

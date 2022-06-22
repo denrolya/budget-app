@@ -7,10 +7,10 @@ import {
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
+import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { rangeToString } from 'src/utils/datetime';
 import LoadingCard from 'src/components/cards/LoadingCard';
-import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import IntervalSwitch from 'src/components/IntervalSwitch';
 
 const TimeperiodStatisticsCard = ({
@@ -33,7 +33,7 @@ const TimeperiodStatisticsCard = ({
     }),
   );
 
-  const onIntervalChange = (interval) => onUpdate(model.set('interval', interval));
+  const onIntervalChange = (v) => onUpdate(model.set('interval', v));
 
   const showOnlyTitle = !!title && !showControls;
   const showIntervalSwitch = model instanceof TimeperiodIntervalStatistics && showControls;

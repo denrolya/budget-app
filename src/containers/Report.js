@@ -42,9 +42,9 @@ const Report = ({
 
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
 
-  const { from, to } = statistics.mainExpenseCategoriesReview;
+  const { from, to } = statistics.moneyFlow;
   const diffInDays = useMemo(
-    () => statistics.mainExpenseCategoriesReview.diffIn('days'),
+    () => statistics.moneyFlow.diffIn('days'),
     [from, to],
   );
   const previousYear = from.year() - 1;
@@ -143,7 +143,7 @@ const Report = ({
               />
             </Col>
             <Col xs={4}>
-              {statistics.mainIncomeSource.data && (
+              {statistics.incomeCategoriesTree.data && (
                 <IconStatisticsCard
                   title="Main income source"
                   color="success"

@@ -1,11 +1,11 @@
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import sumBy from 'lodash/sumBy';
-import PropTypes from 'prop-types';
-import React, { memo } from 'react';
 
-import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
+import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import MoneyValue from 'src/components/MoneyValue';
 import MoneyFlowChart from 'src/components/charts/recharts/bar/MoneyFlowByInterval';
 
@@ -21,7 +21,6 @@ const MoneyFlowCard = ({ isLoading, model, onUpdate }) => {
       showControls
       className="card-chart card-chart-170"
       bodyClassName="p-0"
-      title={<span className="d-none d-md-block">Money flow</span>}
       isLoading={isLoading}
       model={model}
       onUpdate={onUpdate}
