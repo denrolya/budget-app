@@ -7,21 +7,23 @@ import { CardBody, Col, Row } from 'reactstrap';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
+import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
+import LoadingCard from 'src/components/cards/LoadingCard';
+import MoneyValue from 'src/components/MoneyValue';
+
 import DailyExpenses from 'src/components/cards/statistics/simple/DailyExpenses';
 import FoodExpenses from 'src/components/cards/statistics/simple/FoodExpenses';
 import MonthExpenses from 'src/components/cards/statistics/simple/MonthExpenses';
 import RentUtilityExpenses from 'src/components/cards/statistics/simple/RentUtilityExpenses';
-import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
-import CategoryTreeCard from 'src/components/cards/CategoryTreeCard';
-import TransactionCategoriesTimelineCard from 'src/components/cards/TransactionCategoriesTimelineCard';
-import LoadingCard from 'src/components/cards/LoadingCard';
-import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
+
+import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
+import TransactionCategoriesTimelineCard from 'src/components/cards/statistics/withCharts/TransactionCategoriesTimelineCard';
+import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { isActionLoading } from 'src/utils/common';
 import { randomString } from 'src/utils/randomData';
 import { setStatistics, updateDashboard } from 'src/store/actions/dashboard';
-import MoneyValue from 'src/components/MoneyValue';
 
 const Dashboard = ({
   ui,

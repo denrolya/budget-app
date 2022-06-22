@@ -4,7 +4,6 @@ import React, { useEffect, useMemo } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import TotalIncome from 'src/components/cards/statistics/simple/TotalIncome';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 import { Row, Col, UncontrolledCollapse } from 'reactstrap';
@@ -19,17 +18,22 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { setStatistics, updateReport, setPeriod } from 'src/store/actions/report';
 
 import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
-import AccountExpenseDistributionCard from 'src/components/cards/statistics/AccountExpenseDistributionCard';
-import ExpenseCategoriesByWeekdaysCard from 'src/components/cards/statistics/ExpenseCategoriesByWeekdaysCard';
-import ExpenseCategoriesReviewCard from 'src/components/cards/statistics/ExpenseCategoriesReviewCard';
-import NewCategoriesCard from 'src/components/cards/statistics/NewCategoriesCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';
-import TotalExpensesByIntervalCard from 'src/components/cards/statistics/TotalExpensesByIntervalCard';
-import UtilityCostsByIntervalCard from 'src/components/cards/statistics/UtilityCostsByIntervalCard';
-import CategoryTreeCard from 'src/components/cards/CategoryTreeCard';
-import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
-import MoneyValue from 'src/components/MoneyValue';
+
+import TotalIncome from 'src/components/cards/statistics/simple/TotalIncome';
 import SimpleStatisticsCard from 'src/components/cards/statistics/simple/Card';
+
+import NewCategoriesCard from 'src/components/cards/statistics/NewCategoriesCard';
+
+import AccountExpenseDistributionCard from 'src/components/cards/statistics/withCharts/AccountExpenseDistributionCard';
+import ExpenseCategoriesByWeekdaysCard from 'src/components/cards/statistics/withCharts/ExpenseCategoriesByWeekdaysCard';
+import TotalExpensesByIntervalCard from 'src/components/cards/statistics/withCharts/TotalExpensesByIntervalCard';
+import ExpenseCategoriesReviewCard from 'src/components/cards/statistics/withCharts/ExpenseCategoriesReviewCard';
+import UtilityCostsByIntervalCard from 'src/components/cards/statistics/withCharts/UtilityCostsByIntervalCard';
+import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
+import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
+
+import MoneyValue from 'src/components/MoneyValue';
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
 
 const Report = ({

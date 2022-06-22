@@ -4,6 +4,9 @@ import { Carousel, CarouselItem, CarouselIndicators } from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
 
+/**
+ * TODO: Refactor into CarouselWithSwipe
+ */
 const CarouselCard = ({ isLoading, items }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
