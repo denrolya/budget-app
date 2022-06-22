@@ -8,7 +8,10 @@ import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import AccountsExpenseDistribution from 'src/components/charts/recharts/pie/AccountsExpenseDistribution';
 
 const AccountDistributionCard = ({
-  isLoading, height, model, onUpdate,
+  isLoading,
+  height,
+  model,
+  onUpdate,
 }) => {
   const data = useMemo(() => sortBy(model.data, 'value'), [model.data]);
 

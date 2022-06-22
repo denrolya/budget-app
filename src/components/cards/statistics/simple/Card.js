@@ -6,7 +6,7 @@ import { CardBody } from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
 
-const SimpleStatisticsCard = ({
+const Card = ({
   isLoading,
   title,
   content,
@@ -53,13 +53,13 @@ const SimpleStatisticsCard = ({
   return component;
 };
 
-SimpleStatisticsCard.defaultProps = {
+Card.defaultProps = {
   displayDateRange: false,
   footerPadding: true,
   isLoading: false,
 };
 
-SimpleStatisticsCard.propTypes = {
+Card.propTypes = {
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.element]).isRequired,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.element]).isRequired,
   displayDateRange: PropTypes.bool,
@@ -69,4 +69,4 @@ SimpleStatisticsCard.propTypes = {
   link: PropTypes.string,
 };
 
-export default SimpleStatisticsCard;
+export default Card;

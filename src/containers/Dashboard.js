@@ -4,22 +4,22 @@ import sumBy from 'lodash/sumBy';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { CardBody, Col, Row } from 'reactstrap';
-import moment from 'moment-timezone';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
-import SimpleStatisticsCard from 'src/components/cards/statistics/SimpleStatisticsCard';
-import CardsSet from 'src/components/CardsSet';
-import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
-import PercentageSinceLastMonthMessage from 'src/components/messages/PercentageSinceLastMonthMessage';
-import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { generateLinkToExpenses } from 'src/utils/routing';
+import DailyExpenses from 'src/components/cards/statistics/simple/DailyExpenses';
+import FoodExpenses from 'src/components/cards/statistics/simple/FoodExpenses';
+import MonthExpenses from 'src/components/cards/statistics/simple/MonthExpenses';
+import RentUtilityExpenses from 'src/components/cards/statistics/simple/RentUtilityExpenses';
+import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
 import CategoryTreeCard from 'src/components/cards/CategoryTreeCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/TransactionCategoriesTimelineCard';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
+
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { isActionLoading } from 'src/utils/common';
+import { randomString } from 'src/utils/randomData';
 import { setStatistics, updateDashboard } from 'src/store/actions/dashboard';
 import MoneyValue from 'src/components/MoneyValue';
 
@@ -45,82 +45,10 @@ const Dashboard = ({
 
   /* eslint-disable react/no-unstable-nested-components */
   const shortStatistics = [
-    {
-      key: 'short-statistics-month-expenses',
-      item: () => {
-        const { from, to, data } = statistics.monthExpenses;
-        const current = Math.abs(data.current);
-        const previous = Math.abs(data.previous);
-        return (
-          <SimpleStatisticsCard
-            isLoading={isStatisticsActionLoading('monthExpenses')}
-            link={generateLinkToExpenses(from.format(MOMENT_DATE_FORMAT), to.format(MOMENT_DATE_FORMAT))}
-            title={`Expenses in ${from.format('MMMM')}`}
-            content={<MoneyValue className="font-weight-bold" amount={current} maximumFractionDigits={0} />}
-            footer={<PercentageSinceLastMonthMessage previous={previous} current={current} />}
-          />
-        );
-      },
-    },
-    {
-      key: 'short-statistics-food',
-      item: () => {
-        const { from, to, data } = statistics.foodExpenses;
-        const current = Math.abs(data.current);
-        const previous = Math.abs(data.previous);
-        return (
-          <SimpleStatisticsCard
-            title="Food expenses"
-            isLoading={isStatisticsActionLoading('food')}
-            content={<MoneyValue className="font-weight-bold" amount={current} maximumFractionDigits={0} />}
-            footer={<PercentageSinceLastMonthMessage previous={previous} current={current} />}
-            link={generateLinkToExpenses(
-              from.format(MOMENT_DATE_FORMAT),
-              to.format(MOMENT_DATE_FORMAT),
-              null,
-              [1],
-            )}
-          />
-        );
-      },
-    },
-    {
-      key: 'short-statistics-rent',
-      item: () => {
-        const { from, to, data } = statistics.rentExpenses;
-        const current = Math.abs(data.current);
-        const previous = Math.abs(data.previous);
-        return (
-          <SimpleStatisticsCard
-            title="Rent & Utilities"
-            isLoading={isStatisticsActionLoading('rent')}
-            link={generateLinkToExpenses(
-              from.format(MOMENT_DATE_FORMAT),
-              to.format(MOMENT_DATE_FORMAT),
-              null,
-              [2, 18],
-            )}
-            content={<MoneyValue className="font-weight-bold" amount={current} maximumFractionDigits={0} />}
-            footer={<AmountSinceLastPeriodMessage current={current} previous={previous} />}
-          />
-        );
-      },
-    },
-    {
-      key: 'short-statistics-daily-expenses',
-      item: () => {
-        const current = Math.abs(statistics.monthExpenses.data.current) / moment().date();
-        const previous = Math.abs(statistics.monthExpenses.data.previous) / moment().subtract(1, 'month').daysInMonth();
-        return (
-          <SimpleStatisticsCard
-            title="Daily expenses"
-            isLoading={isStatisticsActionLoading('monthExpenses')}
-            content={<MoneyValue className="font-weight-bold" maximumFractionDigits={0} amount={current} />}
-            footer={<PercentageSinceLastMonthMessage previous={previous} current={current} />}
-          />
-        );
-      },
-    },
+    <MonthExpenses isLoading={isStatisticsActionLoading('monthExpenses')} model={statistics.monthExpenses} />,
+    <FoodExpenses isLoading={isStatisticsActionLoading('foodExpenses')} model={statistics.foodExpenses} />,
+    <RentUtilityExpenses isLoading={isStatisticsActionLoading('rentUtilityExpenses')} model={statistics.rentUtilityExpenses} />,
+    <DailyExpenses isLoading={isStatisticsActionLoading('monthExpenses')} model={statistics.monthExpenses} />,
   ];
   /* eslint-enable react/no-unstable-nested-components */
 
@@ -143,7 +71,17 @@ const Dashboard = ({
           </Col>
         </Row>
 
-        <CardsSet items={shortStatistics} />
+        <Row>
+          <Col xs={12} className="d-md-none">
+            <CarouselWithSwipe data={shortStatistics} />
+          </Col>
+
+          {shortStatistics.map((item) => (
+            <Col md={6} lg={3} className="d-none d-md-block" key={randomString(4)}>
+              { item }
+            </Col>
+          ))}
+        </Row>
 
         <Row className="d-flex d-md-none">
           <Col xs={6}>

@@ -102,7 +102,7 @@ TransactionCategoriesComparison.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      current: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired,
       previous: PropTypes.number.isRequired,
     }),
   ),

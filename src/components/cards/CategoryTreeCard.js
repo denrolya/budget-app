@@ -9,20 +9,13 @@ import CenteredMessage from 'src/components/messages/CenteredMessage';
 import TransactionCategories from 'src/components/charts/recharts/pie/TransactionCategories';
 
 const CategoryTreeCard = ({
-  isLoading, model, onUpdate, type,
+  isLoading,
+  model,
+  onUpdate,
+  type,
 }) => {
   const { from, to, data } = model;
   const [selectedCategory, selectCategory] = useState(data.model.name);
-
-  if (!data.hasChildren()) {
-    return (
-      <CenteredMessage
-        className="mb-4"
-        title="No statistics available for selected period."
-        message="Try to select another date range in upper right corner of this card."
-      />
-    );
-  }
 
   return (
     <TimeperiodStatisticsCard
@@ -31,6 +24,13 @@ const CategoryTreeCard = ({
       model={model}
       onUpdate={onUpdate}
     >
+      {!data.hasChildren() && (
+        <CenteredMessage
+          className="mb-4"
+          title="No statistics available for selected period."
+          message="Try to select another date range in upper right corner of this card."
+        />
+      )}
       <div>
         <TransactionCategories data={data} selectedCategory={selectedCategory} onClick={selectCategory} />
       </div>

@@ -143,12 +143,12 @@ export const INITIAL_STATE = {
   expenseCategoriesTree: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
-    data: new TreeModel().parse({ name: 'All categories' }),
+    data: new TreeModel().parse({ name: 'All categories', total: 0 }),
   }),
   incomeCategoriesTree: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
-    data: new TreeModel().parse({ name: 'All categories' }),
+    data: new TreeModel().parse({ name: 'All categories', total: 0 }),
   }),
   foodExpensesMinMax: new TimeperiodStatistics({
     from: startOfYear,

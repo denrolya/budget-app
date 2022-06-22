@@ -4,6 +4,7 @@ import React, { useEffect, useMemo } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import TotalIncome from 'src/components/cards/statistics/simple/TotalIncome';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 import { Row, Col, UncontrolledCollapse } from 'reactstrap';
@@ -17,19 +18,19 @@ import { rangeToString } from 'src/utils/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { setStatistics, updateReport, setPeriod } from 'src/store/actions/report';
 
+import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
 import AccountExpenseDistributionCard from 'src/components/cards/statistics/AccountExpenseDistributionCard';
 import ExpenseCategoriesByWeekdaysCard from 'src/components/cards/statistics/ExpenseCategoriesByWeekdaysCard';
 import ExpenseCategoriesReviewCard from 'src/components/cards/statistics/ExpenseCategoriesReviewCard';
 import NewCategoriesCard from 'src/components/cards/statistics/NewCategoriesCard';
-import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/PercentageSpentFromIncomeCard';
+import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';
 import TotalExpensesByIntervalCard from 'src/components/cards/statistics/TotalExpensesByIntervalCard';
 import UtilityCostsByIntervalCard from 'src/components/cards/statistics/UtilityCostsByIntervalCard';
 import CategoryTreeCard from 'src/components/cards/CategoryTreeCard';
 import MoneyFlowCard from 'src/components/cards/MoneyFlowCard';
 import MoneyValue from 'src/components/MoneyValue';
-import SimpleStatisticsCard from 'src/components/cards/statistics/SimpleStatisticsCard';
+import SimpleStatisticsCard from 'src/components/cards/statistics/simple/Card';
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
-import IconStatisticsCard from 'src/components/cards/statistics/IconStatisticsCard';
 
 const Report = ({
   ui,
@@ -113,6 +114,12 @@ const Report = ({
                   />
                 )}
               />
+
+              <TotalIncome
+                isLoading={isStatisticsActionLoading('totalIncome')}
+                model={statistics.totalIncome}
+              />
+
               <SimpleStatisticsCard
                 isLoading={isStatisticsActionLoading('totalIncome')}
                 title="Daily income"
@@ -144,13 +151,9 @@ const Report = ({
             </Col>
             <Col xs={4}>
               {statistics.incomeCategoriesTree.data && (
-                <IconStatisticsCard
-                  title="Main income source"
-                  color="success"
-                  className="card--hover-expand"
+                <MainIncomeSourceCard
                   isLoading={isStatisticsActionLoading('mainIncomeSource')}
-                  content={statistics.mainIncomeSource.data.name}
-                  icon={statistics.mainIncomeSource.data.icon}
+                  category={statistics.mainIncomeSource.data}
                 />
               )}
               <NewCategoriesCard

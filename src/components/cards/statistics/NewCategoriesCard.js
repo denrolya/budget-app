@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 
-import { useCategories, useExpenseCategories, useIncomeCategories } from 'src/contexts/CategoriesContext';
+import { useCategories } from 'src/contexts/CategoriesContext';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -81,13 +81,14 @@ const NewCategoriesCard = ({
 
 NewCategoriesCard.defaultProps = {
   isLoading: false,
+  onUpdate: undefined,
 };
 
 NewCategoriesCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
   type: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]).isRequired,
+  isLoading: PropTypes.bool,
+  onUpdate: PropTypes.func,
 };
 
 export default memo(

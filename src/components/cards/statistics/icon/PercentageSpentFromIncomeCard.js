@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual';
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
-import IconStatisticsCard from 'src/components/cards/statistics/IconStatisticsCard';
+import IconStatisticsCard from 'src/components/cards/statistics/icon/Card';
 
 const PercentageSpentFromIncomeCard = ({ isLoading, percentage }) => {
   let icon = 'ion-ios-volume-low';

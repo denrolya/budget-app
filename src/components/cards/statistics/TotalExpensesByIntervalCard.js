@@ -8,7 +8,10 @@ import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistic
 import ExpensesBySeason from 'src/components/charts/recharts/pie/ExpensesBySeason';
 
 const TotalExpensesByIntervalCard = ({
-  isLoading, model, className, transparent,
+  isLoading,
+  model,
+  className,
+  transparent,
 }) => (
   <TimeperiodStatisticsCard
     className={cn('card-chart', 'card--hover-expand', className)}

@@ -97,6 +97,7 @@ TimeperiodStatisticsCard.defaultProps = {
   bodyClassName: 'pt-0',
   className: '',
   isLoading: false,
+  onUpdate: undefined,
   showControls: true,
   title: '',
   transparent: false,
@@ -108,13 +109,13 @@ TimeperiodStatisticsCard.propTypes = {
     PropTypes.instanceOf(TimeperiodStatistics),
     PropTypes.instanceOf(TimeperiodIntervalStatistics),
   ]).isRequired,
-  onUpdate: PropTypes.func,
   bodyClassName: PropTypes.string,
   className: PropTypes.string,
   isLoading: PropTypes.bool,
   showControls: PropTypes.bool,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   transparent: PropTypes.bool,
+  onUpdate: PropTypes.func,
 };
 
 export default TimeperiodStatisticsCard;

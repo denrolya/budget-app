@@ -3,7 +3,10 @@ import cn from 'classnames';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  CardBody, CardFooter, Col, Row,
+  CardBody,
+  CardFooter,
+  Col,
+  Row,
 } from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
@@ -20,8 +23,16 @@ Icon.propTypes = {
 };
 
 /* eslint-disable react/jsx-props-no-spreading */
-const IconStatisticsCard = ({
-  isLoading, icon, to, color, title, content, children, className, ...rest
+const Card = ({
+  isLoading,
+  icon,
+  to,
+  color,
+  title,
+  content,
+  children,
+  className,
+  ...rest
 }) => (
   <LoadingCard
     className={cn('card-stats', 'card--hover-expand', {
@@ -64,12 +75,16 @@ const IconStatisticsCard = ({
 );
 /* eslint-enable react/jsx-props-no-spreading */
 
-IconStatisticsCard.defaultProps = {
-  isLoading: false,
+Card.defaultProps = {
+  children: undefined,
   className: '',
+  color: undefined,
+  icon: undefined,
+  isLoading: false,
+  to: undefined,
 };
 
-IconStatisticsCard.propTypes = {
+Card.propTypes = {
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.element]).isRequired,
   title: PropTypes.string.isRequired,
   className: PropTypes.string,
@@ -80,4 +95,4 @@ IconStatisticsCard.propTypes = {
   to: PropTypes.string,
 };
 
-export default IconStatisticsCard;
+export default Card;

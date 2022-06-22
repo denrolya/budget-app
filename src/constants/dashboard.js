@@ -26,7 +26,7 @@ export const AVAILABLE_STATISTICS = [{
   },
   fetchPreviousPeriod: true,
 }, {
-  name: 'rentExpenses',
+  name: 'rentUtilityExpenses',
   path: 'api/transactions/statistics/sum',
   additionalParams: {
     categoryDeep: [2, 18], // Rent, Utilities
@@ -60,7 +60,7 @@ export const INITIAL_STATE = {
       previous: 0,
     },
   }),
-  rentExpenses: new TimeperiodStatistics({
+  rentUtilityExpenses: new TimeperiodStatistics({
     data: {
       current: 0,
       previous: 0,

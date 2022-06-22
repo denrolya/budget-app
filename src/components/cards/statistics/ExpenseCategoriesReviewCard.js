@@ -40,11 +40,12 @@ const ExpenseCategoriesReviewCard = ({
 
 ExpenseCategoriesReviewCard.defaultProps = {
   isLoading: false,
+  onUpdate: undefined,
 };
 
 ExpenseCategoriesReviewCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
-  onUpdate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func,
   isLoading: PropTypes.bool,
 };
 
