@@ -64,7 +64,7 @@ const TimeperiodStatisticsCard = ({
                     <span className="cursor-pointer text-nowrap">
                       {rangeToString(from, to)}
                       {'  '}
-                      <i aria-hidden className="ion-md-calendar" />
+                      <i aria-hidden className="ion-ios-calendar" />
                     </span>
                   </DateRangePicker>
                 )}

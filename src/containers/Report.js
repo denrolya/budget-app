@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -53,6 +53,8 @@ const Report = ({
     updateReport();
   }, [code, from.year()]);
 
+  const currentRange = useMemo(() => rangeToString(from, to, ANNUAL_REPORT_RANGES), [from, to]);
+
   return (
     <>
       <Helmet>
@@ -72,9 +74,9 @@ const Report = ({
         onApply={(event, { startDate, endDate }) => setPeriod(startDate.year(), endDate.year())}
       >
         <span className="cursor-pointer text-nowrap">
-          {rangeToString(from, to, ANNUAL_REPORT_RANGES)}
+          <i aria-hidden className="ion-ios-calendar" />
           {'  '}
-          <i aria-hidden className="ion-md-calendar" />
+          {currentRange}
         </span>
       </DateRangePicker>
 
@@ -118,12 +120,10 @@ const Report = ({
               />
             </Col>
             <Col xs={12} md={6} lg={4}>
-              {statistics.incomeCategoriesTree.data && (
-                <MainIncomeSourceCard
-                  isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
-                  model={statistics.incomeCategoriesTree}
-                />
-              )}
+              <MainIncomeSourceCard
+                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
+                model={statistics.incomeCategoriesTree}
+              />
               <NewCategoriesCard
                 type={INCOME_TYPE}
                 isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
@@ -152,16 +152,14 @@ const Report = ({
               />
             </Col>
             <Col xs={12} md={6} lg={4}>
-              {statistics.totalIncome.data.current && statistics.totalExpense.data.current && (
-                <PercentageSpentFromIncomeCard
-                  isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')}
-                  percentage={amountInPercentage(
-                    statistics.totalIncome.data.current,
-                    statistics.totalExpense.data.current,
-                    0,
-                  )}
-                />
-              )}
+              <PercentageSpentFromIncomeCard
+                isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')}
+                percentage={amountInPercentage(
+                  statistics.totalIncome.data.current,
+                  statistics.totalExpense.data.current,
+                  0,
+                )}
+              />
               <TotalExpensesByIntervalCard
                 isLoading={isStatisticsActionLoading('moneyFlow')}
                 model={statistics.moneyFlow}
@@ -216,15 +214,14 @@ const Report = ({
                 model={statistics.foodExpensesMinMax}
               />
             </Col>
-            {statistics.groceriesAverage.data && (
-              <Col xs={12} md={6} lg={3}>
-                <AverageInCategory
-                  category="Groceries"
-                  isLoading={isStatisticsActionLoading('groceriesAverage')}
-                  model={statistics.groceriesAverage}
-                />
-              </Col>
-            )}
+            <Col xs={12} md={6} lg={3}>
+              <AverageInCategory
+                title="Average groceries bill"
+                category="Groceries"
+                isLoading={isStatisticsActionLoading('groceriesAverage')}
+                model={statistics.groceriesAverage}
+              />
+            </Col>
             <Col xs={12} md={6} lg={3}>
               <DailyInCategory
                 category="Food"
