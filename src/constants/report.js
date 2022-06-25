@@ -93,15 +93,6 @@ export const INITIAL_STATE = {
     to: endOfYear,
     data: randomMoneyFlowData(),
   }),
-  mainIncomeSource: new TimeperiodStatistics({
-    from: startOfYear,
-    to: endOfYear,
-    data: {
-      icon: 'ion-ios-download',
-      name: 'Salary',
-      value: randomFloat(),
-    },
-  }),
   accountExpenseDistribution: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
@@ -143,12 +134,12 @@ export const INITIAL_STATE = {
   expenseCategoriesTree: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
-    data: new TreeModel().parse({ name: 'All categories', total: 0 }),
+    data: new TreeModel().parse({ name: 'All categories', total: 0, value: 0 }),
   }),
   incomeCategoriesTree: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
-    data: new TreeModel().parse({ name: 'All categories', total: 0 }),
+    data: new TreeModel().parse({ name: 'All categories', total: 0, value: 0 }),
   }),
   foodExpensesMinMax: new TimeperiodStatistics({
     from: startOfYear,

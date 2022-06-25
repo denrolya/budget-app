@@ -3,7 +3,10 @@ import { Service } from 'axios-middleware';
 
 import axios from 'src/utils/http';
 import {
-  BAD_REQUEST, FORBIDDEN, NOT_FOUND, UNAUTHORIZED,
+  BAD_REQUEST,
+  FORBIDDEN,
+  NOT_FOUND,
+  UNAUTHORIZED,
 } from 'src/constants/http';
 import { logoutUser } from 'src/store/actions/auth';
 import { notify } from 'src/store/actions/global';

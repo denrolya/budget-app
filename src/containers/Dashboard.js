@@ -12,7 +12,7 @@ import LoadingCard from 'src/components/cards/LoadingCard';
 import MoneyValue from 'src/components/MoneyValue';
 
 import DailyExpenses from 'src/components/cards/statistics/simple/DailyExpenses';
-import FoodExpenses from 'src/components/cards/statistics/simple/FoodExpenses';
+import TotalInCategory from 'src/components/cards/statistics/simple/TotalInCategory';
 import MonthExpenses from 'src/components/cards/statistics/simple/MonthExpenses';
 import RentUtilityExpenses from 'src/components/cards/statistics/simple/RentUtilityExpenses';
 
@@ -20,6 +20,7 @@ import CategoryTreeCard from 'src/components/cards/statistics/withCharts/Categor
 import TransactionCategoriesTimelineCard from 'src/components/cards/statistics/withCharts/TransactionCategoriesTimelineCard';
 import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
 
+import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { isActionLoading } from 'src/utils/common';
 import { randomString } from 'src/utils/randomData';
@@ -48,7 +49,14 @@ const Dashboard = ({
   /* eslint-disable react/no-unstable-nested-components */
   const shortStatistics = [
     <MonthExpenses isLoading={isStatisticsActionLoading('monthExpenses')} model={statistics.monthExpenses} />,
-    <FoodExpenses isLoading={isStatisticsActionLoading('foodExpenses')} model={statistics.foodExpenses} />,
+    <TotalInCategory
+      category="Food"
+      footerPeriod="month"
+      footerType="percentage"
+      type={EXPENSE_TYPE}
+      isLoading={isStatisticsActionLoading('foodExpenses')}
+      model={statistics.foodExpenses}
+    />,
     <RentUtilityExpenses isLoading={isStatisticsActionLoading('rentUtilityExpenses')} model={statistics.rentUtilityExpenses} />,
     <DailyExpenses isLoading={isStatisticsActionLoading('monthExpenses')} model={statistics.monthExpenses} />,
   ];
