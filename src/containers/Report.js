@@ -19,13 +19,12 @@ import { setStatistics, updateReport, setPeriod } from 'src/store/actions/report
 import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';
 
-import TotalIncome from 'src/components/cards/statistics/simple/TotalIncome';
-import Average from 'src/components/cards/statistics/simple/Average';
-import DailyInCategory from 'src/components/cards/statistics/simple/DailyInCategory';
-import DailyIncome from 'src/components/cards/statistics/simple/DailyIncome';
-import TotalInCategory from 'src/components/cards/statistics/simple/TotalInCategory';
-import MinMax from 'src/components/cards/statistics/simple/MinMax';
-import TotalExpense from 'src/components/cards/statistics/simple/TotalExpense';
+import DailyValue from 'src/components/cards/statistics/generic/DailyValue';
+import TotalValue from 'src/components/cards/statistics/generic/TotalValue';
+import AverageInCategory from 'src/components/cards/statistics/generic/AverageInCategory';
+import DailyInCategory from 'src/components/cards/statistics/generic/DailyInCategory';
+import TotalInCategory from 'src/components/cards/statistics/generic/TotalInCategory';
+import MinMax from 'src/components/cards/statistics/generic/MinMax';
 
 import NewCategoriesCard from 'src/components/cards/statistics/NewCategoriesCard';
 
@@ -95,12 +94,16 @@ const Report = ({
         <UncontrolledCollapse defaultOpen toggler="#incomes">
           <Row>
             <Col xs={12} md={6} lg={4}>
-              <TotalIncome
+              <TotalValue
+                footerType="amount"
+                type={INCOME_TYPE}
                 isLoading={isStatisticsActionLoading('totalIncome')}
                 model={statistics.totalIncome}
               />
 
-              <DailyIncome
+              <DailyValue
+                footerType="amount"
+                type={INCOME_TYPE}
                 isLoading={isStatisticsActionLoading('totalIncome')}
                 model={statistics.totalIncome}
               />
@@ -175,7 +178,9 @@ const Report = ({
               />
             </Col>
             <Col xs={12} md={6} lg={4}>
-              <TotalExpense
+              <TotalValue
+                footerType="amount"
+                type={EXPENSE_TYPE}
                 isLoading={isStatisticsActionLoading('totalExpense')}
                 model={statistics.totalExpense}
               />
@@ -199,7 +204,6 @@ const Report = ({
             <Col xs={12} md={6} lg={3} className="order-last order-lg-first">
               <TotalInCategory
                 category="Food"
-                footerPeriod="year"
                 footerType="amount"
                 type={EXPENSE_TYPE}
                 isLoading={isStatisticsActionLoading('foodExpenses')}
@@ -214,7 +218,7 @@ const Report = ({
             </Col>
             {statistics.groceriesAverage.data && (
               <Col xs={12} md={6} lg={3}>
-                <Average
+                <AverageInCategory
                   category="Groceries"
                   isLoading={isStatisticsActionLoading('groceriesAverage')}
                   model={statistics.groceriesAverage}
@@ -225,6 +229,7 @@ const Report = ({
               <DailyInCategory
                 category="Food"
                 type={EXPENSE_TYPE}
+                footerType="amount"
                 isLoading={isStatisticsActionLoading('foodExpenses')}
                 model={statistics.foodExpenses}
               />

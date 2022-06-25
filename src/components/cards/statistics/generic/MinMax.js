@@ -2,13 +2,13 @@ import moment from 'moment-timezone';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SimpleStatisticsCard from 'src/components/cards/statistics/simple/Card';
+import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 import MoneyValue from 'src/components/MoneyValue';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 
-const MinMax = ({ isLoading, model }) => (
+const MinMax = ({ isLoading, model, title }) => (
   <SimpleStatisticsCard
-    title="Minimum & Maximum"
+    title={title || 'Minimum & Maximum'}
     isLoading={isLoading}
     content={(
       <>
@@ -27,9 +27,14 @@ const MinMax = ({ isLoading, model }) => (
   />
 );
 
+MinMax.defaultProps = {
+  title: undefined,
+};
+
 MinMax.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
+  title: PropTypes.node,
 };
 
 export default MinMax;

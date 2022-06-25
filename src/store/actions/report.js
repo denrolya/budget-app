@@ -8,7 +8,6 @@ import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { AVAILABLE_STATISTICS } from 'src/constants/report';
 
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
-import { generatePreviousPeriod } from 'src/utils/datetime';
 
 export const { Types, Creators } = createActions({
   ...AVAILABLE_STATISTICS.map(({ name }) => ({
@@ -29,7 +28,10 @@ export const setStatistics = (name, newModel) => (dispatch) => {
 };
 
 export const fetchStatistics = ({
-  name, path, additionalParams, fetchPreviousPeriod,
+  name,
+  path,
+  additionalParams,
+  fetchPreviousPeriod,
 }) => async (dispatch, getState) => {
   const state = getState().report[name];
   let params = {
@@ -56,8 +58,7 @@ export const fetchStatistics = ({
     if (fetchPreviousPeriod) {
       const getSelectedPeriodDataRequest = axios.get(path, { params });
 
-      const { from, to } = getState().report.expenseCategoriesTree;
-      const previousPeriod = generatePreviousPeriod(from, to);
+      const previousPeriod = getState().report.expenseCategoriesTree.generatePreviousPeriod();
 
       const getPreviousPeriodDataRequest = axios.get(path, {
         params: {
@@ -94,8 +95,7 @@ const customHandlers = {
       },
     });
 
-    const { from, to } = getState().report.expenseCategoriesTree;
-    const previousPeriod = generatePreviousPeriod(from, to);
+    const previousPeriod = getState().report.expenseCategoriesTree.generatePreviousPeriod();
 
     const getPreviousPeriodDataRequest = axios.get(path, {
       params: {
@@ -130,8 +130,7 @@ const customHandlers = {
       },
     });
 
-    const { from, to } = getState().report.expenseCategoriesTree;
-    const previousPeriod = generatePreviousPeriod(from, to);
+    const previousPeriod = getState().report.incomeCategoriesTree.generatePreviousPeriod();
 
     const getPreviousPeriodDataRequest = axios.get(path, {
       params: {

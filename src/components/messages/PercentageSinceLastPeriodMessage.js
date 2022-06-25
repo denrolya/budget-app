@@ -3,8 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { amountInPercentage, ratio, textColor } from 'src/utils/common';
 
-const PercentageSinceLastMonthMessage = ({
-  previous, current, invertedColors, period, text,
+const PercentageSinceLastPeriodMessage = ({
+  previous,
+  current,
+  invertedColors,
+  period,
+  text,
 }) => {
   const percentage = ratio(amountInPercentage(previous, current, 0));
 
@@ -20,13 +24,13 @@ const PercentageSinceLastMonthMessage = ({
   );
 };
 
-PercentageSinceLastMonthMessage.defaultProps = {
+PercentageSinceLastPeriodMessage.defaultProps = {
   invertedColors: false,
   period: 'last month',
   text: true,
 };
 
-PercentageSinceLastMonthMessage.propTypes = {
+PercentageSinceLastPeriodMessage.propTypes = {
   previous: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
   invertedColors: PropTypes.bool,
@@ -34,4 +38,4 @@ PercentageSinceLastMonthMessage.propTypes = {
   period: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-export default PercentageSinceLastMonthMessage;
+export default PercentageSinceLastPeriodMessage;

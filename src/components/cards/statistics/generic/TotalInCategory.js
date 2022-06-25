@@ -1,10 +1,9 @@
-import moment from 'moment-timezone';
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import SimpleStatisticsCard from 'src/components/cards/statistics/simple/Card';
+import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
-import PercentageSinceLastMonthMessage from 'src/components/messages/PercentageSinceLastMonthMessage';
+import PercentageSinceLastPeriodMessage from 'src/components/messages/PercentageSinceLastPeriodMessage';
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
@@ -17,7 +16,7 @@ const TotalInCategory = ({
   type,
   category,
   footerType,
-  footerPeriod,
+  title,
 }) => {
   const { from, to, data } = model;
   const current = Math.abs(data.current);
@@ -29,33 +28,44 @@ const TotalInCategory = ({
     [1],
   );
 
-  let message = <PercentageSinceLastMonthMessage previous={previous} current={current} />;
+  const footer = useMemo(() => {
+    const period = model.generateSincePreviousPeriodText();
 
-  if (footerPeriod === 'year') {
-    const previousYear = from.year() - 1;
-    message = (
+    if (footerType === 'percentage') {
+      return (
+        <PercentageSinceLastPeriodMessage
+          invertedColors={type === INCOME_TYPE}
+          period={period}
+          current={current}
+          previous={previous}
+        />
+      );
+    }
+
+    return (
       <AmountSinceLastPeriodMessage
-        period={(previousYear === moment().year() - 1) ? `last year(${previousYear})` : previousYear}
-        previous={model.data.previous}
-        current={model.data.current}
+        invertedColors={type === INCOME_TYPE}
+        period={period}
+        current={current}
+        previous={previous}
       />
     );
-  }
+  }, [footerType, current, previous]);
 
   return (
     <SimpleStatisticsCard
-      title={`${category} ${type}s`}
+      title={title || `${category} ${type}s`}
       isLoading={isLoading}
       content={<MoneyValue bold maximumFractionDigits={0} amount={current} />}
-      footer={message}
+      footer={footer}
       link={linkToExpenses}
     />
   );
 };
 
 TotalInCategory.defaultProps = {
-  footerPeriod: 'month',
   footerType: 'amount',
+  title: undefined,
 };
 
 TotalInCategory.propTypes = {
@@ -64,7 +74,7 @@ TotalInCategory.propTypes = {
   type: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]).isRequired,
   category: PropTypes.string.isRequired,
   footerType: PropTypes.oneOf(['amount', 'percentage']),
-  footerPeriod: PropTypes.oneOf(['month', 'year']),
+  title: PropTypes.node,
 };
 
 export default TotalInCategory;

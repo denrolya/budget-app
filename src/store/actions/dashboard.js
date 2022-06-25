@@ -7,7 +7,6 @@ import axios from 'src/utils/http';
 import { notify } from 'src/store/actions/global';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
-import { generatePreviousPeriod } from 'src/utils/datetime';
 import { AVAILABLE_STATISTICS } from 'src/constants/dashboard';
 
 export const { Types, Creators } = createActions(
@@ -55,8 +54,7 @@ export const fetchStatistics = ({
     if (fetchPreviousPeriod) {
       const getSelectedPeriodDataRequest = axios.get(path, { params });
 
-      const { from, to } = getState().dashboard.expenseCategoriesTree;
-      const previousPeriod = generatePreviousPeriod(from, to);
+      const previousPeriod = getState().dashboard.expenseCategoriesTree.generatePreviousPeriod();
 
       const getPreviousPeriodDataRequest = axios.get(path, {
         params: {
@@ -111,8 +109,7 @@ const customHandlers = {
       },
     });
 
-    const { from, to } = getState().dashboard.expenseCategoriesTree;
-    const previousPeriod = generatePreviousPeriod(from, to);
+    const previousPeriod = getState().dashboard.expenseCategoriesTree.generatePreviousPeriod();
 
     const getPreviousPeriodDataRequest = axios.get(path, {
       params: {

@@ -9,7 +9,7 @@ import { useCategories } from 'src/contexts/CategoriesContext';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import CarouselCard from 'src/components/cards/CarouselCard';
 import UtilityCosts from 'src/components/charts/recharts/area/UtilityCosts';
-import SimpleStatisticsCard from 'src/components/cards/statistics/simple/Card';
+import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 
 /** TODO: Point radius 0; toFixed in tooltips */
 const UtilityCostsByIntervalCard = ({

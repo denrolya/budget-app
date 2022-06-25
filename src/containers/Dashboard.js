@@ -11,10 +11,10 @@ import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import MoneyValue from 'src/components/MoneyValue';
 
-import DailyExpenses from 'src/components/cards/statistics/simple/DailyExpenses';
-import TotalInCategory from 'src/components/cards/statistics/simple/TotalInCategory';
-import MonthExpenses from 'src/components/cards/statistics/simple/MonthExpenses';
-import RentUtilityExpenses from 'src/components/cards/statistics/simple/RentUtilityExpenses';
+import DailyValue from 'src/components/cards/statistics/generic/DailyValue';
+import DailyInCategory from 'src/components/cards/statistics/generic/DailyInCategory';
+import TotalValue from 'src/components/cards/statistics/generic/TotalValue';
+import TotalInCategory from 'src/components/cards/statistics/generic/TotalInCategory';
 
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/statistics/withCharts/TransactionCategoriesTimelineCard';
@@ -48,8 +48,14 @@ const Dashboard = ({
 
   /* eslint-disable react/no-unstable-nested-components */
   const shortStatistics = [
-    <MonthExpenses isLoading={isStatisticsActionLoading('monthExpenses')} model={statistics.monthExpenses} />,
-    <TotalInCategory
+    <TotalValue
+      title={`Expenses in ${statistics.monthExpenses.from.format('MMMM')}`}
+      footerType="percentage"
+      type={EXPENSE_TYPE}
+      isLoading={isStatisticsActionLoading('monthExpenses')}
+      model={statistics.monthExpenses}
+    />,
+    <DailyInCategory
       category="Food"
       footerPeriod="month"
       footerType="percentage"
@@ -57,8 +63,18 @@ const Dashboard = ({
       isLoading={isStatisticsActionLoading('foodExpenses')}
       model={statistics.foodExpenses}
     />,
-    <RentUtilityExpenses isLoading={isStatisticsActionLoading('rentUtilityExpenses')} model={statistics.rentUtilityExpenses} />,
-    <DailyExpenses isLoading={isStatisticsActionLoading('monthExpenses')} model={statistics.monthExpenses} />,
+    <TotalInCategory
+      category="Rent & Utilities"
+      type={EXPENSE_TYPE}
+      isLoading={isStatisticsActionLoading('rentUtilityExpenses')}
+      model={statistics.rentUtilityExpenses}
+    />,
+    <DailyValue
+      footerType="amount"
+      type={EXPENSE_TYPE}
+      isLoading={isStatisticsActionLoading('monthExpenses')}
+      model={statistics.monthExpenses}
+    />,
   ];
   /* eslint-enable react/no-unstable-nested-components */
 

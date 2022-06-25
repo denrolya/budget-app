@@ -64,12 +64,6 @@ export const AVAILABLE_STATISTICS = [
       type: EXPENSE_TYPE,
     },
   }, {
-    name: 'mainIncomeSource',
-    path: 'api/transactions/statistics/top-value-category',
-    additionalParams: {
-      type: INCOME_TYPE,
-    },
-  }, {
     name: 'accountExpenseDistribution',
     path: 'api/transactions/statistics/account-distribution',
     additionalParams: {
