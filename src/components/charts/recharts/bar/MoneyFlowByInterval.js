@@ -4,7 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { Card } from 'reactstrap';
 import PropTypes from 'prop-types';
 import {
-  Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';

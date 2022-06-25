@@ -1,3 +1,4 @@
+import { RAINBOW_COLORS } from 'src/constants/color';
 import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { notify } from 'src/store/actions/global';
 
@@ -106,3 +107,39 @@ export const copyToClipboard = (str) => {
 };
 
 export const copyTokenToClipboard = () => copyToClipboard(localStorage.getItem('token'));
+
+export const splitHexColor = (color) => {
+  const [r, g, b] = [1, 3, 5].map((o) => parseInt(`0x${color.slice(o, o + 2)}`, 16));
+
+  return { r, g, b };
+};
+
+export const getColorForPercentage = (percentage, colors = [
+  { percentage: 0, color: splitHexColor(RAINBOW_COLORS[0]) },
+  { percentage: 0.83, color: splitHexColor(RAINBOW_COLORS[1]) },
+  { percentage: 0.166, color: splitHexColor(RAINBOW_COLORS[2]) },
+  { percentage: 0.2499, color: splitHexColor(RAINBOW_COLORS[3]) },
+  { percentage: 0.333, color: splitHexColor(RAINBOW_COLORS[4]) },
+  { percentage: 0.4166, color: splitHexColor(RAINBOW_COLORS[5]) },
+  { percentage: 0.4999, color: splitHexColor(RAINBOW_COLORS[6]) },
+  { percentage: 0.5833, color: splitHexColor(RAINBOW_COLORS[7]) },
+  { percentage: 0.7499, color: splitHexColor(RAINBOW_COLORS[8]) },
+  { percentage: 0.8333, color: splitHexColor(RAINBOW_COLORS[9]) },
+  { percentage: 0.9166, color: splitHexColor(RAINBOW_COLORS[10]) },
+  { percentage: 1, color: splitHexColor(RAINBOW_COLORS[11]) },
+]) => {
+  const i = percentage !== 0 ? colors.findIndex((el) => percentage <= el.percentage) : 1;
+  const lower = colors[i - 1];
+  const upper = colors[i];
+  const range = upper.percentage - lower.percentage;
+  const rangePercentage = (percentage - lower.percentage) / range;
+  const percentageLower = 1 - rangePercentage;
+  const percentageUpper = rangePercentage;
+  const color = {
+    r: Math.floor(lower.color.r * percentageLower + upper.color.r * percentageUpper),
+    g: Math.floor(lower.color.g * percentageLower + upper.color.g * percentageUpper),
+    b: Math.floor(lower.color.b * percentageLower + upper.color.b * percentageUpper),
+  };
+
+  return `#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}`;
+};
