@@ -7,17 +7,30 @@ import filter from 'lodash/filter';
 import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
 
+import { isDev } from 'src/utils/common';
 import MoneyValue from 'src/components/MoneyValue';
-import { ROUTE_ACCOUNTS, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/routes';
+import {
+  ROUTE_ACCOUNTS,
+  ROUTE_CURRENCY_CONVERTER,
+  ROUTE_DASHBOARD,
+  ROUTE_DEBTS,
+  ROUTE_REPORT,
+  ROUTE_TEST_PAGE,
+  ROUTE_TRANSACTIONS,
+  ROUTE_TRANSACTIONS_CALENDAR,
+} from 'src/constants/routes';
 import { useActiveAccounts } from 'src/contexts/AccountsContext';
-import { generateLinkToAccountTransactionsPage, routes } from 'src/utils/routing';
+import { generateLinkToAccountTransactionsPage } from 'src/utils/routing';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import AccountName from 'src/components/AccountName';
 import { CURRENCIES } from 'src/constants/currency';
 import { switchCurrencyPrompt } from 'src/utils/prompts';
 
 const Sidebar = ({
-  totalDebt, isLoading, onCurrencySwitch, updateDashboard,
+  totalDebt,
+  isLoading,
+  onCurrencySwitch,
+  updateDashboard,
 }) => {
   const accounts = useActiveAccounts();
   const { symbol, code } = useBaseCurrency();
@@ -25,11 +38,6 @@ const Sidebar = ({
   const totalAccountsValue = useMemo(
     () => sumBy(accounts, ({ convertedValues }) => convertedValues[code]),
     [accounts],
-  );
-
-  const sidebarRoutes = useMemo(
-    () => routes.filter(({ isInSidebar }) => isInSidebar),
-    [routes],
   );
 
   const visibleAccounts = useMemo(
@@ -54,40 +62,63 @@ const Sidebar = ({
         <div className="d-flex justify-content-between pt-0 pb-3 px-3">
           {availableCurrencies.map((c) => (
             <Button
+              color="info"
+              className="btn-icon btn-simple btn-round ml-0 mr-2"
               key={c.symbol}
               active={c.symbol === symbol}
               disabled={c.symbol === symbol}
               onClick={() => handleCurrencyChange(c)}
-              color="info"
-              className="btn-icon btn-simple btn-round ml-0 mr-2"
             >
               <span className="text-white">{c.symbol}</span>
             </Button>
           ))}
         </div>
         <Nav className="mt-0">
-          {sidebarRoutes.map(({ name, path, icon }) => (
-            <NavItem tag="li" key={`nav-item-route-${name}`}>
-              <NavLink className="nav-link" to={path}>
-                <i aria-hidden className={icon} />
-                <p>{name}</p>
-              </NavLink>
-            </NavItem>
-          ))}
+          {isDev() && (
+            <>
+              <NavItem tag="li">
+                <NavLink className="nav-link" to={ROUTE_TEST_PAGE}>
+                  <i aria-hidden className="ion-ios-construct" />
+                  <p>Test Page</p>
+                </NavLink>
+              </NavItem>
+              <NavItem tag="li">
+                <hr />
+              </NavItem>
+            </>
+          )}
           <NavItem tag="li">
-            <hr />
+            <NavLink className="nav-link" to={ROUTE_DASHBOARD}>
+              <i aria-hidden className="mdi mdi-chart-donut-variant" />
+              <p>Dashboard</p>
+            </NavLink>
           </NavItem>
           <NavItem tag="li">
-            <NavLink to={ROUTE_TRANSACTIONS} className="nav-link text-capitalize">
-              <i aria-hidden className="mdi mdi-format-list-bulleted" />
-              <p className="text-capitalize">All Transactions</p>
+            <NavLink className="nav-link" to={ROUTE_REPORT}>
+              <i aria-hidden className="ion-ios-stats" />
+              <p>Annual report</p>
             </NavLink>
           </NavItem>
           <NavItem tag="li">
             <hr />
           </NavItem>
           <NavItem tag="li">
-            <NavLink to={ROUTE_DEBTS} className="nav-link text-capitalize">
+            <NavLink className="nav-link" to={ROUTE_TRANSACTIONS}>
+              <i aria-hidden className="mdi mdi-format-list-bulleted" />
+              <p className="text-capitalize">All Transactions</p>
+            </NavLink>
+          </NavItem>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_TRANSACTIONS_CALENDAR}>
+              <i aria-hidden className="ion-ios-calendar" />
+              <p className="text-capitalize">Calendar View(beta)</p>
+            </NavLink>
+          </NavItem>
+          <NavItem tag="li">
+            <hr />
+          </NavItem>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_DEBTS}>
               <i aria-hidden className="ion-ios-bookmarks" />
               <p className="text-capitalize">
                 Debts
@@ -127,16 +158,25 @@ const Sidebar = ({
                 {!isLoading && (
                   <MoneyValue
                     bold
+                    maximumFractionDigits={0}
                     className={cn('font-size-larger', {
                       'text-white': totalAccountsValue === 0,
                       'text-danger': totalAccountsValue < 0,
                       'text-success': totalAccountsValue > 0,
                     })}
                     amount={totalAccountsValue}
-                    maximumFractionDigits={0}
                   />
                 )}
               </div>
+            </NavLink>
+          </NavItem>
+          <NavItem tag="li">
+            <hr />
+          </NavItem>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_CURRENCY_CONVERTER}>
+              <i aria-hidden className="ion-ios-options" />
+              <p>Currency converter</p>
             </NavLink>
           </NavItem>
         </Nav>

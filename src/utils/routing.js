@@ -1,118 +1,15 @@
-import find from 'lodash/find';
 import { parse, stringify } from 'query-string';
 import { matchPath } from 'react-router-dom';
 import moment from 'moment-timezone';
-import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 
+import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import history from 'src/utils/history';
 import {
-  ROUTE_ACCOUNTS,
-  ROUTE_CATEGORIES,
   ROUTE_DASHBOARD,
-  ROUTE_DEBTS,
-  ROUTE_TEST_PAGE,
-  ROUTE_TRANSACTIONS_CALENDAR,
-  ROUTE_REPORT,
-  ROUTE_PROFILE,
   ROUTE_TRANSACTIONS,
   ROUTE_TRANSFERS,
-  ROUTE_CURRENCY_CONVERTER,
 } from 'src/constants/routes';
 import { EXPENSE_TYPE } from 'src/constants/transactions';
-import AccountList from 'src/containers/AccountList';
-import CategoryList from 'src/containers/CategoryList';
-import Dashboard from 'src/containers/Dashboard';
-import DebtList from 'src/containers/DebtList';
-import TransactionsCalendar from 'src/containers/TransactionsCalendar';
-import Report from 'src/containers/Report';
-import TransactionList from 'src/containers/TransactionList';
-import TransferList from 'src/containers/TransferList';
-import CurrencyConverter from 'src/containers/CurrencyConverter';
-import UserProfile from 'src/containers/UserProfile';
-import { isDev } from 'src/utils/common';
-import TestPage from 'src/containers/TestPage';
-
-export const routes = [
-  {
-    path: ROUTE_DASHBOARD,
-    name: 'Dashboard',
-    icon: 'mdi mdi-chart-donut-variant',
-    element: Dashboard,
-    isInSidebar: true,
-  },
-  {
-    path: ROUTE_TRANSACTIONS,
-    name: 'Transactions',
-    icon: 'mdi mdi-format-list-bulleted',
-    element: TransactionList,
-    isInSidebar: false,
-  },
-  {
-    path: ROUTE_DEBTS,
-    name: 'Debts',
-    icon: 'ion-ios-bookmarks',
-    element: DebtList,
-    isInSidebar: false,
-  },
-  {
-    path: ROUTE_ACCOUNTS,
-    name: 'Accounts',
-    icon: 'mdi mdi-wallet-travel',
-    element: AccountList,
-    isInSidebar: true,
-  },
-  {
-    path: ROUTE_TRANSFERS,
-    name: 'Transfers',
-    icon: 'ion-ios-swap',
-    element: TransferList,
-    isInSidebar: true,
-  },
-  {
-    path: ROUTE_CATEGORIES,
-    name: 'Categories',
-    icon: 'ion-ios-pricetags',
-    element: CategoryList,
-    isInSidebar: true,
-  },
-  {
-    path: ROUTE_PROFILE,
-    name: 'User Profile',
-    icon: 'fa fa-user',
-    element: UserProfile,
-    isInSidebar: false,
-  },
-  {
-    path: ROUTE_TEST_PAGE,
-    name: 'Test Page',
-    icon: 'ion-ios-construct',
-    element: TestPage,
-    isInSidebar: isDev(),
-  },
-  {
-    path: ROUTE_REPORT,
-    name: 'Annual Report',
-    icon: 'ion-ios-stats',
-    element: Report,
-    isInSidebar: true,
-  },
-  {
-    path: ROUTE_TRANSACTIONS_CALENDAR,
-    name: 'Calendar View',
-    icon: 'ion-ios-calendar',
-    element: TransactionsCalendar,
-    isInSidebar: true,
-  },
-  {
-    path: ROUTE_CURRENCY_CONVERTER,
-    name: 'Currency Converter',
-    icon: 'ion-ios-options',
-    element: CurrencyConverter,
-    isInSidebar: true,
-  },
-];
-
-export const getBrandText = (path) => find(routes, (route) => isOnPath(route.path, path))?.name || 'Budget';
 
 export const isOnPath = (pathname) => !!matchPath(history.location.pathname, pathname);
 

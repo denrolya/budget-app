@@ -2,7 +2,7 @@ import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { Button, Row, Col } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import { TRANSACTION_TYPES, TRANSACTIONS_CATEGORIES_PRESETS as PRESETS } from 'src/constants/transactions';
@@ -17,7 +17,6 @@ export const TransactionCategoriesTimelineCard = ({
   const categories = useCategories();
   const typeaheads = [];
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [isLineChart, setIsLineChart] = useState(true);
 
   const selectCategories = (selected) => {
     setSelectedCategories(selected);
@@ -60,33 +59,21 @@ export const TransactionCategoriesTimelineCard = ({
       {model.data.data && <TransactionCategoriesTimelineChart data={model.data.data} interval={model.interval} />}
 
       {!model.data.data && <NoCategoriesSelectedMessage />}
-      <Row>
-        <Col>
-          {PRESETS.map(({ name, categoryIds }) => (
-            <Button
-              size="sm"
-              color="info"
-              className="btn-simple"
-              key={`categories-preset-${name}`}
-              active={isEqual(model.data.categories.sort(), categoryIds.sort())}
-              onClick={() => setCategoriesFromPresets(categoryIds)}
-            >
-              {name}
-            </Button>
-          ))}
-        </Col>
-        <Col className="text-right">
+      <div className="d-flex justify-content-between py-1">
+        {PRESETS.map(({ name, categoryIds }) => (
           <Button
             size="sm"
             color="info"
             className="btn-simple"
-            active={!isLineChart}
-            onClick={() => setIsLineChart(!isLineChart)}
+            key={`categories-preset-${name}`}
+            active={isEqual(model.data.categories.sort(), categoryIds.sort())}
+            onClick={() => setCategoriesFromPresets(categoryIds)}
           >
-            <i aria-hidden className="ion-ios-stats" />
+            {name}
           </Button>
-        </Col>
-      </Row>
+        ))}
+      </div>
+
     </TimeperiodStatisticsCard>
   );
 };
