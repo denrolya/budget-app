@@ -8,7 +8,7 @@ const IntervalSwitch = ({
   <ButtonGroup>
     <Button
       size="sm"
-      color="info"
+      color="default"
       className="btn-simple"
       onClick={() => selected !== '1 day' && onIntervalSwitch('1 day')}
       active={selected === '1 day'}
@@ -18,7 +18,7 @@ const IntervalSwitch = ({
     </Button>
     <Button
       size="sm"
-      color="info"
+      color="default"
       className="btn-simple"
       onClick={() => selected !== '1 week' && onIntervalSwitch('1 week')}
       active={selected === '1 week'}
@@ -29,7 +29,7 @@ const IntervalSwitch = ({
     </Button>
     <Button
       size="sm"
-      color="info"
+      color="default"
       className="btn-simple"
       onClick={() => selected !== '1 month' && onIntervalSwitch('1 month')}
       active={selected === '1 month'}

@@ -84,7 +84,6 @@ const Report = ({
         <MoneyFlowCard
           isLoading={isStatisticsActionLoading('moneyFlow')}
           model={statistics.moneyFlow}
-          onIntervalSelect={() => {}}
           onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
         />
       </section>

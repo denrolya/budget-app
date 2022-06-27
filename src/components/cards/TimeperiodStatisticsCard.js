@@ -62,9 +62,9 @@ const TimeperiodStatisticsCard = ({
                     onApply={onPeriodChange}
                   >
                     <span className="cursor-pointer text-nowrap">
-                      {rangeToString(from, to)}
-                      {'  '}
                       <i aria-hidden className="ion-ios-calendar" />
+                      {'  '}
+                      {rangeToString(from, to)}
                     </span>
                   </DateRangePicker>
                 )}
