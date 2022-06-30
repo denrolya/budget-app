@@ -25,7 +25,7 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
         { ' '}
         {moment().isoWeekday(label + 1).format('dddd')}
       </h4>
-      {Object.keys(payload[0].payload.values).map((categoryName) => {
+      {Object.keys(payload[0].payload.values).reverse().map((categoryName) => {
         const category = categories.find(({ name }) => categoryName === name);
         return (
           <p
