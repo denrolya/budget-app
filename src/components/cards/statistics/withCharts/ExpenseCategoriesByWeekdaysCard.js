@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 
@@ -8,18 +8,35 @@ import ExpenseCategoriesByWeekdays from 'src/components/charts/recharts/bar/Expe
 
 const CategoryExpensesByWeekdaysCard = ({ isLoading, model, onUpdate }) => {
   const [isFilteredDataSelected, setIsFilteredDataSelected] = useState(false);
-  const { data } = model;
+  const [chartData, setChartData] = useState(model.data);
+
+  useEffect(() => {
+    const diffInDays = model.diffIn('days');
+
+    setChartData(
+      model.data.map(({ name, values }) => {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [key, value] of Object.entries(values)) {
+          // eslint-disable-next-line no-param-reassign
+          values[key] = value / diffInDays;
+        }
+        return {
+          name, values,
+        };
+      }),
+    );
+  }, [model.data]);
 
   return (
     <TimeperiodStatisticsCard
-      className="card-chart card--hover-expand"
       title="Days in week expenses"
+      className="card-chart"
       showControls={false}
-      isLoading={isLoading}
+      isLoading={isLoading || !chartData}
       model={model}
       onUpdate={onUpdate}
     >
-      <ExpenseCategoriesByWeekdays topCategories={isFilteredDataSelected} data={data} />
+      <ExpenseCategoriesByWeekdays topCategories={isFilteredDataSelected} data={chartData} />
 
       <Button
         block

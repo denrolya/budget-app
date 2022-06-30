@@ -77,8 +77,13 @@ export const AVAILABLE_STATISTICS = [
       categoryDeep: [4, 18, 132, 133],
       type: EXPENSE_TYPE,
     },
+  }, {
+    name: 'expenseCategoriesByWeekdays',
+    path: 'api/transactions/statistics/by-weekdays',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
   },
-  // 'expenseCategoriesByWeekdays',
 ];
 
 export const INITIAL_STATE = {
@@ -242,7 +247,7 @@ export const INITIAL_STATE = {
     to: endOfYear,
     data: [1, 2, 3, 4, 5, 6, 7].map((day) => ({
       name: moment().isoWeekday(day).format('dddd'),
-      values: ['Food & Drinks',
+      values: Object.fromEntries(['Food & Drinks',
         'Housing',
         'Work Expense',
         'Unknown',
@@ -252,9 +257,7 @@ export const INITIAL_STATE = {
         'Shopping',
         'Health & Fitness',
         'Vehicle',
-        'Financial expenses'].map((cat) => ({
-        [cat]: randomFloat(),
-      })),
+        'Financial expenses'].map((cat) => ([cat, randomFloat(0, 300)]))),
     })),
   }),
   utilityCostsByInterval: new TimeperiodIntervalStatistics({

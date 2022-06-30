@@ -10,9 +10,11 @@ import {
 
 import MoneyValue from 'src/components/MoneyValue';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
+import { useCategories } from 'src/contexts/CategoriesContext';
 
 const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
   const { symbol } = useBaseCurrency();
+  const categories = useCategories();
 
   const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
@@ -23,20 +25,25 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
         { ' '}
         {moment().isoWeekday(label + 1).format('dddd')}
       </h4>
-      {Object.keys(payload[0].payload.values).map((category) => (
-        <p
-          className="mb-0"
-          style={{
-            color: color({
-              luminosity: 'bright',
-              seed: category,
-            }),
-          }}
-        >
-          {`${category}: `}
-          <MoneyValue bold amount={payload[0].payload.values[category]} />
-        </p>
-      ))}
+      {Object.keys(payload[0].payload.values).map((categoryName) => {
+        const category = categories.find(({ name }) => categoryName === name);
+        return (
+          <p
+            className="mb-0"
+            key={`tooltip-item-${categoryName}`}
+            style={{
+              color: color({
+                luminosity: 'bright',
+                seed: categoryName,
+              }),
+            }}
+          >
+            <i aria-hidden className={category.icon} />
+            {` ${category.name}: `}
+            <MoneyValue bold amount={payload[0].payload.values[category.name]} />
+          </p>
+        );
+      })}
     </Card>
   );
 
@@ -63,6 +70,7 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
         {Object.keys(data[0].values).map((categoryName) => (
           <Bar
             stackId="a"
+            key={`bar-${categoryName}`}
             dataKey={`values.${categoryName}`}
             fill={color({
               luminosity: 'bright',
