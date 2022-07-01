@@ -263,7 +263,6 @@ export const INITIAL_STATE = {
         'Unknown',
         'Transportation',
         'Other',
-        'Life & Entertainment',
         'Shopping',
         'Health & Fitness',
         'Vehicle',

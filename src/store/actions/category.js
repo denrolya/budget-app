@@ -1,5 +1,6 @@
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
+import color from 'randomcolor';
 import { createActions } from 'reduxsauce';
 
 import axios from 'src/utils/http';
@@ -42,6 +43,10 @@ export const fetchList = () => async (dispatch) => {
       'asc',
     ).map(({ createdAt, ...cat }) => ({
       ...cat,
+      color: color({
+        luminosity: 'bright',
+        seed: cat.name,
+      }),
       createdAt: moment(createdAt),
     }));
     dispatch(Creators.fetchListSuccess(categories));

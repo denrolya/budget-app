@@ -1,20 +1,45 @@
-import max from 'lodash/max';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import color from 'randomcolor';
 import moment from 'moment-timezone';
 import { Card } from 'reactstrap';
 import {
-  ResponsiveContainer, BarChart, Bar, CartesianGrid, Tooltip, YAxis,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  Tooltip,
+  YAxis,
 } from 'recharts';
+import max from 'lodash/max';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { useCategories } from 'src/contexts/CategoriesContext';
 
 const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
+  const [chartData, setChartData] = useState([]);
   const { symbol } = useBaseCurrency();
   const categories = useCategories();
+
+  useEffect(() => {
+    setChartData(
+      data.map((el) => {
+        if (topCategories) {
+          const maxValue = max(Object.values(el.values));
+          const maxName = Object.keys(el.values).find((cat) => el.values[cat] === maxValue);
+
+          return {
+            ...el,
+            values: {
+              [maxName]: maxValue,
+            },
+          };
+        }
+
+        return el;
+      }),
+    );
+  }, [topCategories]);
 
   const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
@@ -27,15 +52,13 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
       </h4>
       {Object.keys(payload[0].payload.values).reverse().map((categoryName) => {
         const category = categories.find(({ name }) => categoryName === name);
+
         return (
           <p
             className="mb-0"
-            key={`tooltip-item-${categoryName}`}
+            key={`tooltip-item-${category.name}`}
             style={{
-              color: color({
-                luminosity: 'bright',
-                seed: categoryName,
-              }),
+              color: category.color,
             }}
           >
             <i aria-hidden className={category.icon} />
@@ -49,35 +72,22 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <BarChart
-        data={data.map((el) => {
-          if (topCategories) {
-            const maxValue = max(Object.values(el.values));
-            const maxName = Object.keys(el.values).find((cat) => el.values[cat] === maxValue);
-
-            return {
-              ...el,
-              values: {
-                [maxName]: maxValue,
-              },
-            };
-          }
-
-          return el;
-        })}
-      >
+      <BarChart data={chartData}>
         <CartesianGrid opacity={0.1} vertical={false} />
-        {Object.keys(data[0].values).map((categoryName) => (
-          <Bar
-            stackId="a"
-            key={`bar-${categoryName}`}
-            dataKey={`values.${categoryName}`}
-            fill={color({
-              luminosity: 'bright',
-              seed: categoryName,
-            })}
-          />
-        ))}
+        {Object.keys(data[0].values).map((categoryName) => {
+          const category = categories.find(({ name }) => categoryName === name);
+
+          return (
+            <Bar
+              stackId="a"
+              key={`bar-${category.name}`}
+              dataKey={`values.${category.name}`}
+              fill={`${category.color}33`}
+              stroke={category.color}
+              strokeWidth={2}
+            />
+          );
+        })}
         <YAxis
           tickCount={3}
           width={45}
