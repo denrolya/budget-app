@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -26,6 +26,9 @@ const Providers = ({
   fetchDebts,
   children,
 }) => {
+  const [showContent, setShowContent] = useState(false);
+  const calledOnce = useRef(false);
+
   useEffect(() => {
     fetchExchangeRates();
   }, []);
@@ -42,13 +45,24 @@ const Providers = ({
     fetchData();
   }, [isExchangeRatesLoaded]);
 
+  useEffect(() => {
+    if (calledOnce.current) {
+      return;
+    }
+
+    if (isVitalDataLoaded === true) {
+      calledOnce.current = true;
+      setShowContent(true);
+    }
+  }, [isVitalDataLoaded]);
+
   return (
     <BaseCurrencyContext.Provider value={baseCurrency}>
       <ExchangeRatesProvider>
         <AccountsProvider>
           <CategoriesProvider>
             <TransactionFormProvider>
-              { isVitalDataLoaded && children }
+              { showContent && children }
             </TransactionFormProvider>
           </CategoriesProvider>
         </AccountsProvider>
