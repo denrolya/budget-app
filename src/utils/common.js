@@ -66,7 +66,7 @@ export const revenueExpenseRatioColor = (percentage) => {
 export const isActionLoading = (action) => typeof action !== 'undefined' && action !== false;
 export const isActionResolved = (action) => action === false;
 
-export const amountInPercentage = (total, amount, fractionDigits = 2) => total > 0 ? Number(((100 * amount) / total).toFixed(fractionDigits)) : false;
+export const amountInPercentage = (total, amount, fractionDigits = 2) => total !== 0 ? Number(((100 * amount) / total).toFixed(fractionDigits)) : 0;
 
 export const isMobile = () => {
   let check = false;

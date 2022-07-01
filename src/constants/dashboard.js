@@ -67,7 +67,12 @@ export const INITIAL_STATE = {
     },
   }),
   expenseCategoriesTree: new TimeperiodStatistics({
-    data: new TreeModel().parse({ name: 'All categories' }),
+    data: new TreeModel().parse({
+      name: 'All categories',
+      total: 0,
+      value: 0,
+      previous: 0,
+    }),
   }),
   categoriesTimeline: new TimeperiodIntervalStatistics({
     data: {
