@@ -43,7 +43,7 @@ export const fetchList = () => async (dispatch) => {
       'asc',
     ).map(({ createdAt, ...cat }) => ({
       ...cat,
-      color: color({
+      color: cat.color || color({
         luminosity: 'bright',
         seed: cat.name,
       }),
