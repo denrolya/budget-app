@@ -5,7 +5,10 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  Button, CardBody, Col, Row,
+  Button,
+  CardBody,
+  Col,
+  Row,
 } from 'reactstrap';
 import SortableTree, { removeNodeAtPath } from 'react-sortable-tree';
 

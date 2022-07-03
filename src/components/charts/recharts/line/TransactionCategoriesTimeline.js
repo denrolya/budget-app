@@ -11,20 +11,21 @@ import {
   CartesianGrid,
   Legend,
 } from 'recharts';
-import color from 'randomcolor';
 import { Card } from 'reactstrap';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
+import { useCategories } from 'src/contexts/CategoriesContext';
 
 const TransactionCategoriesTimeline = ({ data }) => {
   const { symbol } = useBaseCurrency();
+  const categories = useCategories();
   const [chartData, setChartData] = useState();
 
   useEffect(() => {
-    const categories = Object.keys(data);
-    const dates = data[categories[0]].map(({ date }) => date);
+    const selectedCategories = Object.keys(data);
+    const dates = data[selectedCategories[0]].map(({ date }) => date);
 
     const test = dates.map((date, index) => {
       const result = {
@@ -32,7 +33,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
         values: {},
       };
 
-      categories.forEach((category) => {
+      selectedCategories.forEach((category) => {
         result.values[category] = data[category][index].value;
       });
 
@@ -50,7 +51,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
     }
 
     const { date, values } = payload[0].payload;
-    const categories = Object.keys(values);
+    const selectedCategories = Object.keys(values);
 
     return (
       <Card body className="px-3 py-2">
@@ -59,23 +60,17 @@ const TransactionCategoriesTimeline = ({ data }) => {
           {' '}
           {moment.unix(date).format('MMMM')}
         </h4>
-        {categories.map((category) => (
-          <p className="mb-0" key={category}>
-            {category}
-            :
-            {' '}
-            <span
-              style={{
-                color: color({
-                  luminosity: 'bright',
-                  seed: category,
-                }),
-              }}
-            >
-              <MoneyValue bold amount={values[category]} maximumFractionDigits={0} />
-            </span>
-          </p>
-        ))}
+        {selectedCategories
+          .map((categoryName) => categories.find(({ name }) => name === categoryName))
+          .map(({ name, color }) => (
+            <p className="mb-0" key={`tooltip-category-${name}`}>
+              {name}
+              {': '}
+              <span style={{ color }}>
+                <MoneyValue bold amount={values[name]} maximumFractionDigits={0} />
+              </span>
+            </p>
+          ))}
       </Card>
     );
   };
@@ -104,27 +99,22 @@ const TransactionCategoriesTimeline = ({ data }) => {
         <CartesianGrid opacity={0.2} vertical={false} stroke={HEX_COLORS.text} />
         {Object
           .keys(data)
-          .map((category) => {
-            const hexColor = color({
-              luminosity: 'dark',
-              seed: category,
-            });
-            return (
-              <Bar
-                type="monotone"
-                strokeWidth={2}
-                fillOpacity={1}
-                filter="url(#shadow)"
-                dot={false}
-                radius={[8, 8, 8, 8]}
-                key={category}
-                name={category}
-                dataKey={`values.${category}`}
-                stroke={hexColor}
-                fill={`${hexColor}33`}
-              />
-            );
-          })}
+          .map((categoryName) => categories.find(({ name }) => name === categoryName))
+          .map(({ name, color }) => (
+            <Bar
+              type="monotone"
+              strokeWidth={2}
+              fillOpacity={1}
+              filter="url(#shadow)"
+              dot={false}
+              radius={[8, 8, 8, 8]}
+              key={name}
+              name={name}
+              dataKey={`values.${name}`}
+              stroke={color}
+              fill={`${color}33`}
+            />
+          ))}
 
         <YAxis
           axisLine={false}
