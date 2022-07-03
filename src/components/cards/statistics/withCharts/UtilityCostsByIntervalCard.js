@@ -19,30 +19,30 @@ const UtilityCostsByIntervalCard = ({
 }) => {
   const categories = useCategories();
 
-  const items = Object.keys(model.data).map((categoryName) => {
-    const {
-      name, icon, color,
-    } = categories.find(({ name }) => name === categoryName);
-    const values = model.data[categoryName].map(({ value }) => value);
-    const total = sum(values);
+  const items = Object
+    .keys(model.data)
+    .map((categoryName) => categories.find(({ name }) => name === categoryName))
+    .map(({ name, icon, color }) => {
+      const values = model.data[name].map(({ value }) => value);
+      const total = sum(values);
 
-    return (
-      <SimpleStatisticsCard
-        footerPadding={false}
-        key={name}
-        title={name}
-        isLoading={isLoading}
-        content={(
-          <>
-            <i aria-hidden className={icon} style={{ color }} />
-            {' '}
-            <MoneyValue bold amount={total} maximumFractionDigits={0} />
-          </>
-        )}
-        footer={<UtilityCosts name={name} data={values} color={color} />}
-      />
-    );
-  });
+      return (
+        <SimpleStatisticsCard
+          footerPadding={false}
+          key={name}
+          title={name}
+          isLoading={isLoading}
+          content={(
+            <>
+              <i aria-hidden className={icon} style={{ color }} />
+              {' '}
+              <MoneyValue bold amount={total} maximumFractionDigits={0} />
+            </>
+          )}
+          footer={<UtilityCosts name={name} data={values} color={color} />}
+        />
+      );
+    });
 
   return (
     <>

@@ -10,7 +10,7 @@ import sumBy from 'lodash/sumBy';
 import { isDev } from 'src/utils/common';
 import MoneyValue from 'src/components/MoneyValue';
 import {
-  ROUTE_ACCOUNTS,
+  ROUTE_ACCOUNTS, ROUTE_CATEGORIES,
   ROUTE_CURRENCY_CONVERTER,
   ROUTE_DASHBOARD,
   ROUTE_DEBTS,
@@ -97,6 +97,21 @@ const Sidebar = ({
             <NavLink className="nav-link" to={ROUTE_REPORT}>
               <i aria-hidden className="ion-ios-stats" />
               <p>Annual report</p>
+            </NavLink>
+          </NavItem>
+          <NavItem tag="li">
+            <hr />
+          </NavItem>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_ACCOUNTS}>
+              <i aria-hidden className="mdi mdi-chart-donut-variant" />
+              <p>Accounts</p>
+            </NavLink>
+          </NavItem>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_CATEGORIES}>
+              <i aria-hidden className="ion-ios-stats" />
+              <p>Categories</p>
             </NavLink>
           </NavItem>
           <NavItem tag="li">

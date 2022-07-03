@@ -1,6 +1,7 @@
 import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
 import cn from 'classnames';
+import color from 'randomcolor';
 import React from 'react';
 import { Badge } from 'reactstrap';
 import TreeModel from 'tree-model';
@@ -85,6 +86,17 @@ export const listToTree = (list) => {
   return roots;
 };
 
+export const paintTree = (categories, hue = null) => {
+  categories.forEach((category) => {
+    // eslint-disable-next-line no-param-reassign
+    category.color = category.color || color({ hue, seed: category.id, luminosity: 'bright' });
+
+    if (category.children) {
+      paintTree(category.children, category.color);
+    }
+  });
+};
+
 export const createCategoriesTree = (tree) => orderBy(
   tree.map((c) => {
     if (c.children.length > 0) {
@@ -96,7 +108,7 @@ export const createCategoriesTree = (tree) => orderBy(
       ...c,
       title: (
         <span>
-          <i aria-hidden className={cn('font-18px', c.icon)} />
+          <i aria-hidden className={cn('font-18px', c.icon)} style={{ color: c.color }} />
           {'  '}
           <code>
             #

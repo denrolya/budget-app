@@ -2,6 +2,7 @@ import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import color from 'randomcolor';
 import { createActions } from 'reduxsauce';
+import { listToTree, paintTree } from 'src/utils/category';
 
 import axios from 'src/utils/http';
 import { categoryRemovalPrompt } from 'src/utils/prompts';
@@ -43,12 +44,11 @@ export const fetchList = () => async (dispatch) => {
       'asc',
     ).map(({ createdAt, ...cat }) => ({
       ...cat,
-      color: cat.color || color({
-        luminosity: 'bright',
-        seed: cat.name,
-      }),
       createdAt: moment(createdAt),
     }));
+
+    paintTree(listToTree(categories));
+
     dispatch(Creators.fetchListSuccess(categories));
   } catch (e) {
     notify('error', 'Fetch Category List');
