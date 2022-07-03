@@ -200,7 +200,7 @@ export const deleteTransaction = (transaction) => async (dispatch, getState) => 
 export const setPagination = (model) => (dispatch, getState) => {
   if (!getState().transaction.pagination.isEqual(model)) {
     dispatch(Creators.setPagination(model));
-    history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
+    history.push(`/${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
 
@@ -211,7 +211,7 @@ export const setPage = (page) => (dispatch, getState) => {
 
   if (!getState().transaction.pagination.page !== page) {
     dispatch(Creators.setPage(page));
-    history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
+    history.push(`/${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
 
@@ -222,7 +222,7 @@ export const setPerPage = (perPage) => (dispatch, getState) => {
 
   if (getState().transaction.pagination.perPage !== perPage) {
     dispatch(Creators.setPerPage(perPage));
-    history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
+    history.push(`/${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
 
@@ -236,7 +236,7 @@ export const setFilters = (filters) => (dispatch, getState) => {
 
   if (!getState().transaction.pagination.isEqual(model)) {
     dispatch(Creators.setFilters(filters));
-    history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
+    history.push(`/${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
 
@@ -247,6 +247,6 @@ export const resetFilters = () => (dispatch, getState) => {
   });
 
   if (!getState().transaction.pagination.isEqual(model)) {
-    history.push(`${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
+    history.push(`/${ROUTE_TRANSACTIONS}?${model.getParamsQuery()}`);
   }
 };
