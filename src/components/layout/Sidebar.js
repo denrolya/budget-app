@@ -104,13 +104,13 @@ const Sidebar = ({
           </NavItem>
           <NavItem tag="li">
             <NavLink className="nav-link" to={ROUTE_ACCOUNTS}>
-              <i aria-hidden className="mdi mdi-chart-donut-variant" />
+              <i aria-hidden className="mdi mdi-wallet-travel" />
               <p>Accounts</p>
             </NavLink>
           </NavItem>
           <NavItem tag="li">
             <NavLink className="nav-link" to={ROUTE_CATEGORIES}>
-              <i aria-hidden className="ion-ios-stats" />
+              <i aria-hidden className="ion-ios-pricetags" />
               <p>Categories</p>
             </NavLink>
           </NavItem>
