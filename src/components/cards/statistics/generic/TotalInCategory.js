@@ -34,7 +34,7 @@ const TotalInCategory = ({
     if (footerType === 'percentage') {
       return (
         <PercentageSinceLastPeriodMessage
-          invertedColors={type === INCOME_TYPE}
+          inverted={type === INCOME_TYPE}
           period={period}
           current={current}
           previous={previous}
@@ -44,7 +44,7 @@ const TotalInCategory = ({
 
     return (
       <AmountSinceLastPeriodMessage
-        invertedColors={type === INCOME_TYPE}
+        inverted={type === INCOME_TYPE}
         period={period}
         current={current}
         previous={previous}

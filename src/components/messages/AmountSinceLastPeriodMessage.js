@@ -8,7 +8,7 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 const AmountSinceLastPeriodMessage = ({
   previous,
   current,
-  invertedColors,
+  inverted,
   period,
   text,
 }) => {
@@ -19,7 +19,7 @@ const AmountSinceLastPeriodMessage = ({
 
   return (
     <>
-      <strong className={cn('font-style-numeric', textColor(percentage, invertedColors))}>
+      <strong className={cn('font-style-numeric', textColor(percentage, inverted))}>
         <span>
           {diff > 0 && '+'}
           {diff < 0 && '-'}
@@ -33,7 +33,7 @@ const AmountSinceLastPeriodMessage = ({
 };
 
 AmountSinceLastPeriodMessage.defaultProps = {
-  invertedColors: false,
+  inverted: false,
   period: 'last month',
   text: true,
 };
@@ -41,7 +41,7 @@ AmountSinceLastPeriodMessage.defaultProps = {
 AmountSinceLastPeriodMessage.propTypes = {
   previous: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
-  invertedColors: PropTypes.bool,
+  inverted: PropTypes.bool,
   text: PropTypes.bool,
   period: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

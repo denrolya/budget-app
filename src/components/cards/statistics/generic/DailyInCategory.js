@@ -27,7 +27,7 @@ const DailyInCategory = ({
     if (footerType === 'percentage') {
       return (
         <PercentageSinceLastPeriodMessage
-          invertedColors={type === INCOME_TYPE}
+          inverted={type === EXPENSE_TYPE}
           period={period}
           current={current}
           previous={previous}
@@ -37,7 +37,7 @@ const DailyInCategory = ({
 
     return (
       <AmountSinceLastPeriodMessage
-        invertedColors={type === INCOME_TYPE}
+        inverted={type === INCOME_TYPE}
         period={period}
         current={current}
         previous={previous}

@@ -21,9 +21,10 @@ const TotalValue = ({
     const period = model.generateSincePreviousPeriodText();
 
     if (footerType === 'percentage') {
+      console.log({ current, previous });
       return (
         <PercentageSinceLastPeriodMessage
-          invertedColors={type === INCOME_TYPE}
+          inverted={type === EXPENSE_TYPE}
           period={period}
           current={current}
           previous={previous}
@@ -33,7 +34,7 @@ const TotalValue = ({
 
     return (
       <AmountSinceLastPeriodMessage
-        invertedColors={type === INCOME_TYPE}
+        inverted={type === INCOME_TYPE}
         period={period}
         current={current}
         previous={previous}

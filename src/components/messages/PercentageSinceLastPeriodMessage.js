@@ -6,16 +6,22 @@ import { amountInPercentage, ratio, textColor } from 'src/utils/common';
 const PercentageSinceLastPeriodMessage = ({
   previous,
   current,
-  invertedColors,
+  inverted,
   period,
   text,
 }) => {
   const percentage = ratio(amountInPercentage(previous, current, 0));
 
+  let sign = percentage > 0 ? '-' : '+';
+
+  if (inverted) {
+    sign = percentage > 0 ? '+' : '-';
+  }
+
   return (
     <>
-      <strong className={cn('font-style-numeric', textColor(percentage, invertedColors))}>
-        {percentage > 0 ? '-' : '+'}
+      <strong className={cn('font-style-numeric', textColor(percentage, inverted))}>
+        {sign}
         {percentage}
         %
       </strong>
@@ -25,7 +31,7 @@ const PercentageSinceLastPeriodMessage = ({
 };
 
 PercentageSinceLastPeriodMessage.defaultProps = {
-  invertedColors: false,
+  inverted: false,
   period: 'last month',
   text: true,
 };
@@ -33,7 +39,7 @@ PercentageSinceLastPeriodMessage.defaultProps = {
 PercentageSinceLastPeriodMessage.propTypes = {
   previous: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
-  invertedColors: PropTypes.bool,
+  inverted: PropTypes.bool,
   text: PropTypes.bool,
   period: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
