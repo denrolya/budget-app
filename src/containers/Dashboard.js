@@ -55,6 +55,12 @@ const Dashboard = ({
       isLoading={isStatisticsActionLoading('monthExpenses')}
       model={statistics.monthExpenses}
     />,
+    <DailyValue
+      footerType="amount"
+      type={EXPENSE_TYPE}
+      isLoading={isStatisticsActionLoading('monthExpenses')}
+      model={statistics.monthExpenses}
+    />,
     <DailyInCategory
       category="Food"
       footerPeriod="month"
@@ -68,12 +74,6 @@ const Dashboard = ({
       type={EXPENSE_TYPE}
       isLoading={isStatisticsActionLoading('rentUtilityExpenses')}
       model={statistics.rentUtilityExpenses}
-    />,
-    <DailyValue
-      footerType="amount"
-      type={EXPENSE_TYPE}
-      isLoading={isStatisticsActionLoading('monthExpenses')}
-      model={statistics.monthExpenses}
     />,
   ];
   /* eslint-enable react/no-unstable-nested-components */
