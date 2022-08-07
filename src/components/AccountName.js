@@ -31,19 +31,16 @@ const AccountName = ({
     {showBalance && (
       <div className="d-flex flex-column">
         <p className="text-nowrap">{name}</p>
-        {balance && (
-          <MoneyValue
-            bold
-            amount={balance}
-            values={convertedValues}
-            currency={currency}
-            className={cn('font-size-larger', 'font-weight-bold', {
-              'text-white': balance === 0,
-              'text-danger': balance < 0,
-              'text-success': balance > 0,
-            })}
-          />
-        )}
+        <MoneyValue
+          bold
+          amount={balance}
+          values={convertedValues}
+          currency={currency}
+          className={cn('font-size-larger', 'font-weight-bold', {
+            'text-danger': balance <= 0,
+            'text-success': balance > 0,
+          })}
+        />
       </div>
     )}
   </>
