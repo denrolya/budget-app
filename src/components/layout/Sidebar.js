@@ -17,7 +17,7 @@ import {
   ROUTE_REPORT,
   ROUTE_TEST_PAGE,
   ROUTE_TRANSACTIONS,
-  ROUTE_TRANSACTIONS_CALENDAR,
+  ROUTE_TRANSACTIONS_CALENDAR, ROUTE_TRANSFERS,
 } from 'src/constants/routes';
 import { useActiveAccounts } from 'src/contexts/AccountsContext';
 import { generateLinkToAccountTransactionsPage } from 'src/utils/routing';
@@ -127,6 +127,12 @@ const Sidebar = ({
             <NavLink className="nav-link" to={ROUTE_TRANSACTIONS_CALENDAR}>
               <i aria-hidden className="ion-ios-calendar" />
               <p className="text-capitalize">Calendar View(beta)</p>
+            </NavLink>
+          </NavItem>
+          <NavItem tag="li">
+            <NavLink className="nav-link" to={ROUTE_TRANSFERS}>
+              <i aria-hidden className="ion-ios-swap" />
+              <p className="text-capitalize">Transfers</p>
             </NavLink>
           </NavItem>
           <NavItem tag="li">
