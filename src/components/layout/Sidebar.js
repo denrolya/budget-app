@@ -20,7 +20,6 @@ import {
   ROUTE_TRANSACTIONS_CALENDAR, ROUTE_TRANSFERS,
 } from 'src/constants/routes';
 import { useActiveAccounts } from 'src/contexts/AccountsContext';
-import { generateLinkToAccountTransactionsPage } from 'src/utils/routing';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import AccountName from 'src/components/AccountName';
 import { CURRENCIES } from 'src/constants/currency';
@@ -164,7 +163,7 @@ const Sidebar = ({
             <NavItem tag="li" key={account.name}>
               <NavLink
                 className={() => 'nav-link text-capitalize'}
-                to={generateLinkToAccountTransactionsPage(account.id)}
+                to={`${ROUTE_ACCOUNTS}/${account.id}`}
               >
                 <AccountName showBalance account={account} />
               </NavLink>

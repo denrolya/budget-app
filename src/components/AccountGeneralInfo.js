@@ -90,9 +90,9 @@ const AccountGeneralInfo = ({
           </Col>
         </Row>
         <h4 className="mb-1">
-          Created:
-          {' '}
           <i aria-hidden className="ion-ios-calendar" />
+          {' '}
+          Created:
           {' '}
           {moment(data.createdAt).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
         </h4>
@@ -146,7 +146,7 @@ const AccountGeneralInfo = ({
                 )}
                 {data.cardNumber && (
                   <>
-                    <dt>Card number: </dt>
+                    <dt>Card number</dt>
                     <dd
                       className="cursor-copy"
                       onClick={() => copyToClipboard(data.cardNumber)}
@@ -157,7 +157,7 @@ const AccountGeneralInfo = ({
                 )}
                 {data.monobankId && (
                   <>
-                    <dt>Monobank ID: </dt>
+                    <dt>Monobank ID</dt>
                     <dd
                       className="cursor-copy"
                       onClick={() => copyToClipboard(data.monobankId)}
