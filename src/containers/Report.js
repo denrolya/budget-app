@@ -53,8 +53,6 @@ const Report = ({
     updateReport();
   }, [code, from.year()]);
 
-  const currentRange = useMemo(() => rangeToString(from, to, ANNUAL_REPORT_RANGES), [from, to]);
-
   return (
     <>
       <Helmet>
@@ -71,12 +69,12 @@ const Report = ({
         locale={{ format: MOMENT_DATE_FORMAT }}
         startDate={from}
         endDate={to}
-        onApply={(event, { startDate, endDate }) => setPeriod(startDate.year(), endDate.year())}
+        onApply={(_event, { startDate, endDate }) => setPeriod(startDate.year(), endDate.year())}
       >
         <span className="cursor-pointer text-nowrap">
           <i aria-hidden className="ion-ios-calendar" />
           {'  '}
-          {currentRange}
+          {rangeToString(from, to, ANNUAL_REPORT_RANGES)}
         </span>
       </DateRangePicker>
 

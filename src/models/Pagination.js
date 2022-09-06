@@ -2,7 +2,6 @@ import { Record } from 'immutable';
 import isNil from 'lodash/isNil';
 import compact from 'lodash/compact';
 import { stringify } from 'query-string';
-import isEqual from 'lodash/isEqual';
 
 export const DEFAULT_VALUES = {
   page: 1,

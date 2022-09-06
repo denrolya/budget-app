@@ -1,14 +1,12 @@
 import pick from 'lodash/pick';
 import sumBy from 'lodash/sumBy';
-import React from 'react';
 import moment from 'moment-timezone';
 
 import { initializeList } from 'src/utils/transaction';
 import { RAINBOW_COLORS } from 'src/constants/color';
 import { amountInPercentage } from 'src/utils/common';
-import { CURRENCIES } from 'src/constants/currency';
 
-export const formatDetails = (data, baseCurrencyCode) => {
+export const formatDetails = (data) => {
   const totalExpense = sumBy(data.topExpenseCategories, 'total');
   const totalIncome = sumBy(data.topIncomeCategories, 'total');
   return {

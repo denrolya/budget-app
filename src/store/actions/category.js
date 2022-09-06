@@ -1,6 +1,5 @@
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
-import color from 'randomcolor';
 import { createActions } from 'reduxsauce';
 import { listToTree, paintTree } from 'src/utils/category';
 

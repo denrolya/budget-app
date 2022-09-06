@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import pick from 'lodash/pick';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   Button, ButtonGroup, Col, Form, FormGroup, Input, Label,
