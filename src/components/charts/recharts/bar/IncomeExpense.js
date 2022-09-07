@@ -34,7 +34,7 @@ const INTERVALS = {
 /**
  * TODO: Format ticks & tooltips by interval
  */
-const MoneyFlowChart = () => {
+const IncomeExpenseChart = () => {
   const [interval, setInterval] = useState('1y');
   const [displayValues, setDisplayValues] = useState(TRANSACTION_TYPES);
   const [data, setData] = useState([]);
@@ -131,6 +131,6 @@ const MoneyFlowChart = () => {
   );
 };
 
-MoneyFlowChart.propTypes = {};
+IncomeExpenseChart.propTypes = {};
 
-export default MoneyFlowChart;
+export default IncomeExpenseChart;

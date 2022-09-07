@@ -15,10 +15,8 @@ import {
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-import Breadcrumbs from 'src/components/CategoriesBreadcrumbs';
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import {
   amountInPercentage,
   arrowIcon,
@@ -34,7 +32,6 @@ const CategoriesList = ({
   onCategorySelect,
   from,
   to,
-  type,
 }) => {
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 
@@ -50,8 +47,6 @@ const CategoriesList = ({
 
   return (
     <>
-      <Breadcrumbs selectedCategory={selectedCategory} selectCategory={onCategorySelect} tree={data} />
-
       <ListGroup flush className="card-category-tree__list">
         {selectedSubtree.children.map(({
           model: {
@@ -255,9 +250,7 @@ const CategoriesList = ({
   );
 };
 
-CategoriesList.defaultProps = {
-  type: EXPENSE_TYPE,
-};
+CategoriesList.defaultProps = {};
 
 CategoriesList.propTypes = {
   data: PropTypes.object.isRequired,
@@ -265,7 +258,6 @@ CategoriesList.propTypes = {
   to: PropTypes.object.isRequired,
   selectedCategory: PropTypes.string.isRequired,
   onCategorySelect: PropTypes.func.isRequired,
-  type: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
 };
 
 export default memo(

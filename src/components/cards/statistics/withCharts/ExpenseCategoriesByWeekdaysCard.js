@@ -6,7 +6,7 @@ import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import ExpenseCategoriesByWeekdays from 'src/components/charts/recharts/bar/ExpenseCategoriesByWeekdays';
 
-const CategoryExpensesByWeekdaysCard = ({ isLoading, model, onUpdate }) => {
+const CategoryExpensesByWeekdaysCard = ({ isLoading, model }) => {
   const [isFilteredDataSelected, setIsFilteredDataSelected] = useState(false);
   const [chartData, setChartData] = useState(model.data);
 
@@ -29,12 +29,9 @@ const CategoryExpensesByWeekdaysCard = ({ isLoading, model, onUpdate }) => {
 
   return (
     <TimeperiodStatisticsCard
-      title="Days in week expenses"
+      header="Days in week expenses"
       className="card-chart"
-      showControls={false}
       isLoading={isLoading || !chartData}
-      model={model}
-      onUpdate={onUpdate}
     >
       <ExpenseCategoriesByWeekdays topCategories={isFilteredDataSelected} data={chartData} />
 
@@ -58,7 +55,6 @@ CategoryExpensesByWeekdaysCard.defaultProps = {
 
 CategoryExpensesByWeekdaysCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
-  onUpdate: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
 };
 

@@ -9,11 +9,7 @@ import TransactionCategoriesComparison from 'src/components/charts/recharts/bar/
 
 const TAG_REPORT_NAME = 'report-main';
 
-const ExpenseCategoriesReviewCard = ({
-  isLoading,
-  model,
-  onUpdate,
-}) => {
+const ExpenseCategoriesReviewCard = ({ isLoading, model }) => {
   const { from } = model;
 
   const expenseCategories = useExpenseCategories();
@@ -26,12 +22,9 @@ const ExpenseCategoriesReviewCard = ({
 
   return (
     <TimeperiodStatisticsCard
-      title="Main expense categories"
+      header="Main expense categories"
       className="card-chart"
-      showControls={false}
       isLoading={isLoading}
-      model={model}
-      onUpdate={onUpdate}
     >
       <TransactionCategoriesComparison data={data} selectedYear={from.year()} />
     </TimeperiodStatisticsCard>
@@ -40,12 +33,10 @@ const ExpenseCategoriesReviewCard = ({
 
 ExpenseCategoriesReviewCard.defaultProps = {
   isLoading: false,
-  onUpdate: undefined,
 };
 
 ExpenseCategoriesReviewCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
-  onUpdate: PropTypes.func,
   isLoading: PropTypes.bool,
 };
 

@@ -15,11 +15,9 @@ const TotalExpensesByIntervalCard = ({
 }) => (
   <TimeperiodStatisticsCard
     className={cn('card-chart', 'card--hover-expand', className)}
-    title="Expenses by seasons"
-    showControls={false}
+    header="Expenses by seasons"
     transparent={transparent}
     isLoading={isLoading}
-    model={model}
   >
     <ExpensesBySeason data={model.data} />
   </TimeperiodStatisticsCard>

@@ -11,18 +11,14 @@ const AccountDistributionCard = ({
   isLoading,
   height,
   model,
-  onUpdate,
 }) => {
   const data = useMemo(() => sortBy(model.data, 'value'), [model.data]);
 
   return (
     <TimeperiodStatisticsCard
       className="card-chart card--hover-expand"
-      title="Account distribution"
-      showControls={false}
+      header="Account distribution"
       isLoading={isLoading}
-      model={model}
-      onUpdate={onUpdate}
     >
       <AccountsExpenseDistribution data={data} height={height} />
     </TimeperiodStatisticsCard>
@@ -36,7 +32,6 @@ AccountDistributionCard.defaultProps = {
 
 AccountDistributionCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
-  onUpdate: PropTypes.func.isRequired,
   height: PropTypes.number,
   isLoading: PropTypes.bool,
 };

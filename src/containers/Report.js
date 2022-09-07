@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -80,6 +80,7 @@ const Report = ({
 
       <section>
         <MoneyFlowCard
+          showCalendarSwitch={false}
           isLoading={isStatisticsActionLoading('moneyFlow')}
           model={statistics.moneyFlow}
           onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
@@ -92,7 +93,7 @@ const Report = ({
         <h1 id="incomes" className="cursor-pointer">Incomes</h1>
         <UncontrolledCollapse defaultOpen toggler="#incomes">
           <Row>
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={3}>
               <TotalValue
                 footerType="amount"
                 type={INCOME_TYPE}
@@ -107,7 +108,7 @@ const Report = ({
                 model={statistics.totalIncome}
               />
             </Col>
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={6}>
               <CategoryTreeCard
                 showDailyAnnual
                 type={INCOME_TYPE}
@@ -116,7 +117,7 @@ const Report = ({
                 onUpdate={(newModel) => setStatistics('incomeCategoriesTree', newModel)}
               />
             </Col>
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={3}>
               <MainIncomeSourceCard
                 isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
                 model={statistics.incomeCategoriesTree}

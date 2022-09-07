@@ -15,7 +15,6 @@ import { amountInPercentage } from 'src/utils/common';
 const NewCategoriesCard = ({
   isLoading,
   model,
-  onUpdate,
   type,
 }) => {
   const { from } = model;
@@ -40,12 +39,9 @@ const NewCategoriesCard = ({
 
   return (
     <TimeperiodStatisticsCard
-      title={`New ${type} categories`}
       className="card--hover-expand"
-      showControls={false}
+      header={`New ${type} categories`}
       isLoading={isLoading}
-      model={model}
-      onUpdate={onUpdate}
     >
       <Table borderless size="sm">
         <tbody>
@@ -81,14 +77,12 @@ const NewCategoriesCard = ({
 
 NewCategoriesCard.defaultProps = {
   isLoading: false,
-  onUpdate: undefined,
 };
 
 NewCategoriesCard.propTypes = {
   model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
   type: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]).isRequired,
   isLoading: PropTypes.bool,
-  onUpdate: PropTypes.func,
 };
 
 export default memo(
