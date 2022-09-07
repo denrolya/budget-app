@@ -72,7 +72,7 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={chartData}>
+      <BarChart data={chartData} margin={0} padding={0}>
         <CartesianGrid opacity={0.1} vertical={false} />
         {Object.keys(data[0].values).map((categoryName) => {
           const category = categories.find(({ name }) => categoryName === name);

@@ -18,10 +18,10 @@ const TimeperiodStatisticsCard = ({
     transparent={transparent}
     className={cn('pt-2', 'px-2', className)}
   >
-    <div className="text-white">
+    <header>
       {isString(header) && <h5 className="mb-3 text-white">{header}</h5>}
       {!isString(header) && header}
-    </div>
+    </header>
 
     {children}
   </LoadingCard>

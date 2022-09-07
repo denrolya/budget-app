@@ -9,7 +9,6 @@ import {
   YAxis,
   XAxis,
   CartesianGrid,
-  Legend,
 } from 'recharts';
 import { Card } from 'reactstrap';
 
@@ -77,7 +76,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={250}>
-      <BarChart data={chartData}>
+      <BarChart padding={0} margin={0} data={chartData}>
         <defs>
           <filter id="shadow" height="200%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur" />
@@ -107,7 +106,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
               fillOpacity={1}
               filter="url(#shadow)"
               dot={false}
-              radius={[8, 8, 8, 8]}
+              radius={[8, 8, 0, 0]}
               key={name}
               name={name}
               dataKey={`values.${name}`}
@@ -119,19 +118,21 @@ const TransactionCategoriesTimeline = ({ data }) => {
         <YAxis
           axisLine={false}
           tickLine={false}
-          tickCount={3}
+          tickCount={5}
           tick={{ fontSize: 9 }}
           width={45}
           stroke={HEX_COLORS.text}
           tickFormatter={yAxisTickFormatter}
         />
         <XAxis hide dataKey="date" axisLine={false} tickLine={false} stroke={HEX_COLORS.text} />
-
-        <Legend iconType="square" verticalAlign="top" />
         <Tooltip cursor={false} content={tooltipFormatter} />
       </BarChart>
     </ResponsiveContainer>
   );
+};
+
+TransactionCategoriesTimeline.defaultProps = {
+  data: undefined,
 };
 
 TransactionCategoriesTimeline.propTypes = {

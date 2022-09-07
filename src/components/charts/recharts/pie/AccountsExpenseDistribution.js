@@ -56,11 +56,7 @@ const AccountDistribution = ({ data, height }) => {
 
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <PieChart
-        margin={{
-          top: 0, left: 0, right: 0, bottom: 0,
-        }}
-      >
+      <PieChart margin={0} padding={0}>
         <defs>
           <filter id="shadow" height="200%">
             <feDropShadow dx="0" dy="10" stdDeviation="10" />

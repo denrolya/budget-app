@@ -72,7 +72,7 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
 
   return chartData.length > 0 && (
     <ResponsiveContainer width="100%" height={height}>
-      <BarChart stackOffset="sign" data={chartData}>
+      <BarChart stackOffset="sign" padding={0} margin={0} data={chartData}>
         <defs>
           <linearGradient id="income-gradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={HEX_COLORS.info} stopOpacity={0.4} />

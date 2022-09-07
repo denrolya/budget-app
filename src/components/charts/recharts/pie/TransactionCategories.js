@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from 'reactstrap';
 import {
   PieChart,
@@ -8,14 +8,12 @@ import {
   Tooltip,
 } from 'recharts';
 import PropTypes from 'prop-types';
-import sumBy from 'lodash/sumBy';
 
 import { amountInPercentage, expenseRatioColor } from 'src/utils/common';
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
 
 const TransactionCategories = ({ data, selectedCategory, onClick }) => {
-  const total = useMemo(() => sumBy(data, 'value'), [data]);
   const [chartData, setChartData] = useState([]);
   const onSectorEnter = (_, index) => setActive(index);
   const [active, setActive] = useState();
@@ -131,7 +129,9 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
   );
 };
 
-TransactionCategories.defaultProps = {};
+TransactionCategories.defaultProps = {
+  selectedCategory: undefined,
+};
 
 TransactionCategories.propTypes = {
   data: PropTypes.object.isRequired,

@@ -50,7 +50,7 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data} barGap="5%" barCategoryGap="15%">
+      <BarChart data={data} barGap="5%" barCategoryGap="15%" margin={0} padding={0}>
         <defs>
           <filter id="shadow" height="200%">
             <feDropShadow dx="0" dy="10" stdDeviation="10" />
