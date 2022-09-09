@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import cn from 'classnames';
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
@@ -45,11 +45,27 @@ const DailyValue = ({
     );
   }, [footerType, current, previous]);
 
+  const diff = previous - current;
+
   return (
     <SimpleStatisticsCard
       title={title || `Daily ${type}s`}
       isLoading={isLoading}
-      content={<MoneyValue bold maximumFractionDigits={0} amount={current} />}
+      content={(
+        <>
+          <i
+            aria-hidden
+            className={cn('strong', {
+              'ion-ios-trending-down': diff > 0,
+              'ion-ios-trending-up': diff < 0,
+              'text-success': (diff > 0 && type === EXPENSE_TYPE) || (diff < 0 && type === INCOME_TYPE),
+              'text-danger': (diff < 0 && type === EXPENSE_TYPE) || (diff > 0 && type === INCOME_TYPE),
+            })}
+          />
+          {' '}
+          <MoneyValue bold maximumFractionDigits={0} amount={current} />
+        </>
+      )}
       footer={footer}
     />
   );

@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
@@ -27,7 +28,7 @@ const DailyInCategory = ({
     if (footerType === 'percentage') {
       return (
         <PercentageSinceLastPeriodMessage
-          inverted={type === EXPENSE_TYPE}
+          inverted={type === INCOME_TYPE}
           period={period}
           current={current}
           previous={previous}
@@ -45,11 +46,27 @@ const DailyInCategory = ({
     );
   }, [footerType, current, previous]);
 
+  const diff = previous - current;
+
   return (
     <SimpleStatisticsCard
       title={title || `Daily ${type}s in: ${category}`}
       isLoading={isLoading}
-      content={<MoneyValue bold maximumFractionDigits={0} amount={current} />}
+      content={(
+        <>
+          <i
+            aria-hidden
+            className={cn('strong', {
+              'ion-ios-trending-down': diff > 0,
+              'ion-ios-trending-up': diff < 0,
+              'text-success': (diff > 0 && type === EXPENSE_TYPE) || (diff < 0 && type === INCOME_TYPE),
+              'text-danger': (diff < 0 && type === EXPENSE_TYPE) || (diff > 0 && type === INCOME_TYPE),
+            })}
+          />
+          {' '}
+          <MoneyValue bold maximumFractionDigits={0} amount={current} />
+        </>
+      )}
       footer={footer}
     />
   );

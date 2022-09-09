@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { randomString } from 'src/utils/randomData';
-import { amountInPercentage, ratio, textColor } from 'src/utils/common';
+import { amountInPercentage, ratio } from 'src/utils/common';
 
 const PercentageSinceLastPeriodMessage = ({
   previous,
@@ -25,7 +25,7 @@ const PercentageSinceLastPeriodMessage = ({
 
   return (
     <>
-      <strong id={id} className={cn('font-style-numeric', 'cursor-info', textColor(percentage, inverted))}>
+      <strong id={id} className={cn('font-style-numeric', 'cursor-info')}>
         {sign}
         {percentage}
         %

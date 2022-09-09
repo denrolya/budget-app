@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
@@ -23,7 +24,7 @@ const TotalValue = ({
     if (footerType === 'percentage') {
       return (
         <PercentageSinceLastPeriodMessage
-          inverted={type === EXPENSE_TYPE}
+          inverted={type === INCOME_TYPE}
           period={period}
           current={current}
           previous={previous}
@@ -41,11 +42,27 @@ const TotalValue = ({
     );
   }, [footerType, current, previous]);
 
+  const diff = previous - current;
+
   return (
     <SimpleStatisticsCard
       title={title || `Total ${type}e`}
       isLoading={isLoading}
-      content={<MoneyValue bold maximumFractionDigits={0} amount={model.data.current} />}
+      content={(
+        <>
+          <i
+            aria-hidden
+            className={cn('strong', {
+              'ion-ios-trending-down': diff > 0,
+              'ion-ios-trending-up': diff < 0,
+              'text-success': (diff > 0 && type === EXPENSE_TYPE) || (diff < 0 && type === INCOME_TYPE),
+              'text-danger': (diff < 0 && type === EXPENSE_TYPE) || (diff > 0 && type === INCOME_TYPE),
+            })}
+          />
+          {' '}
+          <MoneyValue bold maximumFractionDigits={0} amount={model.data.current} />
+        </>
+      )}
       footer={footer}
     />
   );
