@@ -61,8 +61,10 @@ const TransactionCategoriesTimeline = ({ data }) => {
         </h4>
         {selectedCategories
           .map((categoryName) => categories.find(({ name }) => name === categoryName))
-          .map(({ name, color }) => (
+          .map(({ name, color, icon }) => (
             <p className="mb-0" key={`tooltip-category-${name}`}>
+              <i aria-hidden="true" className={icon} />
+              {' '}
               {name}
               {': '}
               <span style={{ color }}>
