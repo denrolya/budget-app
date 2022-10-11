@@ -127,10 +127,7 @@ const TransactionList = ({
             </CardHeader>
             <Collapse isOpen={isFiltersOpen}>
               <CardBody>
-                <TransactionFilters
-                  model={pagination.filters}
-                  onModelChange={setFilters}
-                />
+                <TransactionFilters model={pagination.filters} onModelChange={setFilters} />
               </CardBody>
             </Collapse>
           </Card>

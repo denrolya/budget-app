@@ -12,16 +12,14 @@ import TransactionFiltersModel from 'src/models/TransactionFilters';
 import DateRange from 'src/components/forms/fields/DateRange';
 import AccountName from 'src/components/AccountName';
 
-const TransactionFilters = ({
-  onModelChange, model,
-}) => {
+const TransactionFilters = ({ onModelChange, model }) => {
   const accounts = useAccounts();
   const categories = useCategories();
   const typeaheads = [];
 
   const { from, to } = model;
 
-  const applyDateRangeFilter = (event, { startDate, endDate }) => onModelChange(model.setFromTo(startDate, endDate));
+  const onDateRangeFilterChange = (event, { startDate, endDate }) => onModelChange(model.setFromTo(startDate, endDate));
 
   return (
     <Form className="form transaction-filters">
@@ -45,7 +43,7 @@ const TransactionFilters = ({
 
       <FormGroup className="mb-4">
         <h5>Date range:</h5>
-        <DateRange from={from} to={to} onApply={applyDateRangeFilter} />
+        <DateRange from={from} to={to} onApply={onDateRangeFilterChange} />
       </FormGroup>
 
       <FormGroup className="mb-4">

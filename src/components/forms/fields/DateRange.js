@@ -1,9 +1,13 @@
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
+import cn from 'classnames';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import {
-  Input, InputGroup, InputGroupAddon, InputGroupText,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
 } from 'reactstrap';
 
 import { rangeToString } from 'src/utils/datetime';
@@ -15,47 +19,37 @@ const DateRange = ({
   onApply,
   ranges,
   size,
-}) => {
-  const handleDateRangeFilters = ({ target: { value } }) => {
-    let [startDate, endDate] = value.split(' - ');
-    startDate = moment(startDate, MOMENT_DATE_FORMAT, true);
-    endDate = moment(endDate, MOMENT_DATE_FORMAT, true);
-
-    if (startDate.isValid() && endDate.isValid()) {
-      onApply(null, {
-        startDate,
-        endDate,
-      });
-    }
-  };
-
-  return (
-    <DateRangePicker
-      autoApply
-      containerClass="d-block"
-      alwaysShowCalendars={window.innerWidth > 729}
-      locale={{ format: MOMENT_DATE_FORMAT }}
-      autoUpdateInput={false}
-      startDate={from}
-      endDate={to}
-      ranges={ranges}
-      onApply={onApply}
-    >
-      <InputGroup size={size} className="m-0">
-        <InputGroupAddon addonType="prepend">
-          <InputGroupText>
-            <i aria-hidden className="ion-ios-calendar" />
-          </InputGroupText>
-        </InputGroupAddon>
-        <Input
-          type="text"
-          value={rangeToString(moment(from, MOMENT_DATE_FORMAT), moment(to, MOMENT_DATE_FORMAT))}
-          onChange={handleDateRangeFilters}
-        />
-      </InputGroup>
-    </DateRangePicker>
-  );
-};
+}) => (
+  <DateRangePicker
+    autoApply
+    containerClass="d-block"
+    alwaysShowCalendars={window.innerWidth > 729}
+    locale={{ format: MOMENT_DATE_FORMAT }}
+    autoUpdateInput={false}
+    startDate={from}
+    endDate={to}
+    ranges={ranges}
+    onApply={onApply}
+  >
+    <InputGroup size={size} className="m-0">
+      <InputGroupAddon addonType="prepend">
+        <InputGroupText>
+          <i
+            aria-hidden
+            className={cn({
+              'ion-ios-trash': from && to,
+              'ion-ios-calendar': !from && !to,
+            })}
+          />
+        </InputGroupText>
+      </InputGroupAddon>
+      <Input
+        type="text"
+        defaultValue={rangeToString(moment(from, MOMENT_DATE_FORMAT), moment(to, MOMENT_DATE_FORMAT))}
+      />
+    </InputGroup>
+  </DateRangePicker>
+);
 
 DateRange.defaultProps = {
   size: undefined,

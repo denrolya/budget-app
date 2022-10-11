@@ -68,7 +68,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
               {name}
               {': '}
               <span style={{ color }}>
-                <MoneyValue bold amount={values[name]} maximumFractionDigits={0} />
+                <MoneyValue bold maximumFractionDigits={0} amount={values[name]} />
               </span>
             </p>
           ))}
@@ -104,11 +104,11 @@ const TransactionCategoriesTimeline = ({ data }) => {
           .map(({ name, color }) => (
             <Bar
               type="monotone"
+              filter="url(#shadow)"
               strokeWidth={2}
               fillOpacity={1}
-              filter="url(#shadow)"
-              dot={false}
               radius={[8, 8, 0, 0]}
+              dot={false}
               key={name}
               name={name}
               dataKey={`values.${name}`}
