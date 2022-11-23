@@ -26,13 +26,13 @@ const AccountTransactionsDetails = ({ account }) => {
   const transactionsCountByMonths = useMemo(() => {
     const result = [];
     logs.forEach(({ date }) => {
-      const index = result.findIndex((el) => el.date.isSame(date.startOf('month')));
+      const index = result.findIndex((el) => el.date.isSame(date.clone().startOf('month')));
 
       if (index !== -1) {
         result[index].value += 1;
       } else {
         result.push({
-          date: date.startOf('month'),
+          date: date.clone().startOf('month'),
           value: 1,
         });
       }
