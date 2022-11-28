@@ -12,8 +12,8 @@ import { TRANSACTION_TYPES } from 'src/constants/transactions';
 
 export const DEFAULT_VALUES = {
   types: [],
-  from: moment().startOf('month'),
-  to: moment().endOf('month'),
+  from: moment().subtract(10, 'day'),
+  to: moment(),
   accounts: [],
   categories: [],
   onlyDrafts: false,
@@ -136,11 +136,17 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
   isDefault(name) {
     if (Array.isArray(this.get(name))) {
       return isEqual(sortBy(this.get(name)), sortBy(DEFAULT_VALUES[name]));
-    } if (isMoment(this.get(name))) {
+    }
+
+    if (isMoment(this.get(name))) {
       return this.get(name).isSame(DEFAULT_VALUES[name]);
     }
 
     return isEqual(this.get(name), DEFAULT_VALUES[name]);
+  }
+
+  hasChanged() {
+    return Object.keys(DEFAULT_VALUES).some((name) => !this.isDefault(name));
   }
 }
 

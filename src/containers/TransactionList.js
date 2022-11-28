@@ -126,7 +126,7 @@ const TransactionList = ({
               </h5>
             </CardHeader>
             <Collapse isOpen={isFiltersOpen}>
-              <CardBody>
+              <CardBody className="pt-0">
                 <TransactionFilters model={pagination.filters} onModelChange={setFilters} />
               </CardBody>
             </Collapse>

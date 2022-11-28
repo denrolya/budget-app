@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import {
-  Form, FormGroup, Label, Input,
+  Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
 
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import { useAccounts } from 'src/contexts/AccountsContext';
 import { useCategories } from 'src/contexts/CategoriesContext';
-import TransactionFiltersModel from 'src/models/TransactionFilters';
+import TransactionFiltersModel, { DEFAULT_VALUES } from 'src/models/TransactionFilters';
 import DateRange from 'src/components/forms/fields/DateRange';
 import AccountName from 'src/components/AccountName';
 
@@ -20,10 +20,23 @@ const TransactionFilters = ({ onModelChange, model }) => {
   const { from, to } = model;
 
   const onDateRangeFilterChange = (event, { startDate, endDate }) => onModelChange(model.setFromTo(startDate, endDate));
+  const onDateRangeFilterReset = () => onModelChange(model.setFromTo(DEFAULT_VALUES.from, DEFAULT_VALUES.to));
 
   return (
     <Form className="form transaction-filters">
+      {model.hasChanged() && (
+        <Button
+          block
+          size="sm"
+          color="warning"
+          className="mb-3"
+          onClick={() => onModelChange(model.merge(DEFAULT_VALUES))}
+        >
+          Reset
+        </Button>
+      )}
       <FormGroup className="mb-4">
+        <div className="ml-3" />
         <div className="ml-3">
           <FormGroup check>
             <Label check>
@@ -38,12 +51,19 @@ const TransactionFilters = ({ onModelChange, model }) => {
             </Label>
           </FormGroup>
         </div>
-        <div className="ml-3" />
       </FormGroup>
 
       <FormGroup className="mb-4">
-        <h5>Date range:</h5>
-        <DateRange from={from} to={to} onApply={onDateRangeFilterChange} />
+        <h5>Date Range:</h5>
+        <div className="ml-3">
+          <DateRange
+            showReset={!model.isDefault('from') || !model.isDefault('to')}
+            from={from}
+            to={to}
+            onApply={onDateRangeFilterChange}
+            onReset={onDateRangeFilterReset}
+          />
+        </div>
       </FormGroup>
 
       <FormGroup className="mb-4">

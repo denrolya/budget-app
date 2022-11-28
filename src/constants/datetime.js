@@ -15,6 +15,7 @@ export const MOMENT_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const ANNUAL_REPORT_RANGES = generateYearRanges(FIRST_AVAILABLE_YEAR);
 
 export const DATERANGE_PICKER_RANGES = {
+  '10 days': [moment().subtract(10, 'day'), moment()],
   Yesterday: [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
   Today: [moment(), moment()],
   'Last Week': [moment().startOf('isoWeek').subtract(1, 'week'), moment().endOf('isoWeek').subtract(1, 'week')],
