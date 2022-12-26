@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import xor from 'lodash/xor';
+import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Card, Button } from 'reactstrap';
 import {
@@ -96,10 +96,12 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
         {' '}
         {moment.unix(label).format(INTERVALS[interval].tooltipDateFormat)}
       </h4>
-      <p className="text-success mb-0">
-        <MoneyValue bold maximumFractionDigits={0} amount={payload?.[1]?.value} />
-      </p>
-      <p className="text-danger mb-0">
+      <p
+        className={cn('mb-0', {
+          'text-success': displayValues.includes(INCOME_TYPE),
+          'text-danger': displayValues.includes(EXPENSE_TYPE),
+        })}
+      >
         <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.value)} />
       </p>
     </Card>
