@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { useMemo, useEffect } from 'react';
-import sumBy from 'lodash/sumBy';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { CardBody, Col, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
 import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
-import LoadingCard from 'src/components/cards/LoadingCard';
-import MoneyValue from 'src/components/MoneyValue';
 
 import DailyValue from 'src/components/cards/statistics/generic/DailyValue';
 import DailyInCategory from 'src/components/cards/statistics/generic/DailyInCategory';
@@ -18,7 +15,7 @@ import TotalInCategory from 'src/components/cards/statistics/generic/TotalInCate
 
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/statistics/withCharts/TransactionCategoriesTimelineCard';
-import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
+import IncomeExpense from 'src/components/charts/recharts/bar/IncomeExpense';
 
 import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
@@ -32,19 +29,13 @@ const Dashboard = ({
   updateDashboard,
   setStatistics,
 }) => {
-  const { symbol, code } = useBaseCurrency();
+  const { code } = useBaseCurrency();
 
   useEffect(() => {
     updateDashboard();
   }, [code]);
 
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
-
-  const totalIncome = useMemo(() => sumBy(statistics.moneyFlow.data, 'income'), [statistics.moneyFlow.data]);
-  const totalExpense = useMemo(
-    () => Math.abs(sumBy(statistics.moneyFlow.data, 'expense')),
-    [statistics.moneyFlow.data],
-  );
 
   /* eslint-disable react/no-unstable-nested-components */
   const shortStatistics = [
@@ -89,10 +80,9 @@ const Dashboard = ({
       <div className="dashboard">
         <Row>
           <Col md={12}>
-            <MoneyFlowCard
-              isLoading={isStatisticsActionLoading('moneyFlow')}
-              model={statistics.moneyFlow}
-              onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
+            <IncomeExpense
+              model={statistics.incomeExpense}
+              onUpdate={(newModel) => setStatistics('incomeExpense', newModel)}
             />
           </Col>
         </Row>
@@ -107,45 +97,6 @@ const Dashboard = ({
               { item }
             </Col>
           ))}
-        </Row>
-
-        <Row className="d-flex d-md-none">
-          <Col xs={6}>
-            <LoadingCard
-              isLoading={isStatisticsActionLoading('moneyFlow')}
-              className="card-chart card-chart-170 text-center"
-            >
-              <CardBody>
-                <span className="text-nowrap text-success">
-                  <sup>
-                    {symbol}
-                    {' '}
-                  </sup>
-                  <span className="h2">
-                    <MoneyValue bold showSymbol={false} amount={totalIncome} maximumFractionDigits={0} />
-                  </span>
-                </span>
-              </CardBody>
-            </LoadingCard>
-          </Col>
-          <Col xs={6}>
-            <LoadingCard
-              isLoading={isStatisticsActionLoading('moneyFlow')}
-              className="card-chart card-chart-170 text-center"
-            >
-              <CardBody>
-                <span className="text-nowrap text-danger">
-                  <sup>
-                    {symbol}
-                    {' '}
-                  </sup>
-                  <span className="h2">
-                    <MoneyValue bold showSymbol={false} amount={totalExpense} maximumFractionDigits={0} />
-                  </span>
-                </span>
-              </CardBody>
-            </LoadingCard>
-          </Col>
         </Row>
 
         <Row>

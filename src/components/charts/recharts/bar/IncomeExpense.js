@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import axios from 'src/utils/http';
 import moment from 'moment-timezone';
 import xor from 'lodash/xor';
 import React, { useEffect, useState } from 'react';
@@ -7,7 +6,6 @@ import { Card, Button } from 'reactstrap';
 import {
   Bar,
   BarChart,
-  Brush,
   CartesianGrid,
   Legend,
   ResponsiveContainer,
@@ -15,52 +13,89 @@ import {
   XAxis,
 } from 'recharts';
 
+import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import MoneyValue from 'src/components/MoneyValue';
-import { MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 
+// before/after
 const INTERVALS = {
-  '1d': [moment(), moment()],
-  '1w': [moment().subtract(1, 'week'), moment()],
-  '1m': [moment().subtract(1, 'month'), moment()],
-  '3m': [moment().subtract(3, 'months'), moment()],
-  '6m': [moment().subtract(6, 'months'), moment()],
-  '1y': [moment().subtract(1, 'year'), moment()],
-  '2y': [moment().subtract(2, 'years'), moment()],
-  '5y': [moment().subtract(5, 'years'), moment()],
-  '10y': [moment().subtract(10, 'years'), moment()],
+  '1d': {
+    value: [moment().subtract(1, 'day'), moment()],
+    tooltipDateFormat: 'DD MM YYYY hh:mm:ss',
+    xTickFormat: 'ddd HH:00',
+  },
+  '1w': {
+    value: [moment().subtract(1, 'week'), moment()],
+    tooltipDateFormat: 'ddd Do MMM HH:00',
+    xTickFormat: 'Do',
+  },
+  '1m': {
+    value: [moment().subtract(1, 'month'), moment()],
+    tooltipDateFormat: 'ddd Do MMM',
+    xTickFormat: 'Do',
+  },
+  '3m': {
+    value: [moment().subtract(3, 'months'), moment()],
+    tooltipDateFormat: 'ddd Do MMM',
+    xTickFormat: 'Do MMM',
+  },
+  '6m': {
+    value: [moment().subtract(6, 'months'), moment()],
+    tooltipDateFormat: 'ddd Do MMM',
+    xTickFormat: 'Do MMM',
+  },
+  '1y': {
+    value: [moment().subtract(1, 'year'), moment()],
+    tooltipDateFormat: 'ddd Do MMM',
+    xTickFormat: 'Do MMM',
+  },
+  '2y': {
+    value: [moment().subtract(2, 'years'), moment()],
+    tooltipDateFormat: 'ddd Do MMM YY',
+    xTickFormat: 'Do MMM',
+  },
+  '5y': {
+    value: [moment().subtract(5, 'years'), moment()],
+    tooltipDateFormat: 'ddd Do MMM YYYY',
+    xTickFormat: 'Do MMM YY',
+  },
+  '10y': {
+    value: [moment().subtract(10, 'years'), moment()],
+    tooltipDateFormat: 'ddd Do MMM YYYY',
+    xTickFormat: 'Do MMM YY',
+  },
 };
 
 /**
  * TODO: Format ticks & tooltips by interval
  */
-const IncomeExpenseChart = () => {
-  const [interval, setInterval] = useState('1y');
-  const [displayValues, setDisplayValues] = useState(TRANSACTION_TYPES);
-  const [data, setData] = useState([]);
+const IncomeExpenseChart = ({ model, onUpdate }) => {
+  const { data } = model;
+  const [interval, setInterval] = useState('1m');
+  const [displayValues, setDisplayValues] = useState(TRANSACTION_TYPES[0]);
 
-  const toggleDisplayType = (type) => setDisplayValues(xor(displayValues, [type]));
+  const toggleDisplayType = (type) => setDisplayValues([type]);
 
   useEffect(() => {
-    axios
-      .get('api/statistics/income-expense', {
-        params: {
-          from: INTERVALS[interval][0].format(MOMENT_DATE_FORMAT),
-          to: INTERVALS[interval][1].format(MOMENT_DATE_FORMAT),
-        },
-      })
-      .then(({ data }) => setData(data['hydra:member'][0].data));
+    onUpdate(model.merge({
+      from: INTERVALS[interval].value[0],
+      to: INTERVALS[interval].value[1],
+    }));
   }, [interval]);
 
   const xTickFormatter = (val, index) => {
     const date = moment.unix(val);
 
-    return index % 7 ? '' : date.format('MMMM');
+    return index % 7 ? '' : date.format(INTERVALS[interval].xTickFormat);
   };
 
   const tooltipFormatter = ({ active, payload, label }) => (active && payload?.length) && (
     <Card body className="px-3 py-2">
-      <h4 className="mb-1">{moment.unix(label).format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}</h4>
+      <h4 className="mb-1 text-white">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
+        {moment.unix(label).format(INTERVALS[interval].tooltipDateFormat)}
+      </h4>
       <p className="text-success mb-0">
         <MoneyValue bold maximumFractionDigits={0} amount={payload?.[1]?.value} />
       </p>
@@ -106,6 +141,7 @@ const IncomeExpenseChart = () => {
               stroke="#fd4b4b"
               dot={false}
               fill="url(#expense-gradient)"
+              radius={[8, 8, 0, 0]}
             />
             <Bar
               stackId="1"
@@ -115,9 +151,8 @@ const IncomeExpenseChart = () => {
               stroke="#00f27d"
               dot={false}
               fill="url(#income-gradient)"
+              radius={[8, 8, 0, 0]}
             />
-
-            <Brush dataKey="date" height={30} stroke="#8884d8" />
 
             <XAxis dataKey="date" axisLine={false} tickLine={false} tickFormatter={xTickFormatter} />
 
@@ -131,6 +166,9 @@ const IncomeExpenseChart = () => {
   );
 };
 
-IncomeExpenseChart.propTypes = {};
+IncomeExpenseChart.propTypes = {
+  model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
+  onUpdate: PropTypes.func.isRequired,
+};
 
 export default IncomeExpenseChart;

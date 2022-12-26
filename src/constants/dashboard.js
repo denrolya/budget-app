@@ -1,13 +1,14 @@
 import { EXPENSE_TYPE } from 'src/constants/transactions';
 import TreeModel from 'tree-model';
+import moment from 'moment-timezone';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import { randomMoneyFlowData, randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
+import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
 
 export const AVAILABLE_STATISTICS = [{
-  name: 'moneyFlow',
-  path: 'api/transactions/statistics/money-flow',
+  name: 'incomeExpense',
+  path: 'api/transactions/statistics/income-expense',
 }, {
   name: 'monthExpenses',
   path: 'api/transactions/statistics/sum',
@@ -45,8 +46,10 @@ export const AVAILABLE_STATISTICS = [{
 }];
 
 export const INITIAL_STATE = {
-  moneyFlow: new TimeperiodIntervalStatistics({
-    data: randomMoneyFlowData(),
+  incomeExpense: new TimeperiodStatistics({
+    data: [],
+    from: moment().subtract(1, 'month'),
+    to: moment(),
   }),
   monthExpenses: new TimeperiodStatistics({
     data: {
