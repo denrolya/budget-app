@@ -46,7 +46,7 @@ const INTERVALS = {
   },
   '1y': {
     value: [moment().subtract(1, 'year'), moment()],
-    tooltipDateFormat: 'ddd Do MMM',
+    tooltipDateFormat: 'D.MM.YY',
     xTickFormat: 'Do MMM',
   },
   '2y': {
@@ -94,7 +94,9 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
       <h4 className="mb-1 text-white">
         <i aria-hidden className="ion-ios-calendar" />
         {' '}
-        {moment.unix(label).format(INTERVALS[interval].tooltipDateFormat)}
+        {moment.unix(payload[0].payload.from).format(INTERVALS[interval].tooltipDateFormat)}
+        {' - '}
+        {moment.unix(payload[0].payload.to).format(INTERVALS[interval].tooltipDateFormat)}
       </h4>
       <p
         className={cn('mb-0', {

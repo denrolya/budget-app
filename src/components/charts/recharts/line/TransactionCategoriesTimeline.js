@@ -3,8 +3,8 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import {
   ResponsiveContainer,
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
   Tooltip,
   YAxis,
   XAxis,
@@ -78,7 +78,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={250}>
-      <BarChart padding={0} margin={0} data={chartData}>
+      <LineChart padding={0} margin={0} data={chartData}>
         <defs>
           <filter id="shadow" height="200%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur" />
@@ -102,7 +102,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
           .keys(data)
           .map((categoryName) => categories.find(({ name }) => name === categoryName))
           .map(({ name, color }) => (
-            <Bar
+            <Line
               type="monotone"
               filter="url(#shadow)"
               strokeWidth={2}
@@ -128,7 +128,7 @@ const TransactionCategoriesTimeline = ({ data }) => {
         />
         <XAxis hide dataKey="date" axisLine={false} tickLine={false} stroke={HEX_COLORS.text} />
         <Tooltip cursor={false} content={tooltipFormatter} />
-      </BarChart>
+      </LineChart>
     </ResponsiveContainer>
   );
 };
