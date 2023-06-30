@@ -36,9 +36,9 @@ export const fetchList = () => async (dispatch) => {
   dispatch(Creators.fetchListRequest());
 
   try {
-    const response = await axios.get('api/categories');
+    const { data } = await axios.get('api/v2/category');
     const categories = orderBy(
-      response.data['hydra:member'],
+      data,
       'id',
       'asc',
     ).map(({ createdAt, ...cat }) => ({
