@@ -35,8 +35,10 @@ export const fetchList = () => async (dispatch) => {
   dispatch(Creators.fetchListRequest());
 
   try {
-    const { data } = await axios.get('api/debts');
-    dispatch(Creators.fetchListSuccess(orderBy(data['hydra:member'], 'updatedAt', 'asc')));
+    const { data } = await axios.get('api/v2/debt');
+    dispatch(Creators.fetchListSuccess(
+      orderBy(data, 'updatedAt', 'asc'),
+    ));
   } catch (e) {
     notify('error', 'Fetch Debt List');
     dispatch(Creators.fetchListFailure(e));

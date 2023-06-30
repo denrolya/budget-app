@@ -42,7 +42,6 @@ export const fetchList = () => async (dispatch, getState) => {
       ['desc', 'desc'],
     ).map((account) => ({
       ...account,
-      balance: parseFloat(account.balance),
       convertedValues: generateConvertedValues(exchangeRates, account.currency, account.balance),
     }));
     dispatch(Creators.fetchListSuccess(accounts));
