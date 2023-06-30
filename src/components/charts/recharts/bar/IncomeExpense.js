@@ -13,7 +13,7 @@ import {
   XAxis,
 } from 'recharts';
 
-import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
+import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 
@@ -171,7 +171,7 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
 };
 
 IncomeExpenseChart.propTypes = {
-  model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
+  model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
   onUpdate: PropTypes.func.isRequired,
 };
 

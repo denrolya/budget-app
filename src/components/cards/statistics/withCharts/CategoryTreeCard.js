@@ -32,7 +32,7 @@ const CategoryTreeCard = ({
             tree={data}
           />
 
-          <p className="text-right">
+          <span className="d-block text-right">
             <DateRangePicker
               autoApply
               showCustomRangeLabel
@@ -54,7 +54,7 @@ const CategoryTreeCard = ({
                 {rangeToString(from, to)}
               </span>
             </DateRangePicker>
-          </p>
+          </span>
         </>
       )}
     >

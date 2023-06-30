@@ -12,7 +12,7 @@ import Pagination from 'src/models/Pagination';
 import { ROUTE_TRANSACTIONS } from 'src/constants/routes';
 import TransactionFilters from 'src/models/TransactionFilters';
 import history from 'src/utils/history';
-import { MOMENT_DATETIME_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
+import { MOMENT_DEFAULT_DATE_FORMAT, SERVER_TIMEZONE } from 'src/constants/datetime';
 
 export const { Types, Creators } = createActions(
   {
@@ -78,17 +78,16 @@ export const fetchList = () => async (dispatch, getState) => {
       type: types[0], // TODO: To be handled properly
       perPage,
       page,
-      categoryDeep: categories,
-      'account.id': accounts,
-      'executedAt[after]': from.clone().format(MOMENT_DATETIME_FORMAT),
-      'executedAt[before]': to.clone().format(MOMENT_DATETIME_FORMAT),
+      categories,
+      accounts,
+      after: from.clone().format(MOMENT_DEFAULT_DATE_FORMAT),
+      before: to.clone().format(MOMENT_DEFAULT_DATE_FORMAT),
       isDraft: onlyDrafts ? 1 : 0,
     };
 
-    const { data: transactions } = await axios.get('api/transactions', { params });
-    const { data: totalValue } = await axios.get('api/transactions/statistics/sum', { params });
+    const { data: { list, totalValue, count } } = await axios.get('api/v2/transaction', { params });
 
-    dispatch(Creators.fetchListSuccess(transactions['hydra:member'], transactions['hydra:totalItems'], totalValue['hydra:member'][0]));
+    dispatch(Creators.fetchListSuccess(list, count, totalValue));
   } catch (e) {
     notify('error', 'Fetch Transaction List');
     dispatch(Creators.fetchListFailure(e));
