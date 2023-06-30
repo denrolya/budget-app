@@ -58,7 +58,7 @@ AccountName.propTypes = {
     name: PropTypes.string.isRequired,
     currency: PropTypes.string.isRequired,
     color: PropTypes.string,
-    balance: PropTypes.number,
+    balance: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     convertedValues: PropTypes.object,
   }).isRequired,
   colored: PropTypes.bool,

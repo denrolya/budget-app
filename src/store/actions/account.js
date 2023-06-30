@@ -35,13 +35,14 @@ export const fetchList = () => async (dispatch, getState) => {
   dispatch(Creators.fetchListRequest());
 
   try {
-    const { data } = await axios.get('api/accounts');
+    const { data } = await axios.get('api/v2/account');
     const accounts = orderBy(
-      data['hydra:member'],
+      data,
       ['archivedAt', 'lastTransactionAt'],
       ['desc', 'desc'],
     ).map((account) => ({
       ...account,
+      balance: parseFloat(account.balance),
       convertedValues: generateConvertedValues(exchangeRates, account.currency, account.balance),
     }));
     dispatch(Creators.fetchListSuccess(accounts));
