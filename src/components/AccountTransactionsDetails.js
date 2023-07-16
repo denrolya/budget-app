@@ -47,7 +47,9 @@ const AccountTransactionsDetails = ({ account }) => {
   );
 
   const transactionsCountingFrom = moment().subtract(7, 'days');
-  const daysFromLastTransaction = moment().startOf('day').diff(moment(lastTransactionAt).startOf('day'), 'days') + 1;
+  const daysFromLastTransaction = moment()
+    .startOf('day')
+    .diff(moment(latestTransactions[0].executedAt).startOf('day'), 'days');
 
   return (
     <section>
@@ -58,9 +60,13 @@ const AccountTransactionsDetails = ({ account }) => {
               <span className="h5 mb-2">Last Tr.</span>
               <span className="h1 mb-4 font-weight-light">
                 {daysFromLastTransaction === 0 && 'Today'}
-                {daysFromLastTransaction}
-                d
-                <span style={{ fontSize: 15 }}>ago</span>
+                {daysFromLastTransaction !== 0 && (
+                  <>
+                    {daysFromLastTransaction}
+                    {'d '}
+                    <span style={{ fontSize: 15 }}>ago</span>
+                  </>
+                )}
               </span>
             </Col>
             <Col xs={4} className="d-flex flex-column justify-content-between">
@@ -80,17 +86,13 @@ const AccountTransactionsDetails = ({ account }) => {
               <Row className="mb-4">
                 <Col>
                   <span className="h5 mb-2 d-block">Transaction frequency over last 12 months</span>
-                  <span className="h1 mb-2 font-weight-light d-block">
-                    {`Every ${transactionFrequency} hours`}
-                  </span>
+                  <span className="h1 mb-2 font-weight-light d-block">{`Every ${transactionFrequency} hours`}</span>
                 </Col>
               </Row>
               <span className="h5 mb-2 d-block">Monthly Transactions</span>
               <Row className="mb-5 gx-0">
                 <Col xs={4} className="d-flex flex-column justify-content-center">
-                  <span className="h1 mb-2 font-weight-light d-block text-nowrap">
-                    { lastMonthTransactionsCount }
-                  </span>
+                  <span className="h1 mb-2 font-weight-light d-block text-nowrap">{lastMonthTransactionsCount}</span>
                   <span className="h5 m-0 d-block">Last month</span>
                 </Col>
                 <Col xs={8} className="">
