@@ -2,22 +2,15 @@ image: node:15
 
 pipelines:
     default:
-        -   step:
-                name: Build and Deploy
-                script:
-                    - apt-get update
-                    - apt-get install -y zip
-                    - node -v
-                    - npm -v
-                    - npm install
-                    - npm run build
-                    - zip -r build.zip build/
-
-deployments:
-    -   provider: sftp
-        username: $SFTP_USERNAME
-        password: $SFTP_PASSWORD
-        server: 104.248.167.80
-        remote_path: /var/www/app
-        local_path: build.zip
-        pipeline: default
+        - step:
+              name: Build and Deploy
+              script:
+                  - apt-get update
+                  - apt-get install -y zip
+                  - node -v
+                  - npm -v
+                  - npm install
+                  - npm run build
+                  - zip -r build.zip build/
+                  - apt-get install -y sshpass
+                  - sshpass -p $SFTP_PASSWORD scp -o StrictHostKeyChecking=no build.zip $SFTP_USERNAME@104.248.167.80:/var/www/app/
