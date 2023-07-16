@@ -13,11 +13,11 @@ pipelines:
                     - npm run build
                     - zip -r build.zip build/
 
-deployment:
-    -   provider: sftp
-        username: $SFTP_USERNAME
-        password: $SFTP_PASSWORD
-        server: 104.248.167.80
-        remote_path: /var/www/app
-        local_path: build.zip
-        pipeline: default
+    deployment:
+        -   provider: sftp
+            username: $SFTP_USERNAME
+            password: $SFTP_PASSWORD
+            server: 104.248.167.80
+            remote_path: /var/www/app
+            local_path: build.zip
+            pipeline: default
