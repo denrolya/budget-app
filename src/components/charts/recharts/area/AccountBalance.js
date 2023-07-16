@@ -25,7 +25,7 @@ const AccountBalance = ({ account }) => {
       <h4 className="mb-1 text-white">
         <i aria-hidden className="ion-ios-calendar" />
         {' '}
-        {payload[0].payload.date.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
+        {payload[0].payload.createdAt.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}
       </h4>
       <p
         className={cn('mb-0', {
@@ -65,7 +65,7 @@ const AccountBalance = ({ account }) => {
           dataKey={`convertedValues.${account.currency}`}
           tickFormatter={yAxisTickFormatter}
         />
-        <XAxis hide dataKey="date" axisLine={false} tickLine={false} stroke={HEX_COLORS.text} />
+        <XAxis hide dataKey="createdAt" axisLine={false} tickLine={false} stroke={HEX_COLORS.text} />
 
         <CartesianGrid opacity={0.1} vertical={false} stroke={HEX_COLORS.text} />
 
@@ -82,7 +82,7 @@ AccountBalance.propTypes = {
     name: PropTypes.string.isRequired,
     logs: PropTypes.arrayOf(
       PropTypes.shape({
-        date: PropTypes.object.isRequired,
+        createdAt: PropTypes.object.isRequired,
         convertedValues: PropTypes.object.isRequired,
       }),
     ),

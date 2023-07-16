@@ -1,4 +1,5 @@
 import { SERVER_TIMEZONE } from 'src/constants/datetime';
+import { formatDetails } from 'src/utils/account';
 import { generateConvertedValues } from 'src/utils/currency';
 import axios from 'src/utils/http';
 import orderBy from 'lodash/orderBy';
@@ -21,6 +22,10 @@ export const { Types, Creators } = createActions(
     fetchListRequest: null,
     fetchListSuccess: ['list'],
     fetchListFailure: ['message'],
+
+    fetchItemRequest: null,
+    fetchItemSuccess: null,
+    fetchItemFailure: ['message'],
 
     archiveRequest: null,
     archiveSuccess: null,
@@ -107,7 +112,20 @@ export const updateColor = (account, newColor) => async (dispatch) => {
   }
 };
 
-export const fetchDetail = (id) => axios.get(`api/accounts/${id}`);
+export const fetchItem = (id) => async (dispatch, getState) => {
+  dispatch(Creators.fetchItemRequest());
+  try {
+    const { data } = await axios.get(`api/v2/account/${id}`);
+
+    dispatch(Creators.fetchItemSuccess());
+
+    return formatDetails(data, getState().auth.user.baseCurrency);
+  } catch (e) {
+    notify('error', 'Account Fetch Details');
+    dispatch(Creators.fetchItemFailure(e));
+    return e;
+  }
+};
 
 export const toggleArchived = (id, isArchived = false) => async (dispatch) => {
   dispatch(Creators.archiveRequest());

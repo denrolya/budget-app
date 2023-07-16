@@ -15,7 +15,7 @@ export const formatDetails = (data) => {
     ...data,
     logs: data.logs.map((log) => ({
       ...log,
-      date: moment.unix(log.date),
+      createdAt: moment.unix(log.createdAt),
     })),
     latestTransactions: initializeList(data.latestTransactions).map((t) => ({
       ...t,

@@ -19,20 +19,20 @@ const AccountTransactionsDetails = ({ account }) => {
     if (!hasLogs) {
       return 0;
     }
-    const logPeriodInHours = logs[logs.length - 1].date.diff(logs[0].date, 'hours');
+    const logPeriodInHours = logs[logs.length - 1].createdAt.diff(logs[0].createdAt, 'hours');
     return Math.round(logPeriodInHours / logs.length);
   }, [logs]);
 
   const transactionsCountByMonths = useMemo(() => {
     const result = [];
-    logs.forEach(({ date }) => {
-      const index = result.findIndex((el) => el.date.isSame(date.clone().startOf('month')));
+    logs.forEach(({ createdAt }) => {
+      const index = result.findIndex((el) => el.date.isSame(createdAt.clone().startOf('month')));
 
       if (index !== -1) {
         result[index].value += 1;
       } else {
         result.push({
-          date: date.clone().startOf('month'),
+          date: createdAt.clone().startOf('month'),
           value: 1,
         });
       }
@@ -70,7 +70,7 @@ const AccountTransactionsDetails = ({ account }) => {
             <Col xs={4} className="d-flex flex-column justify-content-between">
               <span className="h5 mb-2">In last 7 days</span>
               <span className="h1 mb-4 font-weight-light">
-                {account.logs.filter(({ date }) => date.isAfter(transactionsCountingFrom)).length}
+                {account.logs.filter(({ createdAt }) => createdAt.isAfter(transactionsCountingFrom)).length}
               </span>
             </Col>
           </Row>

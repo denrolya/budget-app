@@ -7,44 +7,31 @@ import { Row, Col, CardBody } from 'reactstrap';
 
 import LoadingCard from 'src/components/cards/LoadingCard';
 import CenteredMessage from 'src/components/messages/CenteredMessage';
+import { isActionLoading } from 'src/utils/common';
 import {
   accountArchivationPrompt,
   accountNameChangePrompt,
   accountRestorationPrompt,
 } from 'src/utils/prompts';
 import {
-  toggleArchived, fetchDetail, updateName, updateColor,
+  toggleArchived, fetchItem, updateName, updateColor,
 } from 'src/store/actions/account';
 import AccountGeneralInfo from 'src/components/AccountGeneralInfo';
-import { formatDetails } from 'src/utils/account';
 import AccountTransactionsDetails from 'src/components/AccountTransactionsDetails';
-import { useBaseCurrency } from 'src/contexts/BaseCurrency';
-import { notify } from 'src/store/actions/global';
 
 const AccountDetails = ({
+  isLoading,
   updateName,
   updateColor,
+  fetchItem,
   toggleArchived,
 }) => {
   const { id = null } = useParams();
-  const { code } = useBaseCurrency();
   const [accountDetails, setAccountDetails] = useState();
-  const [isLoading, setIsLoading] = useState(null);
 
   const hasData = isLoading === false && !!accountDetails;
 
-  const fetchAccountDetails = async (id) => {
-    setIsLoading(true);
-
-    try {
-      const { data } = await fetchDetail(id);
-      setIsLoading(false);
-      setAccountDetails(formatDetails(data, code));
-    } catch (e) {
-      setIsLoading(false);
-      notify('error', 'Error fetching account details');
-    }
-  };
+  const fetchAccountDetails = async (id) => setAccountDetails(await fetchItem(id));
 
   useEffect(() => {
     if (id) {
@@ -137,16 +124,25 @@ const AccountDetails = ({
   );
 };
 
-AccountDetails.defaultProps = {};
+AccountDetails.defaultProps = {
+  isLoading: null,
+};
 
 AccountDetails.propTypes = {
   toggleArchived: PropTypes.func.isRequired,
   updateName: PropTypes.func.isRequired,
   updateColor: PropTypes.func.isRequired,
+  fetchItem: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
 };
 
-export default connect(null, {
+const mapStateToProps = ({ ui }) => ({
+  isLoading: isActionLoading(ui.ACCOUNT_FETCH_ITEM),
+});
+
+export default connect(mapStateToProps, {
   toggleArchived,
   updateName,
   updateColor,
+  fetchItem,
 })(AccountDetails);
