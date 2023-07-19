@@ -64,8 +64,9 @@ export const AVAILABLE_STATISTICS = [
       type: EXPENSE_TYPE,
     },
   }, {
+    v2: true,
     name: 'accountExpenseDistribution',
-    path: 'api/transactions/statistics/account-distribution',
+    path: 'api/v2/statistics/account-distribution',
     additionalParams: {
       type: EXPENSE_TYPE,
     },

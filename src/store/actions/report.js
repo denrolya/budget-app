@@ -4,7 +4,7 @@ import capitalize from 'voca/capitalize';
 import { createActions } from 'reduxsauce';
 
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { AVAILABLE_STATISTICS } from 'src/constants/report';
 
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
@@ -34,11 +34,16 @@ export const fetchStatistics = ({
   fetchPreviousPeriod,
 }) => async (dispatch, getState) => {
   const state = getState().report[name];
-  let params = {
-    'executedAt[after]': state.from.format(MOMENT_DATETIME_FORMAT),
-    'executedAt[before]': state.to.format(MOMENT_DATETIME_FORMAT),
-    interval: state.interval,
-  };
+  const isV2API = AVAILABLE_STATISTICS.find((el) => el.name === name).v2;
+  let params = { interval: state.interval };
+
+  if (isV2API) {
+    params.after = state.from.format(MOMENT_DEFAULT_DATE_FORMAT);
+    params.before = state.to.format(MOMENT_DEFAULT_DATE_FORMAT);
+  } else {
+    params['executedAt[after]'] = state.from.format(MOMENT_DATETIME_FORMAT);
+    params['executedAt[before]'] = state.to.format(MOMENT_DATETIME_FORMAT);
+  }
 
   if (additionalParams) {
     params = {
@@ -60,23 +65,28 @@ export const fetchStatistics = ({
 
       const previousPeriod = getState().report.expenseCategoriesTree.generatePreviousPeriod();
 
-      const getPreviousPeriodDataRequest = axios.get(path, {
-        params: {
-          ...params,
-          'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
-          'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
-        },
-      });
+      const previousPeriodParams = { ...params };
+      if (isV2API) {
+        previousPeriodParams.after = previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT);
+        previousPeriodParams.before = previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT);
+      } else {
+        previousPeriodParams['executedAt[after]'] = previousPeriod.from.format(MOMENT_DATETIME_FORMAT);
+        previousPeriodParams['executedAt[before]'] = previousPeriod.to.format(MOMENT_DATETIME_FORMAT);
+      }
+
+      const getPreviousPeriodDataRequest = axios.get(path, { params: previousPeriodParams });
 
       const [currentResponse, previousResponse] = await axios.all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest]);
 
       dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]({
-        current: currentResponse.data?.['hydra:member'][0],
-        previous: previousResponse.data?.['hydra:member'][0],
+        current: isV2API ? currentResponse.data : currentResponse.data?.['hydra:member'][0],
+        previous: isV2API ? previousResponse.data : previousResponse.data?.['hydra:member'][0],
       }));
     } else {
       const { data } = await axios.get(path, { params });
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0]));
+      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](
+        isV2API ? data : data?.['hydra:member']?.[0],
+      ));
     }
   } catch (e) {
     dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
