@@ -10,7 +10,8 @@ import {
   Tooltip,
   YAxis,
 } from 'recharts';
-import max from 'lodash/max';
+import maxBy from 'lodash/maxBy';
+import sum from 'lodash/sum';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
@@ -21,54 +22,75 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
   const { symbol } = useBaseCurrency();
   const categories = useCategories();
 
+  const findMaxKeyValuePair = (valuesObject) => {
+    const maxValue = maxBy(Object.values(valuesObject), (value) => value);
+    const maxKey = Object.keys(valuesObject).find((key) => valuesObject[key] === maxValue);
+    return { [maxKey]: maxValue };
+  };
+
   useEffect(() => {
-    setChartData(
-      data.map((el) => {
-        if (topCategories) {
-          const maxValue = max(Object.values(el.values));
-          const maxName = Object.keys(el.values).find((cat) => el.values[cat] === maxValue);
+    const updateChartData = () => {
+      if (topCategories) {
+        const updatedData = data.map((element) => ({
+          ...element,
+          values: findMaxKeyValuePair(element.values),
+        }));
+        setChartData(updatedData);
+      } else {
+        setChartData(data);
+      }
+    };
 
-          return {
-            ...el,
-            values: {
-              [maxName]: maxValue,
-            },
-          };
-        }
-
-        return el;
-      }),
-    );
-  }, [topCategories]);
+    updateChartData();
+  }, [data, topCategories]);
 
   const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 
-  const tooltipFormatter = ({ active, payload, label }) => (active && payload?.length) && (
-    <Card body className="px-3 py-2">
-      <h4 className="mb-1">
-        <i aria-hidden className="ion-ios-calendar" />
-        { ' '}
-        {moment().isoWeekday(label + 1).format('dddd')}
-      </h4>
-      {Object.keys(payload[0].payload.values).reverse().map((categoryName) => {
+  const tooltipFormatter = ({ active, payload, label }) => {
+    if (!active || !payload?.length) {
+      return null;
+    }
+
+    const { values } = payload[0].payload;
+    const dayOfWeek = moment().isoWeekday(label + 1).format('dddd');
+    const total = sum(Object.values(values));
+
+    const tooltipItems = Object.keys(values)
+      .reverse()
+      .map((categoryName) => {
         const category = categories.find(({ name }) => categoryName === name);
+
+        if (!category) return null;
 
         return (
           <p
             className="mb-0"
-            key={`tooltip-item-${category.name}`}
+            key={category.name}
             style={{
               color: category.color,
             }}
           >
             <i aria-hidden className={category.icon} />
             {` ${category.name}: `}
-            <MoneyValue bold amount={payload[0].payload.values[category.name]} />
+            <MoneyValue bold amount={values[category.name]} />
           </p>
         );
-      })}
-    </Card>
-  );
+      })
+      .filter((item) => item !== null);
+
+    return (
+      <Card body className="px-3 py-2">
+        <h4 className="mb-1">
+          <i aria-hidden className="ion-ios-calendar" />
+          {' '}
+          {dayOfWeek}
+          { ': ' }
+          <MoneyValue bold amount={total} />
+        </h4>
+        {tooltipItems}
+      </Card>
+    );
+  };
 
   return (
     <ResponsiveContainer width="100%" height={300}>
