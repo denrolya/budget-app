@@ -81,7 +81,9 @@ const TransactionList = ({
   const toggleTransactionEdition = (transaction) => toggleTransactionForm({
     model: transaction,
     title: `Edit ${transaction.type} #${transaction.id}`,
-    onSubmit: ({ id, type, ...values }) => editTransaction(id, type, values),
+    onSubmit: ({ id, type, ...values }) => {
+      editTransaction(id, type, values);
+    },
   });
 
   return (
