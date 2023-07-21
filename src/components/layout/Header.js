@@ -19,6 +19,7 @@ import logo from 'src/assets/img/logo.png';
 
 const Header = ({
   onTokenCopyClick,
+  onMonobankButtonClick,
   isSidebarOpened,
   toggleDarkMode,
   toggleSidebar,
@@ -70,7 +71,7 @@ const Header = ({
       </div>
 
       <div className="d-flex align-center">
-        <button type="button" className="btn btn-round">monobank</button>
+        <button type="button" className="btn btn-round" onClick={onMonobankButtonClick}>monobank</button>
         <AddNewButton size="sm" onClick={toggleTransactionModal} />
         <button
           aria-label="Toggle navigation"
@@ -139,6 +140,7 @@ Header.propTypes = {
   toggleTransactionModal: PropTypes.func.isRequired,
   updateDashboard: PropTypes.func.isRequired,
   onTokenCopyClick: PropTypes.func.isRequired,
+  onMonobankButtonClick: PropTypes.func.isRequired,
 };
 
 export default Header;

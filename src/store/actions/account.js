@@ -30,6 +30,10 @@ export const { Types, Creators } = createActions(
     archiveRequest: null,
     archiveSuccess: null,
     archiveFailure: ['message'],
+
+    setMonobankHookRequest: null,
+    setMonobankHookSuccess: null,
+    setMonobankHookFailure: ['message'],
   },
   { prefix: 'ACCOUNT_' },
 );
@@ -139,5 +143,18 @@ export const toggleArchived = (id, isArchived = false) => async (dispatch) => {
   } catch (e) {
     notify('error', 'Account Edit');
     dispatch(Creators.archiveFailure(e));
+  }
+};
+
+export const setMonobankHook = () => async (dispatch) => {
+  dispatch(Creators.setMonobankHookRequest());
+
+  try {
+    await axios.get('/api/v2/account/set-monobank-hook');
+    notify('success', 'Webhook was successfully set');
+    dispatch(Creators.setMonobankHookSuccess());
+  } catch (e) {
+    notify('error', 'Error setting monobank webhook');
+    dispatch(Creators.setMonobankHookFailure(e));
   }
 };

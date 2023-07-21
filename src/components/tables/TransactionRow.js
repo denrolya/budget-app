@@ -31,7 +31,7 @@ const TransactionRow = ({
       </td>
 
       <td className="fit text-nowrap text-truncate" id={`transaction-account-cell-${id}`}>
-        <AccountName account={account} />
+        <AccountName showName={false} account={account} />
 
         <span className="text-muted font-size-smaller d-block d-md-none text-left">
           <TransactionDate showTimeIcon showDate={false} date={executedAt} />

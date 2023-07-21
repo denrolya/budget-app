@@ -20,6 +20,7 @@ import { logoutUser } from 'src/store/actions/auth';
 import { updateDashboard } from 'src/store/actions/dashboard';
 import { registerTransaction } from 'src/store/actions/transaction';
 import { switchBaseCurrency } from 'src/store/actions/user';
+import { setMonobankHook } from 'src/store/actions/account';
 import {
   closeSidebar,
   openSidebar,
@@ -46,6 +47,7 @@ const Layout = ({
   toggleTransferModal,
   toggleDebtModal,
   toggleAccountModal,
+  setMonobankHook,
   switchBaseCurrency,
   isDarkModeOn,
   isHeaderOpened,
@@ -106,6 +108,7 @@ const Layout = ({
           <Header
             onCurrencySwitch={switchBaseCurrency}
             onTokenCopyClick={copyTokenToClipboard}
+            onMonobankButtonClick={setMonobankHook}
             logoutUser={logoutUser}
             updateDashboard={updateDashboard}
             toggle={toggleHeader}
@@ -172,6 +175,7 @@ Layout.propTypes = {
   toggleDraftExpenseModal: PropTypes.func.isRequired,
   toggleTransferModal: PropTypes.func.isRequired,
   updateDashboard: PropTypes.func.isRequired,
+  setMonobankHook: PropTypes.func.isRequired,
   colorScheme: PropTypes.oneOf(['blue', 'gray', 'indigo', 'lightblue', 'primary', 'green']),
   totalDebt: PropTypes.number,
 };
@@ -204,4 +208,5 @@ export default connect(mapStateToProps, {
   updateDashboard,
   registerTransaction,
   switchBaseCurrency,
+  setMonobankHook,
 })(Layout);
