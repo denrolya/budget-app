@@ -5,8 +5,8 @@ import { findPath } from 'src/utils/category';
 
 const TransactionCategory = ({ showFullPath, category }) => {
   const categories = useCategoriesTree();
-  const path = useMemo(() => findPath(categories, category.id), [category.id]);
-  const lastCategory = path.reverse().pop();
+  const path = useMemo(() => findPath(categories, category.id), [categories, category.id]);
+  const lastCategory = path.pop();
   const { icon } = category;
 
   return (
