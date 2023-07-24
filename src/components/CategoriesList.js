@@ -33,7 +33,6 @@ const CategoriesList = ({
   after,
   before,
 }) => {
-  console.log({ data });
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 
   const previousPeriodToCurrentRatio = useMemo(() => {

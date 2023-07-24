@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
-import { useCategories } from 'src/contexts/CategoriesContext';
+import { useCategoriesTree } from 'src/contexts/CategoriesContext';
 import { findPath } from 'src/utils/category';
 
 const TransactionCategory = ({ showFullPath, category }) => {
-  const categories = useCategories();
+  const categories = useCategoriesTree();
   const path = useMemo(() => findPath(categories, category.id), [category.id]);
   const lastCategory = path.reverse().pop();
   const { icon } = category;
