@@ -140,7 +140,7 @@ export const editTransaction = (id, type, transaction) => async (dispatch, getSt
       executedAt: moment(transaction.executedAt).tz(SERVER_TIMEZONE).format(),
       compensations: transaction.compensations?.map((c) => ({
         ...c,
-        id: `api/transactions/${c.id}`,
+        ...(c.id ? { id: `api/transactions/${c.id}` } : {}),
         amount: String(c.amount),
         executedAt: moment(c.executedAt).tz(SERVER_TIMEZONE).format(),
       })),
