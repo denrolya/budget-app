@@ -71,7 +71,7 @@ const Header = ({
       </div>
 
       <div className="d-flex align-center">
-        <button type="button" className="btn btn-round" onClick={onMonobankButtonClick}>monobank</button>
+        <button type="button" className="btn btn-sm btn-round" onClick={onMonobankButtonClick}>monobank</button>
         <AddNewButton size="sm" onClick={toggleTransactionModal} />
         <button
           aria-label="Toggle navigation"

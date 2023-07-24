@@ -66,24 +66,51 @@ export const generateCategoriesStatisticsTree = (current, previous) => {
 };
 
 export const listToTree = (list) => {
-  const map = {}; let node; const roots = []; let i; const arr = [...list];
+  const map = {};
+  let node;
+  const roots = [];
+  const arr = [...list];
 
-  for (i = 0; i < arr.length; i += 1) {
-    map[arr[i]['@id']] = i; // initialize the map
+  arr.forEach((item, i) => {
+    map[item.id] = i; // initialize the map
     // eslint-disable-next-line no-param-reassign
-    arr[i].children = []; // initialize the children
-  }
+    item.children = []; // initialize the children
+  });
 
-  for (i = 0; i < arr.length; i += 1) {
-    node = arr[i];
-    if (node.parent?.['@id']) {
-      // if you have dangling branches check that map[node.parentId] exists
-      arr[map[node.parent?.['@id']]]?.children.push(node);
+  arr.forEach((item) => {
+    node = item;
+    if (node.parent?.id) {
+      // if you have dangling branches check that map[node.parent.id] exists
+      arr[map[node.parent?.id]]?.children.push(node);
     } else {
       roots.push(node);
     }
-  }
+  });
+
   return roots;
+};
+
+export const findPath = (data, id) => {
+  for (let i = 0; i < data.length; i += 1) {
+    if (data[i].id === id) {
+      // if we found the id we were looking for, return an array with just this id
+      return [data[i].name];
+    }
+
+    // if this node has children, recursively search for the id in the children
+    if (data[i].children) {
+      const pathFromChild = findPath(data[i].children, id);
+
+      // if the id was found in this node's children
+      if (pathFromChild) {
+        // return an array starting with this node's id, followed by the ids in the path from the child
+        return [data[i].name, ...pathFromChild];
+      }
+    }
+  }
+
+  // the id was not found in this branch of the tree
+  return null;
 };
 
 export const paintTree = (categories, hue = null) => {

@@ -9,11 +9,15 @@ import {
   CartesianGrid,
   Tooltip,
   YAxis,
+  PieChart,
+  Pie,
+  Cell,
 } from 'recharts';
 import maxBy from 'lodash/maxBy';
 import sum from 'lodash/sum';
 
 import MoneyValue from 'src/components/MoneyValue';
+import { RAINBOW_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { useCategories } from 'src/contexts/CategoriesContext';
 
@@ -54,6 +58,7 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
     const { values } = payload[0].payload;
     const dayOfWeek = moment().isoWeekday(label + 1).format('dddd');
     const total = sum(Object.values(values));
+    const data = Object.entries(values).map(([name, value]) => ({ name, value }));
 
     const tooltipItems = Object.keys(values)
       .reverse()
@@ -84,10 +89,29 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
           <i aria-hidden className="ion-ios-calendar" />
           {' '}
           {dayOfWeek}
-          { ': ' }
+          {': '}
           <MoneyValue bold amount={total} />
         </h4>
-        {tooltipItems}
+        <div className="row">
+          <div className="col-xs-6">
+            <PieChart width={200} height={200}>
+              <Pie
+                data={data}
+                innerRadius={60}
+                outerRadius={80}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {data.map((entry) => {
+                  const category = categories.find(({ name }) => entry.name === name);
+                  return <Cell key={`cell-${entry.name}`} stroke={category.color} fill={`${category.color}33`} />;
+                })}
+              </Pie>
+            </PieChart>
+          </div>
+          <div className="col-xs-6">{tooltipItems}</div>
+        </div>
       </Card>
     );
   };

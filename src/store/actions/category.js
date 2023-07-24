@@ -46,9 +46,10 @@ export const fetchList = () => async (dispatch) => {
       createdAt: moment(createdAt),
     }));
 
-    paintTree(listToTree(categories));
+    const categoriesTree = listToTree(categories);
+    paintTree(categoriesTree);
 
-    dispatch(Creators.fetchListSuccess(categories));
+    dispatch(Creators.fetchListSuccess(categoriesTree));
   } catch (e) {
     notify('error', 'Fetch Category List');
     dispatch(Creators.fetchListFailure(e.message));

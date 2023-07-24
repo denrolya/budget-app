@@ -74,8 +74,8 @@ const CategoryTreeCard = ({
         data={data}
         onCategorySelect={selectCategory}
         selectedCategory={selectedCategory}
-        from={from}
-        to={to}
+        after={from}
+        before={to}
       />
     </TimeperiodStatisticsCard>
   );

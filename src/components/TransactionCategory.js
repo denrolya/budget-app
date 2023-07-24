@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useCategories } from 'src/contexts/CategoriesContext';
+import { findPath } from 'src/utils/category';
 
-const TransactionCategory = ({ showFullPath, category: { fullPath, icon } }) => {
-  const path = [...fullPath];
+const TransactionCategory = ({ showFullPath, category }) => {
+  const categories = useCategories();
+  const path = useMemo(() => findPath(categories, category.id), [category.id]);
   const lastCategory = path.reverse().pop();
+  const { icon } = category;
 
   return (
     <span className="d-inline-block">
@@ -28,9 +32,9 @@ TransactionCategory.defaultProps = {
 
 TransactionCategory.propTypes = {
   category: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     icon: PropTypes.string,
-    fullPath: PropTypes.array,
   }).isRequired,
   showFullPath: PropTypes.bool,
 };

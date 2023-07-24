@@ -30,15 +30,23 @@ const CategoriesList = ({
   data,
   selectedCategory,
   onCategorySelect,
-  from,
-  to,
+  after,
+  before,
 }) => {
+  console.log({ data });
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 
-  const previousPeriodToCurrentRatio = useMemo(() => amountInPercentage(data.model.previous, data.model.total, 0), [
-    data.model.previous,
-    data.model.total,
-  ]);
+  const previousPeriodToCurrentRatio = useMemo(() => {
+    // TODO: I need a model here. model can generate previous period and that's what i need to calculate percentage
+    const currentDayNumber = moment().dayOfYear();
+    const lastDayOfYear = moment().endOf('year');
+    const isCurrentYear = before.isSame(lastDayOfYear, 'year');
+    const isNotEndOfYear = before.isSameOrBefore(lastDayOfYear);
+
+    return (isCurrentYear && isNotEndOfYear)
+      ? amountInPercentage(data.model.previous, (data.model.total / currentDayNumber) * 365, 0)
+      : amountInPercentage(data.model.previous, data.model.total, 0);
+  }, [data.model.previous, data.model.total]);
 
   const percentageFromTotal = useMemo(() => amountInPercentage(data.model.total, selectedSubtree.model.total), [
     data.model.total,
@@ -94,8 +102,8 @@ const CategoriesList = ({
                   <div className="d-inline-block">
                     <Link
                       to={generateLinkToExpenses(
-                        from.format(MOMENT_DATE_FORMAT),
-                        to.format(MOMENT_DATE_FORMAT),
+                        after.format(MOMENT_DATE_FORMAT),
+                        before.format(MOMENT_DATE_FORMAT),
                         [],
                         [id],
                       )}
@@ -153,9 +161,9 @@ const CategoriesList = ({
                       ['months', 'Monthly'],
                       ['years', 'Annual'],
                     ].map(([unitOfTime, title]) => {
-                      const diff = moment().isBetween(from, to)
-                        ? moment().diff(from, unitOfTime) + 1
-                        : to.diff(from, unitOfTime) + 1;
+                      const diff = moment().isBetween(after, before)
+                        ? moment().diff(after, unitOfTime) + 1
+                        : before.diff(after, unitOfTime) + 1;
 
                       return (
                         diff > 1 && (
@@ -186,7 +194,7 @@ const CategoriesList = ({
             <Link
               id="expense-category-total"
               className="align-center"
-              to={generateLinkToExpenses(from.format(MOMENT_DATE_FORMAT), to.format(MOMENT_DATE_FORMAT))}
+              to={generateLinkToExpenses(after.format(MOMENT_DATE_FORMAT), before.format(MOMENT_DATE_FORMAT))}
             >
               <span
                 className={cn(
@@ -254,8 +262,8 @@ CategoriesList.defaultProps = {};
 
 CategoriesList.propTypes = {
   data: PropTypes.object.isRequired,
-  from: PropTypes.object.isRequired,
-  to: PropTypes.object.isRequired,
+  after: PropTypes.object.isRequired,
+  before: PropTypes.object.isRequired,
   selectedCategory: PropTypes.string.isRequired,
   onCategorySelect: PropTypes.func.isRequired,
 };
@@ -264,6 +272,6 @@ export default memo(
   CategoriesList,
   (pp, np) => isEqual(pp.selectedCategory, np.selectedCategory)
     && isEqual(pp.data, np.data)
-    && isEqual(pp.from, np.from)
-    && isEqual(pp.to, np.to),
+    && isEqual(pp.after, np.after)
+    && isEqual(pp.before, np.before),
 );
