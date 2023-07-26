@@ -48,7 +48,7 @@ export const AVAILABLE_STATISTICS = [{
 export const INITIAL_STATE = {
   incomeExpense: new TimeperiodStatistics({
     data: [],
-    from: moment().subtract(1, 'month'),
+    from: moment().subtract(6, 'month'),
     to: moment(),
   }),
   monthExpenses: new TimeperiodStatistics({

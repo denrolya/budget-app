@@ -27,12 +27,12 @@ const INTERVALS = {
   '1w': {
     value: [moment().subtract(1, 'week'), moment()],
     tooltipDateFormat: 'ddd Do MMM HH:00',
-    xTickFormat: 'Do',
+    xTickFormat: 'Do MMM',
   },
   '1m': {
     value: [moment().subtract(1, 'month'), moment()],
     tooltipDateFormat: 'ddd Do MMM',
-    xTickFormat: 'Do',
+    xTickFormat: 'Do MMM',
   },
   '3m': {
     value: [moment().subtract(3, 'months'), moment()],
@@ -71,8 +71,8 @@ const INTERVALS = {
  */
 const IncomeExpenseChart = ({ model, onUpdate }) => {
   const { data } = model;
-  const [interval, setInterval] = useState('1m');
-  const [displayValues, setDisplayValues] = useState(TRANSACTION_TYPES[0]);
+  const [interval, setInterval] = useState('6m');
+  const [displayValues, setDisplayValues] = useState(INCOME_TYPE);
 
   const toggleDisplayType = (type) => setDisplayValues([type]);
 
@@ -89,25 +89,31 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
     return index % 7 ? '' : date.format(INTERVALS[interval].xTickFormat);
   };
 
-  const tooltipFormatter = ({ active, payload, label }) => (active && payload?.length) && (
-    <Card body className="px-3 py-2">
-      <h4 className="mb-1 text-white">
-        <i aria-hidden className="ion-ios-calendar" />
-        {' '}
-        {moment.unix(payload[0].payload.from).format(INTERVALS[interval].tooltipDateFormat)}
-        {' - '}
-        {moment.unix(payload[0].payload.to).format(INTERVALS[interval].tooltipDateFormat)}
-      </h4>
-      <p
-        className={cn('mb-0', {
-          'text-success': displayValues.includes(INCOME_TYPE),
-          'text-danger': displayValues.includes(EXPENSE_TYPE),
-        })}
-      >
-        <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.value)} />
-      </p>
-    </Card>
-  );
+  const tooltipFormatter = ({ active, payload }) => {
+    return (active && payload?.length) && (
+      <Card body className="px-3 py-2">
+        <h4 className="mb-1 text-white">
+          <i aria-hidden className="ion-ios-calendar" />
+          {' '}
+          {moment.unix(payload[0].payload.after).format(INTERVALS[interval].tooltipDateFormat)}
+          {' - '}
+          {moment.unix(payload[0].payload.before).format(INTERVALS[interval].tooltipDateFormat)}
+        </h4>
+
+        {displayValues.includes(INCOME_TYPE) && (
+          <p className={cn('mb-0', 'text-success')}>
+            <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.payload.income)} />
+          </p>
+        )}
+
+        {displayValues.includes(EXPENSE_TYPE) && (
+          <p className={cn('mb-0', 'text-danger')}>
+            <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.payload.expense)} />
+          </p>
+        )}
+      </Card>
+    );
+  };
 
   return (
     <div>
@@ -158,7 +164,7 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
               radius={[8, 8, 0, 0]}
             />
 
-            <XAxis dataKey="date" axisLine={false} tickLine={false} tickFormatter={xTickFormatter} />
+            <XAxis dataKey="after" axisLine={false} tickLine={false} tickFormatter={xTickFormatter} />
 
             <CartesianGrid opacity={0.1} vertical={false} />
             <Legend onClick={({ value }) => toggleDisplayType(value)} />
