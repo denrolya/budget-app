@@ -56,7 +56,6 @@ const TransactionsTable = ({
                 className={cn('mb-0', {
                   'text-primary': isToday(date),
                   'text-info': isYesterday(date),
-                  'text-white': !isToday(date) && !isYesterday(date),
                 })}
               >
                 <i aria-hidden className="ion-ios-calendar" />

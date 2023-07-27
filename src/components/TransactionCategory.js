@@ -10,7 +10,7 @@ const TransactionCategory = ({ showFullPath, category }) => {
   const { icon } = category;
 
   return (
-    <span className="d-inline-block">
+    <span className="d-inline-block text-white">
       {(showFullPath && path.length > 0) && (
         <span className="d-none d-sm-inline text-muted small">
           {path.join(' / ')}
