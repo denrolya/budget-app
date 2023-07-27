@@ -7,6 +7,7 @@ import { CURRENCIES } from 'src/constants/currency';
 
 /* eslint-disable no-param-reassign */
 const MoneyValue = ({
+  id,
   currency,
   amount,
   values,
@@ -40,6 +41,7 @@ const MoneyValue = ({
 
   return (
     <span
+      id={id}
       className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric', {
         'font-weight-bold': bold,
         [className]: !!className,
@@ -59,6 +61,7 @@ const MoneyValue = ({
 };
 
 MoneyValue.defaultProps = {
+  id: undefined,
   bold: false,
   className: '',
   maximumFractionDigits: 2,
@@ -67,6 +70,7 @@ MoneyValue.defaultProps = {
 };
 
 MoneyValue.propTypes = {
+  id: PropTypes.string,
   amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   bold: PropTypes.bool,
   currency: PropTypes.string,

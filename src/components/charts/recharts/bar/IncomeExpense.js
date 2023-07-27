@@ -15,7 +15,7 @@ import {
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import MoneyValue from 'src/components/MoneyValue';
-import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 
 // before/after
 const INTERVALS = {
@@ -89,31 +89,29 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
     return index % 7 ? '' : date.format(INTERVALS[interval].xTickFormat);
   };
 
-  const tooltipFormatter = ({ active, payload }) => {
-    return (active && payload?.length) && (
-      <Card body className="px-3 py-2">
-        <h4 className="mb-1 text-white">
-          <i aria-hidden className="ion-ios-calendar" />
-          {' '}
-          {moment.unix(payload[0].payload.after).format(INTERVALS[interval].tooltipDateFormat)}
-          {' - '}
-          {moment.unix(payload[0].payload.before).format(INTERVALS[interval].tooltipDateFormat)}
-        </h4>
+  const tooltipFormatter = ({ active, payload }) => (active && payload?.length) && (
+    <Card body className="px-3 py-2">
+      <h4 className="mb-1 text-white">
+        <i aria-hidden className="ion-ios-calendar" />
+        {' '}
+        {moment.unix(payload[0].payload.after).format(INTERVALS[interval].tooltipDateFormat)}
+        {' - '}
+        {moment.unix(payload[0].payload.before).format(INTERVALS[interval].tooltipDateFormat)}
+      </h4>
 
-        {displayValues.includes(INCOME_TYPE) && (
-          <p className={cn('mb-0', 'text-success')}>
-            <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.payload.income)} />
-          </p>
-        )}
+      {displayValues.includes(INCOME_TYPE) && (
+        <p className={cn('mb-0', 'text-success')}>
+          <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.payload.income)} />
+        </p>
+      )}
 
-        {displayValues.includes(EXPENSE_TYPE) && (
-          <p className={cn('mb-0', 'text-danger')}>
-            <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.payload.expense)} />
-          </p>
-        )}
-      </Card>
-    );
-  };
+      {displayValues.includes(EXPENSE_TYPE) && (
+        <p className={cn('mb-0', 'text-danger')}>
+          <MoneyValue bold maximumFractionDigits={0} amount={Math.abs(payload?.[0]?.payload.expense)} />
+        </p>
+      )}
+    </Card>
+  );
 
   return (
     <div>

@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import {
   Button,
   Table,
-  UncontrolledCollapse,
   ListGroup,
   ListGroupItem,
   UncontrolledTooltip,
@@ -74,7 +73,7 @@ const CategoriesList = ({
           return (
             <ListGroupItem className="p-1 card-category-tree__list-item" key={name}>
               <div className="d-flex justify-content-between align-center">
-                <div className="font-weight-light cursor-info py-1" id={`category-${key}`}>
+                <div className="font-weight-light cursor-info py-1" id={`category-${id}`}>
                   <span className="w-25px mr-2 d-inline-block align-center">
                     <CircularProgressbarWithChildren
                       styles={buildStyles({
@@ -97,7 +96,21 @@ const CategoriesList = ({
                   <strong>{name === selectedCategory ? 'Uncategorized' : name}</strong>
                 </div>
                 <div className="text-nowrap card-category-tree__list-item-actions">
-                  <MoneyValue bold className="mr-1 text-white" amount={total} maximumFractionDigits={0} />
+                  <small id={`category-${id}-to-previous`} className="font-style-numeric cursor-info">
+                    {amountToPreviousPeriodRatio !== false && (
+                      <span className={cn('mr-2', `text-${toPreviousRatioColor}`)}>
+                        <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />
+                        {` ${ratio(amountToPreviousPeriodRatio)}%`}
+                      </span>
+                    )}
+                  </small>
+                  <MoneyValue
+                    bold
+                    maximumFractionDigits={0}
+                    className="mr-1 text-white cursor-info"
+                    id={`category-${id}-amount`}
+                    amount={total}
+                  />
                   <div className="d-inline-block">
                     <Link
                       to={generateLinkToExpenses(
@@ -122,38 +135,16 @@ const CategoriesList = ({
                   </div>
                 </div>
               </div>
-              <UncontrolledTooltip target={`category-${key}`}>
+              <UncontrolledTooltip target={`category-${id}`}>
                 {percentageInTotalSum.toFixed()}
                 % from total expenses
               </UncontrolledTooltip>
-              <UncontrolledCollapse toggler={`category-${key}`} className="pl-4">
+              <UncontrolledTooltip target={`category-${id}-to-previous`}>
+                <MoneyValue maximumFractionDigits={0} amount={previous} />
+              </UncontrolledTooltip>
+              <UncontrolledTooltip target={`category-${id}-amount`}>
                 <Table size="sm" bordered={false}>
                   <tbody>
-                    {percentageInTotalSum !== false && (
-                      <tr>
-                        <td>From total expenses:</td>
-                        <td className="text-right font-style-numeric font-weight-bold">
-                          {percentageInTotalSum > 0 || percentageInTotalSum === 0
-                            ? percentageInTotalSum.toFixed()
-                            : percentageInTotalSum.toFixed(1)}
-                          %
-                        </td>
-                      </tr>
-                    )}
-                    <tr>
-                      <td>Previous period:</td>
-                      <td className="text-right font-style-numeric font-weight-bold">
-                        {amountToPreviousPeriodRatio !== false && (
-                          <span className={cn('mr-2', `text-${toPreviousRatioColor}`)}>
-                            <i aria-hidden className={cn(arrowIcon(amountToPreviousPeriodRatio))} />
-                            {' '}
-                            {ratio(amountToPreviousPeriodRatio)}
-                            %
-                          </span>
-                        )}
-                        <MoneyValue maximumFractionDigits={0} amount={previous} />
-                      </td>
-                    </tr>
                     {[
                       ['days', 'Daily'],
                       ['weeks', 'Weekly'],
@@ -164,24 +155,22 @@ const CategoriesList = ({
                         ? moment().diff(after, unitOfTime) + 1
                         : before.diff(after, unitOfTime) + 1;
 
-                      return (
-                        diff > 1 && (
-                          <tr key={`${title}-expenses`}>
-                            <td>
-                              {title}
-                              {' '}
-                              expense:
-                            </td>
-                            <td className="text-right">
-                              <MoneyValue bold amount={total / diff} />
-                            </td>
-                          </tr>
-                        )
+                      return (diff > 1) && (
+                        <tr key={`${title}-expenses`}>
+                          <td className="text-left">
+                            {title}
+                            {' '}
+                            expense:
+                          </td>
+                          <td className="text-right">
+                            <MoneyValue bold amount={total / diff} />
+                          </td>
+                        </tr>
                       );
                     })}
                   </tbody>
                 </Table>
-              </UncontrolledCollapse>
+              </UncontrolledTooltip>
             </ListGroupItem>
           );
         })}
@@ -234,15 +223,19 @@ const CategoriesList = ({
               </span>
               <strong>{selectedSubtree.model.name === data.model.name ? 'Total' : selectedSubtree.model.name}</strong>
             </Link>
-            <div className="text-nowrap text-right d-flex flex-column">
-              <MoneyValue bold className="text-white" amount={selectedSubtree.model.total} />
+
+            <div className="text-nowrap text-right">
               {(previousPeriodToCurrentRatio !== false && previousPeriodToCurrentRatio !== 100) && (
-                <small className={`text-${expenseRatioColor(previousPeriodToCurrentRatio)}`}>
+                <small id="total-to-previous" className={`mr-2 text-${expenseRatioColor(previousPeriodToCurrentRatio)}`}>
                   <i aria-hidden className={cn(arrowIcon(previousPeriodToCurrentRatio))} />
-                  {` ${ratio(previousPeriodToCurrentRatio)}% | `}
-                  <MoneyValue bold maximumFractionDigits={0} amount={selectedSubtree.model.previous} />
+                  {` ${ratio(previousPeriodToCurrentRatio)}%`}
                 </small>
               )}
+              <MoneyValue bold className="text-white" amount={selectedSubtree.model.total} />
+
+              <UncontrolledTooltip target="total-to-previous">
+                <MoneyValue bold maximumFractionDigits={0} amount={selectedSubtree.model.previous} />
+              </UncontrolledTooltip>
             </div>
           </div>
         </ListGroupItem>
