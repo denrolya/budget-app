@@ -48,14 +48,15 @@ const MoneyValue = ({
       })}
     >
       {showSign && amount !== 0 && (amount > 0 ? ' + ' : ' - ')}
-      {amountString}
-      {' '}
-      {!!value && symbol !== baseCurrency.symbol && (
-        <small>
-          |
+      {(!!value && symbol !== baseCurrency.symbol) ? (
+        <>
           {valueString}
-        </small>
-      )}
+          <small>
+            {' | '}
+            {amountString}
+          </small>
+        </>
+      ) : amountString}
     </span>
   );
 };
