@@ -35,6 +35,7 @@ export const fetchStatistics = ({
     'executedAt[before]': state.to.format(MOMENT_DATETIME_FORMAT),
     interval: state.interval,
   };
+  let result;
 
   if (additionalParams) {
     params = {
@@ -45,7 +46,7 @@ export const fetchStatistics = ({
 
   if (customHandlers[name]) {
     dispatch(customHandlers[name](path, params));
-    return;
+    return null;
   }
 
   dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
@@ -66,18 +67,22 @@ export const fetchStatistics = ({
 
       const [currentResponse, previousResponse] = await axios.all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest]);
 
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]({
+      result = {
         current: currentResponse.data?.['hydra:member'][0],
         previous: previousResponse.data?.['hydra:member'][0],
-      }));
+      };
     } else {
       const { data } = await axios.get(path, { params });
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](data?.['hydra:member']?.[0]));
+      result = data?.['hydra:member']?.[0];
+      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]());
     }
   } catch (e) {
     notify('error', `[Error]: Fetch Statistics(${name})`);
     dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
   }
+
+  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](result));
+  return result;
 };
 
 const customHandlers = {

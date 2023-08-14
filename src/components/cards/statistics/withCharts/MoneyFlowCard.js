@@ -1,27 +1,54 @@
-import React, { memo } from 'react';
+import moment from 'moment-timezone';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { connect } from 'react-redux';
 import sumBy from 'lodash/sumBy';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Col, Row } from 'reactstrap';
+
 import IntervalSwitch from 'src/components/IntervalSwitch';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
-
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import MoneyValue from 'src/components/MoneyValue';
 import MoneyFlowChart from 'src/components/charts/recharts/bar/MoneyFlowByInterval';
+import { isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
+import { randomMoneyFlowData } from 'src/utils/randomData';
+import { fetchStatistics } from 'src/store/actions/report';
+import snakeCase from 'voca/snake_case';
+import upperCase from 'voca/upper_case';
+
+const NAME = 'moneyFlow';
+const CONFIG = {
+  name: 'moneyFlow',
+  path: 'api/transactions/statistics/money-flow',
+};
 
 const MoneyFlowCard = ({
-  isLoading,
-  model,
   transparent,
+  fetchStatistics,
+  isLoading,
   onUpdate,
   showCalendarSwitch,
   showIntervalSwitch,
 }) => {
+  const [model, setModel] = useState(new TimeperiodIntervalStatistics({
+    from: moment().startOf('year'),
+    to: moment().endOf('year'),
+    data: randomMoneyFlowData(),
+  }));
+
+  const fetchData = async () => {
+    const data = await fetchStatistics(CONFIG);
+    setModel(model.set('data', data));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const { symbol } = useBaseCurrency();
   const {
     data, interval, from, to,
@@ -105,19 +132,16 @@ MoneyFlowCard.defaultProps = {
 };
 
 MoneyFlowCard.propTypes = {
-  model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
   onUpdate: PropTypes.func.isRequired,
+  fetchStatistics: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   transparent: PropTypes.bool,
   showCalendarSwitch: PropTypes.bool,
   showIntervalSwitch: PropTypes.bool,
 };
 
-export default memo(
-  MoneyFlowCard,
-  (pp, np) => isEqual(pp.model.data, np.model.data)
-    && pp.isLoading === np.isLoading
-    && pp.model.from.isSame(np.model.from)
-    && pp.model.to.isSame(np.model.to)
-    && pp.model.interval === np.model.interval,
-);
+const mapStateToProps = ({ ui }) => ({
+  isLoading: isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(NAME))}`]),
+});
+
+export default connect(mapStateToProps, { fetchStatistics })(MoneyFlowCard);

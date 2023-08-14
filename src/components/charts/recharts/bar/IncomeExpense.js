@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Card, Button } from 'reactstrap';
 import {
   Bar,
@@ -16,6 +17,10 @@ import {
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
+import { isActionLoading } from 'src/utils/common';
+import snakeCase from 'voca/snake_case';
+import upperCase from 'voca/upper_case';
+import { fetchStatistics } from 'src/store/actions/dashboard';
 
 // before/after
 const INTERVALS = {
@@ -66,15 +71,31 @@ const INTERVALS = {
   },
 };
 
+const NAME = 'incomeExpense';
+const CONFIG = {
+  name: 'incomeExpense',
+  path: 'api/transactions/statistics/income-expense',
+};
+
 /**
  * TODO: Format ticks & tooltips by interval
  */
-const IncomeExpenseChart = ({ model, onUpdate }) => {
-  const { data } = model;
+const IncomeExpenseChart = ({ isLoading, onUpdate, fetchStatistics }) => {
+  const [model, setModel] = useState(new TimeperiodStatistics({
+    data: [],
+    from: moment().subtract(6, 'month'),
+    to: moment(),
+  }));
   const [interval, setInterval] = useState('6m');
   const [displayValues, setDisplayValues] = useState(INCOME_TYPE);
+  const { data } = model;
 
   const toggleDisplayType = (type) => setDisplayValues([type]);
+
+  const fetchData = async () => {
+    const data = await fetchStatistics(CONFIG);
+    setModel(model.set('data', data));
+  };
 
   useEffect(() => {
     onUpdate(model.merge({
@@ -82,6 +103,10 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
       to: INTERVALS[interval].value[1],
     }));
   }, [interval]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const xTickFormatter = (val, index) => {
     const date = moment.unix(val);
@@ -174,9 +199,18 @@ const IncomeExpenseChart = ({ model, onUpdate }) => {
   );
 };
 
-IncomeExpenseChart.propTypes = {
-  model: PropTypes.instanceOf(TimeperiodStatistics).isRequired,
-  onUpdate: PropTypes.func.isRequired,
+IncomeExpenseChart.defaultProps = {
+  isLoading: false,
 };
 
-export default IncomeExpenseChart;
+IncomeExpenseChart.propTypes = {
+  isLoading: PropTypes.bool,
+  onUpdate: PropTypes.func.isRequired,
+  fetchStatistics: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = ({ ui }) => ({
+  isLoading: isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(NAME))}`]),
+});
+
+export default connect(mapStateToProps, { fetchStatistics })(IncomeExpenseChart);

@@ -36,6 +36,7 @@ export const fetchStatistics = ({
   const state = getState().report[name];
   const isV2API = AVAILABLE_STATISTICS.find((el) => el.name === name).v2;
   let params = { interval: state.interval };
+  let result;
 
   if (isV2API) {
     params.after = state.from.format(MOMENT_DEFAULT_DATE_FORMAT);
@@ -54,7 +55,7 @@ export const fetchStatistics = ({
 
   if (customHandlers[name]) {
     dispatch(customHandlers[name](path, params));
-    return;
+    return null;
   }
 
   dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
@@ -77,20 +78,20 @@ export const fetchStatistics = ({
       const getPreviousPeriodDataRequest = axios.get(path, { params: previousPeriodParams });
 
       const [currentResponse, previousResponse] = await axios.all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest]);
-
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]({
+      result = {
         current: isV2API ? currentResponse.data : currentResponse.data?.['hydra:member'][0],
         previous: isV2API ? previousResponse.data : previousResponse.data?.['hydra:member'][0],
-      }));
+      };
     } else {
       const { data } = await axios.get(path, { params });
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](
-        isV2API ? data : data?.['hydra:member']?.[0],
-      ));
+      result = isV2API ? data : data?.['hydra:member']?.[0];
     }
   } catch (e) {
     dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
   }
+
+  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](result));
+  return result;
 };
 
 const customHandlers = {
