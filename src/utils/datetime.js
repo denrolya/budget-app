@@ -34,17 +34,36 @@ export const rangeToString = (from, to, range = DATERANGE_PICKER_RANGES) => {
   return result;
 };
 
-export const generatePreviousPeriod = (from, to) => {
-  const currentMonth = moment().month();
-  const isCurrentMonth = from.month() === currentMonth && to.month() === currentMonth;
+export const diffIn = (date1, date2, unitOfTime = 'days') => moment().isBetween(date1, date2)
+  ? moment().diff(date1, unitOfTime) + 1
+  : date2.diff(date1, unitOfTime) + 1;
+
+export const generatePreviousPeriod = (start, end) => {
+  const diffInDays = diffIn(start, end, 'days');
+  let from = start.clone().subtract(diffInDays + 1, 'days');
+  let to = start.clone().subtract(1, 'days');
+
+  // if whole week - previous week
+  if (diffInDays === 6 && start.isoWeekday() === 1 && end.isoWeekday() === 7) {
+    from = start.clone().subtract(1, 'day').startOf('isoWeek');
+    to = start.clone().subtract(1, 'day').endOf('isoWeek');
+  }
+
+  // If whole month - previous month
+  if (end.diff(start, 'days') + 1 === start.daysInMonth()) {
+    from = start.clone().subtract(1, 'day').startOf('month');
+    to = start.clone().subtract(1, 'day').endOf('month');
+  }
+
+  // If whole year - previous year
+  if (start.clone().isSame(moment().startOf('year'), 'day') && end.clone().isSame(moment().endOf('year'), 'day')) {
+    from = start.clone().subtract(1, 'day').startOf('year');
+    to = start.clone().subtract(1, 'day').endOf('year');
+  }
 
   return {
-    from: isCurrentMonth
-      ? from.clone().subtract(1, 'months')
-      : from.clone().subtract(to.diff(from, 'days') + 1, 'days'),
-    to: isCurrentMonth
-      ? from.clone().subtract(1, 'days')
-      : from.clone().subtract(1, 'days'),
+    from,
+    to: to.endOf('day'),
   };
 };
 

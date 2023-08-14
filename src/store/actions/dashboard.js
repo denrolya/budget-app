@@ -1,8 +1,9 @@
 import { createActions } from 'reduxsauce';
-import { EXPENSE_TYPE } from 'src/constants/transactions';
 import camelCase from 'voca/camel_case';
 import capitalize from 'voca/capitalize';
 
+import { EXPENSE_TYPE } from 'src/constants/transactions';
+import { generatePreviousPeriod } from 'src/utils/datetime';
 import axios from 'src/utils/http';
 import { notify } from 'src/store/actions/global';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
@@ -13,7 +14,7 @@ export const { Types, Creators } = createActions(
   {
     ...AVAILABLE_STATISTICS.map(({ name }) => ({
       [`fetchStatistics${capitalize(camelCase(name))}Request`]: null,
-      [`fetchStatistics${capitalize(camelCase(name))}Success`]: [`${name}`],
+      [`fetchStatistics${capitalize(camelCase(name))}Success`]: [name],
       [`fetchStatistics${capitalize(camelCase(name))}Failure`]: ['error'],
     })).reduce((acc, curr) => Object.assign(acc, curr), {}),
     setStatistics: ['name', 'newModel'],
@@ -26,6 +27,60 @@ export const setStatistics = (name, newModel) => (dispatch) => {
   dispatch(fetchStatistics(AVAILABLE_STATISTICS.find((el) => el.name === name)));
 };
 
+export const fetchStatisticsIndependently = ({
+  name, path, model, fetchPreviousPeriod,
+}) => async (dispatch) => {
+  const params = {
+    'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
+    'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+    interval: model.interval,
+  };
+  let result;
+
+  if (customHandlers[name]) {
+    dispatch(customHandlers[name](path, params));
+    return null;
+  }
+
+  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
+
+  try {
+    if (fetchPreviousPeriod) {
+      const getSelectedPeriodDataRequest = axios.get(path, { params });
+
+      const previousPeriod = generatePreviousPeriod(model.from, model.to);
+
+      const getPreviousPeriodDataRequest = axios.get(path, {
+        params: {
+          ...params,
+          'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
+          'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
+        },
+      });
+
+      const [currentResponse, previousResponse] = await axios.all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest]);
+
+      result = {
+        current: currentResponse.data?.['hydra:member'][0],
+        previous: previousResponse.data?.['hydra:member'][0],
+      };
+    } else {
+      const { data } = await axios.get(path, { params });
+      result = data?.['hydra:member']?.[0];
+      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]());
+    }
+  } catch (e) {
+    notify('error', `[Error]: Fetch Statistics(${name})`);
+    dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
+  }
+
+  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](result));
+  return result;
+};
+
+/**
+ * @deprecated since version 2.0
+ */
 export const fetchStatistics = ({
   name, path, additionalParams, fetchPreviousPeriod,
 }) => async (dispatch, getState) => {
@@ -54,8 +109,7 @@ export const fetchStatistics = ({
   try {
     if (fetchPreviousPeriod) {
       const getSelectedPeriodDataRequest = axios.get(path, { params });
-
-      const previousPeriod = getState().dashboard.expenseCategoriesTree.generatePreviousPeriod();
+      const previousPeriod = generatePreviousPeriod(state.from, state.to);
 
       const getPreviousPeriodDataRequest = axios.get(path, {
         params: {
@@ -138,25 +192,6 @@ const customHandlers = {
       dispatch(Creators.fetchStatisticsExpenseCategoriesTreeFailure(e));
     }
   },
-};
-
-export const updateDashboardInterval = (from, to) => (dispatch, getState) => {
-  const { settings } = getState().auth.user;
-  const dashboardStatistics = getState().dashboard;
-
-  settings.dashboardStatistics.forEach((name) => {
-    if (name !== 'moneyFlow') {
-      dispatch(
-        setStatistics(
-          name,
-          dashboardStatistics[name].merge({
-            from,
-            to,
-          }),
-        ),
-      );
-    }
-  });
 };
 
 export const updateDashboard = () => (dispatch) => AVAILABLE_STATISTICS.forEach((el) => dispatch(fetchStatistics(el)));
