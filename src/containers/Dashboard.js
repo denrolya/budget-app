@@ -13,9 +13,9 @@ import DailyInCategory from 'src/components/cards/statistics/generic/DailyInCate
 import TotalValue from 'src/components/cards/statistics/generic/TotalValue';
 import TotalInCategory from 'src/components/cards/statistics/generic/TotalInCategory';
 
+import IncomeExpenseCard from 'src/components/cards/statistics/withCharts/IncomeExpenseCard';
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/statistics/withCharts/TransactionCategoriesTimelineCard';
-import IncomeExpense from 'src/components/charts/recharts/bar/IncomeExpense';
 
 import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
@@ -80,10 +80,7 @@ const Dashboard = ({
       <div className="dashboard">
         <Row>
           <Col md={12}>
-            <IncomeExpense
-              model={statistics.incomeExpense}
-              onUpdate={(newModel) => setStatistics('incomeExpense', newModel)}
-            />
+            <IncomeExpenseCard />
           </Col>
         </Row>
 

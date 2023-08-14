@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import cn from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
 import { Card, Button } from 'reactstrap';
 import {
   Bar,
@@ -14,99 +13,17 @@ import {
   XAxis,
 } from 'recharts';
 
-import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-import { isActionLoading } from 'src/utils/common';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
-import { fetchStatistics } from 'src/store/actions/dashboard';
-
-// before/after
-const INTERVALS = {
-  '1d': {
-    value: [moment().subtract(1, 'day'), moment()],
-    tooltipDateFormat: 'DD MM YYYY hh:mm:ss',
-    xTickFormat: 'ddd HH:00',
-  },
-  '1w': {
-    value: [moment().subtract(1, 'week'), moment()],
-    tooltipDateFormat: 'ddd Do MMM HH:00',
-    xTickFormat: 'Do MMM',
-  },
-  '1m': {
-    value: [moment().subtract(1, 'month'), moment()],
-    tooltipDateFormat: 'ddd Do MMM',
-    xTickFormat: 'Do MMM',
-  },
-  '3m': {
-    value: [moment().subtract(3, 'months'), moment()],
-    tooltipDateFormat: 'ddd Do MMM',
-    xTickFormat: 'Do MMM',
-  },
-  '6m': {
-    value: [moment().subtract(6, 'months'), moment()],
-    tooltipDateFormat: 'ddd Do MMM',
-    xTickFormat: 'Do MMM',
-  },
-  '1y': {
-    value: [moment().subtract(1, 'year'), moment()],
-    tooltipDateFormat: 'D.MM.YY',
-    xTickFormat: 'Do MMM',
-  },
-  '2y': {
-    value: [moment().subtract(2, 'years'), moment()],
-    tooltipDateFormat: 'ddd Do MMM YY',
-    xTickFormat: 'Do MMM',
-  },
-  '5y': {
-    value: [moment().subtract(5, 'years'), moment()],
-    tooltipDateFormat: 'ddd Do MMM YYYY',
-    xTickFormat: 'Do MMM YY',
-  },
-  '10y': {
-    value: [moment().subtract(10, 'years'), moment()],
-    tooltipDateFormat: 'ddd Do MMM YYYY',
-    xTickFormat: 'Do MMM YY',
-  },
-};
-
-const NAME = 'incomeExpense';
-const CONFIG = {
-  name: 'incomeExpense',
-  path: 'api/transactions/statistics/income-expense',
-};
+import { INTERVALS } from 'src/constants/dashboard';
 
 /**
  * TODO: Format ticks & tooltips by interval
  */
-const IncomeExpenseChart = ({ isLoading, onUpdate, fetchStatistics }) => {
-  const [model, setModel] = useState(new TimeperiodStatistics({
-    data: [],
-    from: moment().subtract(6, 'month'),
-    to: moment(),
-  }));
-  const [interval, setInterval] = useState('6m');
+const IncomeExpenseChart = ({ data, interval }) => {
   const [displayValues, setDisplayValues] = useState(INCOME_TYPE);
-  const { data } = model;
 
   const toggleDisplayType = (type) => setDisplayValues([type]);
-
-  const fetchData = async () => {
-    const data = await fetchStatistics(CONFIG);
-    setModel(model.set('data', data));
-  };
-
-  useEffect(() => {
-    onUpdate(model.merge({
-      from: INTERVALS[interval].value[0],
-      to: INTERVALS[interval].value[1],
-    }));
-  }, [interval]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const xTickFormatter = (val, index) => {
     const date = moment.unix(val);
@@ -140,18 +57,6 @@ const IncomeExpenseChart = ({ isLoading, onUpdate, fetchStatistics }) => {
 
   return (
     <div>
-      {Object.keys(INTERVALS).map((name) => (
-        <Button
-          size="sm"
-          color="danger"
-          className="text-uppercase btn-simple"
-          key={name}
-          active={name === interval}
-          onClick={() => setInterval(name)}
-        >
-          {name}
-        </Button>
-      ))}
       {data.length > 0 && (
         <ResponsiveContainer width="100%" height={300}>
           <BarChart stackOffset="sign" data={data}>
@@ -199,18 +104,11 @@ const IncomeExpenseChart = ({ isLoading, onUpdate, fetchStatistics }) => {
   );
 };
 
-IncomeExpenseChart.defaultProps = {
-  isLoading: false,
-};
+IncomeExpenseChart.defaultProps = {};
 
 IncomeExpenseChart.propTypes = {
-  isLoading: PropTypes.bool,
-  onUpdate: PropTypes.func.isRequired,
-  fetchStatistics: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired,
+  interval: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ ui }) => ({
-  isLoading: isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(NAME))}`]),
-});
-
-export default connect(mapStateToProps, { fetchStatistics })(IncomeExpenseChart);
+export default IncomeExpenseChart;
