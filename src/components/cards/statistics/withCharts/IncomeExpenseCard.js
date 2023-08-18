@@ -3,24 +3,20 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, ButtonGroup } from 'reactstrap';
-import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
+import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import { PATHS } from 'src/constants/statistics';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import IncomeExpenseChart from 'src/components/charts/recharts/bar/IncomeExpense';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
-import { fetchStatisticsIndependently as fetchStatistics } from 'src/store/actions/dashboard';
+import { fetchNewStatistics as fetchStatistics } from 'src/store/actions/dashboard';
 import { isActionLoading } from 'src/utils/common';
 import { INTERVALS } from 'src/constants/dashboard';
 
-const NAME = 'incomeExpense';
-const CONFIG = {
-  name: 'incomeExpense',
-  path: 'api/transactions/statistics/income-expense',
-};
-
-const IncomeExpenseCard = ({ isLoading, fetchStatistics }) => {
+const IncomeExpenseCard = ({ uiState, fetchStatistics, config }) => {
+  const isLoading = isActionLoading(uiState[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: [],
     from: moment().subtract(6, 'month'),
@@ -29,7 +25,11 @@ const IncomeExpenseCard = ({ isLoading, fetchStatistics }) => {
   const [interval, setInterval] = useState('6m');
 
   const fetchData = async () => {
-    const data = await fetchStatistics({ ...CONFIG, model });
+    const params = {
+      'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
+      'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+    };
+    const data = await fetchStatistics({ ...config, params });
     setModel(model.set('data', data));
   };
 
@@ -68,16 +68,21 @@ const IncomeExpenseCard = ({ isLoading, fetchStatistics }) => {
 };
 
 IncomeExpenseCard.defaultProps = {
-  isLoading: false,
+  config: {
+    name: 'incomeExpense',
+    path: PATHS.incomeExpense,
+  },
 };
 
 IncomeExpenseCard.propTypes = {
   fetchStatistics: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
+  uiState: PropTypes.object.isRequired,
+  config: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+  }),
 };
 
-const mapStateToProps = ({ ui }) => ({
-  isLoading: isActionLoading(ui[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(NAME))}`]),
-});
+const mapStateToProps = ({ ui }) => ({ uiState: ui });
 
 export default connect(mapStateToProps, { fetchStatistics })(IncomeExpenseCard);

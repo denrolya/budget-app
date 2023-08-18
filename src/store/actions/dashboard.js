@@ -27,6 +27,25 @@ export const setStatistics = (name, newModel) => (dispatch) => {
   dispatch(fetchStatistics(AVAILABLE_STATISTICS.find((el) => el.name === name)));
 };
 
+export const fetchNewStatistics = ({
+  name, path, params,
+}) => async (dispatch) => {
+  let result;
+  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
+
+  try {
+    const { data } = await axios.get(path, { params });
+    result = data?.['hydra:member']?.[0];
+  } catch (e) {
+    notify('error', `[Error]: Fetch Statistics(${name})`);
+    dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
+    return null;
+  }
+
+  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]());
+  return result;
+};
+
 export const fetchStatisticsIndependently = ({
   name, path, model, fetchPreviousPeriod,
 }) => async (dispatch) => {
@@ -67,11 +86,11 @@ export const fetchStatisticsIndependently = ({
     } else {
       const { data } = await axios.get(path, { params });
       result = data?.['hydra:member']?.[0];
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]());
     }
   } catch (e) {
     notify('error', `[Error]: Fetch Statistics(${name})`);
     dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
+    return null;
   }
 
   dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](result));
