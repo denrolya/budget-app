@@ -11,7 +11,7 @@ const AccountList = () => {
   const list = useAccounts();
 
   useEffect(() => {
-    if (list.length > 0) {
+    if (list.length > 0 && !id) {
       navigate(`${list[0].id}`);
     }
   }, [list.length]);

@@ -10,7 +10,7 @@ import TransactionsTable from 'src/components/tables/TransactionsTable';
 
 const AccountTransactionsDetails = ({ account }) => {
   const {
-    id, numberOfTransactions, lastTransactionAt, latestTransactions, logs,
+    id, numberOfTransactions, latestTransactions, logs,
   } = account;
 
   const hasLogs = logs.length > 0;
@@ -138,7 +138,6 @@ AccountTransactionsDetails.propTypes = {
     name: PropTypes.string.isRequired,
     numberOfTransactions: PropTypes.number.isRequired,
     logs: PropTypes.array.isRequired,
-    lastTransactionAt: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     latestTransactions: PropTypes.array,
   }).isRequired,
 };
