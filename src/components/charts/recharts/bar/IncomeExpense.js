@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import cn from 'classnames';
 import React, { useState } from 'react';
-import { Card, Button } from 'reactstrap';
+import { Card } from 'reactstrap';
 import {
   Bar,
   BarChart,

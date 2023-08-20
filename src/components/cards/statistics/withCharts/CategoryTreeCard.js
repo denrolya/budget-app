@@ -12,7 +12,7 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import CenteredMessage from 'src/components/messages/CenteredMessage';
 import TransactionCategories from 'src/components/charts/recharts/pie/TransactionCategories';
 import Breadcrumbs from 'src/components/CategoriesBreadcrumbs';
-import { fetchStatistics } from 'src/store/actions/dashboard';
+import { fetchStatistics } from 'src/store/actions/statistics';
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
 import { isActionLoading } from 'src/utils/common';
 import { generatePreviousPeriod, rangeToString } from 'src/utils/datetime';
@@ -32,7 +32,7 @@ const CategoryTreeCard = ({ config, fetchStatistics, uiState }) => {
     ...DEFAULT_CONFIG,
     ...config,
   };
-  const isLoading = isActionLoading(uiState[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(config.name))}`]);
+  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: new TreeModel().parse({
       name: 'All categories',

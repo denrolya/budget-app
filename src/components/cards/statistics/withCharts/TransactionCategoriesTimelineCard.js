@@ -17,7 +17,7 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import { useCategories } from 'src/contexts/CategoriesContext';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import { fetchStatistics } from 'src/store/actions/dashboard';
+import { fetchStatistics } from 'src/store/actions/statistics';
 import { isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
@@ -33,7 +33,7 @@ export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, co
     ...DEFAULT_CONFIG,
     ...config,
   };
-  const isLoading = isActionLoading(uiState[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(config.name))}`]);
+  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
       data: randomTransactionCategoriesTimelineData(),

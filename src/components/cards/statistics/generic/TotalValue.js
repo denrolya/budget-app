@@ -11,7 +11,7 @@ import { useAccounts } from 'src/contexts/AccountsContext';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
-import { fetchStatistics } from 'src/store/actions/dashboard';
+import { fetchStatistics } from 'src/store/actions/statistics';
 import { diffIn, generatePreviousPeriod, generateSincePreviousPeriodText } from 'src/utils/datetime';
 import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLastPeriodMessage';
@@ -44,7 +44,7 @@ const TotalValue = ({
   };
   const categories = useCategories();
   const accounts = useAccounts();
-  const isLoading = isActionLoading(uiState[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(config.name))}`]);
+  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: {
       current: 0,

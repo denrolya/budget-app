@@ -7,7 +7,6 @@ import { RESET_ACTION } from 'src/store/actions/global';
 import accountReducer from 'src/store/reducers/account';
 import authReducer from 'src/store/reducers/auth';
 import categoryReducer from 'src/store/reducers/category';
-import dashboardReducer from 'src/store/reducers/dashboard';
 import debtReducer from 'src/store/reducers/debt';
 import transactionReducer from 'src/store/reducers/transaction';
 import transferReducer from 'src/store/reducers/transfer';
@@ -21,7 +20,6 @@ export default combineReducers({
   router: createRouterReducer(history),
   auth: authReducer,
   exchangeRates: resettable(exchangeRatesReducer),
-  dashboard: resettable(dashboardReducer),
   account: resettable(accountReducer),
   category: resettable(categoryReducer),
   debt: resettable(debtReducer),

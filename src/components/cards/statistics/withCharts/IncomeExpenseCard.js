@@ -12,7 +12,7 @@ import { PATHS } from 'src/constants/statistics';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import IncomeExpenseChart from 'src/components/charts/recharts/bar/IncomeExpense';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
-import { fetchStatistics } from 'src/store/actions/dashboard';
+import { fetchStatistics } from 'src/store/actions/statistics';
 import { isActionLoading } from 'src/utils/common';
 import { INTERVALS } from 'src/constants/dashboard';
 
@@ -28,7 +28,7 @@ const IncomeExpenseCard = ({ uiState, fetchStatistics, config }) => {
     ...DEFAULT_CONFIG,
     ...config,
   };
-  const isLoading = isActionLoading(uiState[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(config.name))}`]);
+  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: [],
     from: moment().subtract(6, 'month'),
