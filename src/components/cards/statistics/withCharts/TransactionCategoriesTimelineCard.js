@@ -1,36 +1,66 @@
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Typeahead } from 'react-bootstrap-typeahead';
+import { connect } from 'react-redux';
 import { Col, Row } from 'reactstrap';
+import snakeCase from 'voca/snake_case';
+import upperCase from 'voca/upper_case';
 
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import IntervalSwitch from 'src/components/IntervalSwitch';
-import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT, MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import { PATHS } from 'src/constants/statistics';
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { useCategories } from 'src/contexts/CategoriesContext';
-import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
+import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
+import { fetchNewStatistics as fetchStatistics } from 'src/store/actions/dashboard';
+import { isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
+import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
 
-export const TransactionCategoriesTimelineCard = ({
-  isLoading, model, onUpdate,
-}) => {
-  const { from, to, interval } = model;
-  const typeaheads = [];
+export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, config }) => {
+  const isLoading = isActionLoading(uiState[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(config.name))}`]);
+  const [model, setModel] = useState(new TimeperiodIntervalStatistics({
+    data: {
+      data: randomTransactionCategoriesTimelineData(),
+      categories: [1, 2, 4],
+    },
+    from: moment().startOf('year'),
+    to: moment().endOf('year'),
+  }));
   const categories = useCategories();
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const typeaheads = [];
+  const { from, to, interval } = model;
 
   const selectCategories = (selected) => {
     setSelectedCategories(selected);
-    onUpdate(
+    setModel(
       model.setIn(
         'data.categories'.split('.'),
         selected.map(({ id }) => id),
       ),
     );
   };
+
+  const fetchData = async () => {
+    const params = {
+      'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
+      'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+      interval: model.interval,
+      categoryDeep: model.data.categories,
+    };
+    const data = await fetchStatistics({ ...config, params });
+    setModel(model.setIn('data.data'.split('.'), data));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), interval, model.data.categories.length]);
 
   useEffect(() => {
     setSelectedCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)));
@@ -51,7 +81,7 @@ export const TransactionCategoriesTimelineCard = ({
                 startDate={from}
                 endDate={to}
                 ranges={DATERANGE_PICKER_RANGES}
-                onApply={(_event, { startDate, endDate }) => onUpdate(
+                onApply={(_event, { startDate, endDate }) => setModel(
                   model.merge({
                     from: startDate,
                     to: endDate,
@@ -87,7 +117,7 @@ export const TransactionCategoriesTimelineCard = ({
               selected={interval}
               from={from}
               to={to}
-              onIntervalSwitch={(v) => onUpdate(model.set('interval', v))}
+              onIntervalSwitch={(v) => setModel(model.set('interval', v))}
             />
           </Col>
         </Row>
@@ -102,13 +132,21 @@ export const TransactionCategoriesTimelineCard = ({
 };
 
 TransactionCategoriesTimelineCard.defaultProps = {
-  isLoading: false,
+  config: {
+    name: 'categoriesTimeline',
+    path: PATHS.timeline,
+  },
 };
 
 TransactionCategoriesTimelineCard.propTypes = {
-  model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
+  fetchStatistics: PropTypes.func.isRequired,
+  uiState: PropTypes.object.isRequired,
+  config: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+  }),
 };
 
-export default TransactionCategoriesTimelineCard;
+const mapStateToProps = ({ ui }) => ({ uiState: ui });
+
+export default connect(mapStateToProps, { fetchStatistics })(TransactionCategoriesTimelineCard);

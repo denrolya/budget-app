@@ -46,57 +46,6 @@ export const fetchNewStatistics = ({
   return result;
 };
 
-export const fetchStatisticsIndependently = ({
-  name, path, model, fetchPreviousPeriod,
-}) => async (dispatch) => {
-  const params = {
-    'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
-    'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
-    interval: model.interval,
-  };
-  let result;
-
-  if (customHandlers[name]) {
-    dispatch(customHandlers[name](path, params));
-    return null;
-  }
-
-  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
-
-  try {
-    if (fetchPreviousPeriod) {
-      const getSelectedPeriodDataRequest = axios.get(path, { params });
-
-      const previousPeriod = generatePreviousPeriod(model.from, model.to);
-
-      const getPreviousPeriodDataRequest = axios.get(path, {
-        params: {
-          ...params,
-          'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
-          'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
-        },
-      });
-
-      const [currentResponse, previousResponse] = await axios.all([getSelectedPeriodDataRequest, getPreviousPeriodDataRequest]);
-
-      result = {
-        current: currentResponse.data?.['hydra:member'][0],
-        previous: previousResponse.data?.['hydra:member'][0],
-      };
-    } else {
-      const { data } = await axios.get(path, { params });
-      result = data?.['hydra:member']?.[0];
-    }
-  } catch (e) {
-    notify('error', `[Error]: Fetch Statistics(${name})`);
-    dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Failure`](e));
-    return null;
-  }
-
-  dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`](result));
-  return result;
-};
-
 /**
  * @deprecated since version 2.0
  */
