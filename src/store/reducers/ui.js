@@ -1,4 +1,5 @@
 import { Types } from 'src/store/actions/ui';
+import { randomString } from 'src/utils/randomData';
 
 export const INITIAL_STATE = {
   isDarkModeOn: true,
@@ -9,6 +10,7 @@ export const INITIAL_STATE = {
   isTransferModalOpened: false,
   isDebtModalOpened: false,
   isAccountModalOpened: false,
+  updateStatisticsTrigger: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -66,6 +68,11 @@ export default (state = INITIAL_STATE, action) => {
           isDarkModeOn: state.isDarkModeOn,
           isAccountModalOpened: !state.isAccountModalOpened,
         };
+      case Types.UPDATE_STATISTICS:
+        return {
+          ...state,
+          updateStatisticsTrigger: randomString(10),
+        };
       default:
         return state;
     }
@@ -76,6 +83,7 @@ export default (state = INITIAL_STATE, action) => {
   return {
     ...state,
     [requestName]: requestState === 'REQUEST',
-    errorMessage: action.message || '',
+    error: action.error,
+    errorMessage: action.message,
   };
 };

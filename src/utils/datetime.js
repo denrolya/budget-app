@@ -38,27 +38,27 @@ export const diffIn = (date1, date2, unitOfTime = 'days') => moment().isBetween(
   ? Math.abs(moment().diff(date1, unitOfTime) + 1)
   : Math.abs(date2.diff(date1, unitOfTime) + 1);
 
-export const generatePreviousPeriod = (start, end) => {
-  const diffInDays = diffIn(start, end, 'days');
-  let from = start.clone().subtract(diffInDays + 1, 'days');
-  let to = start.clone().subtract(1, 'days');
+export const generatePreviousPeriod = (after, before) => {
+  const diffInDays = diffIn(after, before, 'days');
+  let from = after.clone().subtract(diffInDays + 1, 'days');
+  let to = after.clone().subtract(1, 'days');
 
   // if whole week - previous week
-  if (diffInDays === 6 && start.isoWeekday() === 1 && end.isoWeekday() === 7) {
-    from = start.clone().subtract(1, 'day').startOf('isoWeek');
-    to = start.clone().subtract(1, 'day').endOf('isoWeek');
+  if (diffInDays === 6 && after.isoWeekday() === 1 && before.isoWeekday() === 7) {
+    from = after.clone().subtract(1, 'day').startOf('isoWeek');
+    to = after.clone().subtract(1, 'day').endOf('isoWeek');
   }
 
   // If whole month - previous month
-  if (end.diff(start, 'days') + 1 === start.daysInMonth()) {
-    from = start.clone().subtract(1, 'day').startOf('month');
-    to = start.clone().subtract(1, 'day').endOf('month');
+  if (before.diff(after, 'days') + 1 === after.daysInMonth()) {
+    from = after.clone().subtract(1, 'day').startOf('month');
+    to = after.clone().subtract(1, 'day').endOf('month');
   }
 
   // If whole year - previous year
-  if (start.clone().isSame(moment().startOf('year'), 'day') && end.clone().isSame(moment().endOf('year'), 'day')) {
-    from = start.clone().subtract(1, 'day').startOf('year');
-    to = start.clone().subtract(1, 'day').endOf('year');
+  if (after.clone().isSame(moment().startOf('year'), 'day') && before.clone().isSame(moment().endOf('year'), 'day')) {
+    from = after.clone().subtract(1, 'day').startOf('year');
+    to = after.clone().subtract(1, 'day').endOf('year');
   }
 
   return {

@@ -7,7 +7,7 @@ import { closeDebtPrompt } from 'src/utils/prompts';
 import { ROUTE_DASHBOARD, ROUTE_DEBTS } from 'src/constants/routes';
 import axios from 'src/utils/http';
 import { isOnPath } from 'src/utils/routing';
-import { updateDashboard } from 'src/store/actions/dashboard';
+import { updateStatistics } from 'src/store/actions/ui';
 import { notify } from 'src/store/actions/global';
 
 export const { Types, Creators } = createActions(
@@ -62,7 +62,7 @@ export const createDebt = (debt) => async (dispatch) => {
     }
 
     if (isOnPath(ROUTE_DASHBOARD)) {
-      dispatch(updateDashboard());
+      dispatch(updateStatistics());
     }
   } catch (e) {
     notify('error', 'Create Debt');

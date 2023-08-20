@@ -25,7 +25,7 @@ const Header = ({
   toggleSidebar,
   toggleTransactionModal,
   logoutUser,
-  updateDashboard,
+  updateStatistics,
   isOpened,
   toggle,
 }) => (
@@ -60,7 +60,7 @@ const Header = ({
             className="d-block d-sm-none"
             onClick={() => {
               if (isOnDashboardPage()) {
-                updateDashboard();
+                updateStatistics();
               }
             }}
           >
@@ -138,7 +138,7 @@ Header.propTypes = {
   toggleDarkMode: PropTypes.func.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
   toggleTransactionModal: PropTypes.func.isRequired,
-  updateDashboard: PropTypes.func.isRequired,
+  updateStatistics: PropTypes.func.isRequired,
   onTokenCopyClick: PropTypes.func.isRequired,
   onMonobankButtonClick: PropTypes.func.isRequired,
 };

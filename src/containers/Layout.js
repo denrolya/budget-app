@@ -17,11 +17,8 @@ import { ROUTE_DASHBOARD, ROUTE_DEBTS, ROUTE_TRANSACTIONS } from 'src/constants/
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
 import { isActionLoading, copyTokenToClipboard } from 'src/utils/common';
 import { logoutUser } from 'src/store/actions/auth';
-import { updateDashboard } from 'src/store/actions/dashboard';
-import { registerTransaction } from 'src/store/actions/transaction';
-import { switchBaseCurrency } from 'src/store/actions/user';
-import { setMonobankHook } from 'src/store/actions/account';
 import {
+  updateStatistics,
   closeSidebar,
   openSidebar,
   toggleAccountModal,
@@ -32,6 +29,9 @@ import {
   toggleDraftExpenseModal,
   toggleTransferModal,
 } from 'src/store/actions/ui';
+import { registerTransaction } from 'src/store/actions/transaction';
+import { switchBaseCurrency } from 'src/store/actions/user';
+import { setMonobankHook } from 'src/store/actions/account';
 import DraftCashExpenseForm from 'src/containers/DraftCashExpenseForm';
 
 const Layout = ({
@@ -57,7 +57,7 @@ const Layout = ({
   isAccountModalOpened,
   isTransferRequestInProgress,
   isAssetsLoading,
-  updateDashboard,
+  updateStatistics,
   registerTransaction,
 }) => {
   const toggleTransactionForm = useTransactionForm();
@@ -96,7 +96,7 @@ const Layout = ({
           totalDebt={totalDebt}
           isLoading={isAssetsLoading}
           onCurrencySwitch={switchBaseCurrency}
-          updateDashboard={updateDashboard}
+          updateStatistics={updateStatistics}
         />
 
         <div
@@ -110,7 +110,7 @@ const Layout = ({
             onTokenCopyClick={copyTokenToClipboard}
             onMonobankButtonClick={setMonobankHook}
             logoutUser={logoutUser}
-            updateDashboard={updateDashboard}
+            updateStatistics={updateStatistics}
             toggle={toggleHeader}
             toggleDarkMode={toggleDarkMode}
             toggleTransactionModal={toggleNewTransaction}
@@ -174,7 +174,7 @@ Layout.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,
   toggleDraftExpenseModal: PropTypes.func.isRequired,
   toggleTransferModal: PropTypes.func.isRequired,
-  updateDashboard: PropTypes.func.isRequired,
+  updateStatistics: PropTypes.func.isRequired,
   setMonobankHook: PropTypes.func.isRequired,
   colorScheme: PropTypes.oneOf(['blue', 'gray', 'indigo', 'lightblue', 'primary', 'green']),
   totalDebt: PropTypes.number,
@@ -205,7 +205,7 @@ export default connect(mapStateToProps, {
   toggleDebtModal,
   toggleAccountModal,
   logoutUser,
-  updateDashboard,
+  updateStatistics,
   registerTransaction,
   switchBaseCurrency,
   setMonobankHook,

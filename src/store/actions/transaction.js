@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import axios from 'src/utils/http';
 import { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/utils/routing';
 import { transactionDeletionPrompt } from 'src/utils/prompts';
-import { updateDashboard } from 'src/store/actions/dashboard';
+import { updateStatistics } from 'src/store/actions/ui';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import { fetchList as fetchDebts } from 'src/store/actions/debt';
@@ -113,7 +113,7 @@ export const registerTransaction = (type, transaction) => async (dispatch, getSt
     notify('success', 'Transaction registered');
 
     if (isOnDashboardPage()) {
-      dispatch(updateDashboard());
+      dispatch(updateStatistics());
     }
 
     const { filters } = getState().transaction.pagination;
@@ -180,7 +180,7 @@ export const deleteTransaction = (transaction) => async (dispatch, getState) => 
     notify('success', 'Transaction deleted!', 'DELETED');
 
     if (isOnDashboardPage()) {
-      dispatch(updateDashboard());
+      dispatch(updateStatistics());
     }
 
     if (isOnTransactionsPage() && getState().transaction.pagination.filters.hasType(transaction.type)) {

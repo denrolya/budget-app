@@ -29,7 +29,7 @@ const Sidebar = ({
   totalDebt,
   isLoading,
   onCurrencySwitch,
-  updateDashboard,
+  updateStatistics,
 }) => {
   const accounts = useActiveAccounts();
   const { symbol, code } = useBaseCurrency();
@@ -52,7 +52,7 @@ const Sidebar = ({
     }
 
     await onCurrencySwitch(currency.code);
-    await updateDashboard();
+    await updateStatistics();
   };
 
   return (
@@ -211,7 +211,7 @@ Sidebar.defaultProps = {
 };
 
 Sidebar.propTypes = {
-  updateDashboard: PropTypes.func.isRequired,
+  updateStatistics: PropTypes.func.isRequired,
   onCurrencySwitch: PropTypes.func.isRequired,
   totalDebt: PropTypes.number,
   isLoading: PropTypes.bool,

@@ -17,12 +17,22 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import { useCategories } from 'src/contexts/CategoriesContext';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import { fetchNewStatistics as fetchStatistics } from 'src/store/actions/dashboard';
+import { fetchStatistics } from 'src/store/actions/dashboard';
 import { isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
 
+export const DEFAULT_CONFIG = {
+  name: '<name_goes_here>',
+  path: PATHS.timeline,
+};
+
 export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, config }) => {
+  // eslint-disable-next-line no-param-reassign
+  config = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
   const isLoading = isActionLoading(uiState[`DASHBOARD_FETCH_STATISTICS_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
@@ -47,20 +57,20 @@ export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, co
     );
   };
 
-  const fetchData = async () => {
-    const params = {
-      'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
-      'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
-      interval: model.interval,
-      categoryDeep: model.data.categories,
-    };
-    const data = await fetchStatistics({ ...config, params });
-    setModel(model.setIn('data.data'.split('.'), data));
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
+        'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+        interval: model.interval,
+        categoryDeep: model.data.categories,
+      };
+      const data = await fetchStatistics({ ...config, params });
+      setModel(model.setIn('data.data'.split('.'), data));
+    };
+
     fetchData();
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), interval, model.data.categories.length]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), interval, model.data.categories.length, uiState.updateStatisticsTrigger]);
 
   useEffect(() => {
     setSelectedCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)));
@@ -132,10 +142,7 @@ export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, co
 };
 
 TransactionCategoriesTimelineCard.defaultProps = {
-  config: {
-    name: 'categoriesTimeline',
-    path: PATHS.timeline,
-  },
+  config: DEFAULT_CONFIG,
 };
 
 TransactionCategoriesTimelineCard.propTypes = {
@@ -143,7 +150,7 @@ TransactionCategoriesTimelineCard.propTypes = {
   uiState: PropTypes.object.isRequired,
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired,
+    path: PropTypes.string,
   }),
 };
 

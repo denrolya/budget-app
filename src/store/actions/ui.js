@@ -9,6 +9,7 @@ export const { Types, Creators } = createActions(
     toggleTransferModal: null,
     toggleDebtModal: null,
     toggleAccountModal: null,
+    updateStatistics: null,
   },
   { prefix: 'UI_' },
 );
@@ -30,3 +31,5 @@ export const toggleTransferModal = () => (dispatch) => dispatch(Creators.toggleT
 export const toggleDebtModal = () => (dispatch) => dispatch(Creators.toggleDebtModal());
 
 export const toggleAccountModal = () => (dispatch) => dispatch(Creators.toggleAccountModal());
+
+export const updateStatistics = () => (dispatch) => dispatch(Creators.updateStatistics());

@@ -85,7 +85,7 @@ const CategoriesList = ({
                     >
                       <i
                         aria-hidden
-                        className={cn(icon, 'text-white', {
+                        className={cn(icon, {
                           'font-12px': isTotalAndPreviousZero,
                           'font-17px': !isTotalAndPreviousZero,
                         })}

@@ -9,7 +9,7 @@ import {
   isOnTransactionsPage,
   isOnTransfersPage,
 } from 'src/utils/routing';
-import { updateDashboard } from 'src/store/actions/dashboard';
+import { updateStatistics } from 'src/store/actions/ui';
 import { notify } from 'src/store/actions/global';
 import { fetchList as fetchAccounts } from 'src/store/actions/account';
 import { fetchList as fetchDebts } from 'src/store/actions/debt';
@@ -101,7 +101,7 @@ export const registerTransfer = (transfer) => async (dispatch) => {
     notify('success', 'Transfer successfully registered', 'Transaction registered');
 
     if (isOnDashboardPage()) {
-      dispatch(updateDashboard());
+      dispatch(updateStatistics());
     }
 
     if (isOnTransfersPage()) {
@@ -137,7 +137,7 @@ export const deleteTransfer = (transfer) => async (dispatch) => {
     notify('success', 'Transfer deleted!', 'Deleted');
 
     if (isOnDashboardPage()) {
-      dispatch(updateDashboard());
+      dispatch(updateStatistics());
     }
 
     if (isOnTransfersPage()) {
