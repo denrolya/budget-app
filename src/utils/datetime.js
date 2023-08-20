@@ -35,8 +35,8 @@ export const rangeToString = (from, to, range = DATERANGE_PICKER_RANGES) => {
 };
 
 export const diffIn = (date1, date2, unitOfTime = 'days') => moment().isBetween(date1, date2)
-  ? moment().diff(date1, unitOfTime) + 1
-  : date2.diff(date1, unitOfTime) + 1;
+  ? Math.abs(moment().diff(date1, unitOfTime) + 1)
+  : Math.abs(date2.diff(date1, unitOfTime) + 1);
 
 export const generatePreviousPeriod = (start, end) => {
   const diffInDays = diffIn(start, end, 'days');
@@ -65,6 +65,30 @@ export const generatePreviousPeriod = (start, end) => {
     from,
     to: to.endOf('day'),
   };
+};
+
+export const generateSincePreviousPeriodText = (after, before) => {
+  const diffInDays = diffIn(after, before, 'days');
+  let period = `last ${diffInDays} days`;
+
+  // if whole week - previous week
+  if (diffInDays === 6 && after.isoWeekday() === 1 && before.isoWeekday() === 7) {
+    period = 'last week';
+  }
+
+  // If whole month - previous month
+  if (before.diff(after, 'days') + 1 === after.daysInMonth()) {
+    const previousMonth = after.clone().subtract(1, 'days').format('MMM');
+    period = `last month(${previousMonth})`;
+  }
+
+  // If whole year - previous year
+  if (after.clone().isSame(moment().startOf('year'), 'day') && before.clone().isSame(moment().endOf('year'), 'day')) {
+    const previousYear = after.year() - 1;
+    period = previousYear === moment().year() - 1 ? `last year(${previousYear})` : previousYear;
+  }
+
+  return period;
 };
 
 export const isToday = (date) => moment().isSame(date, 'date');

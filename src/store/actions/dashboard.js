@@ -17,6 +17,9 @@ export const { Types, Creators } = createActions(
       [`fetchStatistics${capitalize(camelCase(name))}Success`]: [name],
       [`fetchStatistics${capitalize(camelCase(name))}Failure`]: ['error'],
     })).reduce((acc, curr) => Object.assign(acc, curr), {}),
+    fetchStatisticsDailyExpensesRequest: null,
+    fetchStatisticsDailyExpensesSuccess: ['dailyExpenses'],
+    fetchStatisticsDailyExpensesFailure: ['error'],
     setStatistics: ['name', 'newModel'],
   },
   { prefix: 'DASHBOARD_' },
@@ -69,7 +72,6 @@ export const fetchStatistics = ({
 
   if (customHandlers[name]) {
     dispatch(customHandlers[name](path, params));
-    return null;
   }
 
   dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Request`]());
@@ -96,7 +98,6 @@ export const fetchStatistics = ({
     } else {
       const { data } = await axios.get(path, { params });
       result = data?.['hydra:member']?.[0];
-      dispatch(Creators[`fetchStatistics${capitalize(camelCase(name))}Success`]());
     }
   } catch (e) {
     notify('error', `[Error]: Fetch Statistics(${name})`);

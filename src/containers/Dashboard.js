@@ -8,7 +8,6 @@ import upperCase from 'voca/upper_case';
 
 import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
 
-import DailyValue from 'src/components/cards/statistics/generic/DailyValue';
 import DailyInCategory from 'src/components/cards/statistics/generic/DailyInCategory';
 import TotalValue from 'src/components/cards/statistics/generic/TotalValue';
 import TotalInCategory from 'src/components/cards/statistics/generic/TotalInCategory';
@@ -17,6 +16,7 @@ import IncomeExpenseCard from 'src/components/cards/statistics/withCharts/Income
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/statistics/withCharts/TransactionCategoriesTimelineCard';
 
+import { PATHS } from 'src/constants/statistics';
 import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { isActionLoading } from 'src/utils/common';
@@ -39,33 +39,20 @@ const Dashboard = ({
 
   /* eslint-disable react/no-unstable-nested-components */
   const shortStatistics = [
-    <TotalValue
-      title={`Expenses in ${statistics.monthExpenses.from.format('MMMM')}`}
-      footerType="percentage"
-      type={EXPENSE_TYPE}
-      isLoading={isStatisticsActionLoading('monthExpenses')}
-      model={statistics.monthExpenses}
-    />,
-    <DailyValue
-      footerType="amount"
-      type={EXPENSE_TYPE}
-      isLoading={isStatisticsActionLoading('monthExpenses')}
-      model={statistics.monthExpenses}
-    />,
-    <DailyInCategory
-      category="Food"
-      footerPeriod="month"
-      footerType="percentage"
-      type={EXPENSE_TYPE}
-      isLoading={isStatisticsActionLoading('foodExpenses')}
-      model={statistics.foodExpenses}
-    />,
-    <TotalInCategory
-      category="Rent & Utilities"
-      type={EXPENSE_TYPE}
-      isLoading={isStatisticsActionLoading('rentUtilityExpenses')}
-      model={statistics.rentUtilityExpenses}
-    />,
+    // <DailyInCategory
+    //   category="Food"
+    //   footerPeriod="month"
+    //   footerType="percentage"
+    //   type={EXPENSE_TYPE}
+    //   isLoading={isStatisticsActionLoading('foodExpenses')}
+    //   model={statistics.foodExpenses}
+    // />,
+    // <TotalInCategory
+    //   category="Rent & Utilities"
+    //   type={EXPENSE_TYPE}
+    //   isLoading={isStatisticsActionLoading('rentUtilityExpenses')}
+    //   model={statistics.rentUtilityExpenses}
+    // />,
   ];
   /* eslint-enable react/no-unstable-nested-components */
 
@@ -95,6 +82,37 @@ const Dashboard = ({
             </Col>
           ))}
         </Row>
+
+        <TotalValue
+          config={{
+            type: 'total',
+            path: PATHS.sum,
+            transactionType: EXPENSE_TYPE,
+            name: 'foodExpenses',
+            footerType: 'percentage',
+            categories: [1],
+          }}
+        />
+
+        <TotalValue
+          config={{
+            type: 'total',
+            path: PATHS.sum,
+            transactionType: EXPENSE_TYPE,
+            name: 'monthExpenses',
+            footerType: 'percentage',
+          }}
+        />
+
+        <TotalValue
+          config={{
+            type: 'daily',
+            path: PATHS.sum,
+            transactionType: EXPENSE_TYPE,
+            name: 'dailyExpenses',
+            footerType: 'amount',
+          }}
+        />
 
         <Row>
           <Col sm={4}>

@@ -20,7 +20,7 @@ const Card = ({
   const component = (
     <LoadingCard
       isLoading={isLoading}
-      className={cn('card-stats', 'card--hover-expand', 'card-stats-simple', 'p-0')}
+      className={cn('card-stats', 'card-stats-simple', 'p-0')}
       {...rest}
     >
       <CardBody className="p-0">

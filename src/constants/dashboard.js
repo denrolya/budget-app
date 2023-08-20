@@ -6,6 +6,7 @@ import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
 
+// TODO: Get rid of this. List should be dynamioc
 export const AVAILABLE_STATISTICS = [{
   name: 'incomeExpense',
   path: 'api/transactions/statistics/income-expense',
