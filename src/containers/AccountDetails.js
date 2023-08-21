@@ -106,19 +106,18 @@ const AccountDetails = ({
             </CardBody>
           </LoadingCard>
         </Col>
-        <Col xs={12} md={9}>
-          <h4 className="mb-2">Transactions</h4>
-          <LoadingCard isLoading={isLoading}>
-            <CardBody>
-              {hasData && (
-                <AccountTransactionsDetails account={accountDetails} />
-              )}
-              {!hasData && (
-                <CenteredMessage title="No data" message="No account data is available at the moment" />
-              )}
-            </CardBody>
-          </LoadingCard>
-        </Col>
+        {(hasData && accountDetails.latestTransactions.length > 0) && (
+          <Col xs={12} md={9}>
+            <h4 className="mb-2">Transactions</h4>
+            <LoadingCard isLoading={isLoading}>
+              <CardBody>
+                {hasData && (
+                  <AccountTransactionsDetails account={accountDetails} />
+                )}
+              </CardBody>
+            </LoadingCard>
+          </Col>
+        )}
       </Row>
     </>
   );

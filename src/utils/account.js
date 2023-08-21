@@ -16,7 +16,7 @@ export const formatDetails = (data) => {
     logs: data.logs.map((log) => ({
       ...log,
       createdAt: moment.unix(log.createdAt),
-    })),
+    })).sort((a, b) => a.createdAt.isBefore(b.createdAt) ? -1 : 1),
     latestTransactions: initializeList(data.latestTransactions).map((t) => ({
       ...t,
       account: pick(data, ['id', 'name', 'type', 'icon', 'balance', 'color', 'currency']),

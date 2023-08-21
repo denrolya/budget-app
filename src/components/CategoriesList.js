@@ -22,6 +22,7 @@ import {
   expenseRatioColor,
   ratio,
 } from 'src/utils/common';
+import { diffIn } from 'src/utils/datetime';
 import { generateLinkToExpenses } from 'src/utils/routing';
 import { HEX_COLORS } from 'src/constants/color';
 
@@ -35,15 +36,17 @@ const CategoriesList = ({
   const selectedSubtree = data.first(({ model: { name } }) => name === selectedCategory);
 
   const previousPeriodToCurrentRatio = useMemo(() => {
-    // TODO: I need a model here. model can generate previous period and that's what i need to calculate percentage
-    const currentDayNumber = moment().dayOfYear();
-    const lastDayOfYear = moment().endOf('year');
-    const isCurrentYear = before.isSame(lastDayOfYear, 'year');
-    const isNotEndOfYear = before.isSameOrBefore(lastDayOfYear);
+    let result = 0;
+    const today = moment();
 
-    return (isCurrentYear && isNotEndOfYear)
-      ? amountInPercentage(data.model.previous, (data.model.total / currentDayNumber) * 365, 0)
-      : amountInPercentage(data.model.previous, data.model.total, 0);
+    if (today.isBetween(after, before)) {
+      const diffInDays = diffIn(before, after, 'days');
+      result = amountInPercentage(data.model.previous / diffInDays, data.model.total / diffInDays);
+    } else {
+      result = amountInPercentage(data.model.previous, data.model.total);
+    }
+
+    return result;
   }, [data.model.previous, data.model.total]);
 
   const percentageFromTotal = useMemo(() => amountInPercentage(data.model.total, selectedSubtree.model.total), [
@@ -228,7 +231,7 @@ const CategoriesList = ({
               {(previousPeriodToCurrentRatio !== false && previousPeriodToCurrentRatio !== 100) && (
                 <small id="total-to-previous" className={`mr-2 text-${expenseRatioColor(previousPeriodToCurrentRatio)}`}>
                   <i aria-hidden className={cn(arrowIcon(previousPeriodToCurrentRatio))} />
-                  {` ${ratio(previousPeriodToCurrentRatio)}%`}
+                  {` ${ratio(previousPeriodToCurrentRatio).toFixed()}%`}
                 </small>
               )}
               <MoneyValue bold className="text-white" amount={selectedSubtree.model.total} />
