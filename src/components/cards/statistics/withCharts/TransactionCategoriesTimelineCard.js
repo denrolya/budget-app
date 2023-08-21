@@ -27,13 +27,14 @@ export const DEFAULT_CONFIG = {
   path: PATHS.timeline,
 };
 
-export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, config }) => {
+export const TransactionCategoriesTimelineCard = ({
+  isLoading, updateStatisticsTrigger, fetchStatistics, config,
+}) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
-  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
       data: randomTransactionCategoriesTimelineData(),
@@ -70,7 +71,7 @@ export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, co
     };
 
     fetchData();
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), interval, model.data.categories.length, uiState.updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), interval, model.data.categories.length, updateStatisticsTrigger]);
 
   useEffect(() => {
     setSelectedCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)));
@@ -143,17 +144,22 @@ export const TransactionCategoriesTimelineCard = ({ uiState, fetchStatistics, co
 
 TransactionCategoriesTimelineCard.defaultProps = {
   config: DEFAULT_CONFIG,
+  isLoading: false,
 };
 
 TransactionCategoriesTimelineCard.propTypes = {
   fetchStatistics: PropTypes.func.isRequired,
-  uiState: PropTypes.object.isRequired,
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
     path: PropTypes.string,
   }),
+  updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }) => ({ uiState: ui });
+const mapStateToProps = ({ ui }, { config }) => ({
+  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+  updateStatisticsTrigger: ui.updateStatisticsTrigger,
+});
 
 export default connect(mapStateToProps, { fetchStatistics })(TransactionCategoriesTimelineCard);

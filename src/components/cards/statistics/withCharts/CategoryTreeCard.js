@@ -1,7 +1,11 @@
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { connect } from 'react-redux';
+import TreeModel from 'tree-model';
+import snakeCase from 'voca/snake_case';
+import upperCase from 'voca/upper_case';
 
 import CategoriesList from 'src/components/CategoriesList';
 import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT, MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
@@ -16,23 +20,24 @@ import { fetchStatistics } from 'src/store/actions/statistics';
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
 import { isActionLoading } from 'src/utils/common';
 import { generatePreviousPeriod, rangeToString } from 'src/utils/datetime';
-import TreeModel from 'tree-model';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   path: PATHS.tree,
   transactionType: EXPENSE_TYPE,
+  after: moment().startOf('year'),
+  before: moment().endOf('year'),
 };
 
-const CategoryTreeCard = ({ config, fetchStatistics, uiState }) => {
+// FIXME: If it's a tree for incomes percentage and colors should be inverted
+const CategoryTreeCard = ({
+  isLoading, updateStatisticsTrigger, config, fetchStatistics,
+}) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
-  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: new TreeModel().parse({
       name: 'All categories',
@@ -40,6 +45,8 @@ const CategoryTreeCard = ({ config, fetchStatistics, uiState }) => {
       value: 0,
       previous: 0,
     }),
+    from: config.after,
+    to: config.before,
   }));
   const { from, to, data } = model;
   const [selectedCategory, selectCategory] = useState(data.model.name);
@@ -75,7 +82,14 @@ const CategoryTreeCard = ({ config, fetchStatistics, uiState }) => {
     };
 
     fetchData();
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), uiState.updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
+
+  useEffect(() => {
+    setModel(model.merge({
+      from: config.after,
+      to: config.before,
+    }));
+  }, [config.after, config.before]);
 
   return (
     <TimeperiodStatisticsCard
@@ -141,18 +155,26 @@ const CategoryTreeCard = ({ config, fetchStatistics, uiState }) => {
 
 CategoryTreeCard.defaultProps = {
   config: DEFAULT_CONFIG,
+  isLoading: false,
+  updateStatisticsTrigger: false,
 };
 
 CategoryTreeCard.propTypes = {
-  uiState: PropTypes.object.isRequired,
   fetchStatistics: PropTypes.func.isRequired,
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
     transactionType: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
     path: PropTypes.string,
+    after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
+  updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }) => ({ uiState: ui });
+const mapStateToProps = ({ ui }, { config }) => ({
+  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+  updateStatisticsTrigger: ui.updateStatisticsTrigger,
+});
 
 export default connect(mapStateToProps, { fetchStatistics })(CategoryTreeCard);

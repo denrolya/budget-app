@@ -22,13 +22,14 @@ export const DEFAULT_CONFIG = {
   path: PATHS.incomeExpense,
 };
 
-const IncomeExpenseCard = ({ uiState, fetchStatistics, config }) => {
+const IncomeExpenseCard = ({
+  isLoading, updateStatisticsTrigger, fetchStatistics, config,
+}) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
-  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: [],
     from: moment().subtract(6, 'month'),
@@ -55,7 +56,7 @@ const IncomeExpenseCard = ({ uiState, fetchStatistics, config }) => {
     };
 
     fetchData();
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), uiState.updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
 
   return (
     <LoadingCard transparent isLoading={isLoading}>
@@ -81,17 +82,23 @@ const IncomeExpenseCard = ({ uiState, fetchStatistics, config }) => {
 
 IncomeExpenseCard.defaultProps = {
   config: DEFAULT_CONFIG,
+  isLoading: false,
+  updateStatisticsTrigger: false,
 };
 
 IncomeExpenseCard.propTypes = {
   fetchStatistics: PropTypes.func.isRequired,
-  uiState: PropTypes.object.isRequired,
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
     path: PropTypes.string,
   }),
+  updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }) => ({ uiState: ui });
+const mapStateToProps = ({ ui }, { config }) => ({
+  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+  updateStatisticsTrigger: ui.updateStatisticsTrigger,
+});
 
 export default connect(mapStateToProps, { fetchStatistics })(IncomeExpenseCard);

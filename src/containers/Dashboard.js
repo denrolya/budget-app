@@ -16,7 +16,7 @@ const Dashboard = () => {
   const shortStatistics = [
     <TotalValue
       config={{
-        name: 'monthExpenses',
+        name: 'totalExpenses',
       }}
     />,
     <TotalValue
@@ -87,7 +87,7 @@ const Dashboard = () => {
           <Col md={3}>
             <CategoryTreeCard
               config={{
-                name: 'expenseCategoriesTree',
+                name: 'expenseCategoryTree',
               }}
             />
           </Col>

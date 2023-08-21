@@ -3,4 +3,5 @@ export const PATHS = {
   sum: 'api/transactions/statistics/sum',
   tree: 'api/categories/tree',
   timeline: 'api/transactions/statistics/categories-timeline',
+  moneyFlow: 'api/transactions/statistics/money-flow',
 };

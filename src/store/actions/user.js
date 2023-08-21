@@ -1,5 +1,6 @@
 import { createActions } from 'reduxsauce';
 
+import { updateStatistics } from 'src/store/actions/ui';
 import { getUser, setBaseCurrency } from 'src/utils/auth';
 import axios from 'src/utils/http';
 import { notify } from 'src/store/actions/global';
@@ -26,6 +27,7 @@ export const switchBaseCurrency = (currency) => async (dispatch) => {
     dispatch(Creators.switchBaseCurrencySuccess(currency));
 
     setBaseCurrency(currency);
+    dispatch(updateStatistics());
     notify('success', 'Switched currency');
   } catch (e) {
     notify('error', 'Switch Base Currency');

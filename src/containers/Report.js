@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import snakeCase from 'voca/snake_case';
+import moment from 'moment-timezone';
 import upperCase from 'voca/upper_case';
 import { Row, Col, UncontrolledCollapse } from 'reactstrap';
 
@@ -14,7 +15,7 @@ import { amountInPercentage, isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
-import { setStatistics, updateReport, setPeriod } from 'src/store/actions/report';
+import { setStatistics, updateReport } from 'src/store/actions/report';
 
 import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';
@@ -41,23 +42,18 @@ const Report = ({
   statistics,
   updateReport,
   setStatistics,
-  setPeriod,
 }) => {
-  const { code } = useBaseCurrency();
-
+  const [dateRange, setDateRange] = useState({
+    after: moment().startOf('year'),
+    before: moment().endOf('year'),
+  });
   const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
-
-  const { from, to } = statistics.moneyFlow;
-
-  useEffect(() => {
-    updateReport();
-  }, [code, from.year()]);
 
   return (
     <>
       <Helmet>
         <title>
-          {`${from.year()} Report | Budget`}
+          {`${dateRange.after.year()} Report | Budget`}
         </title>
       </Helmet>
 
@@ -67,23 +63,29 @@ const Report = ({
         alwaysShowCalendars={false}
         ranges={ANNUAL_REPORT_RANGES}
         locale={{ format: MOMENT_DATE_FORMAT }}
-        startDate={from}
-        endDate={to}
-        onApply={(_event, { startDate, endDate }) => setPeriod(startDate.year(), endDate.year())}
+        startDate={dateRange.after}
+        endDate={dateRange.before}
+        onApply={(_event, { startDate, endDate }) => setDateRange({
+          after: startDate,
+          before: endDate,
+        })}
       >
         <span className="cursor-pointer text-nowrap">
           <i aria-hidden className="ion-ios-calendar" />
           {'  '}
-          {rangeToString(from, to, ANNUAL_REPORT_RANGES)}
+          {rangeToString(dateRange.after, dateRange.before, ANNUAL_REPORT_RANGES)}
         </span>
       </DateRangePicker>
 
       <section>
         <MoneyFlowCard
           showCalendarSwitch={false}
-          isLoading={isStatisticsActionLoading('moneyFlow')}
-          model={statistics.moneyFlow}
-          onUpdate={(newModel) => setStatistics('moneyFlow', newModel)}
+          config={{
+            ...dateRange,
+            name: 'moneyFlow',
+            after: dateRange.after,
+            before: dateRange.before,
+          }}
         />
       </section>
 
@@ -95,38 +97,44 @@ const Report = ({
           <Row>
             <Col xs={12} md={6} lg={3}>
               <TotalValue
-                footerType="amount"
-                type={INCOME_TYPE}
-                isLoading={isStatisticsActionLoading('totalIncome')}
-                model={statistics.totalIncome}
+                config={{
+                  ...dateRange,
+                  name: 'totalIncomes',
+                  footerType: 'percentage',
+                  transactionType: INCOME_TYPE,
+                }}
               />
 
-              <DailyValue
-                footerType="amount"
-                type={INCOME_TYPE}
-                isLoading={isStatisticsActionLoading('totalIncome')}
-                model={statistics.totalIncome}
+              <TotalValue
+                config={{
+                  ...dateRange,
+                  footerType: 'percentage',
+                  type: 'daily',
+                  name: 'dailyIncomes',
+                  transactionType: INCOME_TYPE,
+                }}
               />
             </Col>
             <Col xs={12} md={6} lg={6}>
               <CategoryTreeCard
                 showDailyAnnual
-                type={INCOME_TYPE}
-                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
-                model={statistics.incomeCategoriesTree}
-                onUpdate={(newModel) => setStatistics('incomeCategoriesTree', newModel)}
+                config={{
+                  ...dateRange,
+                  transactionType: INCOME_TYPE,
+                  name: 'incomeCategoryTree',
+                }}
               />
             </Col>
             <Col xs={12} md={6} lg={3}>
-              <MainIncomeSourceCard
-                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
-                model={statistics.incomeCategoriesTree}
-              />
-              <NewCategoriesCard
-                type={INCOME_TYPE}
-                isLoading={isStatisticsActionLoading('incomeCategoriesTree')}
-                model={statistics.incomeCategoriesTree}
-              />
+              {/* <MainIncomeSourceCard */}
+              {/*  isLoading={isStatisticsActionLoading('incomeCategoriesTree')} */}
+              {/*  model={statistics.incomeCategoriesTree} */}
+              {/* /> */}
+              {/* <NewCategoriesCard */}
+              {/*  type={INCOME_TYPE} */}
+              {/*  isLoading={isStatisticsActionLoading('incomeCategoriesTree')} */}
+              {/*  model={statistics.incomeCategoriesTree} */}
+              {/* /> */}
             </Col>
           </Row>
         </UncontrolledCollapse>
@@ -144,51 +152,55 @@ const Report = ({
             <Col xs={12} md={6} lg={4}>
               <CategoryTreeCard
                 showDailyAnnual
-                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-                model={statistics.expenseCategoriesTree}
-                onUpdate={(newModel) => setStatistics('expenseCategoriesTree', newModel)}
+                config={{
+                  ...dateRange,
+                  transactionType: EXPENSE_TYPE,
+                  name: 'expenseCategoryTree',
+                }}
               />
             </Col>
             <Col xs={12} md={6} lg={4}>
-              <PercentageSpentFromIncomeCard
-                isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')}
-                percentage={amountInPercentage(
-                  statistics.totalIncome.data.current,
-                  statistics.totalExpense.data.current,
-                  0,
-                )}
-              />
-              <TotalExpensesByIntervalCard
-                isLoading={isStatisticsActionLoading('moneyFlow')}
-                model={statistics.moneyFlow}
-              />
-              <NewCategoriesCard
-                type={EXPENSE_TYPE}
-                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-                model={statistics.expenseCategoriesTree}
-              />
-              <AccountExpenseDistributionCard
-                isLoading={isStatisticsActionLoading('accountExpenseDistribution')}
-                model={statistics.accountExpenseDistribution}
-                onUpdate={(model) => setStatistics('accountExpenseDistribution', model)}
-              />
+              {/* <PercentageSpentFromIncomeCard */}
+              {/*  isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')} */}
+              {/*  percentage={amountInPercentage( */}
+              {/*    statistics.totalIncome.data.current, */}
+              {/*    statistics.totalExpense.data.current, */}
+              {/*    0, */}
+              {/*  )} */}
+              {/* /> */}
+              {/* <TotalExpensesByIntervalCard */}
+              {/*  isLoading={isStatisticsActionLoading('moneyFlow')} */}
+              {/*  model={statistics.moneyFlow} */}
+              {/* /> */}
+              {/* <NewCategoriesCard */}
+              {/*  type={EXPENSE_TYPE} */}
+              {/*  isLoading={isStatisticsActionLoading('expenseCategoriesTree')} */}
+              {/*  model={statistics.expenseCategoriesTree} */}
+              {/* /> */}
+              {/* <AccountExpenseDistributionCard */}
+              {/*  isLoading={isStatisticsActionLoading('accountExpenseDistribution')} */}
+              {/*  model={statistics.accountExpenseDistribution} */}
+              {/*  onUpdate={(model) => setStatistics('accountExpenseDistribution', model)} */}
+              {/* /> */}
             </Col>
             <Col xs={12} md={6} lg={4}>
               <TotalValue
-                footerType="amount"
-                type={EXPENSE_TYPE}
-                isLoading={isStatisticsActionLoading('totalExpense')}
-                model={statistics.totalExpense}
+                config={{
+                  ...dateRange,
+                  footerType: 'percentage',
+                  name: 'totalExpenses',
+                  transactionType: EXPENSE_TYPE,
+                }}
               />
-              <ExpenseCategoriesReviewCard
-                isLoading={isStatisticsActionLoading('expenseCategoriesTree')}
-                model={statistics.expenseCategoriesTree}
-              />
-              <ExpenseCategoriesByWeekdaysCard
-                isLoading={isStatisticsActionLoading('expenseCategoriesByWeekdays')}
-                model={statistics.expenseCategoriesByWeekdays}
-                onUpdate={(model) => setStatistics('expenseCategoriesByWeekdays', model)}
-              />
+              {/* <ExpenseCategoriesReviewCard */}
+              {/*  isLoading={isStatisticsActionLoading('expenseCategoriesTree')} */}
+              {/*  model={statistics.expenseCategoriesTree} */}
+              {/* /> */}
+              {/* <ExpenseCategoriesByWeekdaysCard */}
+              {/*  isLoading={isStatisticsActionLoading('expenseCategoriesByWeekdays')} */}
+              {/*  model={statistics.expenseCategoriesByWeekdays} */}
+              {/*  onUpdate={(model) => setStatistics('expenseCategoriesByWeekdays', model)} */}
+              {/* /> */}
             </Col>
           </Row>
         </UncontrolledCollapse>
@@ -198,35 +210,40 @@ const Report = ({
         <UncontrolledCollapse defaultOpen toggler="#food-expenses">
           <Row>
             <Col xs={12} md={6} lg={3} className="order-last order-lg-first">
-              <TotalInCategory
-                category="Food"
-                footerType="amount"
-                type={EXPENSE_TYPE}
-                isLoading={isStatisticsActionLoading('foodExpenses')}
-                model={statistics.foodExpenses}
+              <TotalValue
+                config={{
+                  ...dateRange,
+                  categories: [1],
+                  footerType: 'percentage',
+                  name: 'totalFoodExpenses',
+                  transactionType: EXPENSE_TYPE,
+                }}
               />
             </Col>
             <Col xs={12} md={6} lg={3}>
-              <MinMax
-                isLoading={isStatisticsActionLoading('foodExpensesMinMax')}
-                model={statistics.foodExpensesMinMax}
-              />
+              {/* <MinMax */}
+              {/*  isLoading={isStatisticsActionLoading('foodExpensesMinMax')} */}
+              {/*  model={statistics.foodExpensesMinMax} */}
+              {/* /> */}
             </Col>
             <Col xs={12} md={6} lg={3}>
-              <AverageInCategory
-                title="Average groceries bill"
-                category="Groceries"
-                isLoading={isStatisticsActionLoading('groceriesAverage')}
-                model={statistics.groceriesAverage}
-              />
+              {/* <AverageInCategory */}
+              {/*  title="Average groceries bill" */}
+              {/*  category="Groceries" */}
+              {/*  isLoading={isStatisticsActionLoading('groceriesAverage')} */}
+              {/*  model={statistics.groceriesAverage} */}
+              {/* /> */}
             </Col>
             <Col xs={12} md={6} lg={3}>
-              <DailyInCategory
-                category="Food"
-                type={EXPENSE_TYPE}
-                footerType="amount"
-                isLoading={isStatisticsActionLoading('foodExpenses')}
-                model={statistics.foodExpenses}
+              <TotalValue
+                config={{
+                  ...dateRange,
+                  type: 'daily',
+                  footerType: 'percentage',
+                  categories: [1],
+                  name: 'dailyFoodExpenses',
+                  transactionType: EXPENSE_TYPE,
+                }}
               />
             </Col>
           </Row>
@@ -235,11 +252,11 @@ const Report = ({
         <h3 id="utility-expenses" className="cursor-pointer">Utilities</h3>
 
         <UncontrolledCollapse defaultOpen toggler="#utility-expenses">
-          <UtilityCostsByIntervalCard
-            isLoading={isStatisticsActionLoading('utilityCostsByInterval')}
-            model={statistics.utilityCostsByInterval}
-            onUpdate={(model) => setStatistics('utilityCostsByInterval', model)}
-          />
+          {/* <UtilityCostsByIntervalCard */}
+          {/*  isLoading={isStatisticsActionLoading('utilityCostsByInterval')} */}
+          {/*  model={statistics.utilityCostsByInterval} */}
+          {/*  onUpdate={(model) => setStatistics('utilityCostsByInterval', model)} */}
+          {/* /> */}
         </UncontrolledCollapse>
       </section>
 
@@ -254,7 +271,6 @@ Report.propTypes = {
   statistics: PropTypes.object.isRequired,
   setStatistics: PropTypes.func.isRequired,
   updateReport: PropTypes.func.isRequired,
-  setPeriod: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ ui, report: statistics }) => ({ statistics, ui });
@@ -262,5 +278,4 @@ const mapStateToProps = ({ ui, report: statistics }) => ({ statistics, ui });
 export default connect(mapStateToProps, {
   setStatistics,
   updateReport,
-  setPeriod,
 })(Report);

@@ -2,13 +2,21 @@ import moment from 'moment-timezone';
 
 // TODO: Get rid of this. List should be dynamic
 export const AVAILABLE_STATISTICS = [
-  'monthExpenses',
+  'totalExpenses',
   'dailyExpenses',
   'foodExpenses',
   'incomeExpense',
   'rentUtilityExpenses',
-  'expenseCategoriesTree',
+  'expenseCategoryTree',
   'categoriesTimeline',
+
+  'moneyFlow',
+  'totalIncomes',
+  'dailyIncomes',
+  'incomeCategoryTree',
+
+  'totalFoodExpenses',
+  'dailyFoodExpenses',
 ];
 
 export const INITIAL_STATE = {};

@@ -1,6 +1,7 @@
 import React, {
   useEffect, useMemo, useState,
 } from 'react';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { connect } from 'react-redux';
@@ -27,12 +28,15 @@ export const DEFAULT_CONFIG = {
   path: PATHS.sum,
   footerType: 'percentage',
   type: 'total',
+  after: moment().startOf('month'),
+  before: moment().endOf('month'),
   accounts: [],
   categories: [],
 };
 
 const TotalValue = ({
-  uiState,
+  isLoading,
+  updateStatisticsTrigger,
   fetchStatistics,
   config,
 }) => {
@@ -44,12 +48,13 @@ const TotalValue = ({
   };
   const categories = useCategories();
   const accounts = useAccounts();
-  const isLoading = isActionLoading(uiState[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: {
       current: 0,
       previous: 0,
     },
+    from: moment.isMoment(config.after) ? config.after : moment(config.after),
+    to: moment.isMoment(config.before) ? config.before : moment(config.before),
   }));
 
   const { data: { current, previous } } = model;
@@ -123,10 +128,9 @@ const TotalValue = ({
         switch (type) {
           case 'daily':
             // eslint-disable-next-line no-case-declarations
-            const diffInDays = diffIn(model.from, model.to, 'days');
             setModel(model.set('data', {
-              current: currentData / diffInDays,
-              previous: previousPeriodData / diffInDays,
+              current: currentData / diffIn(model.from, model.to, 'days'),
+              previous: previousPeriodData / diffIn(previousPeriod.from, previousPeriod.to, 'days'),
             }));
             break;
           case 'total':
@@ -145,7 +149,14 @@ const TotalValue = ({
     return () => {
       isMounted = false; // Set it to false when the component is unmounted
     };
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), uiState.updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
+
+  useEffect(() => {
+    setModel(model.merge({
+      from: config.after,
+      to: config.before,
+    }));
+  }, [config.after, config.before]);
 
   return (
     <SimpleStatisticsCard
@@ -173,10 +184,11 @@ const TotalValue = ({
 
 TotalValue.defaultProps = {
   config: DEFAULT_CONFIG,
+  isLoading: false,
+  updateStatisticsTrigger: false,
 };
 
 TotalValue.propTypes = {
-  uiState: PropTypes.object.isRequired,
   fetchStatistics: PropTypes.func.isRequired,
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
@@ -186,9 +198,16 @@ TotalValue.propTypes = {
     footerType: PropTypes.oneOf(['percentage', 'amount']),
     categories: PropTypes.array,
     accounts: PropTypes.array,
+    after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
+  updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }) => ({ uiState: ui });
+const mapStateToProps = ({ ui }, { config }) => ({
+  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+  updateStatisticsTrigger: ui.updateStatisticsTrigger,
+});
 
 export default connect(mapStateToProps, { fetchStatistics })(TotalValue);

@@ -15,19 +15,20 @@ const PercentageSinceLastPeriodMessage = ({
   text,
 }) => {
   const id = useMemo(() => `percentage-since-last-period-message-${randomString(8)}`, [previous, current]);
-  const percentage = ratio(amountInPercentage(previous, current, 0));
+  const percentage = amountInPercentage(previous, current, 0);
+  const percentageRatio = ratio(percentage);
 
-  let sign = percentage > 0 ? '-' : '+';
+  let sign = previous >= current ? '-' : '+';
 
   if (inverted) {
-    sign = percentage > 0 ? '+' : '-';
+    sign = previous < current ? '+' : '-';
   }
 
   return (
     <>
       <strong id={id} className={cn('font-style-numeric', 'cursor-info')}>
         {sign}
-        {percentage}
+        {percentageRatio}
         %
       </strong>
       {text && ` since ${period}`}

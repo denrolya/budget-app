@@ -5,9 +5,17 @@ import { connect } from 'react-redux';
 import sumBy from 'lodash/sumBy';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Col, Row } from 'reactstrap';
+import snakeCase from 'voca/snake_case';
+import upperCase from 'voca/upper_case';
 
 import IntervalSwitch from 'src/components/IntervalSwitch';
-import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import {
+  DATERANGE_PICKER_RANGES,
+  MOMENT_DATE_FORMAT,
+  MOMENT_DATETIME_FORMAT,
+  MOMENT_DEFAULT_DATE_FORMAT,
+} from 'src/constants/datetime';
+import { PATHS } from 'src/constants/statistics';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -16,38 +24,55 @@ import MoneyFlowChart from 'src/components/charts/recharts/bar/MoneyFlowByInterv
 import { isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 import { randomMoneyFlowData } from 'src/utils/randomData';
-import { fetchStatistics } from 'src/store/actions/report';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
+import { fetchStatistics } from 'src/store/actions/statistics';
 
-const NAME = 'moneyFlow';
-const CONFIG = {
-  name: 'moneyFlow',
-  path: 'api/transactions/statistics/money-flow',
+export const DEFAULT_CONFIG = {
+  name: '<name_goes_here>',
+  path: PATHS.moneyFlow,
+  after: moment().startOf('year'),
+  before: moment().endOf('year'),
 };
 
 const MoneyFlowCard = ({
   transparent,
   fetchStatistics,
+  config,
   isLoading,
-  onUpdate,
+  updateStatisticsTrigger,
   showCalendarSwitch,
   showIntervalSwitch,
 }) => {
+  // eslint-disable-next-line no-param-reassign
+  config = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
-    from: moment().startOf('year'),
-    to: moment().endOf('year'),
+    from: config.after,
+    to: config.before,
     data: randomMoneyFlowData(),
   }));
 
-  const fetchData = async () => {
-    const data = await fetchStatistics(CONFIG);
-    setModel(model.set('data', data));
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        'executedAt[after]': model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+        'executedAt[before]': model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+        interval: model.interval,
+      };
+      const data = await fetchStatistics({ ...config, params });
+      setModel(model.set('data', data));
+    };
+
+    fetchData();
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), model.interval, updateStatisticsTrigger]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    setModel(model.merge({
+      from: config.after,
+      to: config.before,
+    }));
+  }, [config.after, config.before]);
 
   const { symbol } = useBaseCurrency();
   const {
@@ -73,7 +98,7 @@ const MoneyFlowCard = ({
                 startDate={from}
                 endDate={to}
                 ranges={DATERANGE_PICKER_RANGES}
-                onApply={(_event, { startDate, endDate }) => onUpdate(
+                onApply={(_event, { startDate, endDate }) => setModel(
                   model.merge({
                     from: startDate,
                     to: endDate,
@@ -95,7 +120,7 @@ const MoneyFlowCard = ({
                 selected={interval}
                 from={from}
                 to={to}
-                onIntervalSwitch={(v) => onUpdate(model.set('interval', v))}
+                onIntervalSwitch={(v) => setModel(model.set('interval', v))}
               />
             )}
           </Col>
@@ -125,23 +150,32 @@ const MoneyFlowCard = ({
 };
 
 MoneyFlowCard.defaultProps = {
+  config: DEFAULT_CONFIG,
   isLoading: false,
   showCalendarSwitch: true,
   showIntervalSwitch: true,
   transparent: true,
+  updateStatisticsTrigger: false,
 };
 
 MoneyFlowCard.propTypes = {
-  onUpdate: PropTypes.func.isRequired,
   fetchStatistics: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
+  config: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    path: PropTypes.string,
+    after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  }),
   transparent: PropTypes.bool,
   showCalendarSwitch: PropTypes.bool,
   showIntervalSwitch: PropTypes.bool,
+  updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }) => ({
-  isLoading: isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(NAME))}`]),
+const mapStateToProps = ({ ui }, { config }) => ({
+  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+  updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 
 export default connect(mapStateToProps, { fetchStatistics })(MoneyFlowCard);
