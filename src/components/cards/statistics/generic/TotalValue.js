@@ -10,7 +10,7 @@ import upperCase from 'voca/upper_case';
 
 import { useAccounts } from 'src/contexts/AccountsContext';
 import { useCategories } from 'src/contexts/CategoriesContext';
-import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { diffIn, generatePreviousPeriod, generateSincePreviousPeriodText } from 'src/utils/datetime';
@@ -101,12 +101,12 @@ const TotalValue = ({
 
     const fetchData = async () => {
       const params = {
-        categoryDeep: config.categories,
-        account: config.accounts,
+        categories: config.categories,
+        accounts: config.accounts,
         isDraft: false,
         type: config.transactionType,
-        'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
-        'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+        after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+        before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
       };
 
       const currentData = await fetchStatistics({ ...config, params });
@@ -115,12 +115,12 @@ const TotalValue = ({
       const previousPeriodData = await fetchStatistics({
         ...config,
         params: {
-          categoryDeep: config.categories,
-          account: config.accounts,
+          categories: config.categories,
+          accounts: config.accounts,
           isDraft: false,
           type: config.transactionType,
-          'executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
-          'executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
+          after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+          before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
         },
       });
 

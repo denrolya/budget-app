@@ -1,7 +1,6 @@
 export const PATHS = {
-  incomeExpense: 'api/transactions/statistics/income-expense',
-  sum: 'api/transactions/statistics/sum',
-  tree: 'api/categories/tree',
-  timeline: 'api/transactions/statistics/categories-timeline',
-  moneyFlow: 'api/transactions/statistics/money-flow',
+  sum: 'api/v2/statistics/sum',
+  tree: 'api/v2/statistics/category/tree',
+  timeline: 'api/v2/statistics/category/timeline',
+  moneyFlow: 'api/v2/statistics/money-flow',
 };

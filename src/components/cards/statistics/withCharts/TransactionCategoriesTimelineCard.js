@@ -10,7 +10,12 @@ import upperCase from 'voca/upper_case';
 
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import IntervalSwitch from 'src/components/IntervalSwitch';
-import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT, MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import {
+  DATERANGE_PICKER_RANGES,
+  MOMENT_DATE_FORMAT,
+  MOMENT_DATETIME_FORMAT,
+  MOMENT_DEFAULT_DATE_FORMAT,
+} from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -61,10 +66,10 @@ export const TransactionCategoriesTimelineCard = ({
   useEffect(() => {
     const fetchData = async () => {
       const params = {
-        'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
-        'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+        after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+        before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
         interval: model.interval,
-        categoryDeep: model.data.categories,
+        categories: model.data.categories,
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.setIn('data.data'.split('.'), data));
@@ -145,6 +150,7 @@ export const TransactionCategoriesTimelineCard = ({
 TransactionCategoriesTimelineCard.defaultProps = {
   config: DEFAULT_CONFIG,
   isLoading: false,
+  updateStatisticsTrigger: false,
 };
 
 TransactionCategoriesTimelineCard.propTypes = {

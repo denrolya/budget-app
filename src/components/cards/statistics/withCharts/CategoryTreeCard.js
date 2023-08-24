@@ -8,7 +8,12 @@ import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
 import CategoriesList from 'src/components/CategoriesList';
-import { DATERANGE_PICKER_RANGES, MOMENT_DATE_FORMAT, MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import {
+  DATERANGE_PICKER_RANGES,
+  MOMENT_DATE_FORMAT,
+  MOMENT_DATETIME_FORMAT,
+  MOMENT_DEFAULT_DATE_FORMAT,
+} from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
@@ -57,8 +62,8 @@ const CategoryTreeCard = ({
         ...config,
         params: {
           type: config.transactionType,
-          'transactions.executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
-          'transactions.executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+          after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+          before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
         },
       });
 
@@ -68,8 +73,8 @@ const CategoryTreeCard = ({
         ...config,
         params: {
           type: config.transactionType,
-          'transactions.executedAt[after]': previousPeriod.from.format(MOMENT_DATETIME_FORMAT),
-          'transactions.executedAt[before]': previousPeriod.to.format(MOMENT_DATETIME_FORMAT),
+          after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+          before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
         },
       });
 

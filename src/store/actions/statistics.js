@@ -25,7 +25,7 @@ export const fetchStatistics = ({
 
   try {
     const { data } = await axios.get(path, { params });
-    result = data?.['hydra:member']?.[0];
+    result = data?.['hydra:member']?.[0] || data;
   } catch (e) {
     notify('error', `[Error]: Fetch Statistics(${name})`);
     dispatch(Creators[`fetch${capitalize(camelCase(name))}Failure`](e));

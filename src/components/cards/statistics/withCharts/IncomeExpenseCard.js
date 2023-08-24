@@ -7,7 +7,7 @@ import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
 import { EXPENSE_TYPE } from 'src/constants/transactions';
-import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import IncomeExpenseChart from 'src/components/charts/recharts/bar/IncomeExpense';
@@ -19,7 +19,7 @@ import { INTERVALS } from 'src/constants/dashboard';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.incomeExpense,
+  path: PATHS.moneyFlow,
 };
 
 const IncomeExpenseCard = ({
@@ -48,8 +48,8 @@ const IncomeExpenseCard = ({
   useEffect(() => {
     const fetchData = async () => {
       const params = {
-        'executedAt[after]': model.from.format(MOMENT_DATETIME_FORMAT),
-        'executedAt[before]': model.to.format(MOMENT_DATETIME_FORMAT),
+        after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+        before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.set('data', data));
