@@ -10,7 +10,6 @@ import categoryReducer from 'src/store/reducers/category';
 import debtReducer from 'src/store/reducers/debt';
 import transactionReducer from 'src/store/reducers/transaction';
 import transferReducer from 'src/store/reducers/transfer';
-import reportReducer from 'src/store/reducers/report';
 import uiReducer from 'src/store/reducers/ui';
 import exchangeRatesReducer from 'src/store/reducers/exchangeRates';
 
@@ -26,5 +25,4 @@ export default combineReducers({
   ui: resettable(uiReducer),
   transaction: resettable(transactionReducer),
   transfer: resettable(transferReducer),
-  report: resettable(reportReducer),
 });

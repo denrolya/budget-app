@@ -17,9 +17,8 @@ export const AVAILABLE_STATISTICS = [
 
   'totalFoodExpenses',
   'dailyFoodExpenses',
+  'accountExpenseDistribution',
 ];
-
-export const INITIAL_STATE = {};
 
 export const INTERVALS = {
   '1d': {

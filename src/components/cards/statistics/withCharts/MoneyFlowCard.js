@@ -56,8 +56,8 @@ const MoneyFlowCard = ({
   useEffect(() => {
     const fetchData = async () => {
       const params = {
-        'executedAt[after]': model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
-        'executedAt[before]': model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+        after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+        before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
         interval: model.interval,
       };
       const data = await fetchStatistics({ ...config, params });

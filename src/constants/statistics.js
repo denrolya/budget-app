@@ -3,4 +3,5 @@ export const PATHS = {
   tree: 'api/v2/statistics/category/tree',
   timeline: 'api/v2/statistics/category/timeline',
   moneyFlow: 'api/v2/statistics/money-flow',
+  accountDistribution: 'api/v2/statistics/account-distribution',
 };

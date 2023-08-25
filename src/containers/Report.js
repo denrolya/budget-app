@@ -15,7 +15,6 @@ import { amountInPercentage, isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
-import { setStatistics, updateReport } from 'src/store/actions/report';
 
 import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';
@@ -36,18 +35,17 @@ import ExpenseCategoriesReviewCard from 'src/components/cards/statistics/withCha
 import UtilityCostsByIntervalCard from 'src/components/cards/statistics/withCharts/UtilityCostsByIntervalCard';
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
+import { updateStatistics } from 'src/store/actions/ui';
 
-const Report = ({
-  ui,
-  statistics,
-  updateReport,
-  setStatistics,
-}) => {
+const Report = ({ updateStatistics }) => {
   const [dateRange, setDateRange] = useState({
     after: moment().startOf('year'),
     before: moment().endOf('year'),
   });
-  const isStatisticsActionLoading = (statisticsName) => isActionLoading(ui[`REPORT_FETCH_STATISTICS_${upperCase(snakeCase(statisticsName))}`]);
+
+  useEffect(() => () => {
+    updateStatistics();
+  }, [dateRange.after.format(), dateRange.before.format()]);
 
   return (
     <>
@@ -177,11 +175,9 @@ const Report = ({
               {/*  isLoading={isStatisticsActionLoading('expenseCategoriesTree')} */}
               {/*  model={statistics.expenseCategoriesTree} */}
               {/* /> */}
-              {/* <AccountExpenseDistributionCard */}
-              {/*  isLoading={isStatisticsActionLoading('accountExpenseDistribution')} */}
-              {/*  model={statistics.accountExpenseDistribution} */}
-              {/*  onUpdate={(model) => setStatistics('accountExpenseDistribution', model)} */}
-              {/* /> */}
+              <AccountExpenseDistributionCard
+                config={{ name: 'accountExpenseDistribution' }}
+              />
             </Col>
             <Col xs={12} md={6} lg={4}>
               <TotalValue
@@ -267,15 +263,7 @@ const Report = ({
 };
 
 Report.propTypes = {
-  ui: PropTypes.object.isRequired,
-  statistics: PropTypes.object.isRequired,
-  setStatistics: PropTypes.func.isRequired,
-  updateReport: PropTypes.func.isRequired,
+  updateStatistics: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ ui, report: statistics }) => ({ statistics, ui });
-
-export default connect(mapStateToProps, {
-  setStatistics,
-  updateReport,
-})(Report);
+export default connect(null, { updateStatistics })(Report);

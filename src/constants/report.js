@@ -84,41 +84,6 @@ export const AVAILABLE_STATISTICS = [{
 ];
 
 export const INITIAL_STATE = {
-  moneyFlow: new TimeperiodIntervalStatistics({
-    from: startOfYear,
-    to: endOfYear,
-    data: randomMoneyFlowData(),
-  }),
-  accountExpenseDistribution: new TimeperiodStatistics({
-    from: startOfYear,
-    to: endOfYear,
-    data: [
-      {
-        account: {
-          id: 1,
-          name: 'Cash (₴)',
-          symbol: '₴',
-          type: ACCOUNT_TYPE_CASH,
-          currency: 'UAH',
-          color: randomColor(),
-        },
-        value: randomFloat(),
-        amount: randomFloat(),
-      },
-      {
-        account: {
-          id: 2,
-          name: 'Cash ($)',
-          symbol: '$',
-          type: ACCOUNT_TYPE_CASH,
-          currency: 'USD',
-          color: randomColor(),
-        },
-        value: randomFloat(),
-        amount: randomFloat(),
-      },
-    ],
-  }),
   foodExpenses: new TimeperiodStatistics({
     from: startOfYear,
     to: endOfYear,
