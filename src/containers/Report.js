@@ -19,7 +19,6 @@ import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';
 
-import DailyValue from 'src/components/cards/statistics/generic/DailyValue';
 import TotalValue from 'src/components/cards/statistics/generic/TotalValue';
 import AverageInCategory from 'src/components/cards/statistics/generic/AverageInCategory';
 import DailyInCategory from 'src/components/cards/statistics/generic/DailyInCategory';
@@ -32,7 +31,6 @@ import AccountExpenseDistributionCard from 'src/components/cards/statistics/with
 import ExpenseCategoriesByWeekdaysCard from 'src/components/cards/statistics/withCharts/ExpenseCategoriesByWeekdaysCard';
 import TotalExpensesByIntervalCard from 'src/components/cards/statistics/withCharts/TotalExpensesByIntervalCard';
 import ExpenseCategoriesReviewCard from 'src/components/cards/statistics/withCharts/ExpenseCategoriesReviewCard';
-import UtilityCostsByIntervalCard from 'src/components/cards/statistics/withCharts/UtilityCostsByIntervalCard';
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
 import { updateStatistics } from 'src/store/actions/ui';
@@ -51,6 +49,17 @@ const Report = ({ updateStatistics }) => {
     <TotalValue
       config={{
         ...dateRange,
+        interval: '1 month',
+        name: 'utilityExpenses',
+        categories: [18],
+        footerType: 'chart',
+      }}
+    />,
+    <TotalValue
+      config={{
+        ...dateRange,
+        interval: '1 month',
+        footerType: 'chart',
         name: 'utilityGasExpenses',
         categories: [4],
       }}
@@ -58,25 +67,19 @@ const Report = ({ updateStatistics }) => {
     <TotalValue
       config={{
         ...dateRange,
+        interval: '1 month',
         name: 'utilityWaterExpenses',
         categories: [133],
+        footerType: 'chart',
       }}
     />,
     <TotalValue
       config={{
         ...dateRange,
+        interval: '1 month',
         name: 'utilityElectricityExpenses',
         categories: [132],
-      }}
-    />,
-    <TotalValue
-      config={{
-        ...dateRange,
-        name: 'utilityExpenses',
-        categories: [18],
-        footerType: {
-          type: 'line',
-        },
+        footerType: 'chart',
       }}
     />,
   ];
@@ -289,11 +292,6 @@ const Report = ({ updateStatistics }) => {
               </Col>
             ))}
           </Row>
-          {/* <UtilityCostsByIntervalCard */}
-          {/*  isLoading={isStatisticsActionLoading('utilityCostsByInterval')} */}
-          {/*  model={statistics.utilityCostsByInterval} */}
-          {/*  onUpdate={(model) => setStatistics('utilityCostsByInterval', model)} */}
-          {/* /> */}
         </UncontrolledCollapse>
       </section>
 

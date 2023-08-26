@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
+import GeneralAreaChart from 'src/components/charts/recharts/area/GeneralAreaChart';
+import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { useAccounts } from 'src/contexts/AccountsContext';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
@@ -20,7 +22,6 @@ import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLas
 import PercentageSinceLastPeriodMessage from 'src/components/messages/PercentageSinceLastPeriodMessage';
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import { isActionLoading } from 'src/utils/common';
 
 export const DEFAULT_CONFIG = {
@@ -33,6 +34,7 @@ export const DEFAULT_CONFIG = {
   before: moment().endOf('month'),
   accounts: [],
   categories: [],
+  interval: null,
 };
 
 const TotalValue = ({
@@ -49,16 +51,23 @@ const TotalValue = ({
   };
   const categories = useCategories();
   const accounts = useAccounts();
-  const [model, setModel] = useState(new TimeperiodStatistics({
+  const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
-      current: 0,
-      previous: 0,
+      value: {
+        current: 0,
+        previous: 0,
+      },
+      dataByRange: {
+        current: [],
+        previous: [],
+      },
     },
+    interval: config.interval,
     from: moment.isMoment(config.after) ? config.after : moment(config.after),
     to: moment.isMoment(config.before) ? config.before : moment(config.before),
   }));
 
-  const { data: { current, previous } } = model;
+  const { data: { value: { current, previous } } } = model;
   const { type, transactionType, footerType } = config;
 
   const footer = useMemo(() => {
@@ -75,7 +84,7 @@ const TotalValue = ({
           />
         );
       case 'chart':
-        return 'chartik';
+        return <GeneralAreaChart name={config.name} data={model.data.dataByRange.current} />;
       case 'amount':
       default:
         return (
@@ -90,7 +99,24 @@ const TotalValue = ({
   }, [footerType, current, previous]);
 
   const title = useMemo(() => {
-    // TODO: If type === 'total' & categories selected => colored icon + name
+    if (config.categories?.length > 0) {
+      return (
+        <>
+          {config.type === 'daily' && 'Daily in '}
+          {config.categories.map((categoryId) => {
+            const category = categories.find(({ id }) => id === categoryId);
+            return (
+              <>
+                {category.name}
+                {' '}
+                <i aria-hidden className={category.icon} style={{ color: category.color }} />
+              </>
+            );
+          })}
+        </>
+      );
+    }
+
     const selectedCategoriesNames = config?.categories?.map((id) => categories.find((c) => c.id === id)?.name);
     const selectedAccountsNames = config?.accounts?.map((id) => accounts.find((c) => c.id === id)?.name);
 
@@ -114,44 +140,54 @@ const TotalValue = ({
         categories: config.categories,
         accounts: config.accounts,
         type: config.transactionType,
+        interval: model.interval,
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
       };
 
-      const selectedPeriodValue = sumBy(
-        await fetchStatistics({ ...config, params }),
-        config.transactionType,
-      );
+      const selectedPeriodData = await fetchStatistics({ ...config, params });
+      const selectedPeriodValue = sumBy(selectedPeriodData, config.transactionType);
 
       const previousPeriod = generatePreviousPeriod(model.from, model.to);
-      const previousPeriodValue = sumBy(
-        await fetchStatistics({
-          ...config,
-          params: {
-            categories: config.categories,
-            accounts: config.accounts,
-            type: config.transactionType,
-            after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
-            before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
-          },
-        }),
-        config.transactionType,
-      );
+      const previousPeriodData = await fetchStatistics({
+        ...config,
+        params: {
+          categories: config.categories,
+          accounts: config.accounts,
+          type: config.transactionType,
+          interval: model.interval,
+          after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+          before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+        },
+      });
+      const previousPeriodValue = sumBy(previousPeriodData, config.transactionType);
 
       if (isMounted) {
         switch (type) {
           case 'daily':
             // eslint-disable-next-line no-case-declarations
             setModel(model.set('data', {
-              current: selectedPeriodValue / diffIn(model.from, model.to, 'days'),
-              previous: previousPeriodValue / diffIn(previousPeriod.from, previousPeriod.to, 'days'),
+              value: {
+                current: selectedPeriodValue / diffIn(model.from, model.to, 'days'),
+                previous: previousPeriodValue / diffIn(previousPeriod.from, previousPeriod.to, 'days'),
+              },
+              dataByRange: {
+                current: selectedPeriodData.map((e) => ({ ...e, [config.transactionType]: e[config.transactionType] / diffIn(model.from, model.to, 'days') })),
+                previous: previousPeriodData.map((e) => ({ ...e, [config.transactionType]: e[config.transactionType] / diffIn(model.from, model.to, 'days') })),
+              },
             }));
             break;
           case 'total':
           default:
             setModel(model.set('data', {
-              current: selectedPeriodValue,
-              previous: previousPeriodValue,
+              value: {
+                current: selectedPeriodValue,
+                previous: previousPeriodValue,
+              },
+              dataByRange: {
+                current: selectedPeriodData,
+                previous: previousPeriodData,
+              },
             }));
             break;
         }
@@ -163,7 +199,7 @@ const TotalValue = ({
     return () => {
       isMounted = false; // Set it to false when the component is unmounted
     };
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), model.interval, updateStatisticsTrigger]);
 
   useEffect(() => {
     setModel(model.merge({
@@ -172,10 +208,15 @@ const TotalValue = ({
     }));
   }, [config.after, config.before]);
 
+  useEffect(() => {
+    setModel(model.set('interval', config.interval));
+  }, [config.interval]);
+
   return (
     <SimpleStatisticsCard
       title={title}
       isLoading={isLoading}
+      footerPadding={config.footerType !== 'chart'}
       content={(
         <>
           <i
@@ -188,7 +229,7 @@ const TotalValue = ({
             })}
           />
           {' '}
-          <MoneyValue bold maximumFractionDigits={0} amount={model.data.current} />
+          <MoneyValue bold maximumFractionDigits={0} amount={model.data.value.current} />
         </>
       )}
       footer={footer}
@@ -217,6 +258,7 @@ TotalValue.propTypes = {
     accounts: PropTypes.array,
     after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    interval: PropTypes.string,
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   isLoading: PropTypes.bool,
