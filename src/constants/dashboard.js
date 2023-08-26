@@ -18,6 +18,10 @@ export const AVAILABLE_STATISTICS = [
   'totalFoodExpenses',
   'dailyFoodExpenses',
   'accountExpenseDistribution',
+  'utilityGasExpenses',
+  'utilityWaterExpenses',
+  'utilityElectricityExpenses',
+  'utilityExpenses',
 ];
 
 export const INTERVALS = {

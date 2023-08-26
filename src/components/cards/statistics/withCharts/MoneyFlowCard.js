@@ -28,7 +28,7 @@ import { fetchStatistics } from 'src/store/actions/statistics';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
-  path: PATHS.moneyFlow,
+  path: PATHS.valueByPeriod,
   after: moment().startOf('year'),
   before: moment().endOf('year'),
 };

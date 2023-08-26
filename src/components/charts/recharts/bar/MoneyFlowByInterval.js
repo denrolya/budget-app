@@ -108,7 +108,7 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
         />
 
         <XAxis
-          dataKey="date"
+          dataKey="after"
           axisLine={false}
           tickLine={false}
           stroke={HEX_COLORS.text}

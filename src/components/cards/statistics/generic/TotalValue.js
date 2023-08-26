@@ -1,6 +1,7 @@
 import React, {
   useEffect, useMemo, useState,
 } from 'react';
+import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -25,7 +26,7 @@ import { isActionLoading } from 'src/utils/common';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.sum,
+  path: PATHS.valueByPeriod,
   footerType: 'percentage',
   type: 'total',
   after: moment().startOf('month'),
@@ -63,24 +64,33 @@ const TotalValue = ({
   const footer = useMemo(() => {
     const period = generateSincePreviousPeriodText(model.from, model.to);
 
-    return (footerType === 'percentage') ? (
-      <PercentageSinceLastPeriodMessage
-        inverted={transactionType === INCOME_TYPE}
-        period={period}
-        current={current}
-        previous={previous}
-      />
-    ) : (
-      <AmountSinceLastPeriodMessage
-        inverted={transactionType === INCOME_TYPE}
-        period={period}
-        current={current}
-        previous={previous}
-      />
-    );
+    switch (footerType) {
+      case 'percentage':
+        return (
+          <PercentageSinceLastPeriodMessage
+            inverted={transactionType === INCOME_TYPE}
+            period={period}
+            current={current}
+            previous={previous}
+          />
+        );
+      case 'chart':
+        return 'chartik';
+      case 'amount':
+      default:
+        return (
+          <AmountSinceLastPeriodMessage
+            inverted={transactionType === INCOME_TYPE}
+            period={period}
+            current={current}
+            previous={previous}
+          />
+        );
+    }
   }, [footerType, current, previous]);
 
   const title = useMemo(() => {
+    // TODO: If type === 'total' & categories selected => colored icon + name
     const selectedCategoriesNames = config?.categories?.map((id) => categories.find((c) => c.id === id)?.name);
     const selectedAccountsNames = config?.accounts?.map((id) => accounts.find((c) => c.id === id)?.name);
 
@@ -103,41 +113,45 @@ const TotalValue = ({
       const params = {
         categories: config.categories,
         accounts: config.accounts,
-        isDraft: false,
         type: config.transactionType,
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
       };
 
-      const currentData = await fetchStatistics({ ...config, params });
+      const selectedPeriodValue = sumBy(
+        await fetchStatistics({ ...config, params }),
+        config.transactionType,
+      );
 
       const previousPeriod = generatePreviousPeriod(model.from, model.to);
-      const previousPeriodData = await fetchStatistics({
-        ...config,
-        params: {
-          categories: config.categories,
-          accounts: config.accounts,
-          isDraft: false,
-          type: config.transactionType,
-          after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
-          before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
-        },
-      });
+      const previousPeriodValue = sumBy(
+        await fetchStatistics({
+          ...config,
+          params: {
+            categories: config.categories,
+            accounts: config.accounts,
+            type: config.transactionType,
+            after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+            before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+          },
+        }),
+        config.transactionType,
+      );
 
       if (isMounted) {
         switch (type) {
           case 'daily':
             // eslint-disable-next-line no-case-declarations
             setModel(model.set('data', {
-              current: currentData / diffIn(model.from, model.to, 'days'),
-              previous: previousPeriodData / diffIn(previousPeriod.from, previousPeriod.to, 'days'),
+              current: selectedPeriodValue / diffIn(model.from, model.to, 'days'),
+              previous: previousPeriodValue / diffIn(previousPeriod.from, previousPeriod.to, 'days'),
             }));
             break;
           case 'total':
           default:
             setModel(model.set('data', {
-              current: currentData,
-              previous: previousPeriodData,
+              current: selectedPeriodValue,
+              previous: previousPeriodValue,
             }));
             break;
         }
@@ -195,7 +209,10 @@ TotalValue.propTypes = {
     transactionType: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
     path: PropTypes.string,
     type: PropTypes.oneOf(['total', 'daily']),
-    footerType: PropTypes.oneOf(['percentage', 'amount']),
+    footerType: PropTypes.oneOf(['percentage', 'amount', 'chart']),
+    chartConfig: PropTypes.shape({
+      type: PropTypes.oneOf(['line', 'bar']),
+    }),
     categories: PropTypes.array,
     accounts: PropTypes.array,
     after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),

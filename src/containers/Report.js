@@ -47,6 +47,40 @@ const Report = ({ updateStatistics }) => {
     updateStatistics();
   }, [dateRange.after.format(), dateRange.before.format()]);
 
+  const utilitiesCards = [
+    <TotalValue
+      config={{
+        ...dateRange,
+        name: 'utilityGasExpenses',
+        categories: [4],
+      }}
+    />,
+    <TotalValue
+      config={{
+        ...dateRange,
+        name: 'utilityWaterExpenses',
+        categories: [133],
+      }}
+    />,
+    <TotalValue
+      config={{
+        ...dateRange,
+        name: 'utilityElectricityExpenses',
+        categories: [132],
+      }}
+    />,
+    <TotalValue
+      config={{
+        ...dateRange,
+        name: 'utilityExpenses',
+        categories: [18],
+        footerType: {
+          type: 'line',
+        },
+      }}
+    />,
+  ];
+
   return (
     <>
       <Helmet>
@@ -248,6 +282,13 @@ const Report = ({ updateStatistics }) => {
         <h3 id="utility-expenses" className="cursor-pointer">Utilities</h3>
 
         <UncontrolledCollapse defaultOpen toggler="#utility-expenses">
+          <Row>
+            {utilitiesCards.map((element) => (
+              <Col key={`col-utilities-${element.props.config.name}`} xs={12} md={3}>
+                {element}
+              </Col>
+            ))}
+          </Row>
           {/* <UtilityCostsByIntervalCard */}
           {/*  isLoading={isStatisticsActionLoading('utilityCostsByInterval')} */}
           {/*  model={statistics.utilityCostsByInterval} */}

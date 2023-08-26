@@ -19,7 +19,7 @@ import { INTERVALS } from 'src/constants/dashboard';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.moneyFlow,
+  path: PATHS.valueByPeriod,
 };
 
 const IncomeExpenseCard = ({
@@ -50,6 +50,7 @@ const IncomeExpenseCard = ({
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+        interval: true,
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.set('data', data));
