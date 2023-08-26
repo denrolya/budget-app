@@ -132,7 +132,8 @@ MoneyFlowByInterval.propTypes = {
   interval: PropTypes.oneOf(['1 day', '1 week', '1 month']).isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      date: PropTypes.number.isRequired,
+      after: PropTypes.number.isRequired,
+      before: PropTypes.number.isRequired,
       expense: PropTypes.number.isRequired,
       income: PropTypes.number.isRequired,
     }),

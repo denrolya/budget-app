@@ -103,14 +103,17 @@ const TotalValue = ({
       return (
         <>
           {config.type === 'daily' && 'Daily in '}
-          {config.categories.map((categoryId) => {
+          {config.categories.map((categoryId, index) => {
             const category = categories.find(({ id }) => id === categoryId);
+            const isLastCategory = index === config.categories.length - 1;
+
             return (
-              <>
+              <React.Fragment key={categoryId}>
+                {index > 0 && (isLastCategory ? ' & ' : ', ')}
                 {category.name}
                 {' '}
                 <i aria-hidden className={category.icon} style={{ color: category.color }} />
-              </>
+              </React.Fragment>
             );
           })}
         </>

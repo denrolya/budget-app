@@ -125,8 +125,12 @@ export const randomMoneyFlowData = () => {
   const endOfYear = moment().endOf('year').startOf('day');
 
   while (endOfYear.diff(startOfYear, 'days') >= 0) {
+    const after = startOfYear.clone();
+    const before = after.clone().endOf('month');
+
     result.push({
-      date: startOfYear.clone().unix(),
+      after: after.unix(),
+      before: before.unix(),
       expense: randomFloat(),
       income: randomFloat(),
     });
