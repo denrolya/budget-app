@@ -15,7 +15,7 @@ import {
 
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-import { INTERVALS } from 'src/constants/dashboard';
+import { INTERVALS } from 'src/constants/statistics';
 
 /**
  * TODO: Format ticks & tooltips by interval

@@ -96,3 +96,22 @@ export const isYesterday = (date) => moment().subtract(1, 'day').isSame(date, 'd
 export const isMoreThanWeekAgo = (date) => moment().diff(date, 'days') > 7;
 export const isMoreThanHourAgo = (date) => moment().diff(date, 'hours') > 1;
 export const isCurrentYear = (date) => moment().year() === moment(date).year();
+
+export const countWeekdays = (after, before, weekday) => {
+  if (weekday < 0 || weekday > 6) {
+    throw new Error('Invalid weekday. Please provide a value between 0 and 6 (Sunday to Saturday).');
+  }
+
+  let count = 0;
+  const startDate = after.clone().startOf('day');
+  const endDate = before.clone().startOf('day');
+
+  while (startDate.isSameOrBefore(endDate)) {
+    if (startDate.day() === weekday) {
+      count += 1;
+    }
+    startDate.add(1, 'day');
+  }
+
+  return count;
+};

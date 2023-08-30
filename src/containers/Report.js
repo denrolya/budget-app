@@ -118,8 +118,6 @@ const Report = ({ updateStatistics }) => {
           config={{
             ...dateRange,
             name: 'moneyFlow',
-            after: dateRange.after,
-            before: dateRange.before,
           }}
         />
       </section>
@@ -213,7 +211,10 @@ const Report = ({ updateStatistics }) => {
               {/*  model={statistics.expenseCategoriesTree} */}
               {/* /> */}
               <AccountExpenseDistributionCard
-                config={{ name: 'accountExpenseDistribution' }}
+                config={{
+                  ...dateRange,
+                  name: 'accountExpenseDistribution',
+                }}
               />
             </Col>
             <Col xs={12} md={6} lg={4}>
@@ -229,11 +230,12 @@ const Report = ({ updateStatistics }) => {
               {/*  isLoading={isStatisticsActionLoading('expenseCategoriesTree')} */}
               {/*  model={statistics.expenseCategoriesTree} */}
               {/* /> */}
-              {/* <ExpenseCategoriesByWeekdaysCard */}
-              {/*  isLoading={isStatisticsActionLoading('expenseCategoriesByWeekdays')} */}
-              {/*  model={statistics.expenseCategoriesByWeekdays} */}
-              {/*  onUpdate={(model) => setStatistics('expenseCategoriesByWeekdays', model)} */}
-              {/* /> */}
+              <ExpenseCategoriesByWeekdaysCard
+                config={{
+                  ...dateRange,
+                  name: 'expenseCategoriesByWeekdays',
+                }}
+              />
             </Col>
           </Row>
         </UncontrolledCollapse>

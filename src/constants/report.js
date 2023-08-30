@@ -10,77 +10,87 @@ import { randomFloat, randomColor, randomMoneyFlowData } from 'src/utils/randomD
 const startOfYear = moment().startOf('year');
 const endOfYear = moment().endOf('year');
 
-export const AVAILABLE_STATISTICS = [{
-  name: 'foodExpenses',
-  path: 'api/transactions/statistics/sum',
-  additionalParams: {
-    categoryDeep: [1],
-    type: EXPENSE_TYPE,
+export const AVAILABLE_STATISTICS = [
+  {
+    name: 'foodExpenses',
+    path: 'api/transactions/statistics/sum',
+    additionalParams: {
+      categoryDeep: [1],
+      type: EXPENSE_TYPE,
+    },
+    fetchPreviousPeriod: true,
   },
-  fetchPreviousPeriod: true,
-}, {
-  name: 'expenseCategoriesTree',
-  path: 'api/categories/tree',
-  additionalParams: {
-    type: EXPENSE_TYPE,
+  {
+    name: 'expenseCategoriesTree',
+    path: 'api/categories/tree',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
   },
-}, {
-  name: 'incomeCategoriesTree',
-  path: 'api/categories/tree',
-  additionalParams: {
-    type: INCOME_TYPE,
+  {
+    name: 'incomeCategoriesTree',
+    path: 'api/categories/tree',
+    additionalParams: {
+      type: INCOME_TYPE,
+    },
   },
-}, {
-  name: 'totalIncome',
-  path: 'api/transactions/statistics/sum',
-  additionalParams: {
-    interval: '1 month',
-    type: INCOME_TYPE,
+  {
+    name: 'totalIncome',
+    path: 'api/transactions/statistics/sum',
+    additionalParams: {
+      interval: '1 month',
+      type: INCOME_TYPE,
+    },
+    fetchPreviousPeriod: true,
   },
-  fetchPreviousPeriod: true,
-}, {
-  name: 'totalExpense',
-  path: 'api/transactions/statistics/sum',
-  additionalParams: {
-    type: EXPENSE_TYPE,
+  {
+    name: 'totalExpense',
+    path: 'api/transactions/statistics/sum',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
+    fetchPreviousPeriod: true,
   },
-  fetchPreviousPeriod: true,
-}, {
-  name: 'groceriesAverage',
-  path: 'api/transactions/statistics/avg-weekly',
-  additionalParams: {
-    categoryDeep: [66],
-    type: EXPENSE_TYPE,
+  {
+    name: 'groceriesAverage',
+    path: 'api/transactions/statistics/avg-weekly',
+    additionalParams: {
+      categoryDeep: [66],
+      type: EXPENSE_TYPE,
+    },
   },
-}, {
-  name: 'foodExpensesMinMax',
-  path: 'api/transactions/statistics/min-max',
-  additionalParams: {
-    categoryDeep: [1],
-    type: EXPENSE_TYPE,
+  {
+    name: 'foodExpensesMinMax',
+    path: 'api/transactions/statistics/min-max',
+    additionalParams: {
+      categoryDeep: [1],
+      type: EXPENSE_TYPE,
+    },
   },
-}, {
-  v2: true,
-  name: 'accountExpenseDistribution',
-  path: 'api/v2/statistics/account-distribution',
-  additionalParams: {
-    type: EXPENSE_TYPE,
+  {
+    v2: true,
+    name: 'accountExpenseDistribution',
+    path: 'api/v2/statistics/account-distribution',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
   },
-}, {
-  name: 'utilityCostsByInterval',
-  path: 'api/transactions/statistics/categories-timeline',
-  additionalParams: {
-    interval: '3 months',
-    categoryDeep: [4, 18, 132, 133],
-    type: EXPENSE_TYPE,
+  {
+    name: 'utilityCostsByInterval',
+    path: 'api/transactions/statistics/categories-timeline',
+    additionalParams: {
+      interval: '3 months',
+      categoryDeep: [4, 18, 132, 133],
+      type: EXPENSE_TYPE,
+    },
   },
-}, {
-  name: 'expenseCategoriesByWeekdays',
-  path: 'api/transactions/statistics/by-weekdays',
-  additionalParams: {
-    type: EXPENSE_TYPE,
+  {
+    name: 'expenseCategoriesByWeekdays',
+    path: 'api/transactions/statistics/by-weekdays',
+    additionalParams: {
+      type: EXPENSE_TYPE,
+    },
   },
-},
 ];
 
 export const INITIAL_STATE = {
@@ -219,16 +229,20 @@ export const INITIAL_STATE = {
     to: endOfYear,
     data: [1, 2, 3, 4, 5, 6, 7].map((day) => ({
       name: moment().isoWeekday(day).format('dddd'),
-      values: Object.fromEntries(['Food & Drinks',
-        'Housing',
-        'Work Expense',
-        'Unknown',
-        'Transportation',
-        'Other',
-        'Shopping',
-        'Health & Fitness',
-        'Vehicle',
-        'Financial expenses'].map((cat) => ([cat, randomFloat(0, 300)]))),
+      values: Object.fromEntries(
+        [
+          'Food & Drinks',
+          'Housing',
+          'Work Expense',
+          'Unknown',
+          'Transportation',
+          'Other',
+          'Shopping',
+          'Health & Fitness',
+          'Vehicle',
+          'Financial expenses',
+        ].map((cat) => [cat, randomFloat(0, 300)]),
+      ),
     })),
   }),
   utilityCostsByInterval: new TimeperiodIntervalStatistics({

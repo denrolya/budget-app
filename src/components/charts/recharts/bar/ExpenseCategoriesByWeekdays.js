@@ -17,9 +17,9 @@ import maxBy from 'lodash/maxBy';
 import sum from 'lodash/sum';
 
 import MoneyValue from 'src/components/MoneyValue';
-import { RAINBOW_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { useCategories } from 'src/contexts/CategoriesContext';
+import { amountInPercentage } from 'src/utils/common';
 
 const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
   const [chartData, setChartData] = useState([]);
@@ -61,9 +61,9 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
     const data = Object.entries(values).map(([name, value]) => ({ name, value }));
 
     const tooltipItems = Object.keys(values)
-      .reverse()
       .map((categoryName) => {
         const category = categories.find(({ name }) => categoryName === name);
+        const percentage = amountInPercentage(total, values[category.name]);
 
         if (!category) return null;
 
@@ -75,6 +75,8 @@ const ExpenseCategoriesByWeekdays = ({ topCategories, data }) => {
               color: category.color,
             }}
           >
+            {percentage.toFixed()}
+            {'% '}
             <i aria-hidden className={category.icon} />
             {` ${category.name}: `}
             <MoneyValue bold amount={values[category.name]} />

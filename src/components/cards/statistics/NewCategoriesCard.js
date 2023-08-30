@@ -2,11 +2,10 @@ import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Progress, Table } from 'reactstrap';
 import isEqual from 'lodash/isEqual';
-import MoneyValue from 'src/components/MoneyValue';
+
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-
+import MoneyValue from 'src/components/MoneyValue';
 import { useCategories } from 'src/contexts/CategoriesContext';
-
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { amountInPercentage } from 'src/utils/common';

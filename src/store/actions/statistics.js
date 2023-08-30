@@ -4,7 +4,7 @@ import capitalize from 'voca/capitalize';
 
 import axios from 'src/utils/http';
 import { notify } from 'src/store/actions/global';
-import { AVAILABLE_STATISTICS } from 'src/constants/dashboard';
+import { AVAILABLE_STATISTICS } from 'src/constants/statistics';
 
 export const { Types, Creators } = createActions(
   {

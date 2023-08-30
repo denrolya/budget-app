@@ -8,18 +8,19 @@ import upperCase from 'voca/upper_case';
 
 import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { PATHS, INTERVALS } from 'src/constants/statistics';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import IncomeExpenseChart from 'src/components/charts/recharts/bar/IncomeExpense';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { isActionLoading } from 'src/utils/common';
-import { INTERVALS } from 'src/constants/dashboard';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
   path: PATHS.valueByPeriod,
+  after: moment().subtract(6, 'month'),
+  before: moment(),
 };
 
 const IncomeExpenseCard = ({
@@ -32,8 +33,8 @@ const IncomeExpenseCard = ({
   };
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: [],
-    from: moment().subtract(6, 'month'),
-    to: moment(),
+    from: config.after,
+    to: config.before,
   }));
   const [interval, setInterval] = useState('6m');
 
@@ -58,6 +59,13 @@ const IncomeExpenseCard = ({
 
     fetchData();
   }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
+
+  useEffect(() => {
+    setModel(model.merge({
+      from: config.after,
+      to: config.before,
+    }));
+  }, [config.after, config.before]);
 
   return (
     <LoadingCard transparent isLoading={isLoading}>
@@ -92,6 +100,8 @@ IncomeExpenseCard.propTypes = {
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
     path: PropTypes.string,
+    after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   isLoading: PropTypes.bool,
