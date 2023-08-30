@@ -121,7 +121,7 @@ AccountDistributionCard.propTypes = {
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
     path: PropTypes.string,
-    transactionType: PropTypes.oneOfType(EXPENSE_TYPE, INCOME_TYPE),
+    transactionType: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
     after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),

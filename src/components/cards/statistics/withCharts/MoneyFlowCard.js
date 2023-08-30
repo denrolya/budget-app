@@ -9,6 +9,7 @@ import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
 import IntervalSwitch from 'src/components/IntervalSwitch';
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import {
   DATERANGE_PICKER_RANGES,
   MOMENT_DATE_FORMAT,
@@ -31,6 +32,7 @@ export const DEFAULT_CONFIG = {
   path: PATHS.valueByPeriod,
   after: moment().startOf('year'),
   before: moment().endOf('year'),
+  interval: '1 month',
 };
 
 const MoneyFlowCard = ({
@@ -50,6 +52,7 @@ const MoneyFlowCard = ({
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     from: config.after,
     to: config.before,
+    interval: config.interval,
     data: randomMoneyFlowData(),
   }));
 
@@ -71,8 +74,9 @@ const MoneyFlowCard = ({
     setModel(model.merge({
       from: config.after,
       to: config.before,
+      interval: config.interval,
     }));
-  }, [config.after, config.before]);
+  }, [config.after, config.before, config.interval]);
 
   const { symbol } = useBaseCurrency();
   const {
@@ -163,8 +167,10 @@ MoneyFlowCard.propTypes = {
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
     path: PropTypes.string,
+    transactionType: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
     after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    interval: PropTypes.string,
   }),
   transparent: PropTypes.bool,
   showCalendarSwitch: PropTypes.bool,

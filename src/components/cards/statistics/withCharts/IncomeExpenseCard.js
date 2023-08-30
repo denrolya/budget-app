@@ -11,7 +11,7 @@ import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constant
 import { PATHS, INTERVALS } from 'src/constants/statistics';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import IncomeExpenseChart from 'src/components/charts/recharts/bar/IncomeExpense';
-import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
+import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { isActionLoading } from 'src/utils/common';
 
@@ -21,6 +21,7 @@ export const DEFAULT_CONFIG = {
   path: PATHS.valueByPeriod,
   after: moment().subtract(6, 'month'),
   before: moment(),
+  interval: true,
 };
 
 const IncomeExpenseCard = ({
@@ -31,7 +32,7 @@ const IncomeExpenseCard = ({
     ...DEFAULT_CONFIG,
     ...config,
   };
-  const [model, setModel] = useState(new TimeperiodStatistics({
+  const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: [],
     from: config.after,
     to: config.before,
@@ -51,21 +52,22 @@ const IncomeExpenseCard = ({
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
-        interval: true,
+        interval: config.interval,
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.set('data', data));
     };
 
     fetchData();
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), model.interval, updateStatisticsTrigger]);
 
   useEffect(() => {
     setModel(model.merge({
       from: config.after,
       to: config.before,
+      interval: config.interval,
     }));
-  }, [config.after, config.before]);
+  }, [config.after, config.before, config.interval]);
 
   return (
     <LoadingCard transparent isLoading={isLoading}>
@@ -102,6 +104,7 @@ IncomeExpenseCard.propTypes = {
     path: PropTypes.string,
     after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    interval: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   isLoading: PropTypes.bool,

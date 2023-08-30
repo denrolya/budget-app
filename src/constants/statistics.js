@@ -54,6 +54,9 @@ export const PATHS = {
   valueByPeriod: 'api/v2/statistics/value-by-period',
   accountDistribution: 'api/v2/statistics/account-distribution',
   transactionsValueByWeekdays: 'api/v2/statistics/by-weekdays',
+  topValueCategory: 'api/v2/statistics/top-value-category',
+  min: 'api/v2/statistics/min',
+  max: 'api/v2/statistics/max',
 };
 
 // TODO: Get rid of this. List should be dynamic
@@ -79,4 +82,6 @@ export const AVAILABLE_STATISTICS = [
   'utilityElectricityExpenses',
   'utilityExpenses',
   'expenseCategoriesByWeekdays',
+  'topValueIncomeCategory',
+  'foodMinMax',
 ];

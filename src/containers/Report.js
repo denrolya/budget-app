@@ -159,10 +159,12 @@ const Report = ({ updateStatistics }) => {
               />
             </Col>
             <Col xs={12} md={6} lg={3}>
-              {/* <MainIncomeSourceCard */}
-              {/*  isLoading={isStatisticsActionLoading('incomeCategoriesTree')} */}
-              {/*  model={statistics.incomeCategoriesTree} */}
-              {/* /> */}
+              <MainIncomeSourceCard
+                config={{
+                  ...dateRange,
+                  name: 'topValueIncomeCategory',
+                }}
+              />
               {/* <NewCategoriesCard */}
               {/*  type={INCOME_TYPE} */}
               {/*  isLoading={isStatisticsActionLoading('incomeCategoriesTree')} */}
@@ -251,15 +253,17 @@ const Report = ({ updateStatistics }) => {
                   categories: [1],
                   footerType: 'percentage',
                   name: 'totalFoodExpenses',
-                  transactionType: EXPENSE_TYPE,
                 }}
               />
             </Col>
             <Col xs={12} md={6} lg={3}>
-              {/* <MinMax */}
-              {/*  isLoading={isStatisticsActionLoading('foodExpensesMinMax')} */}
-              {/*  model={statistics.foodExpensesMinMax} */}
-              {/* /> */}
+              <MinMax
+                config={{
+                  ...dateRange,
+                  name: 'foodMinMax',
+                  categories: [1],
+                }}
+              />
             </Col>
             <Col xs={12} md={6} lg={3}>
               {/* <AverageInCategory */}
@@ -277,7 +281,6 @@ const Report = ({ updateStatistics }) => {
                   footerType: 'percentage',
                   categories: [1],
                   name: 'dailyFoodExpenses',
-                  transactionType: EXPENSE_TYPE,
                 }}
               />
             </Col>
