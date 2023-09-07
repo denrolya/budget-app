@@ -6,8 +6,6 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { connect } from 'react-redux';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import GeneralAreaChart from 'src/components/charts/recharts/area/GeneralAreaChart';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
@@ -22,7 +20,6 @@ import AmountSinceLastPeriodMessage from 'src/components/messages/AmountSinceLas
 import PercentageSinceLastPeriodMessage from 'src/components/messages/PercentageSinceLastPeriodMessage';
 import MoneyValue from 'src/components/MoneyValue';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-import { isActionLoading } from 'src/utils/common';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
@@ -38,7 +35,6 @@ export const DEFAULT_CONFIG = {
 };
 
 const TotalValue = ({
-  isLoading,
   updateStatisticsTrigger,
   fetchStatistics,
   config,
@@ -51,6 +47,7 @@ const TotalValue = ({
   let isMounted = false;
   const categories = useCategories();
   const accounts = useAccounts();
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
       value: {
@@ -139,6 +136,7 @@ const TotalValue = ({
     isMounted = true;
 
     const fetchData = async () => {
+      setIsLoading(true);
       const params = {
         categories: config.categories,
         accounts: config.accounts,
@@ -195,6 +193,7 @@ const TotalValue = ({
             break;
         }
       }
+      setIsLoading(false);
     };
 
     fetchData();
@@ -239,7 +238,6 @@ const TotalValue = ({
 
 TotalValue.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -261,11 +259,9 @@ TotalValue.propTypes = {
     interval: PropTypes.string,
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

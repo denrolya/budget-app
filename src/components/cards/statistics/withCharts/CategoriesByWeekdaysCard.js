@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
@@ -12,7 +10,6 @@ import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import ExpenseCategoriesByWeekdays from 'src/components/charts/recharts/bar/ExpenseCategoriesByWeekdays';
-import { isActionLoading } from 'src/utils/common';
 import { randomFloat } from 'src/utils/randomData';
 import { fetchStatistics } from 'src/store/actions/statistics';
 
@@ -25,13 +22,14 @@ export const DEFAULT_CONFIG = {
 };
 
 const CategoryExpensesByWeekdaysCard = ({
-  isLoading, updateStatisticsTrigger, fetchStatistics, config,
+  updateStatisticsTrigger, fetchStatistics, config,
 }) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodStatistics({
     from: config.after,
     to: config.before,
@@ -57,6 +55,7 @@ const CategoryExpensesByWeekdaysCard = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
@@ -64,6 +63,7 @@ const CategoryExpensesByWeekdaysCard = ({
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.set('data', data));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -93,7 +93,6 @@ const CategoryExpensesByWeekdaysCard = ({
 
 CategoryExpensesByWeekdaysCard.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -107,11 +106,9 @@ CategoryExpensesByWeekdaysCard.propTypes = {
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

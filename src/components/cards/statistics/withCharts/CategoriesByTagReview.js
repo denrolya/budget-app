@@ -2,8 +2,6 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import { generatePreviousPeriod } from 'src/utils/datetime';
 import { MOMENT_DEFAULT_DATE_FORMAT, MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
@@ -15,7 +13,6 @@ import { useCategories } from 'src/contexts/CategoriesContext';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TransactionCategoriesComparison from 'src/components/charts/recharts/bar/TransactionCategoriesComparison';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { isActionLoading } from 'src/utils/common';
 
 const TAG_REPORT_NAME = 'report-main';
 
@@ -29,13 +26,14 @@ export const DEFAULT_CONFIG = {
 };
 
 const CategoriesByTagReview = ({
-  isLoading, updateStatisticsTrigger, config, fetchStatistics,
+  updateStatisticsTrigger, config, fetchStatistics,
 }) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: [],
     from: config.after,
@@ -50,6 +48,7 @@ const CategoriesByTagReview = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const selectedPeriodData = await fetchStatistics({
         ...config,
         params: {
@@ -78,6 +77,7 @@ const CategoriesByTagReview = ({
           reportCategories.map((c) => tree.first(({ model: { name } }) => name === c.name)?.model),
         ),
       );
+      setIsLoading(false);
     };
 
     fetchData();
@@ -103,7 +103,6 @@ const CategoriesByTagReview = ({
 
 CategoriesByTagReview.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -118,11 +117,9 @@ CategoriesByTagReview.propTypes = {
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

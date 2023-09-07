@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import meanBy from 'lodash/meanBy';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 import MoneyValue from 'src/components/MoneyValue';
@@ -14,7 +12,6 @@ import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { isActionLoading } from 'src/utils/common';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
@@ -30,13 +27,14 @@ export const DEFAULT_CONFIG = {
 // TODO: Style table as in daily expenses
 // TODO: Display interval somewhere
 const AverageInCategory = ({
-  isLoading, updateStatisticsTrigger, fetchStatistics, config,
+  updateStatisticsTrigger, fetchStatistics, config,
 }) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: 0,
     from: config.after,
@@ -63,6 +61,7 @@ const AverageInCategory = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const data = await fetchStatistics({
         ...config,
         params: {
@@ -84,6 +83,7 @@ const AverageInCategory = ({
           'value',
         ),
       ));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -110,7 +110,6 @@ const AverageInCategory = ({
 
 AverageInCategory.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -127,11 +126,9 @@ AverageInCategory.propTypes = {
     accounts: PropTypes.array,
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

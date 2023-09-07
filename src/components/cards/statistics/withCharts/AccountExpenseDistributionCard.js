@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
@@ -14,7 +12,6 @@ import { PATHS } from 'src/constants/statistics';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import AccountsExpenseDistribution from 'src/components/charts/recharts/pie/AccountsExpenseDistribution';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { isActionLoading } from 'src/utils/common';
 import { randomColor, randomFloat } from 'src/utils/randomData';
 
 export const DEFAULT_CONFIG = {
@@ -28,7 +25,6 @@ export const DEFAULT_CONFIG = {
 const AccountDistributionCard = ({
   config,
   updateStatisticsTrigger,
-  isLoading,
   transparent,
   height,
   fetchStatistics,
@@ -38,6 +34,7 @@ const AccountDistributionCard = ({
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodStatistics({
     from: config.after,
     to: config.before,
@@ -71,6 +68,7 @@ const AccountDistributionCard = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const data = await fetchStatistics({
         ...config,
         params: {
@@ -81,6 +79,7 @@ const AccountDistributionCard = ({
       });
 
       setModel(model.set('data', data));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -110,7 +109,6 @@ const AccountDistributionCard = ({
 AccountDistributionCard.defaultProps = {
   config: DEFAULT_CONFIG,
   height: 300,
-  isLoading: false,
   transparent: false,
   updateStatisticsTrigger: false,
 };
@@ -127,11 +125,9 @@ AccountDistributionCard.propTypes = {
   }),
   transparent: PropTypes.bool,
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

@@ -3,9 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Progress, Table } from 'reactstrap';
+import TreeModel from 'tree-model';
+
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
-
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import MoneyValue from 'src/components/MoneyValue';
 import { useCategories } from 'src/contexts/CategoriesContext';
@@ -13,11 +14,7 @@ import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsC
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
-import { amountInPercentage, isActionLoading } from 'src/utils/common';
-import { generatePreviousPeriod } from 'src/utils/datetime';
-import TreeModel from 'tree-model';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
+import { amountInPercentage } from 'src/utils/common';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
@@ -29,7 +26,6 @@ export const DEFAULT_CONFIG = {
 
 /** TODO: Style table as in daily expenses */
 const NewCategoriesCard = ({
-  isLoading,
   updateStatisticsTrigger,
   config,
   fetchStatistics,
@@ -39,6 +35,7 @@ const NewCategoriesCard = ({
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: {
       tree: new TreeModel().parse({
@@ -59,6 +56,7 @@ const NewCategoriesCard = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const data = await fetchStatistics({
         ...config,
         params: {
@@ -80,6 +78,7 @@ const NewCategoriesCard = ({
           },
         ),
       );
+      setIsLoading(false);
     };
 
     fetchData();
@@ -136,7 +135,6 @@ const NewCategoriesCard = ({
 
 NewCategoriesCard.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -150,11 +148,9 @@ NewCategoriesCard.propTypes = {
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

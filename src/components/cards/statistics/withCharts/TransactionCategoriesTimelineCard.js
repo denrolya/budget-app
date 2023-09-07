@@ -5,8 +5,6 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
 import { Col, Row } from 'reactstrap';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import IntervalSwitch from 'src/components/IntervalSwitch';
@@ -23,7 +21,6 @@ import { useCategories } from 'src/contexts/CategoriesContext';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
 
@@ -33,13 +30,14 @@ export const DEFAULT_CONFIG = {
 };
 
 export const TransactionCategoriesTimelineCard = ({
-  isLoading, updateStatisticsTrigger, fetchStatistics, config,
+  updateStatisticsTrigger, fetchStatistics, config,
 }) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
       data: randomTransactionCategoriesTimelineData(),
@@ -65,6 +63,7 @@ export const TransactionCategoriesTimelineCard = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
@@ -73,6 +72,7 @@ export const TransactionCategoriesTimelineCard = ({
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.setIn('data.data'.split('.'), data));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -149,7 +149,6 @@ export const TransactionCategoriesTimelineCard = ({
 
 TransactionCategoriesTimelineCard.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -160,11 +159,9 @@ TransactionCategoriesTimelineCard.propTypes = {
     path: PropTypes.string,
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

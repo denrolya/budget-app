@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import sumBy from 'lodash/sumBy';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Col, Row } from 'reactstrap';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import IntervalSwitch from 'src/components/IntervalSwitch';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
@@ -22,7 +20,6 @@ import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistic
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import MoneyValue from 'src/components/MoneyValue';
 import MoneyFlowChart from 'src/components/charts/recharts/bar/MoneyFlowByInterval';
-import { isActionLoading } from 'src/utils/common';
 import { rangeToString } from 'src/utils/datetime';
 import { randomMoneyFlowData } from 'src/utils/randomData';
 import { fetchStatistics } from 'src/store/actions/statistics';
@@ -39,7 +36,6 @@ const MoneyFlowCard = ({
   transparent,
   fetchStatistics,
   config,
-  isLoading,
   updateStatisticsTrigger,
   showCalendarSwitch,
   showIntervalSwitch,
@@ -49,6 +45,7 @@ const MoneyFlowCard = ({
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     from: config.after,
     to: config.before,
@@ -58,6 +55,7 @@ const MoneyFlowCard = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
@@ -65,6 +63,7 @@ const MoneyFlowCard = ({
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.set('data', data));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -155,7 +154,6 @@ const MoneyFlowCard = ({
 
 MoneyFlowCard.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   showCalendarSwitch: true,
   showIntervalSwitch: true,
   transparent: true,
@@ -176,11 +174,9 @@ MoneyFlowCard.propTypes = {
   showCalendarSwitch: PropTypes.bool,
   showIntervalSwitch: PropTypes.bool,
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

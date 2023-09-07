@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { connect } from 'react-redux';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { randomMoneyFlowData } from 'src/utils/randomData';
@@ -14,7 +12,6 @@ import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import SumBySeason from 'src/components/charts/recharts/pie/SumBySeason';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { isActionLoading } from 'src/utils/common';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
@@ -28,7 +25,6 @@ export const DEFAULT_CONFIG = {
 };
 
 const TotalExpensesByInterval = ({
-  isLoading,
   updateStatisticsTrigger,
   fetchStatistics,
   config,
@@ -38,6 +34,7 @@ const TotalExpensesByInterval = ({
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     from: config.after,
     to: config.before,
@@ -47,6 +44,7 @@ const TotalExpensesByInterval = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
@@ -56,6 +54,7 @@ const TotalExpensesByInterval = ({
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.set('data', data));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -82,7 +81,6 @@ const TotalExpensesByInterval = ({
 
 TotalExpensesByInterval.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -104,11 +102,9 @@ TotalExpensesByInterval.propTypes = {
     interval: PropTypes.string,
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

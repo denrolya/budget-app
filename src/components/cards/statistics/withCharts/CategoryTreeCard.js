@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { connect } from 'react-redux';
 import TreeModel from 'tree-model';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 import CategoriesList from 'src/components/CategoriesList';
 import {
@@ -23,7 +21,6 @@ import TransactionCategories from 'src/components/charts/recharts/pie/Transactio
 import Breadcrumbs from 'src/components/CategoriesBreadcrumbs';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
-import { isActionLoading } from 'src/utils/common';
 import { generatePreviousPeriod, rangeToString } from 'src/utils/datetime';
 
 export const DEFAULT_CONFIG = {
@@ -36,13 +33,14 @@ export const DEFAULT_CONFIG = {
 
 // FIXME: If it's a tree for incomes percentage and colors should be inverted
 const CategoryTreeCard = ({
-  isLoading, updateStatisticsTrigger, config, fetchStatistics,
+  updateStatisticsTrigger, config, fetchStatistics,
 }) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodStatistics({
     data: new TreeModel().parse({
       name: 'All categories',
@@ -58,6 +56,7 @@ const CategoryTreeCard = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const selectedPeriodData = await fetchStatistics({
         ...config,
         params: {
@@ -84,6 +83,7 @@ const CategoryTreeCard = ({
           generateCategoriesStatisticsTree(selectedPeriodData, previousPeriodData),
         ),
       );
+      setIsLoading(false);
     };
 
     fetchData();
@@ -160,7 +160,6 @@ const CategoryTreeCard = ({
 
 CategoryTreeCard.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -174,11 +173,9 @@ CategoryTreeCard.propTypes = {
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

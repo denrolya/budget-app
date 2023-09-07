@@ -9,9 +9,6 @@ import { PATHS } from 'src/constants/statistics';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { isActionLoading } from 'src/utils/common';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
@@ -24,7 +21,6 @@ const DEFAULT_CONFIG = {
 const TopValueCategory = ({
   fetchStatistics,
   config,
-  isLoading,
   updateStatisticsTrigger,
 }) => {
   // eslint-disable-next-line no-param-reassign
@@ -32,6 +28,7 @@ const TopValueCategory = ({
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     from: config.after,
     to: config.before,
@@ -44,6 +41,7 @@ const TopValueCategory = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
@@ -51,6 +49,7 @@ const TopValueCategory = ({
       };
       const data = await fetchStatistics({ ...config, params });
       setModel(model.set('data', data));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -77,7 +76,6 @@ const TopValueCategory = ({
 
 TopValueCategory.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -91,11 +89,9 @@ TopValueCategory.propTypes = {
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

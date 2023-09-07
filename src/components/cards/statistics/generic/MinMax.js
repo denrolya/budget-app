@@ -10,9 +10,6 @@ import { PATHS } from 'src/constants/statistics';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { isActionLoading } from 'src/utils/common';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
@@ -28,7 +25,6 @@ export const DEFAULT_CONFIG = {
 const MinMax = ({
   fetchStatistics,
   config,
-  isLoading,
   updateStatisticsTrigger,
 }) => {
   // eslint-disable-next-line no-param-reassign
@@ -36,6 +32,7 @@ const MinMax = ({
     ...DEFAULT_CONFIG,
     ...config,
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     from: config.after,
     to: config.before,
@@ -58,6 +55,7 @@ const MinMax = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const params = {
         after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
         before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
@@ -84,6 +82,7 @@ const MinMax = ({
           return minObj;
         }),
       }));
+      setIsLoading(false);
     };
 
     fetchData();
@@ -125,7 +124,6 @@ const MinMax = ({
 
 MinMax.defaultProps = {
   config: DEFAULT_CONFIG,
-  isLoading: false,
   updateStatisticsTrigger: false,
 };
 
@@ -142,11 +140,9 @@ MinMax.propTypes = {
     categories: PropTypes.arrayOf(PropTypes.number),
   }),
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  isLoading: PropTypes.bool,
 };
 
-const mapStateToProps = ({ ui }, { config }) => ({
-  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+const mapStateToProps = ({ ui }) => ({
   updateStatisticsTrigger: ui.updateStatisticsTrigger,
 });
 

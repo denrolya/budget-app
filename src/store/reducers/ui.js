@@ -3,7 +3,7 @@ import { randomString } from 'src/utils/randomData';
 
 export const INITIAL_STATE = {
   isDarkModeOn: true,
-  errorMessage: '',
+  error: null,
   isSidebarOpened: false,
   isHeaderOpened: false,
   isDraftExpenseModalOpened: false,
@@ -84,6 +84,5 @@ export default (state = INITIAL_STATE, action) => {
     ...state,
     [requestName]: requestState === 'REQUEST',
     error: action.error,
-    errorMessage: action.message,
   };
 };
