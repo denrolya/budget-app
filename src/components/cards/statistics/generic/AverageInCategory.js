@@ -7,7 +7,7 @@ import meanBy from 'lodash/meanBy';
 import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
@@ -16,7 +16,7 @@ import { fetchStatistics } from 'src/store/actions/statistics';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.avg,
+  path: API.avg,
   after: moment().startOf('year'),
   before: moment().endOf('year'),
   interval: '1 week',

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import IconStatisticsCard from 'src/components/cards/statistics/icon/Card';
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
@@ -13,7 +13,7 @@ import { amountInPercentage } from 'src/utils/common';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
-  path: PATHS.valueByPeriod,
+  path: API.valueByPeriod,
   after: moment().startOf('month'),
   before: moment().endOf('month'),
   interval: null,

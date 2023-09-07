@@ -8,7 +8,7 @@ import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import AccountsExpenseDistribution from 'src/components/charts/recharts/pie/AccountsExpenseDistribution';
 import { fetchStatistics } from 'src/store/actions/statistics';
@@ -16,7 +16,7 @@ import { randomColor, randomFloat } from 'src/utils/randomData';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
-  path: PATHS.accountDistribution,
+  path: API.accountDistribution,
   transactionType: EXPENSE_TYPE,
   after: moment().startOf('year'),
   before: moment().endOf('year'),

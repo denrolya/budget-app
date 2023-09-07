@@ -12,7 +12,7 @@ import {
   MOMENT_DATETIME_FORMAT,
   MOMENT_DEFAULT_DATE_FORMAT,
 } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -25,7 +25,7 @@ import { generatePreviousPeriod, rangeToString } from 'src/utils/datetime';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
-  path: PATHS.tree,
+  path: API.tree,
   transactionType: EXPENSE_TYPE,
   after: moment().startOf('year'),
   before: moment().endOf('year'),

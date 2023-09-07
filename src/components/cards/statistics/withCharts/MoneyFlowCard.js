@@ -14,7 +14,7 @@ import {
   MOMENT_DATETIME_FORMAT,
   MOMENT_DEFAULT_DATE_FORMAT,
 } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -26,7 +26,7 @@ import { fetchStatistics } from 'src/store/actions/statistics';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
-  path: PATHS.valueByPeriod,
+  path: API.valueByPeriod,
   after: moment().startOf('year'),
   before: moment().endOf('year'),
   interval: '1 month',

@@ -12,7 +12,7 @@ import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistic
 import { useAccounts } from 'src/contexts/AccountsContext';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { diffIn, generatePreviousPeriod, generateSincePreviousPeriodText } from 'src/utils/datetime';
 import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
@@ -24,7 +24,7 @@ import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.valueByPeriod,
+  path: API.valueByPeriod,
   footerType: 'percentage',
   type: 'total',
   after: moment().startOf('month'),

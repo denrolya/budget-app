@@ -7,7 +7,7 @@ import { generatePreviousPeriod } from 'src/utils/datetime';
 import { MOMENT_DEFAULT_DATE_FORMAT, MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
@@ -18,7 +18,7 @@ const TAG_REPORT_NAME = 'report-main';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
-  path: PATHS.tree,
+  path: API.tree,
   transactionType: EXPENSE_TYPE,
   tag: TAG_REPORT_NAME,
   after: moment().startOf('year'),
@@ -112,7 +112,7 @@ CategoriesByTagReview.propTypes = {
     name: PropTypes.string.isRequired,
     transactionType: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
     path: PropTypes.string,
-    tag: PropTypes.string.isRequired,
+    tag: PropTypes.string,
     after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }),

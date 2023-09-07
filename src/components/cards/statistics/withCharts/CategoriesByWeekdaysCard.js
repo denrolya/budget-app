@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -16,7 +16,7 @@ import { fetchStatistics } from 'src/store/actions/statistics';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.transactionsValueByWeekdays,
+  path: API.transactionsValueByWeekdays,
   after: moment().startOf('year'),
   before: moment().endOf('year'),
 };

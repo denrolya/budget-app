@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { randomMoneyFlowData } from 'src/utils/randomData';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import SumBySeason from 'src/components/charts/recharts/pie/SumBySeason';
@@ -16,7 +16,7 @@ import { fetchStatistics } from 'src/store/actions/statistics';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.valueByPeriod,
+  path: API.valueByPeriod,
   after: moment().startOf('month'),
   before: moment().endOf('month'),
   accounts: [],

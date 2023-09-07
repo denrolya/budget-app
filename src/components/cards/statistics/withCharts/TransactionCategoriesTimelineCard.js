@@ -14,7 +14,7 @@ import {
   MOMENT_DATETIME_FORMAT,
   MOMENT_DEFAULT_DATE_FORMAT,
 } from 'src/constants/datetime';
-import { PATHS } from 'src/constants/statistics';
+import { API } from 'src/constants/api';
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { useCategories } from 'src/contexts/CategoriesContext';
@@ -26,7 +26,7 @@ import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
-  path: PATHS.timeline,
+  path: API.timeline,
 };
 
 export const TransactionCategoriesTimelineCard = ({

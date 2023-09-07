@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { Button, ButtonGroup } from 'reactstrap';
 
 import { EXPENSE_TYPE } from 'src/constants/transactions';
-import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
-import { PATHS, INTERVALS } from 'src/constants/statistics';
+import { INTERVALS, MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
+import { API } from 'src/constants/api';
 import LoadingCard from 'src/components/cards/LoadingCard';
 import IncomeExpenseChart from 'src/components/charts/recharts/bar/IncomeExpense';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
@@ -15,7 +15,7 @@ import { fetchStatistics } from 'src/store/actions/statistics';
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
   transactionType: EXPENSE_TYPE,
-  path: PATHS.valueByPeriod,
+  path: API.valueByPeriod,
   after: moment().subtract(6, 'month'),
   before: moment(),
   interval: true,
