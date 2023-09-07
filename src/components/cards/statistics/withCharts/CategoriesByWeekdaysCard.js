@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
-import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
-import { countWeekdays, diffIn } from 'src/utils/datetime';
 import snakeCase from 'voca/snake_case';
 import upperCase from 'voca/upper_case';
 
+import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { PATHS } from 'src/constants/statistics';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';

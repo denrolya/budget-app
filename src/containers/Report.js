@@ -3,37 +3,26 @@ import React, { useEffect, useState } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import snakeCase from 'voca/snake_case';
 import moment from 'moment-timezone';
-import upperCase from 'voca/upper_case';
 import { Row, Col, UncontrolledCollapse } from 'reactstrap';
 
 import { ANNUAL_REPORT_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { INCOME_TYPE, EXPENSE_TYPE } from 'src/constants/transactions';
-
-import { amountInPercentage, isActionLoading } from 'src/utils/common';
+import { updateStatistics } from 'src/store/actions/ui';
 import { rangeToString } from 'src/utils/datetime';
-
-import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';
-
 import TotalValue from 'src/components/cards/statistics/generic/TotalValue';
 import AverageInCategory from 'src/components/cards/statistics/generic/AverageInCategory';
-import DailyInCategory from 'src/components/cards/statistics/generic/DailyInCategory';
-import TotalInCategory from 'src/components/cards/statistics/generic/TotalInCategory';
 import MinMax from 'src/components/cards/statistics/generic/MinMax';
-
 import NewCategoriesCard from 'src/components/cards/statistics/NewCategoriesCard';
-
 import AccountExpenseDistributionCard from 'src/components/cards/statistics/withCharts/AccountExpenseDistributionCard';
-import ExpenseCategoriesByWeekdaysCard from 'src/components/cards/statistics/withCharts/ExpenseCategoriesByWeekdaysCard';
+import CategoriesByWeekdaysCard from 'src/components/cards/statistics/withCharts/CategoriesByWeekdaysCard';
 import TotalExpensesByIntervalCard from 'src/components/cards/statistics/withCharts/TotalExpensesByIntervalCard';
-import ExpenseCategoriesReviewCard from 'src/components/cards/statistics/withCharts/ExpenseCategoriesReviewCard';
+import CategoriesByTagReview from 'src/components/cards/statistics/withCharts/CategoriesByTagReview';
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
-import { updateStatistics } from 'src/store/actions/ui';
 
 const Report = ({ updateStatistics }) => {
   const [dateRange, setDateRange] = useState({
@@ -168,13 +157,13 @@ const Report = ({ updateStatistics }) => {
                   name: 'topValueIncomeCategory',
                 }}
               />
-              {/* <NewCategoriesCard */}
-              {/*  config={{ */}
-              {/*    ...dateRange, */}
-              {/*    transactionType: INCOME_TYPE, */}
-              {/*    name: 'newExpenseCategories', */}
-              {/*  }} */}
-              {/* /> */}
+              <NewCategoriesCard
+                config={{
+                  ...dateRange,
+                  transactionType: INCOME_TYPE,
+                  name: 'newIncomeCategories',
+                }}
+              />
             </Col>
           </Row>
         </UncontrolledCollapse>
@@ -214,13 +203,13 @@ const Report = ({ updateStatistics }) => {
                   name: 'expensesBySeasons',
                 }}
               />
-              {/* <NewCategoriesCard */}
-              {/*  config={{ */}
-              {/*    ...dateRange, */}
-              {/*    transactionType: EXPENSE_TYPE, */}
-              {/*    name: 'newExpenseCategories', */}
-              {/*  }} */}
-              {/* /> */}
+              <NewCategoriesCard
+                config={{
+                  ...dateRange,
+                  transactionType: EXPENSE_TYPE,
+                  name: 'newExpenseCategories',
+                }}
+              />
               <AccountExpenseDistributionCard
                 config={{
                   ...dateRange,
@@ -237,11 +226,13 @@ const Report = ({ updateStatistics }) => {
                   transactionType: EXPENSE_TYPE,
                 }}
               />
-              {/* <ExpenseCategoriesReviewCard */}
-              {/*  isLoading={isStatisticsActionLoading('expenseCategoriesTree')} */}
-              {/*  model={statistics.expenseCategoriesTree} */}
-              {/* /> */}
-              <ExpenseCategoriesByWeekdaysCard
+              <CategoriesByTagReview
+                config={{
+                  ...dateRange,
+                  name: 'taggedCategoriesComparisonWithPreviousPeriod',
+                }}
+              />
+              <CategoriesByWeekdaysCard
                 config={{
                   ...dateRange,
                   name: 'expenseCategoriesByWeekdays',

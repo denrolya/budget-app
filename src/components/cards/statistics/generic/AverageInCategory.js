@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import meanBy from 'lodash/meanBy';
+import snakeCase from 'voca/snake_case';
+import upperCase from 'voca/upper_case';
 
 import SimpleStatisticsCard from 'src/components/cards/statistics/generic/Card';
 import MoneyValue from 'src/components/MoneyValue';
@@ -13,8 +15,6 @@ import { useCategories } from 'src/contexts/CategoriesContext';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { isActionLoading } from 'src/utils/common';
-import snakeCase from 'voca/snake_case';
-import upperCase from 'voca/upper_case';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',

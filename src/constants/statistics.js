@@ -86,4 +86,7 @@ export const AVAILABLE_STATISTICS = [
   'groceriesAverage',
   'expensesBySeasons',
   'expenseToIncomeRatio',
+  'newIncomeCategories',
+  'newExpenseCategories',
+  'taggedCategoriesComparisonWithPreviousPeriod',
 ];

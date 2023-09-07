@@ -23,13 +23,14 @@ const LoadingCard = ({
 );
 /* eslint-enable react/jsx-props-no-spreading */
 
-LoadingCard.propTypes = {
+LoadingCard.defaultProps = {
+  className: '',
   isLoading: false,
   transparent: false,
 };
 
 LoadingCard.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   className: PropTypes.string,
   isLoading: PropTypes.bool,
   transparent: PropTypes.bool,

@@ -55,7 +55,6 @@ const TotalExpensesByInterval = ({
         accounts: config.accounts,
       };
       const data = await fetchStatistics({ ...config, params });
-      console.log({ data });
       setModel(model.set('data', data));
     };
 
