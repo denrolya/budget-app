@@ -59,15 +59,14 @@ const IncomeExpenseCard = ({
     };
 
     fetchData();
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), model.interval, updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
 
   useEffect(() => {
     setModel(model.merge({
       from: config.after,
       to: config.before,
-      interval: config.interval,
     }));
-  }, [config.after, config.before, config.interval]);
+  }, [config.after, config.before]);
 
   return (
     <LoadingCard transparent isLoading={isLoading}>

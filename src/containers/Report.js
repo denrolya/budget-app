@@ -41,9 +41,12 @@ const Report = ({ updateStatistics }) => {
     before: moment().endOf('year'),
   });
 
-  useEffect(() => () => {
-    updateStatistics();
-  }, [dateRange.after.format(), dateRange.before.format()]);
+  useEffect(
+    () => () => {
+      updateStatistics();
+    },
+    [dateRange.after.format(), dateRange.before.format()],
+  );
 
   const utilitiesCards = [
     <TotalValue
@@ -87,9 +90,7 @@ const Report = ({ updateStatistics }) => {
   return (
     <>
       <Helmet>
-        <title>
-          {`${dateRange.after.year()} Report | Budget`}
-        </title>
+        <title>{`${dateRange.after.year()} Report | Budget`}</title>
       </Helmet>
 
       <DateRangePicker
@@ -125,7 +126,9 @@ const Report = ({ updateStatistics }) => {
       <hr />
 
       <section>
-        <h1 id="incomes" className="cursor-pointer">Incomes</h1>
+        <h1 id="incomes" className="cursor-pointer">
+          Incomes
+        </h1>
         <UncontrolledCollapse defaultOpen toggler="#incomes">
           <Row>
             <Col xs={12} md={6} lg={3}>
@@ -166,9 +169,11 @@ const Report = ({ updateStatistics }) => {
                 }}
               />
               {/* <NewCategoriesCard */}
-              {/*  type={INCOME_TYPE} */}
-              {/*  isLoading={isStatisticsActionLoading('incomeCategoriesTree')} */}
-              {/*  model={statistics.incomeCategoriesTree} */}
+              {/*  config={{ */}
+              {/*    ...dateRange, */}
+              {/*    transactionType: INCOME_TYPE, */}
+              {/*    name: 'newExpenseCategories', */}
+              {/*  }} */}
               {/* /> */}
             </Col>
           </Row>
@@ -180,7 +185,9 @@ const Report = ({ updateStatistics }) => {
       <section>
         <h1>Expenses</h1>
 
-        <h3 id="general-expenses" className="cursor-pointer">General expenses</h3>
+        <h3 id="general-expenses" className="cursor-pointer">
+          General expenses
+        </h3>
 
         <UncontrolledCollapse defaultOpen toggler="#general-expenses">
           <Row>
@@ -208,9 +215,11 @@ const Report = ({ updateStatistics }) => {
               {/*  model={statistics.moneyFlow} */}
               {/* /> */}
               {/* <NewCategoriesCard */}
-              {/*  type={EXPENSE_TYPE} */}
-              {/*  isLoading={isStatisticsActionLoading('expenseCategoriesTree')} */}
-              {/*  model={statistics.expenseCategoriesTree} */}
+              {/*  config={{ */}
+              {/*    ...dateRange, */}
+              {/*    transactionType: EXPENSE_TYPE, */}
+              {/*    name: 'newExpenseCategories', */}
+              {/*  }} */}
               {/* /> */}
               <AccountExpenseDistributionCard
                 config={{
@@ -242,7 +251,9 @@ const Report = ({ updateStatistics }) => {
           </Row>
         </UncontrolledCollapse>
 
-        <h3 id="food-expenses" className="cursor-pointer">Food expenses</h3>
+        <h3 id="food-expenses" className="cursor-pointer">
+          Food expenses
+        </h3>
 
         <UncontrolledCollapse defaultOpen toggler="#food-expenses">
           <Row>
@@ -266,12 +277,14 @@ const Report = ({ updateStatistics }) => {
               />
             </Col>
             <Col xs={12} md={6} lg={3}>
-              {/* <AverageInCategory */}
-              {/*  title="Average groceries bill" */}
-              {/*  category="Groceries" */}
-              {/*  isLoading={isStatisticsActionLoading('groceriesAverage')} */}
-              {/*  model={statistics.groceriesAverage} */}
-              {/* /> */}
+              <AverageInCategory
+                config={{
+                  ...dateRange,
+                  interval: '1 week',
+                  name: 'groceriesAverage',
+                  categories: [66],
+                }}
+              />
             </Col>
             <Col xs={12} md={6} lg={3}>
               <TotalValue
@@ -287,7 +300,9 @@ const Report = ({ updateStatistics }) => {
           </Row>
         </UncontrolledCollapse>
 
-        <h3 id="utility-expenses" className="cursor-pointer">Utilities</h3>
+        <h3 id="utility-expenses" className="cursor-pointer">
+          Utilities
+        </h3>
 
         <UncontrolledCollapse defaultOpen toggler="#utility-expenses">
           <Row>
@@ -301,7 +316,6 @@ const Report = ({ updateStatistics }) => {
       </section>
 
       <hr />
-
     </>
   );
 };

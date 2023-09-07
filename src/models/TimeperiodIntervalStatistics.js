@@ -9,6 +9,9 @@ export const DEFAULT_VALUES = {
 };
 
 class TimeperiodIntervalStatistics extends Record(DEFAULT_VALUES) {
+  /**
+   * @deprecated
+   */
   diffIn(unitOfTime = 'days') {
     return moment().isBetween(this.from, this.to)
       ? moment().diff(this.from, unitOfTime) + 1

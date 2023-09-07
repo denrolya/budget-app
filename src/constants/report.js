@@ -1,11 +1,10 @@
 import moment from 'moment-timezone';
-import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TreeModel from 'tree-model';
 
 import TimeperiodStatistics from 'src/models/TimeperiodStatistics';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import { randomFloat, randomColor, randomMoneyFlowData } from 'src/utils/randomData';
+import { randomFloat } from 'src/utils/randomData';
 
 const startOfYear = moment().startOf('year');
 const endOfYear = moment().endOf('year');
