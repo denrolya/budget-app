@@ -1,42 +1,116 @@
-import isEqual from 'lodash/isEqual';
-import React, { memo } from 'react';
+import moment from 'moment-timezone';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { connect } from 'react-redux';
+import snakeCase from 'voca/snake_case';
+import upperCase from 'voca/upper_case';
 
+import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
+import { randomMoneyFlowData } from 'src/utils/randomData';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
+import { PATHS } from 'src/constants/statistics';
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
-import ExpensesBySeason from 'src/components/charts/recharts/pie/ExpensesBySeason';
+import SumBySeason from 'src/components/charts/recharts/pie/SumBySeason';
+import { fetchStatistics } from 'src/store/actions/statistics';
+import { isActionLoading } from 'src/utils/common';
 
-const TotalExpensesByIntervalCard = ({
+export const DEFAULT_CONFIG = {
+  name: '<name_goes_here>',
+  transactionType: EXPENSE_TYPE,
+  path: PATHS.valueByPeriod,
+  after: moment().startOf('month'),
+  before: moment().endOf('month'),
+  accounts: [],
+  categories: [],
+  interval: '1 month',
+};
+
+const TotalExpensesByInterval = ({
   isLoading,
-  model,
-  className,
-  transparent,
-}) => (
-  <TimeperiodStatisticsCard
-    className={cn('card-chart', 'card--hover-expand', className)}
-    header="Expenses by seasons"
-    transparent={transparent}
-    isLoading={isLoading}
-  >
-    <ExpensesBySeason data={model.data} />
-  </TimeperiodStatisticsCard>
-);
+  updateStatisticsTrigger,
+  fetchStatistics,
+  config,
+}) => {
+  // eslint-disable-next-line no-param-reassign
+  config = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
+  const [model, setModel] = useState(new TimeperiodIntervalStatistics({
+    from: config.after,
+    to: config.before,
+    interval: config.interval,
+    data: randomMoneyFlowData(),
+  }));
 
-TotalExpensesByIntervalCard.defaultProps = {
-  className: '',
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+        before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+        interval: model.interval,
+        categories: config.categories,
+        accounts: config.accounts,
+      };
+      const data = await fetchStatistics({ ...config, params });
+      console.log({ data });
+      setModel(model.set('data', data));
+    };
+
+    fetchData();
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), model.interval, updateStatisticsTrigger]);
+
+  useEffect(() => {
+    setModel(model.merge({
+      from: config.after,
+      to: config.before,
+      interval: config.interval,
+    }));
+  }, [config.after, config.before, config.interval]);
+
+  return (
+    <TimeperiodStatisticsCard
+      className={cn('card-chart', 'card--hover-expand')}
+      header="Expenses by seasons"
+      isLoading={isLoading}
+    >
+      <SumBySeason data={model.data} type={config.transactionType} />
+    </TimeperiodStatisticsCard>
+  );
+};
+
+TotalExpensesByInterval.defaultProps = {
+  config: DEFAULT_CONFIG,
   isLoading: false,
-  transparent: false,
+  updateStatisticsTrigger: false,
 };
 
-TotalExpensesByIntervalCard.propTypes = {
-  model: PropTypes.instanceOf(TimeperiodIntervalStatistics).isRequired,
-  className: PropTypes.string,
+TotalExpensesByInterval.propTypes = {
+  fetchStatistics: PropTypes.func.isRequired,
+  config: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    transactionType: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
+    path: PropTypes.string,
+    type: PropTypes.oneOf(['total', 'daily']),
+    footerType: PropTypes.oneOf(['percentage', 'amount', 'chart']),
+    chartConfig: PropTypes.shape({
+      type: PropTypes.oneOf(['line', 'bar']),
+    }),
+    categories: PropTypes.array,
+    accounts: PropTypes.array,
+    after: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    interval: PropTypes.string,
+  }),
+  updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   isLoading: PropTypes.bool,
-  transparent: PropTypes.bool,
 };
 
-export default memo(
-  TotalExpensesByIntervalCard,
-  (pp, np) => isEqual(pp.model.data, np.model.data) && isEqual(pp.isLoading, np.isLoading),
-);
+const mapStateToProps = ({ ui }, { config }) => ({
+  isLoading: isActionLoading(ui[`STATISTICS_FETCH_${upperCase(snakeCase(config.name))}`]),
+  updateStatisticsTrigger: ui.updateStatisticsTrigger,
+});
+
+export default connect(mapStateToProps, { fetchStatistics })(TotalExpensesByInterval);

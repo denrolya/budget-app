@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { HEX_COLORS } from 'src/constants/color';
 
@@ -62,7 +63,7 @@ const renderActiveShape = ({
   </g>
 );
 
-const ExpensesBySeason = ({ data }) => {
+const SumBySeason = ({ data, type }) => {
   const [chartData, setChartData] = useState([
     {
       value: 0,
@@ -91,28 +92,28 @@ const ExpensesBySeason = ({ data }) => {
 
   useEffect(() => {
     const result = [0, 0, 0, 0];
-    data.forEach(({ date, expense }) => {
-      const month = moment.unix(date).month();
+    data.forEach((el) => {
+      const month = moment.unix(el.after).month();
       switch (month) {
         case 0:
         case 1:
         case 11:
-          result[0] += expense;
+          result[0] += el[type];
           break;
         case 2:
         case 3:
         case 4:
-          result[1] += expense;
+          result[1] += el[type];
           break;
         case 5:
         case 6:
         case 7:
-          result[2] += expense;
+          result[2] += el[type];
           break;
         case 8:
         case 9:
         case 10:
-          result[3] += expense;
+          result[3] += el[type];
           break;
           // no default
       }
@@ -157,8 +158,9 @@ const ExpensesBySeason = ({ data }) => {
   );
 };
 
-ExpensesBySeason.propTypes = {
+SumBySeason.propTypes = {
   data: PropTypes.array.isRequired,
+  type: PropTypes.oneOf([INCOME_TYPE, EXPENSE_TYPE]).isRequired,
 };
 
-export default ExpensesBySeason;
+export default SumBySeason;

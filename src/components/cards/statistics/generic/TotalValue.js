@@ -43,12 +43,12 @@ const TotalValue = ({
   fetchStatistics,
   config,
 }) => {
-  let isMounted = false;
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
     ...config,
   };
+  let isMounted = false;
   const categories = useCategories();
   const accounts = useAccounts();
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
@@ -208,12 +208,9 @@ const TotalValue = ({
     setModel(model.merge({
       from: config.after,
       to: config.before,
+      interval: config.interval,
     }));
-  }, [config.after, config.before]);
-
-  useEffect(() => {
-    setModel(model.set('interval', config.interval));
-  }, [config.interval]);
+  }, [config.after, config.before, config.interval]);
 
   return (
     <SimpleStatisticsCard

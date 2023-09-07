@@ -202,18 +202,18 @@ const Report = ({ updateStatistics }) => {
               />
             </Col>
             <Col xs={12} md={6} lg={4}>
-              {/* <PercentageSpentFromIncomeCard */}
-              {/*  isLoading={isStatisticsActionLoading('totalExpense') || isStatisticsActionLoading('totalIncome')} */}
-              {/*  percentage={amountInPercentage( */}
-              {/*    statistics.totalIncome.data.current, */}
-              {/*    statistics.totalExpense.data.current, */}
-              {/*    0, */}
-              {/*  )} */}
-              {/* /> */}
-              {/* <TotalExpensesByIntervalCard */}
-              {/*  isLoading={isStatisticsActionLoading('moneyFlow')} */}
-              {/*  model={statistics.moneyFlow} */}
-              {/* /> */}
+              <PercentageSpentFromIncomeCard
+                config={{
+                  ...dateRange,
+                  name: 'expenseToIncomeRatio',
+                }}
+              />
+              <TotalExpensesByIntervalCard
+                config={{
+                  ...dateRange,
+                  name: 'expensesBySeasons',
+                }}
+              />
               {/* <NewCategoriesCard */}
               {/*  config={{ */}
               {/*    ...dateRange, */}

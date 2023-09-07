@@ -84,4 +84,6 @@ export const AVAILABLE_STATISTICS = [
   'topValueIncomeCategory',
   'foodMinMax',
   'groceriesAverage',
+  'expensesBySeasons',
+  'expenseToIncomeRatio',
 ];
