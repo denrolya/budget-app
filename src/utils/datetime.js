@@ -39,26 +39,33 @@ export const diffIn = (date1, date2, unitOfTime = 'days') => moment().isBetween(
   : Math.abs(date2.diff(date1, unitOfTime) + 1);
 
 export const generatePreviousPeriod = (after, before) => {
-  const diffInDays = diffIn(after, before, 'days');
-  let from = after.clone().subtract(diffInDays + 1, 'days');
+  const now = moment();
+  const diff = {
+    d: diffIn(after, before, 'days'),
+    w: diffIn(after, before, 'weeks'),
+    m: diffIn(after, before, 'months'),
+    y: diffIn(after, before, 'years'),
+  };
+  let from = after.clone().subtract(diff.d + 1, 'days');
   let to = after.clone().subtract(1, 'days');
+  const isWeek = after.clone().isSame(after.clone().startOf('week'), 'day') && before.clone().isSame(before.clone().endOf('week'), 'day');
+  const isMonth = after.clone().isSame(after.clone().startOf('month'), 'day') && before.clone().isSame(before.clone().endOf('month'), 'day');
+  const isYear = after.clone().isSame(after.clone().startOf('year'), 'day') && before.clone().isSame(before.clone().endOf('year'), 'day');
+  const isCurrent = before.isAfter(now);
 
-  // if whole week - previous week
-  if (diffInDays === 6 && after.isoWeekday() === 1 && before.isoWeekday() === 7) {
-    from = after.clone().subtract(1, 'day').startOf('isoWeek');
-    to = after.clone().subtract(1, 'day').endOf('isoWeek');
+  if (isWeek) {
+    from = isCurrent ? after.clone().subtract(diff.w, 'week') : after.clone().subtract(diff.w, 'weeks').startOf('isoWeek');
+    to = isCurrent ? from.clone().add(diff.d, 'days') : after.clone().endOf('isoWeek');
   }
 
-  // If whole month - previous month
-  if (before.diff(after, 'days') + 1 === after.daysInMonth()) {
-    from = after.clone().subtract(1, 'day').startOf('month');
-    to = after.clone().subtract(1, 'day').endOf('month');
+  if (isMonth) {
+    from = isCurrent ? after.clone().subtract(diff.m, 'month') : after.clone().subtract(diff.m, 'months').startOf('month');
+    to = isCurrent ? after.clone().subtract(diff.d, 'days') : after.clone().endOf('month');
   }
 
-  // If whole year - previous year
-  if (after.clone().isSame(moment().startOf('year'), 'day') && before.clone().isSame(moment().endOf('year'), 'day')) {
-    from = after.clone().subtract(1, 'day').startOf('year');
-    to = after.clone().subtract(1, 'day').endOf('year');
+  if (isYear) {
+    from = isCurrent ? after.clone().subtract(diff.y, 'years') : after.clone().subtract(diff.y, 'years').startOf('year');
+    to = isCurrent ? from.clone().add(diff.d, 'days') : after.clone().endOf('year');
   }
 
   return {

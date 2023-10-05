@@ -133,6 +133,7 @@ export const createCategoriesTree = (tree) => orderBy(
 
     return {
       ...c,
+      expanded: true,
       title: (
         <span>
           <i aria-hidden className={cn('font-18px', c.icon)} style={{ color: c.color }} />

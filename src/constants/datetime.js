@@ -23,6 +23,7 @@ export const DATERANGE_PICKER_RANGES = {
   'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
   'This Month': [moment().startOf('month'), moment().endOf('month')],
   'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+  '10 Year': [moment().subtract(10, 'year').startOf('year'), moment().endOf('year')],
   'This Year': [moment().startOf('year'), moment().endOf('year')],
   Winter: [moment().month('December').subtract(1, 'year').startOf('month'), moment().month('February').endOf('month')],
   Spring: [moment().month('March').startOf('month'), moment().month('May').endOf('month')],
