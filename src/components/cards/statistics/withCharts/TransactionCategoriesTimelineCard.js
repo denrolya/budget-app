@@ -2,12 +2,12 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import { connect } from 'react-redux';
 import { Col, Row } from 'reactstrap';
 
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
 import IntervalSwitch from 'src/components/IntervalSwitch';
+import CategoryTypeahead from 'src/components/CategoryTypeahead';
 import {
   DATERANGE_PICKER_RANGES,
   MOMENT_DATE_FORMAT,
@@ -15,7 +15,6 @@ import {
   MOMENT_DEFAULT_DATE_FORMAT,
 } from 'src/constants/datetime';
 import { API } from 'src/constants/api';
-import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
@@ -29,9 +28,7 @@ export const DEFAULT_CONFIG = {
   path: API.timeline,
 };
 
-export const TransactionCategoriesTimelineCard = ({
-  updateStatisticsTrigger, fetchStatistics, config,
-}) => {
+export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fetchStatistics, config }) => {
   // eslint-disable-next-line no-param-reassign
   config = {
     ...DEFAULT_CONFIG,
@@ -48,7 +45,6 @@ export const TransactionCategoriesTimelineCard = ({
   }));
   const categories = useCategories();
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const typeaheads = [];
   const { from, to, interval } = model;
 
   const selectCategories = (selected) => {
@@ -114,18 +110,7 @@ export const TransactionCategoriesTimelineCard = ({
           </Col>
 
           <Col xs={6}>
-            <Typeahead
-              multiple
-              id="categories"
-              labelKey="name"
-              placeholder="Filter by categories..."
-              onChange={selectCategories}
-              selected={selectedCategories}
-              ref={(t) => typeaheads.push(t)}
-              options={categories.filter(
-                ({ type, name }) => TRANSACTION_TYPES.includes(type) && !model.data.categories.includes(name),
-              )}
-            />
+            <CategoryTypeahead selected={selectedCategories} onChange={selectCategories} />
           </Col>
 
           <Col className="text-right" xs={4}>

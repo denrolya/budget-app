@@ -16,6 +16,7 @@ export const DEFAULT_VALUES = {
   to: moment(),
   accounts: [],
   categories: [],
+  withNestedCategories: true,
   onlyDrafts: false,
 };
 
@@ -25,15 +26,16 @@ class TransactionFilters extends Record(DEFAULT_VALUES) {
 
     if (finalValues) {
       const {
-        types, from, to, categories, accounts, onlyDrafts,
+        types, from, to, categories, accounts, withNestedCategories, onlyDrafts,
       } = finalValues;
 
       finalValues = {
         types: TransactionFilters.normalize('types', types),
         from: TransactionFilters.normalize('from', from),
         to: TransactionFilters.normalize('to', to),
-        categories: TransactionFilters.normalize('categories', categories),
         accounts: TransactionFilters.normalize('accounts', accounts),
+        categories: TransactionFilters.normalize('categories', categories),
+        withNestedCategories: TransactionFilters.normalize('withNestedCategories', withNestedCategories),
         onlyDrafts: TransactionFilters.normalize('onlyDrafts', onlyDrafts),
       };
     }

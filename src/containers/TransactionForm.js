@@ -11,6 +11,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   Button, ButtonGroup, Col, FormGroup, Input, Label,
 } from 'reactstrap';
+import CategoryTypeahead from 'src/components/CategoryTypeahead';
 
 import ModalForm from 'src/components/forms/ModalForm';
 import LoadingButton from 'src/components/LoadingButton';
@@ -152,14 +153,14 @@ const TransactionForm = ({
               {form.initialValues.isDraft && <h3 className="text-warning">Draft</h3>}
 
               <FormGroup>
-                <Typeahead
+                <CategoryTypeahead
                   id="category"
                   className="form-control-typeahead"
                   name="category"
                   placeholder="Select category..."
                   labelKey="name"
+                  multple={false}
                   autoFocus={!isEditMode}
-                  multiple={false}
                   inputProps={{ id: 'category' }}
                   isInvalid={touched.category && !!errors.category}
                   selected={category ? categoryOptions.filter(({ id }) => id === category) : []}

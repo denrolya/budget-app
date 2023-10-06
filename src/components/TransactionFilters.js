@@ -4,6 +4,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
+import CategoryTypeahead from 'src/components/CategoryTypeahead';
 
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import { useAccounts } from 'src/contexts/AccountsContext';
@@ -15,7 +16,6 @@ import AccountName from 'src/components/AccountName';
 const TransactionFilters = ({ onModelChange, model }) => {
   const accounts = useAccounts();
   const categories = useCategories();
-  const typeaheads = [];
 
   const { from, to } = model;
 
@@ -90,18 +90,24 @@ const TransactionFilters = ({ onModelChange, model }) => {
 
       <FormGroup className="mb-4">
         <h5>Categories:</h5>
-        <Typeahead
-          multiple
-          id="categories"
-          placeholder="Filter by categories..."
-          labelKey="name"
-          ref={(t) => typeaheads.push(t)}
-          selected={model.categories.map((id) => categories.find((c) => c.id === id))}
-          onChange={(selected) => onModelChange(model.setCategories(selected))}
-          options={categories.filter(
-            ({ type, name }) => TRANSACTION_TYPES.includes(type) && !categories.includes(name),
-          )}
-        />
+        <FormGroup>
+          <CategoryTypeahead
+            onChange={(selected) => onModelChange(model.setCategories(selected))}
+            selected={model.categories.map((id) => categories.find((c) => c.id === id))}
+          />
+          <FormGroup check>
+            <Label check>
+              <Input
+                type="checkbox"
+                checked={model.withNestedCategories}
+                onChange={() => onModelChange(model.set('withNestedCategories', !model.withNestedCategories))}
+              />
+              <span className="form-check-sign" />
+              {' '}
+              <span className="text-capitalize">Nested</span>
+            </Label>
+          </FormGroup>
+        </FormGroup>
       </FormGroup>
 
       <FormGroup>
