@@ -14,10 +14,11 @@ import { Card } from 'reactstrap';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
+import { MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT } from 'src/constants/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { useCategories } from 'src/contexts/CategoriesContext';
 
-const TransactionCategoriesTimeline = ({ data }) => {
+const TransactionCategoriesTimeline = ({ data, interval }) => {
   const { symbol } = useBaseCurrency();
   const categories = useCategories();
   const [chartData, setChartData] = useState();
@@ -49,25 +50,41 @@ const TransactionCategoriesTimeline = ({ data }) => {
       return null;
     }
 
-    const { date, values } = payload[0].payload;
+    const { values } = payload[0].payload;
     const selectedCategories = Object.keys(values);
+    const date = moment.unix(payload[0].payload.date);
+    let dateString = '';
+
+    switch (interval) {
+      case '1 month':
+        dateString = date.format(date.year() === moment().year() ? 'MMMM' : 'MMMM YY');
+        break;
+      case '1 week':
+        dateString = `#${date.isoWeek()} ${date.format(date.year() === moment().year() ? 'MMMM' : 'MMMM YY')}`;
+        break;
+      case '1 day':
+      default:
+        dateString = date.format(date.year() === moment().year() ? MOMENT_VIEW_DATE_FORMAT : `${MOMENT_VIEW_DATE_FORMAT} YY`);
+    }
 
     return (
       <Card body className="px-3 py-2">
         <h4 className="mb-1 text-white">
           <i aria-hidden className="ion-ios-calendar" />
           {' '}
-          {moment.unix(date).format('MMMM')}
+          { dateString }
         </h4>
         {selectedCategories
           .map((categoryName) => categories.find(({ name }) => name === categoryName))
           .map(({ name, color, icon }) => (
             <p className="mb-0" key={`tooltip-category-${name}`}>
-              <i aria-hidden="true" className={icon} />
-              {' '}
-              {name}
-              {': '}
               <span style={{ color }}>
+                <i aria-hidden="true" className={icon} />
+                {' '}
+                {name}
+                {': '}
+              </span>
+              <span>
                 <MoneyValue bold maximumFractionDigits={0} amount={values[name]} />
               </span>
             </p>
@@ -139,6 +156,7 @@ TransactionCategoriesTimeline.defaultProps = {
 
 TransactionCategoriesTimeline.propTypes = {
   data: PropTypes.object,
+  interval: PropTypes.string.isRequired,
 };
 
 export default TransactionCategoriesTimeline;

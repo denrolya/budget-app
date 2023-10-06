@@ -59,7 +59,7 @@ const CategoriesList = ({
       <ListGroup flush className="card-category-tree__list">
         {selectedSubtree.children.map(({
           model: {
-            id, name, icon, total, previous,
+            id, name, icon, total, previous, color,
           },
         }, key) => {
           const amountToPreviousPeriodRatio = amountInPercentage(previous, total, 0);
@@ -92,6 +92,7 @@ const CategoriesList = ({
                           'font-12px': isTotalAndPreviousZero,
                           'font-17px': !isTotalAndPreviousZero,
                         })}
+                        style={{ color }}
                       />
                     </CircularProgressbarWithChildren>
                   </span>
