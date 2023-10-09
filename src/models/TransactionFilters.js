@@ -12,7 +12,7 @@ import { TRANSACTION_TYPES } from 'src/constants/transactions';
 
 export const DEFAULT_VALUES = {
   types: [],
-  from: moment().subtract(10, 'day'),
+  from: moment().startOf('month'),
   to: moment(),
   accounts: [],
   categories: [],

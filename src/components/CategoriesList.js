@@ -92,7 +92,6 @@ const CategoriesList = ({
                           'font-12px': isTotalAndPreviousZero,
                           'font-17px': !isTotalAndPreviousZero,
                         })}
-                        style={{ color }}
                       />
                     </CircularProgressbarWithChildren>
                   </span>

@@ -144,7 +144,13 @@ const CategoryTreeCard = ({
       )}
 
       <div className="mb-3">
-        <TransactionCategories data={data} selectedCategory={selectedCategory} onClick={selectCategory} />
+        <TransactionCategories
+          after={from}
+          before={to}
+          data={data}
+          selectedCategory={selectedCategory}
+          onClick={selectCategory}
+        />
       </div>
 
       <CategoriesList

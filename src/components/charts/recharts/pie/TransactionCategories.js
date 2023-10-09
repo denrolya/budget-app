@@ -1,5 +1,8 @@
+import moment from 'moment-timezone';
 import React, { useState, useEffect } from 'react';
-import { Card } from 'reactstrap';
+import {
+  Card, Table, Row, Col, Container,
+} from 'reactstrap';
 import {
   PieChart,
   Pie,
@@ -8,12 +11,16 @@ import {
   Tooltip,
 } from 'recharts';
 import PropTypes from 'prop-types';
+import { MOMENT_VIEW_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT_SHORT } from 'src/constants/datetime';
 
 import { amountInPercentage, expenseRatioColor } from 'src/utils/common';
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
+import { generatePreviousPeriod } from 'src/utils/datetime';
 
-const TransactionCategories = ({ data, selectedCategory, onClick }) => {
+const TransactionCategories = ({
+  after, before, data, selectedCategory, onClick,
+}) => {
   const [chartData, setChartData] = useState([]);
   const onSectorEnter = (_, index) => setActive(index);
   const [active, setActive] = useState();
@@ -34,6 +41,41 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
       previous, total, name, icon,
     } = payload[0].payload;
     const color = expenseRatioColor(amountInPercentage(previous, total, 0));
+    const previousPeriod = generatePreviousPeriod(after, before);
+
+    const dataTable = (sum) => (
+      <Table size="sm" bordered={false} className="m-0">
+        <tbody>
+          <tr>
+            <td className="text-left">Total</td>
+            <td className="text-right">
+              <MoneyValue bold className="text-white" amount={sum} maximumFractionDigits={0} />
+            </td>
+          </tr>
+          {[
+            ['days', 'Daily'],
+            ['weeks', 'Weekly'],
+            ['months', 'Monthly'],
+            ['years', 'Annual'],
+          ].map(([unitOfTime, title]) => {
+            const diff = moment().isBetween(after, before)
+              ? moment().diff(after, unitOfTime) + 1
+              : before.diff(after, unitOfTime) + 1;
+
+            return (diff > 1) && (
+              <tr key={`${title}-expenses`}>
+                <td className="text-left">
+                  {title}
+                </td>
+                <td className="text-right">
+                  <MoneyValue bold className="text-white" amount={sum / diff} />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+    );
 
     return (
       <Card body className="px-3 py-2">
@@ -47,16 +89,32 @@ const TransactionCategories = ({ data, selectedCategory, onClick }) => {
           {' '}
           {name}
         </h4>
-        <p className="mb-0">
-          Selected Period:
-          {' '}
-          <MoneyValue bold className="text-white" amount={total} maximumFractionDigits={0} />
-        </p>
-        <p className="mb-0">
-          Previous Period:
-          {' '}
-          <MoneyValue bold className="text-white" amount={previous} maximumFractionDigits={0} />
-        </p>
+        <Container fluid className="p-0">
+          <Row>
+            <Col sm={6}>
+              <p className="mb-0">
+                <span>Selected Period</span>
+                <small className="d-block">
+                  {after.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                  {' - '}
+                  {before.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                </small>
+              </p>
+              {dataTable(total)}
+            </Col>
+            <Col sm={6}>
+              <p className="mb-0">
+                Previous Period:
+                <small className="d-block">
+                  {previousPeriod.from.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                  {' - '}
+                  {previousPeriod.to.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                </small>
+              </p>
+              {dataTable(previous)}
+            </Col>
+          </Row>
+        </Container>
       </Card>
     );
   };
@@ -134,6 +192,8 @@ TransactionCategories.defaultProps = {
 };
 
 TransactionCategories.propTypes = {
+  after: PropTypes.object.isRequired,
+  before: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
   selectedCategory: PropTypes.string,
