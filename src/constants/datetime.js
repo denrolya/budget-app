@@ -18,20 +18,15 @@ export const ANNUAL_REPORT_RANGES = generateYearRanges(FIRST_AVAILABLE_YEAR);
 
 export const DATERANGE_PICKER_RANGES = {
   '10 days': [moment().subtract(10, 'day'), moment()],
-  Yesterday: [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
-  Today: [moment(), moment()],
-  'Last Week': [moment().startOf('isoWeek').subtract(1, 'week'), moment().endOf('isoWeek').subtract(1, 'week')],
+  '30 days': [moment().subtract(30, 'day'), moment()],
   'This Week': [moment().startOf('isoWeek'), moment().endOf('isoWeek')],
   'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
   'This Month': [moment().startOf('month'), moment().endOf('month')],
+  'This Year': [moment().startOf('year'), moment().endOf('year')],
   'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
   '2 Years': [moment().subtract(2, 'year').startOf('year'), moment().endOf('year')],
+  '5 Years': [moment().subtract(5, 'year').startOf('year'), moment().endOf('year')],
   '10 Years': [moment().subtract(10, 'year').startOf('year'), moment().endOf('year')],
-  'This Year': [moment().startOf('year'), moment().endOf('year')],
-  Winter: [moment().month('December').subtract(1, 'year').startOf('month'), moment().month('February').endOf('month')],
-  Spring: [moment().month('March').startOf('month'), moment().month('May').endOf('month')],
-  Summer: [moment().month('June').startOf('month'), moment().month('August').endOf('month')],
-  Autumn: [moment().month('September').startOf('month'), moment().month('November').endOf('month')],
 };
 
 export const INTERVALS = {
