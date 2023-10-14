@@ -22,7 +22,7 @@ import CategoriesByWeekdaysCard from 'src/components/cards/statistics/withCharts
 import TotalExpensesByIntervalCard from 'src/components/cards/statistics/withCharts/TotalExpensesByIntervalCard';
 import CategoriesByTagReview from 'src/components/cards/statistics/withCharts/CategoriesByTagReview';
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
-import MoneyFlowCard from 'src/components/cards/statistics/withCharts/MoneyFlowCard';
+import MoneyFlowOnSteroidsCard from 'src/components/cards/statistics/withCharts/MoneyFlowOnSteroidsCard';
 
 const Report = ({ updateStatistics }) => {
   const [dateRange, setDateRange] = useState({
@@ -103,8 +103,7 @@ const Report = ({ updateStatistics }) => {
       </DateRangePicker>
 
       <section>
-        <MoneyFlowCard
-          showCalendarSwitch={false}
+        <MoneyFlowOnSteroidsCard
           config={{
             ...dateRange,
             name: 'moneyFlow',

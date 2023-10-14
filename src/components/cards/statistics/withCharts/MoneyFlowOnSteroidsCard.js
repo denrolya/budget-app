@@ -119,7 +119,7 @@ const MoneyFlowOnSteroidsCard = ({
       [INCOME_TYPE]: sumBy(data.previousPeriod, INCOME_TYPE),
       [EXPENSE_TYPE]: Math.abs(sumBy(data.previousPeriod, EXPENSE_TYPE)),
     },
-  }), [data.selectedPeriod.length, data.previousPeriod.length]);
+  }), [data]);
 
   return (
     <TimeperiodStatisticsCard
@@ -228,8 +228,8 @@ const MoneyFlowOnSteroidsCard = ({
                       <i
                         aria-hidden
                         className={cn({
-                          'ion-ios-trending-up': total.previousPeriod[INCOME_TYPE] >= total.selectedPeriod[INCOME_TYPE],
-                          'ion-ios-trending-down': total.previousPeriod[INCOME_TYPE] < total.selectedPeriod[INCOME_TYPE],
+                          'ion-ios-trending-down': total.previousPeriod[INCOME_TYPE] >= total.selectedPeriod[INCOME_TYPE],
+                          'ion-ios-trending-up': total.previousPeriod[INCOME_TYPE] < total.selectedPeriod[INCOME_TYPE],
                         })}
                       />
                       {` ${ratio(amountInPercentage(total.previousPeriod[INCOME_TYPE], total.selectedPeriod[INCOME_TYPE], 0))} %`}

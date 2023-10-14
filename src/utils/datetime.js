@@ -65,7 +65,7 @@ export const generatePreviousPeriod = (after, before, afterNow = false) => {
 
   if (isYear) {
     from = isCurrent ? after.clone().subtract(diff.y, 'years') : after.clone().subtract(diff.y, 'years').startOf('year');
-    to = isCurrent ? from.clone().add(diff.d, 'days') : after.clone().endOf('year');
+    to = isCurrent ? from.clone().add(diff.d, 'days') : after.clone().subtract(diff.y, 'years').endOf('year');
   }
 
   return {
