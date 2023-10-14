@@ -7,7 +7,7 @@ const LoadingButton = ({
   isLoading, label, type, className, color, ...rest
 }) => (
   <Button className={className} color={color} type={type} disabled={isLoading} {...rest}>
-    {isLoading && <i aria-hidden className="tim-icons icon-refresh-02 fa-spin" />}
+    {isLoading && <i aria-hidden className="tim-icons icon-refresh-02 fa-spin text-white" />}
     {!isLoading && label}
   </Button>
 );

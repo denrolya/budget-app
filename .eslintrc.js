@@ -69,6 +69,7 @@ module.exports = {
     'react/jsx-filename-extension': 0,
     'react/jsx-no-target-blank': 0,
     'react/jsx-uses-vars': 1,
+    'react/jsx-props-no-spreading': 1,
     'react/require-default-props': 1,
     'react/require-extension': 0,
     'react/self-closing-comp': 0,

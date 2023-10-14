@@ -1,71 +1,108 @@
 import moment from 'moment-timezone';
-import xor from 'lodash/xor';
 import React, { useState, useEffect } from 'react';
-import { Card } from 'reactstrap';
+import {
+  Card, Container, Row, Col,
+} from 'reactstrap';
 import PropTypes from 'prop-types';
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
   Tooltip,
-  XAxis,
+  XAxis, YAxis,
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
+import { MOMENT_VIEW_DATE_FORMAT_SHORT } from 'src/constants/datetime';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import { HEX_COLORS } from 'src/constants/color';
 
-/**
- * TODO: Format ticks & tooltips by interval
- */
 /* eslint-disable no-unused-vars */
-const MoneyFlowByInterval = ({ data, height, interval }) => {
+const MoneyFlowByInterval = ({
+  after, before, data, height, visibleTypes,
+}) => {
   const [chartData, setChartData] = useState([]);
-  const [displayValues, setDisplayValues] = useState(TRANSACTION_TYPES);
-  const toggleDisplayType = (type) => setDisplayValues(xor(displayValues, [type]));
 
   useEffect(() => {
-    setChartData(
-      data.map(({ expense, ...rest }) => ({
-        ...rest,
-        expense: -expense,
-      })),
-    );
+    setChartData(data.selectedPeriod.map((entry, index) => ({
+      date: entry.after,
+      dateRange: {
+        after: entry.after,
+        before: entry.before,
+      },
+      previousDateRange: {
+        after: data.previousPeriod[index].after,
+        before: data.previousPeriod[index].before,
+      },
+      expenseCurrent: -entry.expense,
+      incomeCurrent: entry.income,
+      expensePrevious: -data.previousPeriod[index].expense,
+      incomePrevious: data.previousPeriod[index].income,
+    })));
   }, [data]);
 
-  const xTickFormatter = (val) => moment.unix(val).format('MMMM');
+  const yAxisTickFormatter = (val) => val.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  const xTickFormatter = (val) => moment.unix(val).format('MMM');
 
   const tooltipFormatter = ({ active, payload, label }) => {
     if (!active) {
       return null;
     }
 
-    const expense = payload.find(({ name }) => name === EXPENSE_TYPE);
-    const income = payload.find(({ name }) => name === INCOME_TYPE);
-
-    const date = moment.unix(label);
+    const expenseCurrent = payload.find(({ name }) => name === 'expenseCurrent');
+    const incomeCurrent = payload.find(({ name }) => name === 'incomeCurrent');
+    const expensePrevious = payload.find(({ name }) => name === 'expensePrevious');
+    const incomePrevious = payload.find(({ name }) => name === 'incomePrevious');
 
     return (
       <Card body className="px-3 py-2">
-        <h4 className="mb-1 text-white">
-          <i aria-hidden className="ion-ios-calendar" />
-          {' '}
-          {date.format('MMMM')}
-        </h4>
-        {income && (
-          <p className="mb-0">
-            {'Income: '}
-            <MoneyValue bold className="text-success" maximumFractionDigits={0} amount={income.value} />
-          </p>
-        )}
-        {expense && (
-          <p className="mb-0">
-            {'Expense: '}
-            <MoneyValue bold className="text-danger" maximumFractionDigits={0} amount={Math.abs(expense.value)} />
-          </p>
-        )}
+        <Container fluid className="p-0">
+          <Row>
+            <Col sm={6}>
+              <h4 className="mb-0">
+                <span>Selected Period</span>
+                <small className="d-block text-nowrap">
+                  {moment.unix(payload[0].payload.dateRange.after).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                  {' - '}
+                  {moment.unix(payload[0].payload.dateRange.before).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                </small>
+              </h4>
+              <hr className="my-1" />
+              <p className="mb-0 text-nowrap">
+                Income:
+                {' '}
+                <MoneyValue bold className="text-success" maximumFractionDigits={0} amount={incomeCurrent.value} />
+              </p>
+              <p className="mb-0 text-nowrap">
+                Expense:
+                {' '}
+                <MoneyValue bold className="text-danger" maximumFractionDigits={0} amount={Math.abs(expenseCurrent.value)} />
+              </p>
+            </Col>
+            <Col sm={6}>
+              <h4 className="mb-0">
+                Previous Period:
+                <small className="d-block text-nowrap">
+                  {moment.unix(payload[0].payload.previousDateRange.after).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                  {' - '}
+                  {moment.unix(payload[0].payload.previousDateRange.before).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                </small>
+              </h4>
+              <hr className="my-1" />
+              <p className="mb-0 text-nowrap">
+                Income:
+                {' '}
+                <MoneyValue bold className="text-success" maximumFractionDigits={0} amount={incomePrevious.value} />
+              </p>
+              <p className="mb-0 text-nowrap">
+                Expense:
+                {' '}
+                <MoneyValue bold className="text-danger" maximumFractionDigits={0} amount={Math.abs(expensePrevious.value)} />
+              </p>
+            </Col>
+          </Row>
+        </Container>
       </Card>
     );
   };
@@ -86,8 +123,9 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
 
         <Bar
           stackId="1"
-          hide={!displayValues.includes(EXPENSE_TYPE)}
-          dataKey="expense"
+          xAxisId={0}
+          hide={!visibleTypes.includes(EXPENSE_TYPE)}
+          dataKey="expenseCurrent"
           stroke={HEX_COLORS.danger}
           strokeWidth={2}
           dot={false}
@@ -97,8 +135,9 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
         />
         <Bar
           stackId="1"
-          hide={!displayValues.includes(INCOME_TYPE)}
-          dataKey="income"
+          xAxisId={0}
+          hide={!visibleTypes.includes(INCOME_TYPE)}
+          dataKey="incomeCurrent"
           stroke={HEX_COLORS.success}
           strokeWidth={2}
           dot={false}
@@ -107,8 +146,50 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
           radius={[8, 8, 0, 0]}
         />
 
+        <Bar
+          stackId="2"
+          xAxisId={1}
+          hide={!visibleTypes.includes(EXPENSE_TYPE)}
+          dataKey="expensePrevious"
+          stroke={HEX_COLORS.danger}
+          opacity={0.1}
+          strokeWidth={2}
+          dot={false}
+          barSize={75}
+          fill={`${HEX_COLORS.danger}33`}
+          radius={[8, 8, 0, 0]}
+        />
+        <Bar
+          stackId="2"
+          xAxisId={1}
+          hide={!visibleTypes.includes(INCOME_TYPE)}
+          dataKey="incomePrevious"
+          stroke={HEX_COLORS.success}
+          opacity={0.1}
+          strokeWidth={2}
+          dot={false}
+          barSize={75}
+          fill={`${HEX_COLORS.success}33`}
+          radius={[8, 8, 0, 0]}
+        />
+
+        <YAxis
+          unit="€"
+          orientation="right"
+          tick={{ fontSize: 9 }}
+          tickCount={5}
+          axisLine={false}
+          tickFormatter={yAxisTickFormatter}
+        />
         <XAxis
-          dataKey="after"
+          hide
+          xAxisId={1}
+          dataKey="date"
+          fillOpacity={0.6}
+        />
+        <XAxis
+          xAxisId={0}
+          dataKey="date"
           axisLine={false}
           tickLine={false}
           stroke={HEX_COLORS.text}
@@ -116,7 +197,6 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
         />
 
         <CartesianGrid opacity={0.1} vertical={false} stroke={HEX_COLORS.text} />
-        <Legend onClick={({ value }) => toggleDisplayType(value)} />
         <Tooltip cursor={false} content={tooltipFormatter} />
       </BarChart>
     </ResponsiveContainer>
@@ -124,21 +204,36 @@ const MoneyFlowByInterval = ({ data, height, interval }) => {
 };
 
 MoneyFlowByInterval.defaultProps = {
-  data: [],
+  data: {
+    selectedPeriod: [],
+    previousPeriod: [],
+  },
   height: 250,
 };
 
 MoneyFlowByInterval.propTypes = {
-  interval: PropTypes.oneOf(['1 day', '1 week', '1 month']).isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      after: PropTypes.number.isRequired,
-      before: PropTypes.number.isRequired,
-      expense: PropTypes.number.isRequired,
-      income: PropTypes.number.isRequired,
-    }),
-  ),
-  height: PropTypes.number,
+  after: PropTypes.object.isRequired,
+  before: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    selectedPeriod: PropTypes.arrayOf(
+      PropTypes.shape({
+        after: PropTypes.number.isRequired,
+        before: PropTypes.number.isRequired,
+        expense: PropTypes.number.isRequired,
+        income: PropTypes.number.isRequired,
+      }),
+    ),
+    previousPeriod: PropTypes.arrayOf(
+      PropTypes.shape({
+        after: PropTypes.number.isRequired,
+        before: PropTypes.number.isRequired,
+        expense: PropTypes.number.isRequired,
+        income: PropTypes.number.isRequired,
+      }),
+    ),
+  }),
+  visibleTypes: PropTypes.arrayOf(PropTypes.oneOf(TRANSACTION_TYPES)).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default MoneyFlowByInterval;

@@ -10,9 +10,7 @@ import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const TransactionCategoriesComparison = ({ data, selectedYear }) => {
-  const { symbol } = useBaseCurrency();
-
-  const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  const yAxisTickFormatter = (val) => val.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
   const tooltipFormatter = ({ active, payload }) => (active && payload?.length) && (
     <Card body className="px-3 py-2">
@@ -77,6 +75,7 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
         />
 
         <YAxis
+          unit="€"
           dataKey="previous"
           width={45}
           tick={{ fontSize: 9 }}

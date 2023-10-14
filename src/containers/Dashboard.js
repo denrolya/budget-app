@@ -1,11 +1,12 @@
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Col, Row } from 'reactstrap';
 
 import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
+import MoneyFlowOnSteroidsCard from 'src/components/cards/statistics/withCharts/MoneyFlowOnSteroidsCard';
 import TotalValue from 'src/components/cards/statistics/generic/TotalValue';
-import IncomeExpenseCard from 'src/components/cards/statistics/withCharts/IncomeExpenseCard';
 import CategoryTreeCard from 'src/components/cards/statistics/withCharts/CategoryTreeCard';
 import TransactionCategoriesTimelineCard from 'src/components/cards/statistics/withCharts/TransactionCategoriesTimelineCard';
 
@@ -56,9 +57,11 @@ const Dashboard = () => {
           <Col md={9}>
             <Row>
               <Col md={12}>
-                <IncomeExpenseCard
+                <MoneyFlowOnSteroidsCard
                   config={{
-                    name: 'incomeExpense',
+                    after: moment().startOf('year'),
+                    before: moment().endOf('year'),
+                    name: 'moneyFlow',
                   }}
                 />
               </Col>

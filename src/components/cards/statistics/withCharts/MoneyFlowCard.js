@@ -1,3 +1,4 @@
+import xor from 'lodash/xor';
 import moment from 'moment-timezone';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -7,7 +8,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Col, Row } from 'reactstrap';
 
 import IntervalSwitch from 'src/components/IntervalSwitch';
-import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
+import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import {
   DATERANGE_PICKER_RANGES,
   MOMENT_DATE_FORMAT,
@@ -20,7 +21,7 @@ import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistic
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
 import MoneyValue from 'src/components/MoneyValue';
 import MoneyFlowChart from 'src/components/charts/recharts/bar/MoneyFlowByInterval';
-import { rangeToString } from 'src/utils/datetime';
+import { generatePreviousPeriod, rangeToString } from 'src/utils/datetime';
 import { randomMoneyFlowData } from 'src/utils/randomData';
 import { fetchStatistics } from 'src/store/actions/statistics';
 
@@ -50,19 +51,42 @@ const MoneyFlowCard = ({
     from: config.after,
     to: config.before,
     interval: config.interval,
-    data: randomMoneyFlowData(),
+    data: {
+      current: randomMoneyFlowData(),
+      previous: randomMoneyFlowData(),
+    },
   }));
+  const [visibleTypes, setVisibleTypes] = useState(TRANSACTION_TYPES);
+  const toggleTypeVisibility = (type) => setVisibleTypes(xor(visibleTypes, [type]));
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const params = {
-        after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
-        before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
-        interval: model.interval,
-      };
-      const data = await fetchStatistics({ ...config, params });
-      setModel(model.set('data', data));
+
+      const selectedPeriodData = await fetchStatistics({
+        ...config,
+        params: {
+          after: model.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+          before: model.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+          interval: model.interval,
+        },
+      });
+
+      const previousPeriod = generatePreviousPeriod(model.from, model.to, true);
+
+      const previousPeriodData = await fetchStatistics({
+        ...config,
+        params: {
+          after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+          before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+          interval: model.interval,
+        },
+      });
+
+      setModel(model.set('data', {
+        current: selectedPeriodData,
+        previous: previousPeriodData,
+      }));
       setIsLoading(false);
     };
 
@@ -81,8 +105,8 @@ const MoneyFlowCard = ({
   const {
     data, interval, from, to,
   } = model;
-  const totalExpense = Math.abs(sumBy(data, 'expense'));
-  const totalRevenue = sumBy(data, 'income');
+  const totalExpense = Math.abs(sumBy(data.current, 'expense'));
+  const totalRevenue = sumBy(data.current, 'income');
 
   return (
     <TimeperiodStatisticsCard
@@ -147,7 +171,7 @@ const MoneyFlowCard = ({
           </span>
         </div>
       </div>
-      <MoneyFlowChart data={data} interval={interval} />
+      <MoneyFlowChart data={data} visibleTypes={visibleTypes} />
     </TimeperiodStatisticsCard>
   );
 };

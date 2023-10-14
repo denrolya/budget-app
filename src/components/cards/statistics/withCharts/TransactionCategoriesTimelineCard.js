@@ -16,6 +16,7 @@ import {
 } from 'src/constants/datetime';
 import { API } from 'src/constants/api';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
+import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
@@ -35,15 +36,15 @@ export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fet
     ...config,
   };
   const [isLoading, setIsLoading] = useState(false);
+  const categories = useCategories();
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
       data: randomTransactionCategoriesTimelineData(),
-      categories: [1, 2, 4],
+      categories: categories.filter((c) => c?.root === null && c.type === EXPENSE_TYPE && c.isTechnical === false).map((c) => c.id),
     },
     from: moment().startOf('year'),
     to: moment().endOf('year'),
   }));
-  const categories = useCategories();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const { from, to, interval } = model;
 

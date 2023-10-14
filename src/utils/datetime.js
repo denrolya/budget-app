@@ -38,7 +38,7 @@ export const diffIn = (date1, date2, unitOfTime = 'days') => moment().isBetween(
   ? Math.abs(moment().diff(date1, unitOfTime) + 1)
   : Math.abs(date2.diff(date1, unitOfTime) + 1);
 
-export const generatePreviousPeriod = (after, before) => {
+export const generatePreviousPeriod = (after, before, afterNow = false) => {
   const now = moment();
   const diff = {
     d: diffIn(after, before, 'days'),
@@ -51,7 +51,7 @@ export const generatePreviousPeriod = (after, before) => {
   const isWeek = after.clone().isSame(after.clone().startOf('week'), 'day') && before.clone().isSame(before.clone().endOf('week'), 'day');
   const isMonth = after.clone().isSame(after.clone().startOf('month'), 'day') && before.clone().isSame(before.clone().endOf('month'), 'day');
   const isYear = after.clone().isSame(after.clone().startOf('year'), 'day') && before.clone().isSame(before.clone().endOf('year'), 'day');
-  const isCurrent = before.isAfter(now);
+  const isCurrent = !afterNow && before.isAfter(now);
 
   if (isWeek) {
     from = isCurrent ? after.clone().subtract(diff.w, 'week') : after.clone().subtract(diff.w, 'weeks').startOf('isoWeek');

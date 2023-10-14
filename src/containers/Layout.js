@@ -56,6 +56,7 @@ const Layout = ({
   isDebtModalOpened,
   isAccountModalOpened,
   isTransferRequestInProgress,
+  isMonobankHookRequestInProgress,
   isAssetsLoading,
   updateStatistics,
   registerTransaction,
@@ -108,6 +109,7 @@ const Layout = ({
           <Header
             onCurrencySwitch={switchBaseCurrency}
             onTokenCopyClick={copyTokenToClipboard}
+            isMonobankHookRequestInProgress={isMonobankHookRequestInProgress}
             onMonobankButtonClick={setMonobankHook}
             logoutUser={logoutUser}
             updateStatistics={updateStatistics}
@@ -163,6 +165,7 @@ Layout.propTypes = {
   isSidebarOpened: PropTypes.bool.isRequired,
   isTransferModalOpened: PropTypes.bool.isRequired,
   isTransferRequestInProgress: PropTypes.bool.isRequired,
+  isMonobankHookRequestInProgress: PropTypes.bool.isRequired,
   logoutUser: PropTypes.func.isRequired,
   openSidebar: PropTypes.func.isRequired,
   registerTransaction: PropTypes.func.isRequired,
@@ -189,6 +192,7 @@ const mapStateToProps = ({
   isTransferModalOpened: ui.isTransferModalOpened,
   isDebtModalOpened: ui.isDebtModalOpened,
   isAccountModalOpened: ui.isAccountModalOpened,
+  isMonobankHookRequestInProgress: isActionLoading(ui.ACCOUNT_SET_MONOBANK_HOOK),
   isTransferRequestInProgress: isActionLoading(ui.TRANSFER_REGISTER),
   totalDebt: sumBy(debt.filter(({ closedAt }) => !closedAt), ({ convertedValues }) => convertedValues[user.baseCurrency]),
   isAssetsLoading: isActionLoading(ui.ACCOUNT_FETCH_LIST) || isActionLoading(ui.DEBT_FETCH_LIST),

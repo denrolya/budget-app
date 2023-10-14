@@ -12,6 +12,7 @@ import {
   NavLink,
   UncontrolledDropdown,
 } from 'reactstrap';
+import LoadingButton from 'src/components/LoadingButton';
 
 import { isOnDashboardPage } from 'src/utils/routing';
 import AddNewButton from 'src/components/AddNewButton';
@@ -20,6 +21,7 @@ import logo from 'src/assets/img/logo.png';
 const Header = ({
   onTokenCopyClick,
   onMonobankButtonClick,
+  isMonobankHookRequestInProgress,
   isSidebarOpened,
   toggleDarkMode,
   toggleSidebar,
@@ -71,7 +73,15 @@ const Header = ({
       </div>
 
       <div className="d-flex align-center">
-        <button type="button" className="btn btn-sm btn-round" onClick={onMonobankButtonClick}>monobank</button>
+        <LoadingButton
+          type="button"
+          color="secondary"
+          label="monobank"
+          size="sm"
+          className="btn-round"
+          isLoading={isMonobankHookRequestInProgress}
+          onClick={onMonobankButtonClick}
+        />
         <AddNewButton size="sm" onClick={toggleTransactionModal} />
         <button
           aria-label="Toggle navigation"
@@ -130,9 +140,14 @@ const Header = ({
   </Navbar>
 );
 
+Header.defaultProps = {
+  isMonobankHookRequestInProgress: false,
+};
+
 Header.propTypes = {
   isOpened: PropTypes.bool.isRequired,
   isSidebarOpened: PropTypes.bool.isRequired,
+  isMonobankHookRequestInProgress: PropTypes.bool,
   logoutUser: PropTypes.func.isRequired,
   toggle: PropTypes.func.isRequired,
   toggleDarkMode: PropTypes.func.isRequired,
