@@ -9,7 +9,12 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import {
   Badge,
   Button,
-  Col, FormGroup, Input, InputGroup, InputGroupText, Row,
+  Col,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupText,
+  Row,
 } from 'reactstrap';
 
 import IncomeExpenseRatioDoughnut from 'src/components/charts/recharts/pie/IncomeExpenseRatioDoughnut';
@@ -215,8 +220,8 @@ const MoneyFlowOnSteroidsCard = ({
             <IncomeExpenseRatioDoughnut previousPeriod={previousPeriod} height={300} data={data} />
 
             <div className="d-flex justify-content-between">
-              <span
-                className="text-nowrap text-white pl-3"
+              <div
+                className="text-nowrap pl-3 d-flex flex-column justify-content-between"
                 style={{
                   borderLeft: `2px solid ${HEX_COLORS.success}`,
                 }}
@@ -238,18 +243,15 @@ const MoneyFlowOnSteroidsCard = ({
                 </h3>
                 <p className="m-0">
                   <i aria-hidden className="ion-ios-arrow-round-down" />
-                  {' '}
-                  Incomes
+                  {' Incomes'}
                 </p>
                 {previousPeriod && (
-                  <p className="text-white">
-                    <MoneyValue showSymbol className="h4 mb-0" maximumFractionDigits={0} amount={total.previousPeriod[INCOME_TYPE]} />
-                  </p>
+                  <MoneyValue showSymbol className="text-muted mb-0" maximumFractionDigits={0} amount={total.previousPeriod[INCOME_TYPE]} />
                 )}
-              </span>
+              </div>
 
-              <span
-                className="text-nowrap pl-3"
+              <div
+                className="text-nowrap pl-3 d-flex flex-column justify-content-between"
                 style={{
                   borderLeft: `2px solid ${HEX_COLORS.danger}`,
                 }}
@@ -271,15 +273,12 @@ const MoneyFlowOnSteroidsCard = ({
                 </h3>
                 <p className="m-0">
                   <i aria-hidden className="ion-ios-arrow-round-up" />
-                  {' '}
-                  Expenses
+                  {' Expenses'}
                 </p>
                 {previousPeriod && (
-                  <p className="text-white">
-                    <MoneyValue showSymbol className="h4 mb-0" maximumFractionDigits={0} amount={total.previousPeriod[EXPENSE_TYPE]} />
-                  </p>
+                  <MoneyValue showSymbol className="text-muted mb-0" maximumFractionDigits={0} amount={total.previousPeriod[EXPENSE_TYPE]} />
                 )}
-              </span>
+              </div>
             </div>
           </div>
         </Col>
