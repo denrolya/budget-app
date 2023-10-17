@@ -133,7 +133,7 @@ const MoneyFlowOnSteroidsCard = ({
       header={(
         <>
           <Row className="align-center">
-            <Col xs={4}>
+            <Col xs={3}>
               <DateRangePicker
                 autoApply
                 showCustomRangeLabel
@@ -189,6 +189,7 @@ const MoneyFlowOnSteroidsCard = ({
                 </Button>
                 <Button
                   size="sm"
+                  outline
                   className="btn-simple btn-success m-0"
                   active={visibleTypes.includes(INCOME_TYPE)}
                   onClick={() => toggleTypeVisibility(INCOME_TYPE)}
@@ -199,12 +200,12 @@ const MoneyFlowOnSteroidsCard = ({
             </Col>
           </Row>
 
-          <hr className="mb-1" />
+          <hr className="my-1" />
         </>
       )}
     >
       <Row noGutters>
-        <Col xs={12} md={8} xl={9}>
+        <Col xs={12} md={8} xl={8}>
           <MoneyFlowChart
             height="100%"
             previousPeriod={previousPeriod}
@@ -215,7 +216,7 @@ const MoneyFlowOnSteroidsCard = ({
             visibleTypes={visibleTypes}
           />
         </Col>
-        <Col xs={0} md={4} xl={3}>
+        <Col xs={0} md={4} xl={4}>
           <div className="d-flex flex-column justify-content-between px-4">
             <IncomeExpenseRatioDoughnut previousPeriod={previousPeriod} height={300} data={data} />
 

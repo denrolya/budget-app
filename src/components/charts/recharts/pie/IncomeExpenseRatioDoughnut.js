@@ -12,7 +12,7 @@ import {
 import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { HEX_COLORS } from 'src/constants/color';
-import { amountInPercentage } from 'src/utils/common';
+import { amountInPercentage, ratio } from 'src/utils/common';
 
 const IncomeExpenseRatioDoughnut = ({ height, data, previousPeriod }) => {
   const [chartData, setChartData] = useState([{
@@ -54,12 +54,12 @@ const IncomeExpenseRatioDoughnut = ({ height, data, previousPeriod }) => {
     return (
       <g>
         <text
-          dy={-5}
+          dy={5}
           dx={-5}
           fontSize="26"
           textAnchor="middle"
-          fill={HEX_COLORS.white}
           fontFamily="'Roboto Condensed', sans-serif"
+          fill={HEX_COLORS.white}
           x={cx}
           y={cy}
         >
@@ -68,16 +68,15 @@ const IncomeExpenseRatioDoughnut = ({ height, data, previousPeriod }) => {
           {diff.toLocaleString(undefined, { maximumFractionDigits: 0 })}
         </text>
         {previousPeriod && (
-          <text x={cx} y={cy} dy={20} fontSize="16" textAnchor="middle" fill={selectedAndPreviousPeriodDiffRatio <= 0 ? HEX_COLORS.danger : HEX_COLORS.success}>
-            <i
-              aria-hidden
-              className={cn({
-                'ion-ios-trending-up': selectedAndPreviousPeriodDiffRatio > 0,
-                'ion-ios-trending-down': selectedAndPreviousPeriodDiffRatio <= 0,
-              })}
-            />
-            {selectedAndPreviousPeriodDiffRatio}
-            %
+          <text
+            fontSize="14"
+            textAnchor="middle"
+            dy={30}
+            x={cx}
+            y={cy}
+            fill={selectedAndPreviousPeriodDiffRatio <= 0 ? HEX_COLORS.danger : HEX_COLORS.success}
+          >
+            {`${ratio(selectedAndPreviousPeriodDiffRatio)}%`}
           </text>
         )}
         <Sector
@@ -119,10 +118,10 @@ const IncomeExpenseRatioDoughnut = ({ height, data, previousPeriod }) => {
           innerRadius="75%"
           outerRadius="90%"
           dataKey="value"
-          activeIndex={active}
           startAngle={270}
           endAngle={-270}
           paddingAngle={5}
+          activeIndex={active}
           data={chartData}
           symbol={symbol}
           activeShape={renderActiveShape}

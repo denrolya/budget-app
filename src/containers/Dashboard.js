@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Container } from 'reactstrap';
 
 import CarouselWithSwipe from 'src/components/CarouselWithSwipe';
 import MoneyFlowOnSteroidsCard from 'src/components/cards/statistics/withCharts/MoneyFlowOnSteroidsCard';
@@ -52,21 +52,20 @@ const Dashboard = () => {
         </title>
       </Helmet>
 
-      <div className="dashboard">
+      <Container fluid className="dashboard">
+        <Row>
+          <Col md={12}>
+            <MoneyFlowOnSteroidsCard
+              config={{
+                after: moment().startOf('year'),
+                before: moment().endOf('year'),
+                name: 'moneyFlow',
+              }}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col md={9}>
-            <Row>
-              <Col md={12}>
-                <MoneyFlowOnSteroidsCard
-                  config={{
-                    after: moment().startOf('year'),
-                    before: moment().endOf('year'),
-                    name: 'moneyFlow',
-                  }}
-                />
-              </Col>
-            </Row>
-
             <Row>
               <Col xs={12} className="d-md-none">
                 <CarouselWithSwipe data={shortStatistics} />
@@ -95,7 +94,7 @@ const Dashboard = () => {
             />
           </Col>
         </Row>
-      </div>
+      </Container>
     </>
   );
 };
