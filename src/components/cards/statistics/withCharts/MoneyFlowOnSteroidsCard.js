@@ -163,7 +163,7 @@ const MoneyFlowOnSteroidsCard = ({
               </DateRangePicker>
             </Col>
             <Col xs={1}>
-              <FormGroup className="w-100px m-0">
+              <FormGroup className="w-100 m-0">
                 <Input type="select" value={interval} onChange={(e) => setModel(model.set('interval', e.target.value))}>
                   <option value="1 day">
                     Day
@@ -189,7 +189,6 @@ const MoneyFlowOnSteroidsCard = ({
                 </Button>
                 <Button
                   size="sm"
-                  outline
                   className="btn-simple btn-success m-0"
                   active={visibleTypes.includes(INCOME_TYPE)}
                   onClick={() => toggleTypeVisibility(INCOME_TYPE)}

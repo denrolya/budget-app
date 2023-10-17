@@ -1,7 +1,6 @@
 import moment from 'moment-timezone';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { connect } from 'react-redux';
 
 import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
@@ -70,7 +69,7 @@ const TotalExpensesByInterval = ({
 
   return (
     <TimeperiodStatisticsCard
-      className={cn('card-chart', 'card--hover-expand')}
+      className="card-chart"
       header="Expenses by seasons"
       isLoading={isLoading}
     >

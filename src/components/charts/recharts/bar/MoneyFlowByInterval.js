@@ -175,10 +175,12 @@ const MoneyFlowByInterval = ({
 
         <YAxis
           unit="€"
-          orientation="right"
+          orientation="left"
+          tickCount={7}
           tick={{ fontSize: 9 }}
-          tickCount={5}
           axisLine={false}
+          tickLine={false}
+          stroke={HEX_COLORS.text}
           tickFormatter={yAxisTickFormatter}
         />
         <XAxis

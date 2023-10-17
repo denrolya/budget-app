@@ -1,5 +1,4 @@
 .card-chart {
-  overflow: hidden;
 
   .card-header {
     .card-title {
@@ -43,16 +42,6 @@
 
     .stats {
       color: $dark-gray;
-    }
-  }
-
-  .dropdown {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-
-    .btn {
-      margin: 0;
     }
   }
 

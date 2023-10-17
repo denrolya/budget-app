@@ -7,6 +7,7 @@ import LoadingCard from 'src/components/cards/LoadingCard';
 
 const TimeperiodStatisticsCard = ({
   isLoading,
+  expandOnHover,
   transparent,
   header,
   children,
@@ -16,7 +17,10 @@ const TimeperiodStatisticsCard = ({
     body
     isLoading={isLoading}
     transparent={transparent}
-    className={cn('pt-2', 'px-2', className)}
+    className={cn('pt-2', 'px-2', {
+      'card--hover-expand': expandOnHover,
+      [className]: className,
+    })}
   >
     <header>
       {isString(header) && <h5 className="mb-3 text-white">{header}</h5>}
@@ -29,6 +33,7 @@ const TimeperiodStatisticsCard = ({
 
 TimeperiodStatisticsCard.defaultProps = {
   className: '',
+  expandOnHover: false,
   isLoading: false,
   transparent: false,
 };
@@ -39,6 +44,7 @@ TimeperiodStatisticsCard.propTypes = {
   className: PropTypes.string,
   isLoading: PropTypes.bool,
   transparent: PropTypes.bool,
+  expandOnHover: PropTypes.bool,
 };
 
 export default TimeperiodStatisticsCard;

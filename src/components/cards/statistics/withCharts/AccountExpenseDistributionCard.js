@@ -96,7 +96,7 @@ const AccountDistributionCard = ({
 
   return (
     <TimeperiodStatisticsCard
-      className="card-chart card--hover-expand"
+      className="card-chart"
       header="Account distribution"
       transparent={transparent}
       isLoading={isLoading}

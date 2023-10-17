@@ -66,7 +66,6 @@ const TopValueCategory = ({
     <IconStatisticsCard
       title="Main income source"
       color="success"
-      className="card--hover-expand"
       isLoading={isLoading}
       content={model.data.name}
       icon={model.data.icon}

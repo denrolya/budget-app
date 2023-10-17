@@ -32,10 +32,12 @@ const Card = ({
   content,
   children,
   className,
+  expandOnHover,
   ...rest
 }) => (
   <LoadingCard
-    className={cn('card-stats', 'card--hover-expand', {
+    className={cn('card-stats', {
+      'card--hover-expand': expandOnHover,
       [className]: className,
     })}
     isLoading={isLoading}
@@ -82,6 +84,7 @@ Card.defaultProps = {
   icon: undefined,
   isLoading: false,
   to: undefined,
+  expandOnHover: false,
 };
 
 Card.propTypes = {
@@ -93,6 +96,7 @@ Card.propTypes = {
   icon: PropTypes.string,
   isLoading: PropTypes.bool,
   to: PropTypes.string,
+  expandOnHover: PropTypes.bool,
 };
 
 export default Card;

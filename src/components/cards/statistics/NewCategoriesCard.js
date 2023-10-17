@@ -97,7 +97,6 @@ const NewCategoriesCard = ({
 
   return (
     <TimeperiodStatisticsCard
-      className="card--hover-expand"
       header={`New ${config.transactionType} categories`}
       isLoading={isLoading}
     >

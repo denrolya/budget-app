@@ -14,12 +14,10 @@ import { Card } from 'reactstrap';
 
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
-import { MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT } from 'src/constants/datetime';
-import { useBaseCurrency } from 'src/contexts/BaseCurrency';
+import { MOMENT_VIEW_DATE_FORMAT } from 'src/constants/datetime';
 import { useCategories } from 'src/contexts/CategoriesContext';
 
 const TransactionCategoriesTimeline = ({ data, interval }) => {
-  const { symbol } = useBaseCurrency();
   const categories = useCategories();
   const [chartData, setChartData] = useState();
 
@@ -43,7 +41,7 @@ const TransactionCategoriesTimeline = ({ data, interval }) => {
     setChartData(test);
   }, [data]);
 
-  const yAxisTickFormatter = (val) => `${symbol} ${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  const yAxisTickFormatter = (val) => val.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
   const tooltipFormatter = ({ active, payload }) => {
     if (!active || !payload?.length) {
@@ -135,11 +133,12 @@ const TransactionCategoriesTimeline = ({ data, interval }) => {
           ))}
 
         <YAxis
+          unit="€"
+          orientation="left"
+          tick={{ fontSize: 9 }}
+          tickCount={7}
           axisLine={false}
           tickLine={false}
-          tickCount={5}
-          tick={{ fontSize: 9 }}
-          width={45}
           stroke={HEX_COLORS.text}
           tickFormatter={yAxisTickFormatter}
         />
