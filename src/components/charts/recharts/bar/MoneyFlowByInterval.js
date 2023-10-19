@@ -14,26 +14,26 @@ import {
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
-import { MOMENT_VIEW_DATE_FORMAT_SHORT } from 'src/constants/datetime';
+import { MOMENT_VIEW_DATE_FORMAT_SHORT, MOMENT_VIEW_DATE_WITH_YEAR_FORMAT } from 'src/constants/datetime';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
 import { HEX_COLORS } from 'src/constants/color';
 
 /* eslint-disable no-unused-vars */
 const MoneyFlowByInterval = ({
-  after, before, data, height, visibleTypes,
+  after, before, interval, data, height, visibleTypes,
 }) => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     setChartData(data.selectedPeriod.map((entry, index) => ({
       date: entry.after,
-      dateRange: {
-        after: entry.after,
-        before: entry.before,
+      selectedPeriod: {
+        after: moment.unix(entry.after),
+        before: moment.unix(entry.before),
       },
-      previousDateRange: {
-        after: data.previousPeriod[index].after,
-        before: data.previousPeriod[index].before,
+      previousPeriod: {
+        after: moment.unix(data.previousPeriod[index].after),
+        before: moment.unix(data.previousPeriod[index].before),
       },
       expenseCurrent: -entry.expense,
       incomeCurrent: entry.income,
@@ -55,17 +55,34 @@ const MoneyFlowByInterval = ({
     const expensePrevious = payload.find(({ name }) => name === 'expensePrevious');
     const incomePrevious = payload.find(({ name }) => name === 'incomePrevious');
 
+    let selectedPeriodString = '';
+    let previousPeriodString = '';
+
+    switch (interval) {
+      case '1 week':
+        selectedPeriodString = `Week #${payload[0].payload.selectedPeriod.after.isoWeek()}: ${payload[0].payload.selectedPeriod.after.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)} - ${payload[0].payload.selectedPeriod.before.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}`;
+        previousPeriodString = `Week #${payload[0].payload.previousPeriod.after.isoWeek()}: ${payload[0].payload.previousPeriod.after.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)} - ${payload[0].payload.previousPeriod.before.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}`;
+        break;
+      case '1 month':
+        selectedPeriodString = payload[0].payload.selectedPeriod.after.format('MMMM YYYY');
+        previousPeriodString = payload[0].payload.previousPeriod.after.format('MMMM YYYY');
+        break;
+      case '1 day':
+      default:
+        selectedPeriodString = `${payload[0].payload.selectedPeriod.after.format(MOMENT_VIEW_DATE_FORMAT_SHORT)} - ${payload[0].payload.selectedPeriod.before.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}`;
+        previousPeriodString = `${payload[0].payload.previousPeriod.after.format(MOMENT_VIEW_DATE_FORMAT_SHORT)} - ${payload[0].payload.previousPeriod.before.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}`;
+        break;
+    }
+
     return (
       <Card body className="px-3 py-2">
         <Container fluid className="p-0">
           <Row>
             <Col sm={6}>
               <h4 className="mb-0">
-                <span>Selected Period</span>
+                <span>Selected Period:</span>
                 <small className="d-block text-nowrap">
-                  {moment.unix(payload[0].payload.dateRange.after).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
-                  {' - '}
-                  {moment.unix(payload[0].payload.dateRange.before).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                  {selectedPeriodString}
                 </small>
               </h4>
               <hr className="my-1" />
@@ -84,9 +101,7 @@ const MoneyFlowByInterval = ({
               <h4 className="mb-0">
                 Previous Period:
                 <small className="d-block text-nowrap">
-                  {moment.unix(payload[0].payload.previousDateRange.after).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
-                  {' - '}
-                  {moment.unix(payload[0].payload.previousDateRange.before).format(MOMENT_VIEW_DATE_FORMAT_SHORT)}
+                  {previousPeriodString}
                 </small>
               </h4>
               <hr className="my-1" />
@@ -192,6 +207,7 @@ const MoneyFlowByInterval = ({
         <XAxis
           xAxisId={0}
           dataKey="date"
+          tick={{ fontSize: 9 }}
           axisLine={false}
           tickLine={false}
           stroke={HEX_COLORS.text}
@@ -216,6 +232,7 @@ MoneyFlowByInterval.defaultProps = {
 MoneyFlowByInterval.propTypes = {
   after: PropTypes.object.isRequired,
   before: PropTypes.object.isRequired,
+  interval: PropTypes.string.isRequired,
   data: PropTypes.shape({
     selectedPeriod: PropTypes.arrayOf(
       PropTypes.shape({

@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import React, { useMemo } from 'react';
-import { UncontrolledTooltip } from 'reactstrap';
+import { Badge, UncontrolledTooltip } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import MoneyValue from 'src/components/MoneyValue';
@@ -17,25 +17,26 @@ const PercentageSinceLastPeriodMessage = ({
   const id = useMemo(() => `percentage-since-last-period-message-${randomString(8)}`, [previous, current]);
   const percentage = amountInPercentage(previous, current, 0);
   const percentageRatio = ratio(percentage);
-
   let sign = previous >= current ? '-' : '+';
+  let badgeColor = previous >= current ? 'success' : 'danger';
 
   if (inverted) {
-    sign = previous < current ? '+' : '-';
+    sign = previous >= current ? '+' : '-';
+    badgeColor = previous >= current ? 'danger' : 'success';
   }
 
   return (
-    <>
-      <strong id={id} className={cn('font-style-numeric', 'cursor-info')}>
+    <span className="d-flex align-items-center">
+      <Badge className="font-style-numeric cursor-info mr-1" id={id} color={badgeColor}>
         {sign}
         {percentageRatio}
         %
-      </strong>
+      </Badge>
       {text && ` since ${period}`}
       <UncontrolledTooltip target={id}>
         <MoneyValue amount={previous} />
       </UncontrolledTooltip>
-    </>
+    </span>
   );
 };
 

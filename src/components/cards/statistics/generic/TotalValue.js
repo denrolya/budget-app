@@ -86,7 +86,7 @@ const TotalValue = ({
       default:
         return (
           <AmountSinceLastPeriodMessage
-            inverted={transactionType === INCOME_TYPE}
+            inverted={transactionType === EXPENSE_TYPE}
             period={period}
             current={current}
             previous={previous}
@@ -217,19 +217,7 @@ const TotalValue = ({
       isLoading={isLoading}
       footerPadding={config.footerType !== 'chart'}
       content={(
-        <>
-          <i
-            aria-hidden
-            className={cn('strong', {
-              'ion-ios-trending-down': diff > 0,
-              'ion-ios-trending-up': diff < 0,
-              'text-success': (diff > 0 && transactionType === EXPENSE_TYPE) || (diff < 0 && transactionType === INCOME_TYPE),
-              'text-danger': (diff < 0 && transactionType === EXPENSE_TYPE) || (diff > 0 && transactionType === INCOME_TYPE),
-            })}
-          />
-          {' '}
-          <MoneyValue bold maximumFractionDigits={0} amount={model.data.value.current} />
-        </>
+        <MoneyValue bold maximumFractionDigits={0} amount={model.data.value.current} />
       )}
       footer={footer}
     />

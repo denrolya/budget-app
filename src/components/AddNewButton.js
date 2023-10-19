@@ -13,7 +13,7 @@ const AddNewButton = ({
 AddNewButton.defaultProps = {
   color: 'primary',
   size: 'md',
-  text: <i className="tim-icons icon-simple-add" />,
+  text: <i aria-hidden className="tim-icons icon-simple-add" />,
 };
 
 AddNewButton.propTypes = {
