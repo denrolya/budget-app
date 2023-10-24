@@ -208,6 +208,11 @@
     .has-success .form-control:focus, .has-success.input-group-focus .input-group-append .input-group-text, .has-success.input-group-focus .input-group-prepend .input-group-text {
       border-color: darken($success, 10%);
     }
+
+    .dropdown-menu {
+      border: none;
+      background: $white;
+    }
   }
 
   &--transparent {

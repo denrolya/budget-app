@@ -15,9 +15,11 @@ import { Card } from 'reactstrap';
 import MoneyValue from 'src/components/MoneyValue';
 import { HEX_COLORS } from 'src/constants/color';
 import { MOMENT_VIEW_DATE_FORMAT } from 'src/constants/datetime';
+import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { useCategories } from 'src/contexts/CategoriesContext';
 
 const TransactionCategoriesTimeline = ({ data, interval }) => {
+  const { symbol } = useBaseCurrency();
   const categories = useCategories();
   const [chartData, setChartData] = useState();
 
@@ -133,7 +135,7 @@ const TransactionCategoriesTimeline = ({ data, interval }) => {
           ))}
 
         <YAxis
-          unit="€"
+          unit={symbol}
           orientation="left"
           tick={{ fontSize: 9 }}
           tickCount={7}

@@ -2,7 +2,13 @@ import React from 'react';
 import { Card } from 'reactstrap';
 import PropTypes from 'prop-types';
 import {
-  Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 
 import MoneyValue from 'src/components/MoneyValue';
@@ -10,6 +16,8 @@ import { HEX_COLORS } from 'src/constants/color';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 
 const TransactionCategoriesComparison = ({ data, selectedYear }) => {
+  const { symbol } = useBaseCurrency();
+
   const yAxisTickFormatter = (val) => val.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
   const tooltipFormatter = ({ active, payload }) => (active && payload?.length) && (
@@ -75,7 +83,7 @@ const TransactionCategoriesComparison = ({ data, selectedYear }) => {
         />
 
         <YAxis
-          unit="€"
+          unit={symbol}
           dataKey="previous"
           width={45}
           tick={{ fontSize: 9 }}

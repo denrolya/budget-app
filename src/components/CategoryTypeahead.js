@@ -1,5 +1,6 @@
 import cn from 'classnames';
-import React from 'react';
+import sortBy from 'lodash/sortBy';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import differenceBy from 'lodash/differenceBy';
 import { Highlighter, Token, Typeahead } from 'react-bootstrap-typeahead';
@@ -97,13 +98,18 @@ const CategoryTypeahead = ({
     </Token>
   );
 
+  const optionsSortedAndFiltered = useMemo(
+    () => sortBy(options.length > 0 ? options : differenceBy(categories, selected, 'id'), ['type', 'name']),
+    [categories, selected],
+  );
+
   return (
     <Typeahead
-      id={randomString(5)}
       labelKey="name"
       placeholder="Categories"
+      id={randomString(5)}
       multiple={multiple}
-      options={options.length > 0 ? options : differenceBy(categories, selected, 'id')}
+      options={optionsSortedAndFiltered}
       selected={selected}
       onChange={onChange}
       ref={(t) => typeaheads.push(t)}

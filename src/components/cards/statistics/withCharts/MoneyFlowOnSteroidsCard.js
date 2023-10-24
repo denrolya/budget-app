@@ -63,7 +63,7 @@ const MoneyFlowOnSteroidsCard = ({
     interval: config.interval,
     data: {
       selectedPeriod: randomMoneyFlowData(),
-      previousPeriod: randomMoneyFlowData(),
+      previousPeriod: previousPeriod ? randomMoneyFlowData() : undefined,
     },
   }));
   const [visibleTypes, setVisibleTypes] = useState(TRANSACTION_TYPES);
@@ -82,21 +82,28 @@ const MoneyFlowOnSteroidsCard = ({
         },
       });
 
-      const previousPeriod = generatePreviousPeriod(model.from, model.to, true);
+      if (previousPeriod) {
+        const previousPeriod = generatePreviousPeriod(model.from, model.to, true);
 
-      const previousPeriodData = await fetchStatistics({
-        ...config,
-        params: {
-          after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
-          before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
-          interval: model.interval,
-        },
-      });
+        const previousPeriodData = await fetchStatistics({
+          ...config,
+          params: {
+            after: previousPeriod.from.format(MOMENT_DEFAULT_DATE_FORMAT),
+            before: previousPeriod.to.format(MOMENT_DEFAULT_DATE_FORMAT),
+            interval: model.interval,
+          },
+        });
 
-      setModel(model.set('data', {
-        selectedPeriod: selectedPeriodData,
-        previousPeriod: previousPeriodData,
-      }));
+        setModel(model.set('data', {
+          selectedPeriod: selectedPeriodData,
+          previousPeriod: previousPeriodData,
+        }));
+      } else {
+        setModel(model.set('data', {
+          selectedPeriod: selectedPeriodData,
+        }));
+      }
+
       setIsLoading(false);
     };
 
@@ -120,10 +127,10 @@ const MoneyFlowOnSteroidsCard = ({
       [INCOME_TYPE]: sumBy(data.selectedPeriod, INCOME_TYPE),
       [EXPENSE_TYPE]: Math.abs(sumBy(data.selectedPeriod, EXPENSE_TYPE)),
     },
-    previousPeriod: {
+    previousPeriod: previousPeriod ? {
       [INCOME_TYPE]: sumBy(data.previousPeriod, INCOME_TYPE),
       [EXPENSE_TYPE]: Math.abs(sumBy(data.previousPeriod, EXPENSE_TYPE)),
-    },
+    } : undefined,
   }), [data]);
 
   return (
@@ -217,7 +224,7 @@ const MoneyFlowOnSteroidsCard = ({
         </Col>
         <Col xs={0} md={4} xl={4}>
           <div className="d-flex flex-column justify-content-between px-4">
-            <IncomeExpenseRatioDoughnut previousPeriod={previousPeriod} height={300} data={data} />
+            <IncomeExpenseRatioDoughnut height={300} previousPeriod={previousPeriod} data={data} />
 
             <div className="d-flex justify-content-between">
               <div
@@ -290,12 +297,11 @@ const MoneyFlowOnSteroidsCard = ({
 
 MoneyFlowOnSteroidsCard.defaultProps = {
   config: DEFAULT_CONFIG,
-  updateStatisticsTrigger: false,
   previousPeriod: true,
+  updateStatisticsTrigger: false,
 };
 
 MoneyFlowOnSteroidsCard.propTypes = {
-  previousPeriod: PropTypes.bool,
   fetchStatistics: PropTypes.func.isRequired,
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
@@ -305,6 +311,7 @@ MoneyFlowOnSteroidsCard.propTypes = {
     before: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     interval: PropTypes.string,
   }),
+  previousPeriod: PropTypes.bool,
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
 
