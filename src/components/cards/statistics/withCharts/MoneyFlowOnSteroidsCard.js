@@ -5,28 +5,18 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { connect } from 'react-redux';
 import sumBy from 'lodash/sumBy';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
 import {
   Badge,
   Button,
   Col,
-  FormGroup,
   Input,
-  InputGroup,
-  InputGroupText,
   Row,
 } from 'reactstrap';
 
 import IncomeExpenseRatioDoughnut from 'src/components/charts/recharts/pie/IncomeExpenseRatioDoughnut';
 import { HEX_COLORS } from 'src/constants/color';
 import { EXPENSE_TYPE, INCOME_TYPE, TRANSACTION_TYPES } from 'src/constants/transactions';
-import {
-  DATERANGE_PICKER_RANGES,
-  MOMENT_DATE_FORMAT,
-  MOMENT_DATETIME_FORMAT,
-  MOMENT_DEFAULT_DATE_FORMAT,
-  MOMENT_VIEW_DATE_WITH_YEAR_FORMAT,
-} from 'src/constants/datetime';
+import { MOMENT_DATETIME_FORMAT, MOMENT_DEFAULT_DATE_FORMAT } from 'src/constants/datetime';
 import { API } from 'src/constants/api';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
@@ -119,7 +109,7 @@ const MoneyFlowOnSteroidsCard = ({
   }, [config.after, config.before, config.interval]);
 
   const {
-    data, interval, from, to,
+    data, interval, from,
   } = model;
 
   const total = useMemo(() => ({
@@ -133,6 +123,13 @@ const MoneyFlowOnSteroidsCard = ({
     } : undefined,
   }), [data]);
 
+  const setYear = (year) => setModel(
+    model.merge({
+      from: moment().year(year).startOf('year'),
+      to: moment().year(year).endOf('year'),
+    }),
+  );
+
   return (
     <TimeperiodStatisticsCard
       className="card-chart card-chart-170 p-0 pb-3"
@@ -140,49 +137,49 @@ const MoneyFlowOnSteroidsCard = ({
       header={(
         <>
           <Row className="align-center">
-            <Col xs={3}>
-              <DateRangePicker
-                autoApply
-                showCustomRangeLabel
-                alwaysShowCalendars
-                containerClass="d-block"
-                locale={{ format: MOMENT_DATE_FORMAT }}
-                startDate={from}
-                endDate={to}
-                ranges={DATERANGE_PICKER_RANGES}
-                initialSettings={{ showDropdowns: true }}
-                onApply={(_event, { startDate, endDate }) => setModel(
-                  model.merge({
-                    from: startDate,
-                    to: endDate,
-                  }),
-                )}
-                on
-              >
-                <FormGroup className="m-0">
-                  <InputGroup className="m-0">
-                    <InputGroupText>
-                      <i aria-hidden className="ion-ios-calendar" />
-                    </InputGroupText>
-                    <Input readOnly value={`${from.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)} - ${to.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}`} />
-                  </InputGroup>
-                </FormGroup>
-              </DateRangePicker>
+            <Col>
+              <div className="d-none d-md-flex flex-row align-items-center">
+                <Button
+                  size="sm"
+                  type="button"
+                  className="btn-simple btn-icon"
+                  onClick={() => setYear(from.year() - 1)}
+                >
+                  <i aria-hidden className="mdi mdi-chevron-left" />
+                </Button>
+                <Input
+                  type="number"
+                  bsSize="sm"
+                  value={from.year()}
+                  onChange={(e) => setYear(e.target.value)}
+                />
+                <Button
+                  size="sm"
+                  type="button"
+                  className="btn-simple btn-icon"
+                  onClick={() => setYear(from.year() + 1)}
+                >
+                  <i aria-hidden className="mdi mdi-chevron-right" />
+                </Button>
+              </div>
             </Col>
-            <Col xs={1}>
-              <FormGroup className="w-100 m-0">
-                <Input type="select" value={interval} onChange={(e) => setModel(model.set('interval', e.target.value))}>
-                  <option value="1 day">
-                    Day
-                  </option>
-                  <option value="1 week">
-                    Week
-                  </option>
-                  <option value="1 month">
-                    Month
-                  </option>
-                </Input>
-              </FormGroup>
+            <Col>
+              <Input
+                type="select"
+                bsSize="sm"
+                value={interval}
+                onChange={(e) => setModel(model.set('interval', e.target.value))}
+              >
+                <option value="1 day">
+                  Day
+                </option>
+                <option value="1 week">
+                  Week
+                </option>
+                <option value="1 month">
+                  Month
+                </option>
+              </Input>
             </Col>
             <Col>
               <div className="d-flex justify-content-end">
@@ -315,8 +312,6 @@ MoneyFlowOnSteroidsCard.propTypes = {
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
 
-const mapStateToProps = ({ ui }) => ({
-  updateStatisticsTrigger: ui.updateStatisticsTrigger,
-});
+const mapStateToProps = ({ ui: { updateStatisticsTrigger } }) => ({ updateStatisticsTrigger });
 
 export default connect(mapStateToProps, { fetchStatistics })(MoneyFlowOnSteroidsCard);

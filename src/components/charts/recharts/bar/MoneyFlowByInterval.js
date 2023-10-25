@@ -37,19 +37,22 @@ const MoneyFlowByInterval = ({
         after: moment.unix(entry.after),
         before: moment.unix(entry.before),
       },
-      previousPeriod: previousPeriod ? {
+      previousPeriod: (previousPeriod && data.previousPeriod[index]) ? {
         after: moment.unix(data.previousPeriod[index].after),
         before: moment.unix(data.previousPeriod[index].before),
       } : undefined,
-      expensePrevious: previousPeriod ? -data.previousPeriod[index].expense : undefined,
-      incomePrevious: previousPeriod ? data.previousPeriod[index].income : undefined,
+      expensePrevious: (previousPeriod && data.previousPeriod[index]) ? -data.previousPeriod[index].expense : undefined,
+      incomePrevious: (previousPeriod && data.previousPeriod[index]) ? data.previousPeriod[index].income : undefined,
       expenseCurrent: -entry.expense,
       incomeCurrent: entry.income,
     })));
   }, [data]);
 
   const yAxisTickFormatter = (val) => val.toLocaleString(undefined, { maximumFractionDigits: 0 });
-  const xTickFormatter = (val) => moment.unix(val).format('MMM');
+  const xTickFormatter = (val) => {
+    const momentDate = moment.unix(val);
+    return `${momentDate.format('MMM')} ${before.year() !== momentDate.year() ? momentDate.format('YY') : ''}`;
+  };
 
   const tooltipFormatter = ({ active, payload }) => {
     if (!active) {
@@ -58,8 +61,8 @@ const MoneyFlowByInterval = ({
 
     const expenseCurrent = payload.find(({ name }) => name === 'expenseCurrent');
     const incomeCurrent = payload.find(({ name }) => name === 'incomeCurrent');
-    const expensePrevious = previousPeriod ? payload.find(({ name }) => name === 'expensePrevious') : undefined;
-    const incomePrevious = previousPeriod ? payload.find(({ name }) => name === 'incomePrevious') : undefined;
+    const expensePrevious = payload.find(({ name }) => name === 'expensePrevious') || { value: undefined };
+    const incomePrevious = payload.find(({ name }) => name === 'incomePrevious') || { value: undefined };
 
     let selectedPeriodString = '';
     let previousPeriodString = '';
@@ -67,20 +70,20 @@ const MoneyFlowByInterval = ({
     switch (interval) {
       case '1 week':
         selectedPeriodString = `Week #${payload[0].payload.selectedPeriod.after.isoWeek()}: ${payload[0].payload.selectedPeriod.after.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)} - ${payload[0].payload.selectedPeriod.before.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}`;
-        previousPeriodString = previousPeriod
+        previousPeriodString = payload[0].payload.previousPeriod
           ? `Week #${payload[0].payload.previousPeriod.after.isoWeek()}: ${payload[0].payload.previousPeriod.after.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)} - ${payload[0].payload.previousPeriod.before.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}`
           : undefined;
         break;
       case '1 month':
         selectedPeriodString = payload[0].payload.selectedPeriod.after.format('MMMM YYYY');
-        previousPeriodString = previousPeriod
+        previousPeriodString = payload[0].payload.previousPeriod
           ? payload[0].payload.previousPeriod.after.format('MMMM YYYY')
           : undefined;
         break;
       case '1 day':
       default:
         selectedPeriodString = `${payload[0].payload.selectedPeriod.after.format(MOMENT_VIEW_DATE_FORMAT_SHORT)} - ${payload[0].payload.selectedPeriod.before.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}`;
-        previousPeriodString = previousPeriod
+        previousPeriodString = payload[0].payload.previousPeriod
           ? `${payload[0].payload.previousPeriod.after.format(MOMENT_VIEW_DATE_FORMAT_SHORT)} - ${payload[0].payload.previousPeriod.before.format(MOMENT_VIEW_DATE_FORMAT_SHORT)}`
           : undefined;
         break;

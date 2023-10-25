@@ -55,7 +55,7 @@ export const generatePreviousPeriod = (after, before, afterNow = false) => {
 
   if (isWeek) {
     from = isCurrent ? after.clone().subtract(diff.w, 'week') : after.clone().subtract(diff.w, 'weeks').startOf('isoWeek');
-    to = isCurrent ? from.clone().add(diff.d, 'days') : after.clone().endOf('isoWeek');
+    to = isCurrent ? after.clone().subtract(diff.d, 'days') : after.clone().endOf('isoWeek');
   }
 
   if (isMonth) {
@@ -65,11 +65,11 @@ export const generatePreviousPeriod = (after, before, afterNow = false) => {
 
   if (isYear) {
     from = isCurrent ? after.clone().subtract(diff.y, 'years') : after.clone().subtract(diff.y, 'years').startOf('year');
-    to = isCurrent ? from.clone().add(diff.d, 'days') : after.clone().subtract(diff.y, 'years').endOf('year');
+    to = isCurrent ? after.clone().subtract(diff.d, 'days') : before.clone().subtract(diff.y, 'years').endOf('year');
   }
 
   return {
-    from,
+    from: from.startOf('day'),
     to: to.endOf('day'),
   };
 };
