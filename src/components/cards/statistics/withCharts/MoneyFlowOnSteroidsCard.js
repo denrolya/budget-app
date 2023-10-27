@@ -205,10 +205,10 @@ const MoneyFlowOnSteroidsCard = ({
           />
         </Col>
         <Col xs={0} md={4} xl={4}>
-          <div className="d-flex flex-column justify-content-between px-4">
+          <div className="d-flex flex-column justify-content-between">
             <IncomeExpenseRatioDoughnut height={300} previousPeriod={previousPeriod} data={data} />
 
-            <Row noGutters>
+            <Row noGutters className="px-4">
               <Col xs={12} lg={6}>
                 <div
                   className="text-nowrap px-3 d-flex flex-column justify-content-between"
