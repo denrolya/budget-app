@@ -78,7 +78,7 @@ export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fet
     };
 
     fetchData();
-  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), interval, model.data.categories.length, updateStatisticsTrigger]);
+  }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), model.data.categories.length, interval, updateStatisticsTrigger]);
 
   useEffect(() => {
     setModel(model.merge({
@@ -89,7 +89,7 @@ export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fet
   }, [config.after, config.before, config.interval]);
 
   useEffect(() => {
-    setSelectedCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)));
+    setSelectedCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)).slice(0, 5));
   }, []);
 
   return (
@@ -98,7 +98,7 @@ export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fet
       header={(
         <>
           <Row className="align-center">
-            <Col xs={3}>
+            <Col xs={4}>
               <DateRangePicker
                 autoApply
                 showCustomRangeLabel
@@ -115,34 +115,33 @@ export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fet
                     to: endDate,
                   }),
                 )}
-                on
               >
-                <FormGroup className="m-0">
-                  <InputGroup className="m-0">
-                    <InputGroupText>
-                      <i aria-hidden className="ion-ios-calendar" />
-                    </InputGroupText>
-                    <Input readOnly value={`${from.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)} - ${to.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}`} />
-                  </InputGroup>
-                </FormGroup>
+                <Input
+                  readOnly
+                  bsSize="sm"
+                  value={`${from.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)} - ${to.format(MOMENT_VIEW_DATE_WITH_YEAR_FORMAT)}`}
+                />
               </DateRangePicker>
             </Col>
-            <Col xs={1}>
-              <FormGroup className="w-100 m-0">
-                <Input type="select" value={interval} onChange={(e) => setModel(model.set('interval', e.target.value))}>
-                  <option value="1 day">
-                    Day
-                  </option>
-                  <option value="1 week">
-                    Week
-                  </option>
-                  <option value="1 month">
-                    Month
-                  </option>
-                </Input>
-              </FormGroup>
+            <Col className="px-1" xs={2}>
+              <Input
+                type="select"
+                bsSize="sm"
+                value={interval}
+                onChange={(e) => setModel(model.set('interval', e.target.value))}
+              >
+                <option value="1 day">
+                  Day
+                </option>
+                <option value="1 week">
+                  Week
+                </option>
+                <option value="1 month">
+                  Month
+                </option>
+              </Input>
             </Col>
-            <Col>
+            <Col xs={6}>
               <CategoryTypeahead selected={selectedCategories} onChange={selectCategories} />
             </Col>
           </Row>
@@ -176,8 +175,6 @@ TransactionCategoriesTimelineCard.propTypes = {
   updateStatisticsTrigger: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
 
-const mapStateToProps = ({ ui }) => ({
-  updateStatisticsTrigger: ui.updateStatisticsTrigger,
-});
+const mapStateToProps = ({ ui: { updateStatisticsTrigger } }) => ({ updateStatisticsTrigger });
 
 export default connect(mapStateToProps, { fetchStatistics })(TransactionCategoriesTimelineCard);

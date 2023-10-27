@@ -8,6 +8,7 @@ import sumBy from 'lodash/sumBy';
 import {
   Badge,
   Button,
+  ButtonGroup,
   Col,
   Input,
   Row,
@@ -136,34 +137,16 @@ const MoneyFlowOnSteroidsCard = ({
       isLoading={isLoading}
       header={(
         <>
-          <Row className="align-center">
-            <Col>
-              <div className="d-none d-md-flex flex-row align-items-center">
-                <Button
-                  size="sm"
-                  type="button"
-                  className="btn-simple btn-icon"
-                  onClick={() => setYear(from.year() - 1)}
-                >
-                  <i aria-hidden className="mdi mdi-chevron-left" />
-                </Button>
-                <Input
-                  type="number"
-                  bsSize="sm"
-                  value={from.year()}
-                  onChange={(e) => setYear(e.target.value)}
-                />
-                <Button
-                  size="sm"
-                  type="button"
-                  className="btn-simple btn-icon"
-                  onClick={() => setYear(from.year() + 1)}
-                >
-                  <i aria-hidden className="mdi mdi-chevron-right" />
-                </Button>
-              </div>
+          <Row noGutters className="align-center">
+            <Col xs={4}>
+              <Input
+                type="number"
+                bsSize="sm"
+                value={from.year()}
+                onChange={(e) => setYear(e.target.value)}
+              />
             </Col>
-            <Col>
+            <Col className="px-1" xs={2}>
               <Input
                 type="select"
                 bsSize="sm"
@@ -181,24 +164,26 @@ const MoneyFlowOnSteroidsCard = ({
                 </option>
               </Input>
             </Col>
-            <Col>
+            <Col xs={6}>
               <div className="d-flex justify-content-end">
-                <Button
-                  size="sm"
-                  className="btn-simple btn-danger m-0"
-                  active={visibleTypes.includes(EXPENSE_TYPE)}
-                  onClick={() => toggleTypeVisibility(EXPENSE_TYPE)}
-                >
-                  <i aria-hidden className="ion-ios-arrow-round-up" />
-                </Button>
-                <Button
-                  size="sm"
-                  className="btn-simple btn-success m-0"
-                  active={visibleTypes.includes(INCOME_TYPE)}
-                  onClick={() => toggleTypeVisibility(INCOME_TYPE)}
-                >
-                  <i aria-hidden className="ion-ios-arrow-round-down" />
-                </Button>
+                <ButtonGroup>
+                  <Button
+                    size="sm"
+                    className="btn-simple btn-danger m-0"
+                    active={visibleTypes.includes(EXPENSE_TYPE)}
+                    onClick={() => toggleTypeVisibility(EXPENSE_TYPE)}
+                  >
+                    <i aria-hidden className="ion-ios-arrow-round-up" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="btn-simple btn-success m-0"
+                    active={visibleTypes.includes(INCOME_TYPE)}
+                    onClick={() => toggleTypeVisibility(INCOME_TYPE)}
+                  >
+                    <i aria-hidden className="ion-ios-arrow-round-down" />
+                  </Button>
+                </ButtonGroup>
               </div>
             </Col>
           </Row>
@@ -223,67 +208,71 @@ const MoneyFlowOnSteroidsCard = ({
           <div className="d-flex flex-column justify-content-between px-4">
             <IncomeExpenseRatioDoughnut height={300} previousPeriod={previousPeriod} data={data} />
 
-            <div className="d-flex justify-content-between">
-              <div
-                className="text-nowrap pl-3 d-flex flex-column justify-content-between"
-                style={{
-                  borderLeft: `2px solid ${HEX_COLORS.success}`,
-                }}
-              >
-                <h3 className="mb-0 align-center">
-                  <MoneyValue showSymbol className="text-white" maximumFractionDigits={0} amount={total.selectedPeriod[INCOME_TYPE]} />
-                  { previousPeriod && (
-                    <Badge color={total.previousPeriod[INCOME_TYPE] >= total.selectedPeriod[INCOME_TYPE] ? 'danger' : 'success'} className="ml-1">
-                      <i
-                        aria-hidden
-                        className={cn({
-                          'ion-ios-trending-down': total.previousPeriod[INCOME_TYPE] >= total.selectedPeriod[INCOME_TYPE],
-                          'ion-ios-trending-up': total.previousPeriod[INCOME_TYPE] < total.selectedPeriod[INCOME_TYPE],
-                        })}
-                      />
-                      {` ${ratio(amountInPercentage(total.previousPeriod[INCOME_TYPE], total.selectedPeriod[INCOME_TYPE], 0))} %`}
-                    </Badge>
-                  )}
-                </h3>
-                <p className="m-0">
-                  <i aria-hidden className="ion-ios-arrow-round-down" />
-                  {' Incomes'}
-                </p>
-                {previousPeriod && (
-                  <MoneyValue showSymbol className="text-muted mb-0" maximumFractionDigits={0} amount={total.previousPeriod[INCOME_TYPE]} />
-                )}
-              </div>
-
-              <div
-                className="text-nowrap pl-3 d-flex flex-column justify-content-between"
-                style={{
-                  borderLeft: `2px solid ${HEX_COLORS.danger}`,
-                }}
-              >
-                <h3 className="mb-0 align-center">
-                  <MoneyValue showSymbol className="text-white" maximumFractionDigits={0} amount={total.selectedPeriod[EXPENSE_TYPE]} />
+            <Row noGutters>
+              <Col xs={12} lg={6}>
+                <div
+                  className="text-nowrap px-3 d-flex flex-column justify-content-between"
+                  style={{
+                    borderLeft: `2px solid ${HEX_COLORS.success}`,
+                  }}
+                >
+                  <h3 className="d-flex justify-content-between align-items-center mb-0">
+                    <MoneyValue showSymbol className="text-white" maximumFractionDigits={0} amount={total.selectedPeriod[INCOME_TYPE]} />
+                    { previousPeriod && (
+                      <Badge color={total.previousPeriod[INCOME_TYPE] >= total.selectedPeriod[INCOME_TYPE] ? 'danger' : 'success'} className="ml-1">
+                        <i
+                          aria-hidden
+                          className={cn({
+                            'ion-ios-trending-down': total.previousPeriod[INCOME_TYPE] >= total.selectedPeriod[INCOME_TYPE],
+                            'ion-ios-trending-up': total.previousPeriod[INCOME_TYPE] < total.selectedPeriod[INCOME_TYPE],
+                          })}
+                        />
+                        {` ${ratio(amountInPercentage(total.previousPeriod[INCOME_TYPE], total.selectedPeriod[INCOME_TYPE], 0))} %`}
+                      </Badge>
+                    )}
+                  </h3>
+                  <p className="m-0">
+                    <i aria-hidden className="ion-ios-arrow-round-down" />
+                    {' Incomes'}
+                  </p>
                   {previousPeriod && (
-                    <Badge color={total.previousPeriod[EXPENSE_TYPE] < total.selectedPeriod[EXPENSE_TYPE] ? 'danger' : 'success'} className="ml-1">
-                      <i
-                        aria-hidden
-                        className={cn({
-                          'ion-ios-trending-up': total.previousPeriod[EXPENSE_TYPE] < total.selectedPeriod[EXPENSE_TYPE],
-                          'ion-ios-trending-down': total.previousPeriod[EXPENSE_TYPE] >= total.selectedPeriod[EXPENSE_TYPE],
-                        })}
-                      />
-                      {` ${ratio(amountInPercentage(total.previousPeriod[EXPENSE_TYPE], total.selectedPeriod[EXPENSE_TYPE], 0))} %`}
-                    </Badge>
+                    <MoneyValue showSymbol className="text-muted mb-0" maximumFractionDigits={0} amount={total.previousPeriod[INCOME_TYPE]} />
                   )}
-                </h3>
-                <p className="m-0">
-                  <i aria-hidden className="ion-ios-arrow-round-up" />
-                  {' Expenses'}
-                </p>
-                {previousPeriod && (
-                  <MoneyValue showSymbol className="text-muted mb-0" maximumFractionDigits={0} amount={total.previousPeriod[EXPENSE_TYPE]} />
-                )}
-              </div>
-            </div>
+                </div>
+              </Col>
+
+              <Col xs={12} lg={6}>
+                <div
+                  className="text-nowrap px-3 d-flex flex-column justify-content-between"
+                  style={{
+                    borderLeft: `2px solid ${HEX_COLORS.danger}`,
+                  }}
+                >
+                  <h3 className="d-flex justify-content-between align-items-center mb-0">
+                    <MoneyValue showSymbol className="text-white" maximumFractionDigits={0} amount={total.selectedPeriod[EXPENSE_TYPE]} />
+                    {previousPeriod && (
+                      <Badge color={total.previousPeriod[EXPENSE_TYPE] < total.selectedPeriod[EXPENSE_TYPE] ? 'danger' : 'success'} className="ml-1">
+                        <i
+                          aria-hidden
+                          className={cn({
+                            'ion-ios-trending-up': total.previousPeriod[EXPENSE_TYPE] < total.selectedPeriod[EXPENSE_TYPE],
+                            'ion-ios-trending-down': total.previousPeriod[EXPENSE_TYPE] >= total.selectedPeriod[EXPENSE_TYPE],
+                          })}
+                        />
+                        {` ${ratio(amountInPercentage(total.previousPeriod[EXPENSE_TYPE], total.selectedPeriod[EXPENSE_TYPE], 0))} %`}
+                      </Badge>
+                    )}
+                  </h3>
+                  <p className="m-0">
+                    <i aria-hidden className="ion-ios-arrow-round-up" />
+                    {' Expenses'}
+                  </p>
+                  {previousPeriod && (
+                    <MoneyValue showSymbol className="text-muted mb-0" maximumFractionDigits={0} amount={total.previousPeriod[EXPENSE_TYPE]} />
+                  )}
+                </div>
+              </Col>
+            </Row>
           </div>
         </Col>
       </Row>

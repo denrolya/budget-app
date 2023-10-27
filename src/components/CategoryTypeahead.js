@@ -107,6 +107,7 @@ const CategoryTypeahead = ({
     <Typeahead
       labelKey="name"
       placeholder="Categories"
+      bsSize="sm"
       id={randomString(5)}
       multiple={multiple}
       options={optionsSortedAndFiltered}
