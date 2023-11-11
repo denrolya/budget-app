@@ -45,7 +45,10 @@ const AccountForm = ({ isLoading, toggleModal, createAccount }) => {
   });
 
   const submitAccount = async (values) => {
-    await createAccount(values);
+    await createAccount({
+      ...values,
+      balance: `${values.balance}`,
+    });
     toggleModal();
   };
 
