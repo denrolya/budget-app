@@ -40,7 +40,7 @@ const Sidebar = ({
   );
 
   const visibleAccounts = useMemo(
-    () => orderBy(accounts, 'name').filter(({ isDisplayedOnSidebar }) => isDisplayedOnSidebar),
+    () => orderBy(accounts, ['type', 'name']).filter(({ isDisplayedOnSidebar }) => isDisplayedOnSidebar),
     [accounts],
   );
 
