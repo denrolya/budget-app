@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { connect } from 'react-redux';
-import {
-  Button, Col, FormGroup, Input, InputGroup, InputGroupText, Row,
-} from 'reactstrap';
+import { Col, Input, Row } from 'reactstrap';
 
 import TransactionCategoriesTimelineChart from 'src/components/charts/recharts/line/TransactionCategoriesTimeline';
-import IntervalSwitch from 'src/components/IntervalSwitch';
 import CategoryTypeahead from 'src/components/CategoryTypeahead';
 import {
   DATERANGE_PICKER_RANGES,
@@ -18,12 +15,11 @@ import {
 } from 'src/constants/datetime';
 import { API } from 'src/constants/api';
 import TimeperiodStatisticsCard from 'src/components/cards/TimeperiodStatisticsCard';
-import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
+import { EXPENSE_TYPE } from 'src/constants/transactions';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import NoCategoriesSelectedMessage from 'src/components/messages/NoCategoriesSelectedMessage';
 import TimeperiodIntervalStatistics from 'src/models/TimeperiodIntervalStatistics';
 import { fetchStatistics } from 'src/store/actions/statistics';
-import { rangeToString } from 'src/utils/datetime';
 import { randomTransactionCategoriesTimelineData } from 'src/utils/randomData';
 
 export const DEFAULT_CONFIG = {
@@ -45,7 +41,7 @@ export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fet
   const [model, setModel] = useState(new TimeperiodIntervalStatistics({
     data: {
       data: randomTransactionCategoriesTimelineData(),
-      categories: categories.filter((c) => c?.root === null && c.type === EXPENSE_TYPE && c.isTechnical === false).map((c) => c.id),
+      categories: categories.filter((c) => c?.root === null && c.type === EXPENSE_TYPE && c.isTechnical === false).map((c) => c.id).slice(0, 5),
     },
     from: moment().startOf('year'),
     to: moment().endOf('year'),
@@ -89,7 +85,7 @@ export const TransactionCategoriesTimelineCard = ({ updateStatisticsTrigger, fet
   }, [config.after, config.before, config.interval]);
 
   useEffect(() => {
-    setSelectedCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)).slice(0, 5));
+    selectCategories(model.data.categories.map((id) => categories.find((cat) => cat.id === id)).slice(0, 5));
   }, []);
 
   return (
