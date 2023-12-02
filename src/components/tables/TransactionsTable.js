@@ -8,9 +8,9 @@ import cn from 'classnames';
 import MoneyValue from 'src/components/MoneyValue';
 import PaginationRow from 'src/components/PaginationRow';
 import TransactionRow from 'src/components/tables/TransactionRow';
-import { MOMENT_VIEW_DATE_FORMAT, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { MOMENT_VIEW_DATE_FORMAT, MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT_LONG } from 'src/constants/datetime';
 import { isExpense } from 'src/utils/common';
-import { isToday, isYesterday } from 'src/utils/datetime';
+import { isCurrentYear, isToday, isYesterday } from 'src/utils/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import Pagination from 'src/models/Pagination';
 
@@ -63,7 +63,7 @@ const TransactionsTable = ({
                 <strong>
                   {isToday(date) && 'Today'}
                   {isYesterday(date) && 'Yesterday'}
-                  {!isToday(date) && !isYesterday(date) && date.format(MOMENT_VIEW_DATE_FORMAT)}
+                  {(!isToday(date) && !isYesterday(date)) && date.format(isCurrentYear(date) ? MOMENT_VIEW_DATE_FORMAT : MOMENT_VIEW_DATE_FORMAT_LONG)}
                 </strong>
               </p>
               <Badge pill className="float-right" color={totalDailyValue > 0 ? 'success' : 'danger'}>
