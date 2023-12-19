@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isString from 'lodash/isString';
 import { connect } from 'react-redux';
-import { Typeahead } from 'react-bootstrap-typeahead';
+import orderBy from 'lodash/orderBy';
 import {
   Button, ButtonGroup, Col, FormGroup, Input, Label,
 } from 'reactstrap';
@@ -36,7 +36,7 @@ const TransactionForm = ({
   onSubmit,
   toggleModal,
 }) => {
-  const accountOptions = useActiveAccounts();
+  const accountOptions = orderBy(useActiveAccounts(), ['type', 'currency', 'name']);
   const categoryOptions = useCategories();
   const debtIncomeCategory = useDebtIncomeCategory();
   const compensationIncomeCategory = useCompensationIncomeCategory();
