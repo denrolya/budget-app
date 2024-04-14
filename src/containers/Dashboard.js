@@ -88,6 +88,7 @@ const Dashboard = () => {
           </Col>
           <Col md={3}>
             <CategoryTreeCard
+              disabled
               config={{
                 name: 'expenseCategoryTree',
               }}

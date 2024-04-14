@@ -33,7 +33,10 @@ export const DEFAULT_CONFIG = {
 
 // FIXME: If it's a tree for incomes percentage and colors should be inverted
 const CategoryTreeCard = ({
-  updateStatisticsTrigger, config, fetchStatistics,
+  disabled,
+  updateStatisticsTrigger,
+  config,
+  fetchStatistics,
 }) => {
   // eslint-disable-next-line no-param-reassign
   config = {
@@ -86,7 +89,9 @@ const CategoryTreeCard = ({
       setIsLoading(false);
     };
 
-    fetchData();
+    if (!disabled) {
+      fetchData();
+    }
   }, [model.from.format(MOMENT_DATETIME_FORMAT), model.to.format(MOMENT_DATETIME_FORMAT), updateStatisticsTrigger]);
 
   useEffect(() => {
@@ -95,6 +100,10 @@ const CategoryTreeCard = ({
       to: config.before,
     }));
   }, [config.after, config.before]);
+
+  if (disabled) {
+    return null;
+  }
 
   return (
     <TimeperiodStatisticsCard
@@ -166,11 +175,13 @@ const CategoryTreeCard = ({
 
 CategoryTreeCard.defaultProps = {
   config: DEFAULT_CONFIG,
+  disabled: false,
   updateStatisticsTrigger: false,
 };
 
 CategoryTreeCard.propTypes = {
   fetchStatistics: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   config: PropTypes.shape({
     name: PropTypes.string.isRequired,
     transactionType: PropTypes.oneOf([EXPENSE_TYPE, INCOME_TYPE]),
