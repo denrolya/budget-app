@@ -1,4 +1,6 @@
+import orderBy from 'lodash/orderBy';
 import { createContext, useContext } from 'react';
+
 import { ACCOUNT_TYPE_CASH } from 'src/constants/account';
 import BaseCurrencyContext from 'src/contexts/BaseCurrency';
 
@@ -13,5 +15,15 @@ export const useDefaultCashAccount = () => {
 };
 export const useActiveAccounts = () => useContext(AccountsContext).filter(({ archivedAt }) => !archivedAt);
 export const useArchivedAccounts = () => useContext(AccountsContext).filter(({ archivedAt }) => !!archivedAt);
+
+export const useActiveAccountsWithDefaultOrder = () => orderBy(
+  useContext(AccountsContext).filter(({ archivedAt }) => !archivedAt),
+  ['currency', 'type', 'name'],
+);
+export const useAccountsWithDefaultOrder = () => orderBy(
+  useContext(AccountsContext),
+  ['archivedAt', 'currency', 'type', 'name'],
+  ['desc', 'asc', 'asc', 'asc'],
+);
 
 export default AccountsContext;

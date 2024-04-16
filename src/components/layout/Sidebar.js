@@ -19,7 +19,7 @@ import {
   ROUTE_TRANSACTIONS,
   ROUTE_TRANSACTIONS_CALENDAR, ROUTE_TRANSFERS,
 } from 'src/constants/routes';
-import { useActiveAccounts } from 'src/contexts/AccountsContext';
+import { useActiveAccountsWithDefaultOrder } from 'src/contexts/AccountsContext';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import AccountName from 'src/components/AccountName';
 import { CURRENCIES } from 'src/constants/currency';
@@ -31,7 +31,7 @@ const Sidebar = ({
   onCurrencySwitch,
   updateStatistics,
 }) => {
-  const accounts = useActiveAccounts();
+  const accounts = useActiveAccountsWithDefaultOrder();
   const { symbol, code } = useBaseCurrency();
   const availableCurrencies = filter(CURRENCIES, ({ type }) => type === 'fiat');
   const totalAccountsValue = useMemo(
@@ -40,7 +40,7 @@ const Sidebar = ({
   );
 
   const visibleAccounts = useMemo(
-    () => orderBy(accounts, ['type', 'currency', 'name']),
+    () => accounts.filter(({ isDisplayedOnSidebar }) => isDisplayedOnSidebar),
     [accounts],
   );
 

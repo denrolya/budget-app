@@ -1,7 +1,7 @@
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import { createActions } from 'reduxsauce';
-import { listToTree, paintTree } from 'src/utils/category';
+import { paintTree } from 'src/utils/category';
 
 import axios from 'src/utils/http';
 import { categoryRemovalPrompt } from 'src/utils/prompts';

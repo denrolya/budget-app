@@ -15,6 +15,7 @@ const AccountName = ({
     icon,
     convertedValues,
     currency,
+    archivedAt,
   },
   showBalance,
   showIcon,
@@ -29,7 +30,7 @@ const AccountName = ({
             aria-hidden
             id={`account-name-${randomIdString}`}
             style={{
-              color: colored ? color : 'inherit',
+              color: !archivedAt ? color : 'inherit',
             }}
             className={cn(icon, {
               'cursor-info': !showName,
@@ -73,6 +74,7 @@ AccountName.propTypes = {
     color: PropTypes.string,
     balance: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     convertedValues: PropTypes.object,
+    archivedAt: PropTypes.object,
   }).isRequired,
   colored: PropTypes.bool,
   showBalance: PropTypes.bool,

@@ -3,12 +3,12 @@ import { Helmet } from 'react-helmet';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 import AccountSelector from 'src/components/AccountSelector';
-import { useAccounts } from 'src/contexts/AccountsContext';
+import { useAccountsWithDefaultOrder } from 'src/contexts/AccountsContext';
 
 const AccountList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const list = useAccounts();
+  const list = useAccountsWithDefaultOrder();
 
   useEffect(() => {
     if (list.length > 0 && !id) {

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
-import { Table, Badge, UncontrolledCollapse } from 'reactstrap';
+import { Table, Badge } from 'reactstrap';
 import uniqBy from 'lodash/uniqBy';
 import sumBy from 'lodash/sumBy';
 import cn from 'classnames';
@@ -8,7 +8,7 @@ import cn from 'classnames';
 import MoneyValue from 'src/components/MoneyValue';
 import PaginationRow from 'src/components/PaginationRow';
 import TransactionRow from 'src/components/tables/TransactionRow';
-import { MOMENT_VIEW_DATE_FORMAT, MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT_LONG } from 'src/constants/datetime';
+import { MOMENT_VIEW_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT_LONG } from 'src/constants/datetime';
 import { isExpense } from 'src/utils/common';
 import { isCurrentYear, isToday, isYesterday } from 'src/utils/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
@@ -48,10 +48,7 @@ const TransactionsTable = ({
 
         return (
           <React.Fragment key={date}>
-            <div
-              className="text-nowrap cursor-pointer py-1 px-3 d-flex justify-content-between align-center card-transactions__date-header"
-              id={`date-${date.format(MOMENT_DATE_FORMAT)}`}
-            >
+            <div className="text-nowrap cursor-pointer py-1 px-3 d-flex justify-content-between align-center card-transactions__date-header">
               <p
                 className={cn('mb-0', {
                   'text-primary': isToday(date),
@@ -70,23 +67,21 @@ const TransactionsTable = ({
                 <MoneyValue bold amount={totalDailyValue} />
               </Badge>
             </div>
-            <UncontrolledCollapse defaultOpen toggler={`date-${date.format(MOMENT_DATE_FORMAT)}`}>
-              <Table className="table--border-top-0 mb-0" size={size}>
-                <tbody>
-                  {transactions.map((transaction) => (
-                    <TransactionRow
-                      key={transaction.id}
-                      showNote={showNote}
-                      showActions={showActions}
-                      showFullCategoryPath={showFullCategoryPath}
-                      transaction={transaction}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                    />
-                  ))}
-                </tbody>
-              </Table>
-            </UncontrolledCollapse>
+            <Table className="table--border-top-0 mb-0" size={size}>
+              <tbody>
+                {transactions.map((transaction) => (
+                  <TransactionRow
+                    key={transaction.id}
+                    showNote={showNote}
+                    showActions={showActions}
+                    showFullCategoryPath={showFullCategoryPath}
+                    transaction={transaction}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </tbody>
+            </Table>
           </React.Fragment>
         );
       })}

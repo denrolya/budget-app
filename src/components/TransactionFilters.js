@@ -1,20 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
 import CategoryTypeahead from 'src/components/CategoryTypeahead';
 
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
-import { useAccounts } from 'src/contexts/AccountsContext';
+import { useAccountsWithDefaultOrder } from 'src/contexts/AccountsContext';
 import { useCategories } from 'src/contexts/CategoriesContext';
 import TransactionFiltersModel, { DEFAULT_VALUES } from 'src/models/TransactionFilters';
 import DateRange from 'src/components/forms/fields/DateRange';
 import AccountName from 'src/components/AccountName';
 
 const TransactionFilters = ({ onModelChange, model }) => {
-  const accounts = useAccounts();
+  const accounts = useAccountsWithDefaultOrder();
   const categories = useCategories();
 
   const { from, to } = model;

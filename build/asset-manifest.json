@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.28d892ba.css",
-    "main.js": "/static/js/main.ce76f7d6.js",
-    "static/js/27.c6e9aa07.chunk.js": "/static/js/27.c6e9aa07.chunk.js",
-    "static/media/materialdesignicons-webfont.eot": "/static/media/materialdesignicons-webfont.e044ed23c047e571c550.eot",
-    "static/media/materialdesignicons-webfont.ttf?v=6.5.95": "/static/media/materialdesignicons-webfont.5d42b4e60858731e7b65.ttf",
-    "static/media/materialdesignicons-webfont.woff?v=6.5.95": "/static/media/materialdesignicons-webfont.5dff34d5fed607519dcb.woff",
+    "main.css": "/static/css/main.fd268a79.css",
+    "main.js": "/static/js/main.11eca6da.js",
+    "static/js/206.2e59c071.chunk.js": "/static/js/206.2e59c071.chunk.js",
+    "static/media/materialdesignicons-webfont.eot": "/static/media/materialdesignicons-webfont.de316c4d7c4935189323.eot",
+    "static/media/materialdesignicons-webfont.ttf?v=6.9.96": "/static/media/materialdesignicons-webfont.ac55aef662342c261b21.ttf",
+    "static/media/materialdesignicons-webfont.woff?v=6.9.96": "/static/media/materialdesignicons-webfont.059ea00c378aeafc39fc.woff",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
-    "static/media/materialdesignicons-webfont.woff2?v=6.5.95": "/static/media/materialdesignicons-webfont.606b16427a59a5a97afb.woff2",
+    "static/media/materialdesignicons-webfont.woff2?v=6.9.96": "/static/media/materialdesignicons-webfont.d5cba82059f88bfa469e.woff2",
     "static/media/ionicons.svg?v=4.6.3": "/static/media/ionicons.bb0605ccfbc8cbabadc5.svg",
     "static/media/fontawesome-webfont.eot": "/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
     "static/media/fontawesome-webfont.ttf?v=4.7.0": "/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
@@ -31,7 +31,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.28d892ba.css",
-    "static/js/main.ce76f7d6.js"
+    "static/css/main.fd268a79.css",
+    "static/js/main.11eca6da.js"
   ]
 }

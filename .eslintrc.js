@@ -36,15 +36,7 @@ module.exports = {
     'jsx-a11y/aria-props': 2,
     'jsx-a11y/heading-has-content': 0,
     'jsx-a11y/no-noninteractive-element-interactions': 1,
-    'jsx-a11y/label-has-associated-control': [
-      2,
-      {
-        // NOTE: If this error triggers, either disable it or add
-        // your custom components, labels and attributes via these options
-        // See https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/label-has-associated-control.md
-        controlComponents: ['Input'],
-      },
-    ],
+    'jsx-a11y/control-has-associated-label': 'warn',
     'jsx-a11y/label-has-for': 0,
     'jsx-a11y/mouse-events-have-key-events': 1,
     'jsx-a11y/click-events-have-key-events': 1,

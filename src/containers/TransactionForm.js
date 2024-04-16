@@ -7,12 +7,11 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isString from 'lodash/isString';
 import { connect } from 'react-redux';
-import orderBy from 'lodash/orderBy';
 import {
   Button, ButtonGroup, Col, FormGroup, Input, Label,
 } from 'reactstrap';
-import CategoryTypeahead from 'src/components/CategoryTypeahead';
 
+import CategoryTypeahead from 'src/components/CategoryTypeahead';
 import ModalForm from 'src/components/forms/ModalForm';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
@@ -24,7 +23,7 @@ import {
   TRANSACTION_TYPES,
   VALIDATION_SCHEMA,
 } from 'src/constants/transactions';
-import { useActiveAccounts } from 'src/contexts/AccountsContext';
+import { useActiveAccountsWithDefaultOrder } from 'src/contexts/AccountsContext';
 import { useCategories, useCompensationIncomeCategory, useDebtIncomeCategory } from 'src/contexts/CategoriesContext';
 import { isActionLoading } from 'src/utils/common';
 
@@ -36,7 +35,7 @@ const TransactionForm = ({
   onSubmit,
   toggleModal,
 }) => {
-  const accountOptions = orderBy(useActiveAccounts(), ['type', 'currency', 'name']);
+  const accountOptions = useActiveAccountsWithDefaultOrder();
   const categoryOptions = useCategories();
   const debtIncomeCategory = useDebtIncomeCategory();
   const compensationIncomeCategory = useCompensationIncomeCategory();
@@ -200,11 +199,9 @@ const TransactionForm = ({
                       onChange={({ target }) => setFieldValue('account', target.value)}
                     >
                       <option value="">------------</option>
-                      {accountOptions.map(({ id, name, archivedAt }) => (
+                      {accountOptions.map(({ id, name }) => (
                         <option key={`account-option-${id}`} value={parseInt(id, 10)}>
                           {name}
-                          {' '}
-                          {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
                         </option>
                       ))}
                     </Input>
@@ -262,87 +259,84 @@ const TransactionForm = ({
 
                   <hr />
 
-                  {compensations
-                         && compensations.map((compensation, key) => {
-                           const amountKey = `compensations.${key}.amount`;
-                           const accountKey = `compensations.${key}.account`;
-                           const executedAtKey = `compensations.${key}.executedAt`;
-                           return (
-                             <FormGroup row className="mb-md-0" key={compensation.id}>
-                               <Col xs={12} md={1} className="text-sm-right align-center">
-                                 <Button
-                                   color="warning"
-                                   size="sm"
-                                   className="btn-icon btn-round"
-                                   onClick={() => {
-                                     compensations.splice(key, 1);
-                                     setFieldValue('compensations', compensations);
-                                   }}
-                                 >
-                                   <i className="tim-icons icon-simple-remove" aria-hidden />
-                                 </Button>
-                               </Col>
+                  {compensations && compensations.map((compensation, key) => {
+                    const amountKey = `compensations.${key}.amount`;
+                    const accountKey = `compensations.${key}.account`;
+                    const executedAtKey = `compensations.${key}.executedAt`;
+                    return (
+                      <FormGroup row className="mb-md-0" key={compensation.id}>
+                        <Col xs={12} md={1} className="text-sm-right align-center">
+                          <Button
+                            color="warning"
+                            size="sm"
+                            className="btn-icon btn-round"
+                            onClick={() => {
+                              compensations.splice(key, 1);
+                              setFieldValue('compensations', compensations);
+                            }}
+                          >
+                            <i className="tim-icons icon-simple-remove" aria-hidden />
+                          </Button>
+                        </Col>
 
-                               <Col>
-                                 <FormGroup row>
-                                   <Col xs={12} md={6}>
-                                     <FormGroup>
-                                       <Label for={amountKey}>Amount*</Label>
-                                       <Field
-                                         as={Input}
-                                         id={amountKey}
-                                         name={amountKey}
-                                         type="number"
-                                         min={0}
-                                         step="any"
-                                         placeholder="Enter the amount"
-                                         invalid={!!get(touched, amountKey) && !!get(errors, amountKey)}
-                                         value={compensations[key].amount}
-                                       />
-                                       <ErrorMessage component="div" name={amountKey} className="invalid-feedback" />
-                                     </FormGroup>
-                                   </Col>
-                                   <Col xs={12} md={6}>
-                                     <FormGroup>
-                                       <Label for="accountSelect">Account*</Label>
-                                       <Input
-                                         type="select"
-                                         name={accountKey}
-                                         id={accountKey}
-                                         value={compensations[key].account}
-                                         onChange={({ target }) => setFieldValue(accountKey, target.value)}
-                                       >
-                                         <option value="">-----------</option>
-                                         {accountOptions.map(({ id, name, archivedAt }) => (
-                                           <option key={`account-option-${id}`} value={parseInt(id, 10)}>
-                                             {name}
-                                             {' '}
-                                             {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
-                                           </option>
-                                         ))}
-                                       </Input>
-                                       <ErrorMessage component="div" className="invalid-feedback" name={accountKey} />
-                                     </FormGroup>
-                                   </Col>
-                                   <Col xs={12} md={12}>
-                                     <FormGroup>
-                                       <Label for={executedAtKey}>Executed at*</Label>
-                                       <Field
-                                         type="datetime-local"
-                                         name={executedAtKey}
-                                         as={Input}
-                                         id={executedAtKey}
-                                         value={compensations[key].executedAt}
-                                         invalid={!!get(touched, executedAtKey) && !!get(errors, executedAtKey)}
-                                       />
-                                       <ErrorMessage component="div" className="invalid-feedback" name={executedAtKey} />
-                                     </FormGroup>
-                                   </Col>
-                                 </FormGroup>
-                               </Col>
-                             </FormGroup>
-                           );
-                         })}
+                        <Col>
+                          <FormGroup row>
+                            <Col xs={12} md={6}>
+                              <FormGroup>
+                                <Label for={amountKey}>Amount*</Label>
+                                <Field
+                                  as={Input}
+                                  id={amountKey}
+                                  name={amountKey}
+                                  type="number"
+                                  min={0}
+                                  step="any"
+                                  placeholder="Enter the amount"
+                                  invalid={!!get(touched, amountKey) && !!get(errors, amountKey)}
+                                  value={compensations[key].amount}
+                                />
+                                <ErrorMessage component="div" name={amountKey} className="invalid-feedback" />
+                              </FormGroup>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <FormGroup>
+                                <Label for="accountSelect">Account*</Label>
+                                <Input
+                                  type="select"
+                                  name={accountKey}
+                                  id={accountKey}
+                                  value={compensations[key].account}
+                                  onChange={({ target }) => setFieldValue(accountKey, target.value)}
+                                >
+                                  <option value="">-----------</option>
+                                  {accountOptions.map(({ id, name }) => (
+                                    <option key={`account-option-${id}`} value={parseInt(id, 10)}>
+                                      {name}
+                                    </option>
+                                  ))}
+                                </Input>
+                                <ErrorMessage component="div" className="invalid-feedback" name={accountKey} />
+                              </FormGroup>
+                            </Col>
+                            <Col xs={12} md={12}>
+                              <FormGroup>
+                                <Label for={executedAtKey}>Executed at*</Label>
+                                <Field
+                                  type="datetime-local"
+                                  name={executedAtKey}
+                                  as={Input}
+                                  id={executedAtKey}
+                                  value={compensations[key].executedAt}
+                                  invalid={!!get(touched, executedAtKey) && !!get(errors, executedAtKey)}
+                                />
+                                <ErrorMessage component="div" className="invalid-feedback" name={executedAtKey} />
+                              </FormGroup>
+                            </Col>
+                          </FormGroup>
+                        </Col>
+                      </FormGroup>
+                    );
+                  })}
                 </>
               )}
 
