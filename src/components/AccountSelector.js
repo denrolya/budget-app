@@ -28,7 +28,7 @@ const AccountSelector = ({ accounts, selected, onChange }) => (
 
 AccountSelector.defaultProps = {
   accounts: [],
-  selected: null,
+  selected: '',
 };
 
 AccountSelector.propTypes = {

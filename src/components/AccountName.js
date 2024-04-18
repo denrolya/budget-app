@@ -74,7 +74,7 @@ AccountName.propTypes = {
     color: PropTypes.string,
     balance: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     convertedValues: PropTypes.object,
-    archivedAt: PropTypes.object,
+    archivedAt: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }).isRequired,
   colored: PropTypes.bool,
   showBalance: PropTypes.bool,

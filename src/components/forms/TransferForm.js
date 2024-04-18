@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 import * as Yup from 'yup';
 
-import { useActiveAccounts } from 'src/contexts/AccountsContext';
+import { useActiveAccountsWithDefaultOrder } from 'src/contexts/AccountsContext';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { registerTransfer } from 'src/store/actions/transfer';
@@ -16,7 +16,7 @@ import { registerTransfer } from 'src/store/actions/transfer';
 const TransferForm = ({
   isLoading, registerTransfer, toggleModal,
 }) => {
-  const accountOptions = useActiveAccounts();
+  const accountOptions = useActiveAccountsWithDefaultOrder();
   const initialData = {
     from: '',
     to: '',
@@ -64,11 +64,9 @@ const TransferForm = ({
                   onChange={({ target }) => setFieldValue('from', target.value)}
                 >
                   <option value="">------------</option>
-                  {accountOptions.map(({ id, name, archivedAt }) => (
+                  {accountOptions.map(({ id, name }) => (
                     <option key={`from-option-${id}`} value={parseInt(id, 10)}>
                       {name}
-                      {' '}
-                      {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
                     </option>
                   ))}
                 </Input>
@@ -105,11 +103,9 @@ const TransferForm = ({
                   onChange={({ target }) => setFieldValue('to', target.value)}
                 >
                   <option value="">------------</option>
-                  {accountOptions.map(({ id, name, archivedAt }) => (
+                  {accountOptions.map(({ id, name }) => (
                     <option key={`to-option-${id}`} value={parseInt(id, 10)}>
                       {name}
-                      {' '}
-                      {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
                     </option>
                   ))}
                 </Input>
@@ -162,11 +158,9 @@ const TransferForm = ({
                   onChange={({ target }) => setFieldValue('feeAccount', target.value)}
                 >
                   <option value="">------------</option>
-                  {accountOptions.map(({ id, name, archivedAt }) => (
+                  {accountOptions.map(({ id, name }) => (
                     <option key={`feeAccount-option-${id}`} value={parseInt(id, 10)}>
                       {name}
-                      {' '}
-                      {archivedAt ? `(Archived ${moment(archivedAt).calendar()})` : ''}
                     </option>
                   ))}
                 </Input>

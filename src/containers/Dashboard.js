@@ -67,11 +67,13 @@ const Dashboard = () => {
         <Row>
           <Col md={9}>
             <Row>
-              <Col xs={12} className="d-md-none">
-                <CarouselWithSwipe data={shortStatistics} />
-              </Col>
+              {window.isMobile && (
+                <Col xs={12} className="d-md-none">
+                  <CarouselWithSwipe data={shortStatistics} />
+                </Col>
+              )}
 
-              {shortStatistics.map((item) => (
+              {!window.isMobile && shortStatistics.map((item) => (
                 <Col md={6} lg={3} className="d-none d-md-block" key={randomString(4)}>
                   { item }
                 </Col>
@@ -88,7 +90,7 @@ const Dashboard = () => {
           </Col>
           <Col md={3}>
             <CategoryTreeCard
-              disabled
+              disabled={false}
               config={{
                 name: 'expenseCategoryTree',
               }}

@@ -1,7 +1,5 @@
 import moment from 'moment-timezone';
 
-import { generateYearRanges } from 'src/utils/datetime';
-
 export const FIRST_AVAILABLE_YEAR = 2015;
 export const SERVER_TIMEZONE = 'UTC';
 export const MOMENT_DATE_FORMAT = 'DD-MM-YYYY';
@@ -13,8 +11,6 @@ export const MOMENT_VIEW_DATE_WITH_YEAR_FORMAT = 'DD.MM.YYYY';
 export const MOMENT_VIEW_TIME_FORMAT = 'HH:mm';
 export const MOMENT_VIEW_DATETIME_FORMAT = `${MOMENT_VIEW_DATE_FORMAT} ${MOMENT_VIEW_TIME_FORMAT}`;
 export const MOMENT_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
-
-export const ANNUAL_REPORT_RANGES = generateYearRanges(FIRST_AVAILABLE_YEAR);
 
 export const DATERANGE_PICKER_RANGES = {
   '10 days': [moment().subtract(10, 'day'), moment()],

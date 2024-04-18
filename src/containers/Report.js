@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 import moment from 'moment-timezone';
 import { Row, Col, UncontrolledCollapse } from 'reactstrap';
 
-import { ANNUAL_REPORT_RANGES, MOMENT_DATE_FORMAT } from 'src/constants/datetime';
+import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { INCOME_TYPE, EXPENSE_TYPE } from 'src/constants/transactions';
 import { updateStatistics } from 'src/store/actions/ui';
-import { rangeToString } from 'src/utils/datetime';
+import { ANNUAL_REPORT_RANGES, rangeToString } from 'src/utils/datetime';
 
 import MainIncomeSourceCard from 'src/components/cards/statistics/icon/MainIncomeSourceCard';
 import PercentageSpentFromIncomeCard from 'src/components/cards/statistics/icon/PercentageSpentFromIncomeCard';

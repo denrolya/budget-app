@@ -21,7 +21,7 @@ import TransactionCategories from 'src/components/charts/recharts/pie/Transactio
 import Breadcrumbs from 'src/components/CategoriesBreadcrumbs';
 import { fetchStatistics } from 'src/store/actions/statistics';
 import { generateCategoriesStatisticsTree } from 'src/utils/category';
-import { generatePreviousPeriod, rangeToString } from 'src/utils/datetime';
+import { generatePreviousPeriod, generatePreviousPeriodNew, rangeToString } from 'src/utils/datetime';
 
 export const DEFAULT_CONFIG = {
   name: '<name_goes_here>',
@@ -55,7 +55,9 @@ const CategoryTreeCard = ({
     to: config.before,
   }));
   const { from, to, data } = model;
-  const [selectedCategory, selectCategory] = useState(data.model.name);
+  const [selectedCategory, setSelectedCategory] = useState(data.model.name);
+
+  const selectCategory = (categoryName) => setSelectedCategory(categoryName);
 
   useEffect(() => {
     const fetchData = async () => {
