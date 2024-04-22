@@ -58,7 +58,7 @@ const CategoriesByTagReview = ({
         },
       });
 
-      const previousPeriod = generatePreviousPeriod(model.from, model.to);
+      const previousPeriod = generatePreviousPeriod(model.from, model.to, true);
 
       const previousPeriodData = await fetchStatistics({
         ...config,

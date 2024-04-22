@@ -149,7 +149,7 @@ const TotalValue = ({
       const selectedPeriodData = await fetchStatistics({ ...config, params });
       const selectedPeriodValue = sumBy(selectedPeriodData, config.transactionType);
 
-      const previousPeriod = generatePreviousPeriod(model.from, model.to);
+      const previousPeriod = generatePreviousPeriod(model.from, model.to, true);
       const previousPeriodData = await fetchStatistics({
         ...config,
         params: {

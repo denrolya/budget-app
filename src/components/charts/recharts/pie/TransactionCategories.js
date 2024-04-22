@@ -41,7 +41,7 @@ const TransactionCategories = ({
       previous, total, name, icon,
     } = payload[0].payload;
     const color = expenseRatioColor(amountInPercentage(previous, total, 0));
-    const previousPeriod = generatePreviousPeriod(after, before);
+    const previousPeriod = generatePreviousPeriod(after, before, true);
 
     const dataTable = (sum) => (
       <Table size="sm" bordered={false} className="m-0">

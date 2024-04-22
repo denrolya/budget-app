@@ -10,16 +10,15 @@ import {
 
 export const generateYearRanges = (startYear, endYear = moment().year()) => Object.assign(
   {},
-  ...times(endYear - startYear + 1, (i) => ({
-    [startYear + i]: [
-      moment()
-        .year(startYear + i)
-        .startOf('year'),
-      moment()
-        .year(startYear + i)
-        .endOf('year'),
-    ],
-  })),
+  ...times(
+    endYear - startYear + 1,
+    (i) => ({
+      [startYear + i]: [
+        moment().year(startYear + i).startOf('year'),
+        moment().year(startYear + i).endOf('year'),
+      ],
+    }),
+  ),
 );
 
 export const ANNUAL_REPORT_RANGES = generateYearRanges(FIRST_AVAILABLE_YEAR);
@@ -41,9 +40,13 @@ export const diffIn = (date1, date2, unitOfTime = 'days') => moment().isBetween(
   ? Math.abs(moment().diff(date1, unitOfTime) + 1)
   : Math.abs(date2.diff(date1, unitOfTime) + 1);
 
-export const generatePreviousPeriod = (after, before, afterNow = false) => {
+export const generatePreviousPeriodUntilNow = (after, before) => {
+  // TODO: Refactor generatePreviousPeriodUntilNow to use generatePreviousPeriod
+};
+
+export const generatePreviousPeriod = (after, before, rangeUntilNow = false) => {
   const now = moment();
-  const isTodayInRange = !afterNow && before.isAfter(now);
+  const isTodayInRange = rangeUntilNow && before.isAfter(now);
   const diff = {
     d: diffIn(after, before, 'days'),
     w: diffIn(after, before, 'weeks'),

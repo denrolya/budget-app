@@ -72,7 +72,7 @@ const MoneyFlowCard = ({
         },
       });
 
-      const previousPeriod = generatePreviousPeriod(model.from, model.to, true);
+      const previousPeriod = generatePreviousPeriod(model.from, model.to);
 
       const previousPeriodData = await fetchStatistics({
         ...config,

@@ -74,7 +74,7 @@ const MoneyFlowOnSteroidsCard = ({
       });
 
       if (previousPeriod) {
-        const previousPeriod = generatePreviousPeriod(model.from, model.to, true);
+        const previousPeriod = generatePreviousPeriod(model.from, model.to, false);
 
         const previousPeriodData = await fetchStatistics({
           ...config,
