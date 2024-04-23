@@ -105,6 +105,7 @@ const TransactionList = ({
               {data.length > 0 && (
                 <TransactionsTable
                   data={data}
+                  showFullCategoryPath={false}
                   pagination={pagination}
                   totalValue={totalValue}
                   setPage={setPage}

@@ -1,7 +1,6 @@
-import cn from 'classnames';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
-import { Button } from 'reactstrap';
+import { Badge, Button } from 'reactstrap';
 
 import AccountName from 'src/components/AccountName';
 import MoneyValue from 'src/components/MoneyValue';
@@ -10,61 +9,46 @@ import { isExpense } from 'src/utils/common';
 import TransactionCategory from 'src/components/TransactionCategory';
 
 const TransactionRow = ({
-  transaction,
-  showActions,
-  showFullCategoryPath,
-  showNote,
-  onEdit,
-  onDelete,
+  transaction, showActions, showFullCategoryPath, showNote, onEdit, onDelete,
 }) => {
   const {
     id, account, amount, convertedValues, note, category, executedAt,
   } = transaction;
 
-  return (
+  return [
     <tr>
-      <td className="text-nowrap d-none d-md-table-cell" style={{ width: '40px' }}>
+      <td className="text-nowrap d-none d-md-table-cell fit">
         <code>
           #
           {id}
         </code>
       </td>
 
-      <td className="fit text-nowrap text-truncate" id={`transaction-account-cell-${id}`}>
-        <AccountName showName={false} account={account} />
+      <td className="d-none d-md-table-cell text-nowrap text-white fit">
+        <AccountName showName account={account} />
+      </td>
+
+      <td className="text-nowrap text-truncate" id={`transaction-account-cell-${id}`}>
+        <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
 
         <span className="text-muted font-size-smaller d-block d-md-none text-left">
           <TransactionDate showTimeIcon showDate={false} date={executedAt} />
         </span>
       </td>
 
-      <td className="d-none d-md-table-cell">
-        <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
-        { (showNote && note) && (
-          <p className="text-muted small">
-            {note}
-          </p>
-        )}
-      </td>
-
-      <td className={cn('text-nowrap', 'text-right', 'text-md-center', 'w-130px')}>
-        <span
-          className={cn('d-block', 'font-style-numeric', {
-            'text-danger': isExpense(transaction),
-            'text-success': !isExpense(transaction),
-          })}
-        >
+      <td className="text-nowrap fit">
+        <Badge className="font-style-numeric" id={id} color={isExpense(transaction) ? 'danger' : 'success'}>
           {isExpense(transaction) ? '-' : '+'}
           {' '}
           <MoneyValue currency={account.currency} amount={amount} values={convertedValues} />
-        </span>
+        </Badge>
 
         <small className="text-nowrap d-block d-md-none">
           <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
         </small>
       </td>
 
-      <td className="text-right d-none d-md-table-cell w-130px">
+      <td className="d-none d-md-table-cell fit">
         <TransactionDate showTimeIcon showDate={false} date={executedAt} />
       </td>
 
@@ -78,8 +62,19 @@ const TransactionRow = ({
           </Button>
         </td>
       )}
-    </tr>
-  );
+    </tr>,
+    showNote && note && (
+      <tr className="border-top-0 p-0">
+        <td colSpan="100%" className="border-top-0 py-0 px-1">
+          <p className="text-muted small">
+            <i className="fa fa-comment-o" aria-hidden="true" />
+            :
+            {note}
+          </p>
+        </td>
+      </tr>
+    ),
+  ];
 };
 
 TransactionRow.defaultProps = {

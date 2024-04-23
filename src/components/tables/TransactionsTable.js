@@ -28,47 +28,44 @@ const TransactionsTable = ({
   handleEdit,
 }) => {
   const { code } = useBaseCurrency();
-  const dates = useMemo(() => uniqBy(
+  const uniqDates = useMemo(() => uniqBy(
     data.map(({ executedAt }) => executedAt.clone().startOf('day')),
     (date) => date.format(),
   ).sort((a, b) => a.isBefore(b)), [data]);
 
   return (
     <>
-      {dates.map((date) => {
-        const transactions = data.filter(({ executedAt }) => executedAt.clone().startOf('day').isSame(date));
-        const totalDailyValue = sumBy(
-          transactions.filter((t) => !isExpense(t)),
-          ({ convertedValues }) => convertedValues[code],
-        )
-          - sumBy(
-            transactions.filter((t) => isExpense(t)),
-            ({ convertedValues }) => convertedValues[code],
-          );
+      <Table className="table--border-top-0 mb-0" size={size}>
+        <tbody>
+          {uniqDates.map((date) => {
+            const transactions = data.filter(({ executedAt }) => executedAt.clone().startOf('day').isSame(date));
+            const expenses = transactions.filter((t) => isExpense(t));
+            const incomes = transactions.filter((t) => !isExpense(t));
 
-        return (
-          <React.Fragment key={date}>
-            <div className="text-nowrap cursor-pointer py-1 px-3 d-flex justify-content-between align-center card-transactions__date-header">
-              <p
-                className={cn('mb-0', {
-                  'text-primary': isToday(date),
-                  'text-info': isYesterday(date),
-                })}
-              >
-                <i aria-hidden className="ion-ios-calendar" />
-                {' '}
-                <strong>
-                  {isToday(date) && 'Today'}
-                  {isYesterday(date) && 'Yesterday'}
-                  {(!isToday(date) && !isYesterday(date)) && date.format(isCurrentYear(date) ? MOMENT_VIEW_DATE_FORMAT : MOMENT_VIEW_DATE_FORMAT_LONG)}
-                </strong>
-              </p>
-              <Badge pill className="float-right" color={totalDailyValue > 0 ? 'success' : 'danger'}>
-                <MoneyValue bold amount={totalDailyValue} />
-              </Badge>
-            </div>
-            <Table className="table--border-top-0 mb-0" size={size}>
-              <tbody>
+            const dailyExpense = sumBy(expenses, ({ convertedValues }) => convertedValues[code]);
+            const dailyIncome = sumBy(incomes, ({ convertedValues }) => convertedValues[code]);
+            const totalDailyValue = dailyExpense - dailyIncome;
+            return (
+              <>
+                <tr className="bg-dark" key={date}>
+                  <td className="text-nowrap px-1" colSpan="100%">
+                    <span
+                      className={cn('mb-0', {
+                        'text-primary': isToday(date),
+                        'text-info': isYesterday(date),
+                      })}
+                    >
+                      <i aria-hidden className="ion-ios-calendar" />
+                      {'  '}
+                      {isToday(date) && 'Today'}
+                      {isYesterday(date) && 'Yesterday'}
+                      {(!isToday(date) && !isYesterday(date)) && date.format(isCurrentYear(date) ? MOMENT_VIEW_DATE_FORMAT : MOMENT_VIEW_DATE_FORMAT_LONG)}
+                    </span>
+                    <Badge color={totalDailyValue > 0 ? 'success' : 'danger'} className="float-right">
+                      <MoneyValue bold amount={totalDailyValue} />
+                    </Badge>
+                  </td>
+                </tr>
                 {transactions.map((transaction) => (
                   <TransactionRow
                     key={transaction.id}
@@ -80,11 +77,11 @@ const TransactionsTable = ({
                     onDelete={handleDelete}
                   />
                 ))}
-              </tbody>
-            </Table>
-          </React.Fragment>
-        );
-      })}
+              </>
+            );
+          })}
+        </tbody>
+      </Table>
 
       {pagination && (
         <div className="px-3 py-1">

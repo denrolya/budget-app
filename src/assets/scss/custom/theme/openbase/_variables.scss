@@ -377,7 +377,7 @@ $font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mon
 $font-family-base: $font-family-sans-serif !default;
 $font-family-alt: 'Poppins', sans-serif !default;
 
-$font-size-dash: .875rem !default;
+$font-size-dash: .750rem !default;
 
 $font-size-base: $font-size-dash !default; // Assumes the browser default, typically `16px`
 $font-size-xl: ($font-size-base * 1.428);
@@ -827,7 +827,7 @@ $breadcrumb-active-color: $white !default;
 
 // Badges
 
-$badge-font-size: $font-size-xs !default;
+$badge-font-size: $font-size-sm !default;
 $badge-font-weight: $font-weight-extra-bold !default;
 $badge-padding-y: .25rem !default;
 $badge-padding-x: .5rem !default;
