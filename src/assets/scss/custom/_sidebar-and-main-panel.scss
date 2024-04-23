@@ -457,34 +457,9 @@
   float: right;
   width: $full-width;
   min-height: 100vh;
-  border-top: 2px solid $primary;
   background: linear-gradient($background-black, $background-states-black);
 
   @include transitions(0.50s, cubic-bezier(0.685, 0.0473, 0.346, 1));
-
-  &[data-color="gray"] {
-    border-top: 2px solid $card-black-background;
-  }
-
-  &[data-color="indigo"] {
-    border-top: 2px solid $indigo;
-  }
-
-  &[data-color="lightblue"] {
-    border-top: 2px solid $blue;
-  }
-
-  &[data-color="blue"] {
-    border-top: 2px solid $info;
-  }
-
-  &[data-color="green"] {
-    border-top: 2px solid $success;
-  }
-
-  &[data-color="primary"] {
-    border-top: 2px solid $primary;
-  }
 
   > .content {
     z-index: 0;
