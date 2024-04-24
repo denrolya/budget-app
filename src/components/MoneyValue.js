@@ -25,8 +25,7 @@ const MoneyValue = ({
 
   const amountString = (
     <>
-      {amount < 0 ? ' - ' : ''}
-      {' '}
+      {(showSign && amount < 0) ? ' - ' : ' '}
       <span>{showSymbol ? symbol : ''}</span>
       <span>
         {' '}
@@ -35,7 +34,7 @@ const MoneyValue = ({
     </>
   );
   const valueString = !!value
-    && `${value < 0 ? ' - ' : ''} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, {
+    && `${(showSign && value < 0) ? ' - ' : ''} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, {
       maximumFractionDigits,
     })}`;
 

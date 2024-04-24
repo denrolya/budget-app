@@ -10,20 +10,24 @@ import { isCurrentYear, isMoreThanHourAgo } from 'src/utils/datetime';
 
 const TransactionDate = ({
   date, showDate, showTime, showTimeIcon,
-}) => (
-  <>
-    {showDate
-      && (!isMoreThanHourAgo(date)
-        ? date.fromNow()
-        : date.format(!isCurrentYear(date) ? MOMENT_VIEW_DATE_WITH_YEAR_FORMAT : MOMENT_VIEW_DATE_FORMAT))}
-    {showDate && showTime && ' | '}
-    <span className="text-nowrap">
-      {showTimeIcon && <i className="ion-ios-time" aria-hidden />}
-      {' '}
-      {showTime && date.format(MOMENT_VIEW_TIME_FORMAT)}
-    </span>
-  </>
-);
+}) => {
+  let formattedDate = date.format(!isCurrentYear(date) ? MOMENT_VIEW_DATE_WITH_YEAR_FORMAT : MOMENT_VIEW_DATE_FORMAT);
+  if (!isMoreThanHourAgo(date)) {
+    formattedDate = date.fromNow();
+  }
+
+  return (
+    <>
+      {showDate && formattedDate}
+      {(showDate && showTime) && ' | '}
+      <span className="text-nowrap">
+        {showTimeIcon && <i className="ion-ios-time" aria-hidden />}
+        {' '}
+        {showTime && date.format(MOMENT_VIEW_TIME_FORMAT)}
+      </span>
+    </>
+  );
+};
 
 TransactionDate.defaultProps = {
   showDate: true,

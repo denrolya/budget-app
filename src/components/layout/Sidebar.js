@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { Button, Nav, NavItem } from 'reactstrap';
 import filter from 'lodash/filter';
-import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
 
 import { isDev } from 'src/utils/common';

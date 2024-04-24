@@ -15,72 +15,87 @@ const TransactionRow = ({
     id, account, amount, convertedValues, note, category, executedAt,
   } = transaction;
 
-  return [
-    <tr>
-      <td className="text-nowrap d-none d-md-table-cell fit">
-        <code>
-          #
-          {id}
-        </code>
-      </td>
+  const idColumn = (
+    <td className="text-nowrap d-none d-md-table-cell fit">
+      <code>
+        #
+        {id}
+      </code>
+    </td>
+  );
 
-      <td className="d-none d-md-table-cell text-nowrap text-white fit">
-        <AccountName showName account={account} />
-      </td>
+  const accountColumn = (
+    <td className="d-none d-md-table-cell text-nowrap text-white fit">
+      <AccountName showName account={account} />
+    </td>
+  );
 
-      <td className="text-nowrap text-truncate" id={`transaction-account-cell-${id}`}>
-        <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
+  const categoryWithTimeColumn = (
+    <td className="text-nowrap text-truncate" id={`transaction-account-cell-${id}`}>
+      <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
 
-        <span className="text-muted font-size-smaller d-block d-md-none text-left">
-          <TransactionDate showTimeIcon showDate={false} date={executedAt} />
-        </span>
-      </td>
-
-      <td className="text-nowrap fit">
-        <Badge className="font-style-numeric" id={id} color={isExpense(transaction) ? 'danger' : 'success'}>
-          {isExpense(transaction) ? '-' : '+'}
-          {' '}
-          <MoneyValue currency={account.currency} amount={amount} values={convertedValues} />
-        </Badge>
-
-        <small className="text-nowrap d-block d-md-none">
-          <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
-        </small>
-      </td>
-
-      <td className="d-none d-md-table-cell fit">
+      <span className="text-muted font-size-smaller d-block d-md-none text-left">
         <TransactionDate showTimeIcon showDate={false} date={executedAt} />
-      </td>
+      </span>
+    </td>
+  );
 
-      {showActions && (
-        <td className="text-right text-nowrap w-50px">
-          <Button size="sm" className="btn-link px-2" color="warning" onClick={() => onEdit(transaction)}>
-            <i aria-hidden className="tim-icons icon-pencil" />
-          </Button>
-          <Button size="sm" className="btn-link px-2" color="danger" onClick={() => onDelete(transaction)}>
-            <i aria-hidden className="tim-icons icon-trash-simple" />
-          </Button>
-        </td>
-      )}
+  const amountWithCategoryColumn = (
+    <td className="text-nowrap text-right fit">
+      <Badge className="font-style-numeric" id={id} color={isExpense(transaction) ? 'danger' : 'success'}>
+        <MoneyValue showSign={false} currency={account.currency} amount={amount} values={convertedValues} />
+      </Badge>
+
+      <small className="text-nowrap d-block d-md-none">
+        <TransactionCategory showFullPath={showFullCategoryPath} category={category} />
+      </small>
+    </td>
+  );
+
+  const timeColumn = (
+    <td className="d-none d-md-table-cell fit">
+      <TransactionDate showTimeIcon showDate={false} date={executedAt} />
+    </td>
+  );
+
+  const actionsColumn = (
+    <td className="text-right text-nowrap w-50px">
+      <Button size="sm" aria-label="Edit transaction" className="btn-link px-2" color="warning" onClick={() => onEdit(transaction)}>
+        <i aria-hidden className="tim-icons icon-pencil" />
+      </Button>
+      <Button size="sm" aria-label="Delete transaction" className="btn-link px-2" color="danger" onClick={() => onDelete(transaction)}>
+        <i aria-hidden className="tim-icons icon-trash-simple" />
+      </Button>
+    </td>
+  );
+
+  return [
+    <tr key={`transaction-row-data-${id}`}>
+      { idColumn }
+      { accountColumn }
+      { categoryWithTimeColumn }
+      { amountWithCategoryColumn }
+      { timeColumn }
+      { showActions && actionsColumn }
     </tr>,
-    showNote && note && (
-      <tr className="border-top-0 p-0">
+    (showNote && note) ? (
+      <tr className="border-top-0 p-0" key={`transaction-row-note-${id}`}>
         <td colSpan="100%" className="border-top-0 py-0 px-1">
           <p className="text-muted small">
-            <i className="fa fa-comment-o" aria-hidden="true" />
+            <i aria-hidden className="fa fa-comment-o" />
             :
             {note}
           </p>
         </td>
       </tr>
-    ),
+    ) : null,
   ];
 };
 
 TransactionRow.defaultProps = {
-  showNote: true,
   showActions: true,
   showFullCategoryPath: true,
+  showNote: true,
 };
 
 TransactionRow.propTypes = {

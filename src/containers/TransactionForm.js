@@ -11,6 +11,7 @@ import {
   Button, ButtonGroup, Col, FormGroup, Input, Label,
 } from 'reactstrap';
 
+import AccountTypeahead from 'src/components/AccountTypeahead';
 import CategoryTypeahead from 'src/components/CategoryTypeahead';
 import ModalForm from 'src/components/forms/ModalForm';
 import LoadingButton from 'src/components/LoadingButton';
@@ -190,21 +191,19 @@ const TransactionForm = ({
                 </Col>
                 <Col md={6}>
                   <FormGroup>
-                    <Label for="accountSelect">Account*</Label>
-                    <Input
-                      type="select"
+                    <Label for="account-typeahead-account">Account*</Label>
+                    <AccountTypeahead
+                      id="account"
+                      className="form-control-typeahead"
                       name="account"
-                      id="accountSelect"
-                      value={account}
-                      onChange={({ target }) => setFieldValue('account', target.value)}
-                    >
-                      <option value="">------------</option>
-                      {accountOptions.map(({ id, name }) => (
-                        <option key={`account-option-${id}`} value={parseInt(id, 10)}>
-                          {name}
-                        </option>
-                      ))}
-                    </Input>
+                      placeholder="Select account..."
+                      labelKey="name"
+                      inputProps={{ id: 'account' }}
+                      isInvalid={touched.account && !!errors.account}
+                      selected={account}
+                      onBlur={handleBlur}
+                      onChange={([selected]) => setFieldValue('account', selected ? selected.id : '')}
+                    />
                     <ErrorMessage component="div" name="account" className="invalid-feedback" />
                   </FormGroup>
                 </Col>
