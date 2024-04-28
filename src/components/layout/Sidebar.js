@@ -139,20 +139,22 @@ const Sidebar = ({
           <NavItem tag="li">
             <NavLink className="nav-link" to={ROUTE_DEBTS}>
               <i aria-hidden className="ion-ios-bookmarks" />
-              <p className="text-capitalize">
-                Debts
-                {' '}
-                {!isLoading && (
-                  <span
-                    className={cn('font-size-larger', {
-                      'text-white': totalDebt === 0,
+              <span className="d-flex flex-column">
+                <p className="text-capitalize text-nowrap">
+                  Debts
+                </p>
+                { !isLoading && (
+                  <MoneyValue
+                    bold
+                    maximumFractionDigits={0}
+                    className={cn('font-size-larger', 'opacity-7', {
+                      'text-success': totalDebt === 0,
                       'text-danger': totalDebt !== 0,
                     })}
-                  >
-                    <MoneyValue bold amount={totalDebt} maximumFractionDigits={0} />
-                  </span>
-                )}
-              </p>
+                    amount={totalDebt}
+                  />
+                ) }
+              </span>
             </NavLink>
           </NavItem>
           <NavItem tag="li">
@@ -172,21 +174,20 @@ const Sidebar = ({
             <NavLink to={ROUTE_ACCOUNTS} className={() => 'nav-link text-capitalize'}>
               <i aria-hidden className="mdi mdi-wallet-travel" />
 
-              <div className="d-flex flex-column">
+              <span className="d-flex flex-column">
                 <p className="text-nowrap">All Accounts</p>
                 {!isLoading && (
                   <MoneyValue
                     bold
                     maximumFractionDigits={0}
-                    className={cn('font-size-larger', {
-                      'text-white': totalAccountsValue === 0,
+                    className={cn('font-size-larger', 'opacity-7', {
                       'text-danger': totalAccountsValue < 0,
                       'text-success': totalAccountsValue > 0,
                     })}
                     amount={totalAccountsValue}
                   />
                 )}
-              </div>
+              </span>
             </NavLink>
           </NavItem>
           <NavItem tag="li">

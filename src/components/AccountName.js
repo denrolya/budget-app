@@ -44,11 +44,10 @@ const AccountName = ({
         <div className="d-flex flex-column">
           <p className="text-nowrap">{name}</p>
           <MoneyValue
-            bold
             amount={balance}
             values={convertedValues}
             currency={currency}
-            className={cn('font-size-larger', 'font-weight-bold', {
+            className={cn('font-size-larger', 'opacity-6', {
               'text-danger': balance < 0,
               'text-success': balance > 0,
             })}

@@ -49,7 +49,7 @@ const MoneyValue = ({
   return (
     <span
       id={id}
-      className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric', 'o-70', {
+      className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric', {
         'font-weight-bold': bold,
         [className]: !!className,
       })}
