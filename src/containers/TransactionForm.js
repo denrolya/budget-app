@@ -299,21 +299,19 @@ const TransactionForm = ({
                             </Col>
                             <Col xs={12} md={6}>
                               <FormGroup>
-                                <Label for="accountSelect">Account*</Label>
-                                <Input
-                                  type="select"
-                                  name={accountKey}
+                                <Label for="account-typeahead-account">Account*</Label>
+                                <AccountTypeahead
+                                  className="form-control-typeahead"
+                                  placeholder="Select account..."
+                                  labelKey="name"
+                                  inputProps={{ id: 'account' }}
+                                  isInvalid={!!get(touched, accountKey) && !!get(errors, accountKey)}
                                   id={accountKey}
-                                  value={compensations[key].account}
-                                  onChange={({ target }) => setFieldValue(accountKey, target.value)}
-                                >
-                                  <option value="">-----------</option>
-                                  {accountOptions.map(({ id, name }) => (
-                                    <option key={`account-option-${id}`} value={parseInt(id, 10)}>
-                                      {name}
-                                    </option>
-                                  ))}
-                                </Input>
+                                  name={accountKey}
+                                  selected={compensations[key].account}
+                                  onBlur={handleBlur}
+                                  onChange={([selected]) => setFieldValue(accountKey, selected ? selected.id : '')}
+                                />
                                 <ErrorMessage component="div" className="invalid-feedback" name={accountKey} />
                               </FormGroup>
                             </Col>

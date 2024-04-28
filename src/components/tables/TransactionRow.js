@@ -1,18 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
-import { Badge, Button } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 import AccountName from 'src/components/AccountName';
-import MoneyValue from 'src/components/MoneyValue';
 import TransactionDate from 'src/components/TransactionDate';
-import { isExpense } from 'src/utils/common';
+import TransactionValue from 'src/components/TransactionValue';
 import TransactionCategory from 'src/components/TransactionCategory';
 
 const TransactionRow = ({
   transaction, showActions, showFullCategoryPath, showNote, onEdit, onDelete,
 }) => {
   const {
-    id, account, amount, convertedValues, note, category, executedAt,
+    id, account, note, category, executedAt,
   } = transaction;
 
   const idColumn = (
@@ -42,9 +41,7 @@ const TransactionRow = ({
 
   const amountWithCategoryColumn = (
     <td className="text-nowrap text-right fit">
-      <Badge className="font-style-numeric" id={id} color={isExpense(transaction) ? 'danger' : 'success'}>
-        <MoneyValue showSign={false} currency={account.currency} amount={amount} values={convertedValues} />
-      </Badge>
+      <TransactionValue transaction={transaction} />
 
       <small className="text-nowrap d-block d-md-none">
         <TransactionCategory showFullPath={showFullCategoryPath} category={category} />

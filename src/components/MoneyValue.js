@@ -25,7 +25,9 @@ const MoneyValue = ({
 
   const amountString = (
     <>
-      {(showSign && amount < 0) ? ' - ' : ' '}
+      { showSign && (
+        (amount < 0) ? ' - ' : ' + '
+      )}
       <span>{showSymbol ? symbol : ''}</span>
       <span>
         {' '}
@@ -46,7 +48,6 @@ const MoneyValue = ({
         [className]: !!className,
       })}
     >
-      {showSign && amount !== 0 && (amount > 0 ? ' + ' : ' - ')}
       {(!!value && symbol !== baseCurrency.symbol) ? (
         <>
           {valueString}
@@ -70,8 +71,8 @@ MoneyValue.defaultProps = {
 };
 
 MoneyValue.propTypes = {
-  id: PropTypes.string,
   amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  id: PropTypes.string,
   bold: PropTypes.bool,
   currency: PropTypes.string,
   className: PropTypes.string,

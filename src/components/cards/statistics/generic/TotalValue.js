@@ -217,7 +217,7 @@ const TotalValue = ({
       isLoading={isLoading}
       footerPadding={config.footerType !== 'chart'}
       content={(
-        <MoneyValue bold maximumFractionDigits={0} amount={model.data.value.current} />
+        <MoneyValue bold showSign={false} maximumFractionDigits={0} amount={model.data.value.current} />
       )}
       footer={footer}
     />

@@ -43,7 +43,7 @@ const TransactionsTable = ({
 
           const dailyExpense = sumBy(expenses, ({ convertedValues }) => convertedValues[code]);
           const dailyIncome = sumBy(incomes, ({ convertedValues }) => convertedValues[code]);
-          const totalDailyValue = dailyExpense - dailyIncome;
+          const totalDailyValue = dailyIncome - dailyExpense;
 
           return [
             <tr className="bg-dark" key={`transaction-date-row-${date.format(MOMENT_DATE_FORMAT)}`}>
@@ -61,8 +61,8 @@ const TransactionsTable = ({
                   {(!isToday(date) && !isYesterday(date)) && date.format(isCurrentYear(date) ? MOMENT_VIEW_DATE_FORMAT : MOMENT_VIEW_DATE_FORMAT_LONG)}
                 </span>
 
-                <Badge color={totalDailyValue > 0 ? 'danger' : 'success'} className="float-right">
-                  <MoneyValue bold showSign={false} amount={totalDailyValue} />
+                <Badge color={totalDailyValue > 0 ? 'success' : 'danger'} className="float-right">
+                  <MoneyValue showSign amount={totalDailyValue} />
                 </Badge>
               </td>
             </tr>,
