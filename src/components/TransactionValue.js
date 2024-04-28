@@ -31,12 +31,12 @@ const TransactionValue = ({
         })}
       >
         {amountString}
-        {(!!value && (baseCurrency.code !== currency || amount !== value)) ? (
+        {(!!value && (baseCurrency.code !== currency || amount !== value)) && (
           <span>
             {' | '}
             {valueString}
           </span>
-        ) : ''}
+        )}
       </span>
     </Badge>
   );

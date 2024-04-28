@@ -21,9 +21,7 @@ const MoneyValue = ({
   const symbol = currency ? CURRENCIES[currency].symbol : baseCurrency.symbol;
   const value = values?.[baseCurrency.code];
 
-  const absAmount = Math.abs(amount).toLocaleString(undefined, { maximumFractionDigits });
-
-  const amountString = (
+  const amountElement = (
     <>
       { showSign && (
         (amount < 0) ? ' - ' : ' + '
@@ -31,43 +29,51 @@ const MoneyValue = ({
       <span>{showSymbol ? symbol : ''}</span>
       <span>
         {' '}
-        {absAmount}
+        {Math.abs(amount).toLocaleString(undefined, { maximumFractionDigits })}
       </span>
     </>
   );
-  const valueString = !!value
-    && `${(showSign && value < 0) ? ' - ' : ''} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, {
-      maximumFractionDigits,
-    })}`;
+  const valueElement = !!value && (
+    <>
+      { showSign && (
+        (value < 0) ? ' - ' : ' + '
+      )}
+      <span>{baseCurrency.symbol}</span>
+      <span>
+        {' '}
+        {Math.abs(value).toLocaleString(undefined, { maximumFractionDigits })}
+      </span>
+    </>
+  );
 
   return (
     <span
       id={id}
-      className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric', {
+      className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric', 'o-70', {
         'font-weight-bold': bold,
         [className]: !!className,
       })}
     >
-      {(!!value && symbol !== baseCurrency.symbol) ? (
-        <>
-          {valueString}
-          <small>
-            {' | '}
-            {amountString}
-          </small>
-        </>
-      ) : amountString}
+      {amountElement}
+      {(!!value && (baseCurrency.code !== currency || amount !== value)) && (
+        <span>
+          {' | '}
+          {valueElement}
+        </span>
+      )}
     </span>
   );
 };
 
 MoneyValue.defaultProps = {
-  id: undefined,
   bold: false,
   className: '',
+  currency: undefined,
+  id: undefined,
   maximumFractionDigits: 2,
   showSign: false,
   showSymbol: true,
+  values: [],
 };
 
 MoneyValue.propTypes = {

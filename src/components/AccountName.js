@@ -49,7 +49,7 @@ const AccountName = ({
             values={convertedValues}
             currency={currency}
             className={cn('font-size-larger', 'font-weight-bold', {
-              'text-danger': balance <= 0,
+              'text-danger': balance < 0,
               'text-success': balance > 0,
             })}
           />
