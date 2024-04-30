@@ -147,7 +147,7 @@ const Sidebar = ({
                   <MoneyValue
                     bold
                     maximumFractionDigits={0}
-                    className={cn('font-size-larger', 'opacity-7', {
+                    className={cn('font-size-larger', 'opacity-9', {
                       'text-success': totalDebt === 0,
                       'text-danger': totalDebt !== 0,
                     })}
@@ -180,7 +180,7 @@ const Sidebar = ({
                   <MoneyValue
                     bold
                     maximumFractionDigits={0}
-                    className={cn('font-size-larger', 'opacity-7', {
+                    className={cn('font-size-larger', 'opacity-9', {
                       'text-danger': totalAccountsValue < 0,
                       'text-success': totalAccountsValue > 0,
                     })}
