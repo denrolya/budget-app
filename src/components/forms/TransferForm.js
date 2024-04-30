@@ -8,15 +8,14 @@ import {
 } from 'reactstrap';
 import * as Yup from 'yup';
 
-import { useActiveAccountsWithDefaultOrder } from 'src/contexts/AccountsContext';
 import LoadingButton from 'src/components/LoadingButton';
 import { MOMENT_DATETIME_FORMAT } from 'src/constants/datetime';
 import { registerTransfer } from 'src/store/actions/transfer';
+import AccountTypeahead from 'src/components/AccountTypeahead';
 
 const TransferForm = ({
   isLoading, registerTransfer, toggleModal,
 }) => {
-  const accountOptions = useActiveAccountsWithDefaultOrder();
   const initialData = {
     from: '',
     to: '',
@@ -49,6 +48,7 @@ const TransferForm = ({
         touched,
         errors,
         handleSubmit,
+        handleBlur,
         setFieldValue,
       }) => (
         <Form onSubmit={handleSubmit}>
@@ -56,20 +56,18 @@ const TransferForm = ({
             <Col md={6}>
               <FormGroup>
                 <Label for="fromSelect">From*</Label>
-                <Input
-                  type="select"
-                  name="from"
+                <AccountTypeahead
                   id="fromSelect"
-                  value={from}
-                  onChange={({ target }) => setFieldValue('from', target.value)}
-                >
-                  <option value="">------------</option>
-                  {accountOptions.map(({ id, name }) => (
-                    <option key={`from-option-${id}`} value={parseInt(id, 10)}>
-                      {name}
-                    </option>
-                  ))}
-                </Input>
+                  className="form-control-typeahead"
+                  name="from"
+                  placeholder="Select account..."
+                  labelKey="name"
+                  inputProps={{ id: 'from' }}
+                  isInvalid={touched.from && !!errors.from}
+                  selected={from}
+                  onBlur={handleBlur}
+                  onChange={([selected]) => setFieldValue('from', selected ? selected.id : '')}
+                />
                 <ErrorMessage component="div" name="from" className="invalid-feedback" />
               </FormGroup>
             </Col>
@@ -95,20 +93,18 @@ const TransferForm = ({
             <Col md={6}>
               <FormGroup>
                 <Label for="toSelect">To*</Label>
-                <Input
-                  type="select"
-                  name="to"
+                <AccountTypeahead
                   id="toSelect"
-                  value={to}
-                  onChange={({ target }) => setFieldValue('to', target.value)}
-                >
-                  <option value="">------------</option>
-                  {accountOptions.map(({ id, name }) => (
-                    <option key={`to-option-${id}`} value={parseInt(id, 10)}>
-                      {name}
-                    </option>
-                  ))}
-                </Input>
+                  className="form-control-typeahead"
+                  name="to"
+                  placeholder="Select account..."
+                  labelKey="name"
+                  inputProps={{ id: 'to' }}
+                  isInvalid={touched.to && !!errors.to}
+                  selected={to}
+                  onBlur={handleBlur}
+                  onChange={([selected]) => setFieldValue('to', selected ? selected.id : '')}
+                />
                 <ErrorMessage component="div" name="to" className="invalid-feedback" />
               </FormGroup>
             </Col>
@@ -150,20 +146,18 @@ const TransferForm = ({
             <Col md={6}>
               <FormGroup>
                 <Label for="feeAccount">Fee paid from</Label>
-                <Input
-                  type="select"
-                  name="feeAccount"
+                <AccountTypeahead
                   id="feeAccountSelect"
-                  value={feeAccount}
-                  onChange={({ target }) => setFieldValue('feeAccount', target.value)}
-                >
-                  <option value="">------------</option>
-                  {accountOptions.map(({ id, name }) => (
-                    <option key={`feeAccount-option-${id}`} value={parseInt(id, 10)}>
-                      {name}
-                    </option>
-                  ))}
-                </Input>
+                  className="form-control-typeahead"
+                  name="feeAccount"
+                  placeholder="Select account..."
+                  labelKey="name"
+                  inputProps={{ id: 'feeAccount' }}
+                  isInvalid={touched.feeAccount && !!errors.feeAccount}
+                  selected={feeAccount}
+                  onBlur={handleBlur}
+                  onChange={([selected]) => setFieldValue('feeAccount', selected ? selected.id : '')}
+                />
                 <ErrorMessage component="div" name="feeAccount" className="invalid-feedback" />
               </FormGroup>
             </Col>
