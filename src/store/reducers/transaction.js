@@ -1,6 +1,6 @@
 import { createReducer } from 'reduxsauce';
+import Transaction from 'src/models/Transaction';
 
-import { initializeList as initializeTransactionsList } from 'src/utils/transaction';
 import { Types } from 'src/store/actions/transaction';
 import Pagination from 'src/models/Pagination';
 import TransactionFilters from 'src/models/TransactionFilters';
@@ -14,12 +14,14 @@ const INITIAL_STATE = {
 };
 
 // eslint-disable-next-line default-param-last
-const fetchListSuccessHandler = (state = INITIAL_STATE, { data, totalValue, count }) => ({
-  ...state,
-  totalValue,
-  data: initializeTransactionsList(data),
-  pagination: state.pagination.set('count', count),
-});
+const fetchListSuccessHandler = (state = INITIAL_STATE, { data, totalValue, count }) => {
+  return ({
+    ...state,
+    totalValue,
+    data,
+    pagination: state.pagination.set('count', count),
+  });
+};
 
 // eslint-disable-next-line default-param-last
 const deleteSuccessHandler = (state = INITIAL_STATE, { transactionId }) => ({

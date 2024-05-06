@@ -5,7 +5,7 @@ import cn from 'classnames';
 
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import { CURRENCIES } from 'src/constants/currency';
-import { isExpense, isIncome } from 'src/utils/common';
+import Transaction from 'src/models/Transaction';
 
 const TransactionValue = ({
   className,
@@ -17,16 +17,16 @@ const TransactionValue = ({
   const symbol = currency ? CURRENCIES[currency].symbol : baseCurrency.symbol;
   const value = convertedValues?.[baseCurrency.code];
 
-  const amountSign = ((isIncome(transaction) && amount >= 0) || (isExpense(transaction) && amount < 0)) ? '+' : '-';
+  const amountSign = ((transaction.isIncome() && amount >= 0) || (transaction.isExpense() && amount < 0)) ? '+' : '-';
   const amountString = `${amountSign} ${symbol} ${Math.abs(amount).toLocaleString(undefined, { maximumFractionDigits })}`;
 
-  const valueSign = ((isIncome(transaction) && value >= 0) || (isExpense(transaction) && value < 0)) ? '+' : '-';
+  const valueSign = ((transaction.isIncome() && value >= 0) || (transaction.isExpense() && value < 0)) ? '+' : '-';
   const valueString = `${valueSign} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, { maximumFractionDigits })}`;
 
   return (
     <Badge
       pill
-      color={isExpense(transaction) ? 'danger' : 'success'}
+      color={transaction.isExpense() ? 'danger' : 'success'}
       className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric')}
     >
       <span
@@ -52,14 +52,7 @@ TransactionValue.defaultProps = {
 };
 
 TransactionValue.propTypes = {
-  transaction: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    account: PropTypes.shape({
-      currency: PropTypes.string.isRequired,
-    }).isRequired,
-    convertedValues: PropTypes.object.isRequired,
-  }).isRequired,
+  transaction: PropTypes.instanceOf(Transaction).isRequired,
   className: PropTypes.string,
   maximumFractionDigits: PropTypes.number,
 };

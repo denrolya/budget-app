@@ -9,7 +9,7 @@ import MoneyValue from 'src/components/MoneyValue';
 import PaginationRow from 'src/components/PaginationRow';
 import TransactionRowMobile from 'src/components/tables/TransactionRowMobile';
 import { MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT_LONG } from 'src/constants/datetime';
-import { isExpense } from 'src/utils/common';
+import Transaction from 'src/models/Transaction';
 import { isCurrentYear, isToday, isYesterday } from 'src/utils/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import Pagination from 'src/models/Pagination';
@@ -37,8 +37,8 @@ const TransactionsTableMobile = ({
       <tbody>
         {uniqDates.map((date) => {
           const transactions = data.filter(({ executedAt }) => executedAt.clone().startOf('day').isSame(date));
-          const expenses = transactions.filter((t) => isExpense(t));
-          const incomes = transactions.filter((t) => !isExpense(t));
+          const expenses = transactions.filter((t) => t.isExpense());
+          const incomes = transactions.filter((t) => t.isIncome());
 
           const dailyExpense = sumBy(expenses, ({ convertedValues }) => convertedValues[code]);
           const dailyIncome = sumBy(incomes, ({ convertedValues }) => convertedValues[code]);
@@ -111,7 +111,7 @@ TransactionsTableMobile.defaultProps = {
 };
 
 TransactionsTableMobile.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(PropTypes.instanceOf(Transaction)).isRequired,
   handleDelete: PropTypes.func,
   handleEdit: PropTypes.func,
   pagination: PropTypes.instanceOf(Pagination),

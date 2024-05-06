@@ -1,9 +1,6 @@
 import { RAINBOW_COLORS } from 'src/constants/color';
-import { EXPENSE_TYPE, INCOME_TYPE } from 'src/constants/transactions';
 import { notify } from 'src/store/actions/global';
 
-export const isExpense = ({ type }) => type === EXPENSE_TYPE;
-export const isIncome = ({ type }) => type === INCOME_TYPE;
 export const isDev = () => process.env.NODE_ENV === 'development';
 
 export const textColor = (p, isInverted = false) => ({

@@ -1,5 +1,6 @@
 import { createActions } from 'reduxsauce';
 import moment from 'moment-timezone';
+import Transaction from 'src/models/Transaction';
 
 import axios from 'src/utils/http';
 import { getTransactionListQueryParams, isOnDashboardPage, isOnTransactionsPage } from 'src/utils/routing';
@@ -87,10 +88,15 @@ export const fetchList = () => async (dispatch, getState) => {
       isDraft: onlyDrafts ? 1 : 0,
     };
 
-    const { data: { list, totalValue, count } } = await axios.get('api/v2/transaction', { params });
+    // eslint-disable-next-line prefer-const
+    let { data: { list, totalValue, count } } = await axios.get('api/v2/transaction', { params });
+
+    const { account, category } = getState();
+    list = list.map((t) => new Transaction(t, account.list, category.list));
 
     dispatch(Creators.fetchListSuccess(list, count, totalValue));
   } catch (e) {
+    console.error(e);
     notify('error', 'Fetch Transaction List');
     dispatch(Creators.fetchListFailure(e));
   }
