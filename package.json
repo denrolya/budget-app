@@ -72,6 +72,7 @@
         "react-masonry-css": "^1.0.16",
         "react-redux": "^7.2.9",
         "react-refresh": "^0.14.0",
+        "react-responsive": "^10.0.0",
         "react-router-dom": "^6.22.3",
         "react-sortable-tree": "^2.8.0",
         "react-swipeable": "^6.2.2",

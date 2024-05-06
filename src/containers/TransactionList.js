@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 import { useLocation } from 'react-router-dom';
 import {
   Card,
@@ -32,7 +33,8 @@ import {
   initializeList,
 } from 'src/store/actions/transaction';
 import Pagination from 'src/models/Pagination';
-import TransactionsTable from 'src/components/tables/TransactionsTable';
+import TransactionsTableDesktop from 'src/components/tables/TransactionsTableDesktop';
+import TransactionsTableMobile from 'src/components/tables/TransactionsTableMobile';
 import LoadingCard from 'src/components/cards/LoadingCard';
 
 const TransactionList = ({
@@ -54,6 +56,12 @@ const TransactionList = ({
   const toggleTransactionForm = useTransactionForm();
   const { code } = useBaseCurrency();
   const [isFiltersOpen, setIsFiltersOpen] = useState(!window.isMobile);
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-device-width: 1224px)',
+  });
+  const isMobile = useMediaQuery({
+    query: '(max-device-width: 1224px)',
+  });
 
   useEffect(() => {
     if (search) {
@@ -102,10 +110,21 @@ const TransactionList = ({
                 'p-0': data.length > 0,
               })}
             >
-              {data.length > 0 && (
-                <TransactionsTable
+              {(data.length > 0 && isDesktopOrLaptop) && (
+                <TransactionsTableDesktop
                   data={data}
-                  showFullCategoryPath={false}
+                  pagination={pagination}
+                  totalValue={totalValue}
+                  setPage={setPage}
+                  setPerPage={setPerPage}
+                  setFilters={setFilters}
+                  handleEdit={toggleTransactionEdition}
+                  handleDelete={deleteTransaction}
+                />
+              )}
+              {(data.length > 0 && isMobile) && (
+                <TransactionsTableMobile
+                  data={data}
                   pagination={pagination}
                   totalValue={totalValue}
                   setPage={setPage}

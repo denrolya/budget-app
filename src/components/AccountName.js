@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 
 import { randomString } from 'src/utils/randomData';
@@ -8,6 +8,7 @@ import MoneyValue from 'src/components/MoneyValue';
 
 const AccountName = ({
   colored,
+  id,
   account: {
     name,
     color,
@@ -16,12 +17,14 @@ const AccountName = ({
     convertedValues,
     currency,
     archivedAt,
+    id: accountId,
   },
   showBalance,
   showIcon,
   showName,
 }) => {
-  const randomIdString = randomString(5);
+  const randomIdString = useMemo(() => `${id}-${randomString(5)}`, [accountId]);
+
   return (
     <>
       {showIcon && (
@@ -30,7 +33,7 @@ const AccountName = ({
             aria-hidden
             id={`account-name-${randomIdString}`}
             style={{
-              color: !archivedAt ? color : 'inherit',
+              color: (!archivedAt && colored) ? color : 'inherit',
             }}
             className={cn(icon, {
               'cursor-info': !showName,
@@ -61,6 +64,7 @@ const AccountName = ({
 
 AccountName.defaultProps = {
   colored: true,
+  id: 'account-name',
   showBalance: false,
   showIcon: true,
   showName: true,
@@ -68,6 +72,7 @@ AccountName.defaultProps = {
 
 AccountName.propTypes = {
   account: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     icon: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     currency: PropTypes.string.isRequired,
@@ -76,6 +81,7 @@ AccountName.propTypes = {
     convertedValues: PropTypes.object,
     archivedAt: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   }).isRequired,
+  id: PropTypes.string,
   colored: PropTypes.bool,
   showBalance: PropTypes.bool,
   showIcon: PropTypes.bool,

@@ -4,6 +4,7 @@ import cn from 'classnames';
 import color from 'randomcolor';
 import React from 'react';
 import { Badge } from 'reactstrap';
+import getTextColorForGivenBackground from 'src/utils/getTextColorForGivenBackground';
 import TreeModel from 'tree-model';
 
 export const generateCategoriesStatisticsTree = (current, previous) => {
@@ -94,7 +95,7 @@ export const findPath = (data, id) => {
   for (let i = 0; i < data.length; i += 1) {
     if (data[i].id === id) {
       // if we found the id we were looking for, return an array with just this id
-      return [data[i].name];
+      return [data[i]];
     }
 
     // if this node has children, recursively search for the id in the children
@@ -104,7 +105,7 @@ export const findPath = (data, id) => {
       // if the id was found in this node's children
       if (pathFromChild) {
         // return an array starting with this node's id, followed by the ids in the path from the child
-        return [data[i].name, ...pathFromChild];
+        return [data[i], ...pathFromChild];
       }
     }
   }
@@ -116,7 +117,7 @@ export const findPath = (data, id) => {
 export const paintTree = (categories, hue = null) => {
   categories.forEach((category) => {
     // eslint-disable-next-line no-param-reassign
-    category.color = category.color || color({ hue, seed: category.id, luminosity: 'bright' });
+    category.color = category.color || color({ hue, seed: category.id, luminosity: 'dark' });
 
     if (category.children) {
       paintTree(category.children, category.color);
@@ -135,24 +136,25 @@ export const createCategoriesTree = (tree) => orderBy(
       ...c,
       expanded: true,
       title: (
-        <span>
-          <i aria-hidden className={cn('font-18px', c.icon)} style={{ color: c.color }} />
-          {'  '}
-          <code>
-            #
-            {c.id}
-          </code>
-          {' '}
+        <Badge
+          pill
+          className="color-info align-center font-size-smaller"
+          style={{
+            backgroundColor: c.color,
+            color: getTextColorForGivenBackground(c.color),
+          }}
+        >
+          <i aria-hidden className={cn('font-18px', c.icon, 'mr-1')} />
           {c.name + (c.children.length > 0 ? `(${c.children.length})` : '')}
           {c.isFixed && (
             <Badge pill color="warning" className="ml-1" size="sm">
               F
             </Badge>
           )}
-        </span>
+        </Badge>
       ),
       subtitle: (
-        <p className="mt-2">
+        <p className="mt-3">
           {c.tags.map(({ name }) => (
             <a href={`#${name}`} className="mr-1 font-weight-bold" key={name}>
               #

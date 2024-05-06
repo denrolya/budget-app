@@ -16,7 +16,7 @@ import {
 } from 'reactstrap';
 import sumBy from 'lodash/sumBy';
 
-import TransactionsTable from 'src/components/tables/TransactionsTable';
+import TransactionsTableDesktop from 'src/components/tables/TransactionsTableDesktop';
 import DebtForm from 'src/components/forms/DebtForm';
 import { DEBT_TRANSACTION_CATEGORY_NAME, EXPENSE_TYPE } from 'src/constants/transactions';
 import { useTransactionForm } from 'src/contexts/TransactionFormProvider';
@@ -175,7 +175,7 @@ const DebtList = ({
 
                 {transactions.length > 0 && (
                   <UncontrolledCollapse className="w-100 px-5 py-4 opacity-8" toggler={`debt-transactions-${id}`}>
-                    <TransactionsTable
+                    <TransactionsTableDesktop
                       data={transactions}
                       editTransaction={(t) => toggleTransactionEditModal(debt, t)}
                       deleteTransaction={(t) => deleteTransaction(t)}

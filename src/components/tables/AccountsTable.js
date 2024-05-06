@@ -71,7 +71,7 @@ const AccountsTable = ({ accounts, handleArchivation }) => (
                   Edit
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem tag={Link} to={generateLinkToTransactionPage([], null, null, [account.name], [])}>
+                <DropdownItem tag={Link} to={generateLinkToTransactionPage({ accounts: [account.name] })}>
                   List transactions
                 </DropdownItem>
                 <DropdownItem divider />

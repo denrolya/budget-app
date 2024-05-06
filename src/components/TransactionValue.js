@@ -24,7 +24,11 @@ const TransactionValue = ({
   const valueString = `${valueSign} ${baseCurrency.symbol} ${Math.abs(value).toLocaleString(undefined, { maximumFractionDigits })}`;
 
   return (
-    <Badge color={isExpense(transaction) ? 'danger' : 'success'} className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric')}>
+    <Badge
+      pill
+      color={isExpense(transaction) ? 'danger' : 'success'}
+      className={cn('text-nowrap', 'd-inline-block', 'font-style-numeric')}
+    >
       <span
         className={cn({
           [className]: !!className,
@@ -54,7 +58,7 @@ TransactionValue.propTypes = {
     account: PropTypes.shape({
       currency: PropTypes.string.isRequired,
     }).isRequired,
-    convertedValues: PropTypes.array.isRequired,
+    convertedValues: PropTypes.object.isRequired,
   }).isRequired,
   className: PropTypes.string,
   maximumFractionDigits: PropTypes.number,

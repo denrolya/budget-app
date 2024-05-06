@@ -49,14 +49,13 @@ export const getTransferListQueryParams = (queryString) => ({
   accounts: getQueryParam(queryString, 'accounts', (v) => (Array.isArray(v) ? v : [v])),
 });
 
-/**
- * @param {array} types
- * @param {string=} from
- * @param {string=} to
- * @param {array=} accounts
- * @param {array=} categories
- */
-export const generateLinkToTransactionPage = (types, from, to, accounts, categories) => {
+export const generateLinkToTransactionPage = ({
+  types = [],
+  from = undefined,
+  to = undefined,
+  accounts = [],
+  categories = [],
+}) => {
   const queryParams = stringify({
     types,
     from,
@@ -68,12 +67,12 @@ export const generateLinkToTransactionPage = (types, from, to, accounts, categor
   return `/${ROUTE_TRANSACTIONS}?${queryParams}`;
 };
 
-export const generateLinkToAccountTransactionsPage = (account) => generateLinkToTransactionPage([], undefined, undefined, [account], []);
+export const generateLinkToAccountTransactionsPage = (account) => generateLinkToTransactionPage({ accounts: [account] });
 
-/**
- * @param {string=} from
- * @param {string=} to
- * @param {array=} accounts
- * @param {array=} categories
- */
-export const generateLinkToExpenses = (from, to, accounts = [], categories = []) => generateLinkToTransactionPage([EXPENSE_TYPE], from, to, accounts, categories);
+export const generateLinkToExpenses = (from, to, accounts = [], categories = []) => generateLinkToTransactionPage({
+  from,
+  to,
+  accounts,
+  categories,
+  types: [EXPENSE_TYPE],
+});

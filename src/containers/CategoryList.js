@@ -85,45 +85,44 @@ const CategoryList = ({
         {TRANSACTION_TYPES.map((type) => {
           const generateNodeProps = ({ node, path }) => ({
             buttons: [
-              <Button
-                size="sm"
-                color="warning"
-                className="btn-link px-2"
-                onClick={() => toggleCategoryEdition(node)}
-              >
-                <i aria-hidden className="tim-icons icon-pencil" />
-              </Button>,
-              <Link
-                to={generateLinkToTransactionPage(
-                  [node.type],
-                  undefined,
-                  undefined,
-                  [],
-                  [node.id],
-                )}
-              >
-                <Button size="sm" color="info" className="btn-link px-2">
-                  <i aria-hidden className="mdi mdi-format-list-bulleted" />
+              <div className="align-center">
+                <Button
+                  size="sm"
+                  color="warning"
+                  className="btn-link px-2"
+                  onClick={() => toggleCategoryEdition(node)}
+                >
+                  <i aria-hidden className="tim-icons icon-pencil" />
                 </Button>
-              </Link>,
-              <Button
-                size="sm"
-                color="danger"
-                className="btn-link px-2"
-                onClick={async () => {
-                  await remove(node);
-                  setTree({
-                    ...tree,
-                    [type]: removeNodeAtPath({
-                      path,
-                      treeData: tree[type],
-                      getNodeKey: ({ treeIndex }) => treeIndex,
-                    }),
-                  });
-                }}
-              >
-                <i aria-hidden className="tim-icons icon-trash-simple" />
-              </Button>,
+                <Link
+                  to={generateLinkToTransactionPage({
+                    types: [node.type],
+                    categories: [node.id],
+                  })}
+                >
+                  <Button size="sm" color="info" className="btn-link px-2">
+                    <i aria-hidden className="mdi mdi-format-list-bulleted" />
+                  </Button>
+                </Link>
+                <Button
+                  size="sm"
+                  color="danger"
+                  className="btn-link px-2"
+                  onClick={async () => {
+                    await remove(node);
+                    setTree({
+                      ...tree,
+                      [type]: removeNodeAtPath({
+                        path,
+                        treeData: tree[type],
+                        getNodeKey: ({ treeIndex }) => treeIndex,
+                      }),
+                    });
+                  }}
+                >
+                  <i aria-hidden className="tim-icons icon-trash-simple" />
+                </Button>
+              </div>,
             ],
           });
 

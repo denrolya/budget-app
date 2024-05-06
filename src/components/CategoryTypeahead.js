@@ -88,6 +88,7 @@ const CategoryTypeahead = ({
       key={index}
       option={option}
       style={{
+        borderRadius: '0.25rem',
         backgroundColor: option.color,
         color: getTextColorForGivenBackground(option.color),
       }}

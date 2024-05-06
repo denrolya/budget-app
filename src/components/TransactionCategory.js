@@ -1,51 +1,50 @@
+import cn from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
+import { UncontrolledTooltip, Badge } from 'reactstrap';
+
 import { useCategoriesTree } from 'src/contexts/CategoriesContext';
 import { findPath } from 'src/utils/category';
-import { UncontrolledTooltip } from 'reactstrap';
+import getTextColorForGivenBackground from 'src/utils/getTextColorForGivenBackground';
 import { randomString } from 'src/utils/randomData';
+import CategoryPath from 'src/components/CategoryPath';
 
-const TransactionCategory = ({ showFullPath, category }) => {
+const TransactionCategory = ({ showFullPath, category, className }) => {
+  const randomIdString = useMemo(() => randomString(5), [category.id]);
   const categories = useCategoriesTree();
   const path = useMemo(() => findPath(categories, category.id), [categories, category.id]);
-  const lastCategory = path.pop();
-  const { icon } = category;
-  const randomIdString = randomString(5);
+  const currentCategory = path[path.length - 1];
 
   return (
-    <>
-      <span className="d-inline-block text-white cursor-info" id={`transaction-category-${category.id}-${randomIdString}`}>
-        {(showFullPath && path.length > 0) && (
-          <span className="d-none d-sm-inline text-muted small">
-            {path.join(' / ')}
-            {' / '}
-          </span>
-        )}
-        <span>
-          {icon && <i aria-hidden className={icon} />}
-          {' '}
-          {lastCategory}
-        </span>
-      </span>
+    <small
+      className={cn({
+        className,
+      })}
+    >
+      <Badge
+        pill
+        id={`transaction-category-${category.id}-${randomIdString}`}
+        className="font-size-smaller align-center cursor-info d-inline-block"
+        style={{
+          backgroundColor: currentCategory.color,
+          color: getTextColorForGivenBackground(currentCategory.color),
+        }}
+      >
+        <CategoryPath showFullPath={showFullPath} path={path} />
+      </Badge>
+
       <UncontrolledTooltip target={`transaction-category-${category.id}-${randomIdString}`}>
-        {(path.length > 0) && (
-          <span className="d-none d-sm-inline small">
-            {path.join(' / ')}
-            {' / '}
-          </span>
-        )}
-        <span>
-          {icon && <i aria-hidden className={icon} />}
-          {' '}
-          {lastCategory}
-        </span>
+        <p className="text-nowrap text-white">
+          <CategoryPath path={path} />
+        </p>
       </UncontrolledTooltip>
-    </>
+    </small>
   );
 };
 
 TransactionCategory.defaultProps = {
   showFullPath: true,
+  className: '',
 };
 
 TransactionCategory.propTypes = {
@@ -53,7 +52,9 @@ TransactionCategory.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     icon: PropTypes.string,
+    color: PropTypes.string,
   }).isRequired,
+  className: PropTypes.string,
   showFullPath: PropTypes.bool,
 };
 

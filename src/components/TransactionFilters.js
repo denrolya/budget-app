@@ -3,8 +3,8 @@ import React from 'react';
 import {
   Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
-import CategoryTypeahead from 'src/components/CategoryTypeahead';
 
+import CategoryTypeahead from 'src/components/CategoryTypeahead';
 import { TRANSACTION_TYPES } from 'src/constants/transactions';
 import { useAccountsWithDefaultOrder } from 'src/contexts/AccountsContext';
 import { useCategories } from 'src/contexts/CategoriesContext';

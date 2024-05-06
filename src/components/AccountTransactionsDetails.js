@@ -6,7 +6,7 @@ import { Row, Col, Button } from 'reactstrap';
 
 import { generateLinkToAccountTransactionsPage } from 'src/utils/routing';
 import TransactionsCountByMonth from 'src/components/charts/recharts/bar/TransactionsCountByMonth';
-import TransactionsTable from 'src/components/tables/TransactionsTable';
+import TransactionsTableDesktop from 'src/components/tables/TransactionsTableDesktop';
 
 const AccountTransactionsDetails = ({ account }) => {
   const {
@@ -107,7 +107,7 @@ const AccountTransactionsDetails = ({ account }) => {
           <div className="preview">
             <div className="preview-inner">
               {account?.latestTransactions && (
-                <TransactionsTable
+                <TransactionsTableDesktop
                   showFullCategoryPath={false}
                   showActions={false}
                   showNote={false}

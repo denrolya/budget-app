@@ -6,7 +6,7 @@ import {
   Button, FormGroup, Input, Label, UncontrolledCollapse, Table, UncontrolledTooltip,
 } from 'reactstrap';
 
-import TransactionRow from 'src/components/tables/TransactionRow';
+import TransactionRow from 'src/components/tables/TransactionRowDesktop';
 import MoneyValue from 'src/components/MoneyValue';
 import { MOMENT_DATE_FORMAT } from 'src/constants/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';

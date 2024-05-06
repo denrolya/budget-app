@@ -7,15 +7,14 @@ import cn from 'classnames';
 
 import MoneyValue from 'src/components/MoneyValue';
 import PaginationRow from 'src/components/PaginationRow';
-import TransactionRow from 'src/components/tables/TransactionRow';
+import TransactionRowMobile from 'src/components/tables/TransactionRowMobile';
 import { MOMENT_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT, MOMENT_VIEW_DATE_FORMAT_LONG } from 'src/constants/datetime';
 import { isExpense } from 'src/utils/common';
 import { isCurrentYear, isToday, isYesterday } from 'src/utils/datetime';
 import { useBaseCurrency } from 'src/contexts/BaseCurrency';
 import Pagination from 'src/models/Pagination';
 
-const TransactionsTable = ({
-  showNote,
+const TransactionsTableMobile = ({
   showActions,
   showFullCategoryPath,
   size,
@@ -54,23 +53,21 @@ const TransactionsTable = ({
                     'text-info': isYesterday(date),
                   })}
                 >
-                  <i aria-hidden className="ion-ios-calendar" />
-                  {'  '}
+                  <i aria-hidden className="ion-ios-calendar mr-1" />
                   {isToday(date) && 'Today'}
                   {isYesterday(date) && 'Yesterday'}
                   {(!isToday(date) && !isYesterday(date)) && date.format(isCurrentYear(date) ? MOMENT_VIEW_DATE_FORMAT : MOMENT_VIEW_DATE_FORMAT_LONG)}
                 </span>
 
-                <Badge color={totalDailyValue > 0 ? 'success' : 'danger'} className="float-right">
+                <Badge pill color={totalDailyValue > 0 ? 'success' : 'danger'} className="float-right">
                   <MoneyValue showSign amount={totalDailyValue} />
                 </Badge>
               </td>
             </tr>,
 
             ...transactions.map((transaction) => (
-              <TransactionRow
+              <TransactionRowMobile
                 key={`transaction-row-data-component-${transaction.id}`}
-                showNote={showNote}
                 showActions={showActions}
                 showFullCategoryPath={showFullCategoryPath}
                 transaction={transaction}
@@ -106,15 +103,14 @@ const TransactionsTable = ({
   ];
 };
 
-TransactionsTable.defaultProps = {
+TransactionsTableMobile.defaultProps = {
   showActions: true,
   showFullCategoryPath: true,
-  showNote: true,
   size: 'sm',
   totalValue: 0,
 };
 
-TransactionsTable.propTypes = {
+TransactionsTableMobile.propTypes = {
   data: PropTypes.array,
   handleDelete: PropTypes.func,
   handleEdit: PropTypes.func,
@@ -123,9 +119,8 @@ TransactionsTable.propTypes = {
   setPerPage: PropTypes.func,
   showActions: PropTypes.bool,
   showFullCategoryPath: PropTypes.bool,
-  showNote: PropTypes.bool,
   size: PropTypes.string,
   totalValue: PropTypes.number,
 };
 
-export default TransactionsTable;
+export default TransactionsTableMobile;

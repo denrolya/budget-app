@@ -73,7 +73,7 @@ MoneyValue.defaultProps = {
   maximumFractionDigits: 2,
   showSign: false,
   showSymbol: true,
-  values: [],
+  values: {},
 };
 
 MoneyValue.propTypes = {
