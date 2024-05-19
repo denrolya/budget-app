@@ -36,7 +36,7 @@ const TransactionValue = ({
       >
         {amountString}
         {(!!value && (baseCurrency.code !== currency || amount !== value)) && (
-          <span>
+          <span className="font-size-smaller font-weight-light">
             {' | '}
             {valueString}
           </span>
