@@ -1,14 +1,15 @@
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import { createActions } from 'reduxsauce';
+
 import { SERVER_TIMEZONE } from 'src/constants/datetime';
 import { closeDebtPrompt } from 'src/utils/prompts';
-
 import { ROUTE_DASHBOARD, ROUTE_DEBTS } from 'src/constants/routes';
 import axios from 'src/utils/http';
 import { isOnPath } from 'src/utils/routing';
 import { updateStatistics } from 'src/store/actions/ui';
 import { notify } from 'src/store/actions/global';
+import Transaction from 'src/models/Transaction';
 
 export const { Types, Creators } = createActions(
   {
@@ -31,11 +32,17 @@ export const { Types, Creators } = createActions(
   { prefix: 'DEBT_' },
 );
 
-export const fetchList = () => async (dispatch) => {
+export const fetchList = () => async (dispatch, getState) => {
   dispatch(Creators.fetchListRequest());
 
   try {
-    const { data } = await axios.get('api/v2/debt');
+    let { data } = await axios.get('api/v2/debt');
+
+    const { account, category } = getState();
+    data = data.map((d) => ({
+      ...d,
+      transactions: d.transactions.map((t) => new Transaction(t, account.list, category.list)),
+    }));
     dispatch(Creators.fetchListSuccess(
       orderBy(data, 'updatedAt', 'asc'),
     ));
@@ -45,15 +52,17 @@ export const fetchList = () => async (dispatch) => {
   }
 };
 
-export const createDebt = (debt) => async (dispatch) => {
+export const createDebt = (debt) => async (dispatch, getState) => {
   dispatch(Creators.createRequest());
 
   try {
+    const { account, category } = getState();
     const { data } = await axios.post('api/debts', {
       ...debt,
       balance: String(debt.balance),
       createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
       closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
+      transactions: debt.transactions.map((t) => new Transaction(t, account.list, category.list)),
     });
     dispatch(Creators.createSuccess(data));
 
@@ -70,15 +79,17 @@ export const createDebt = (debt) => async (dispatch) => {
   }
 };
 
-export const editDebt = (id, debt) => async (dispatch) => {
+export const editDebt = (id, debt) => async (dispatch, getState) => {
   dispatch(Creators.editRequest());
 
   try {
+    const { account, category } = getState();
     const { data } = await axios.put(`api/debts/${id}`, {
       ...debt,
       balance: String(debt.balance),
       createdAt: moment(debt.createdAt).tz(SERVER_TIMEZONE).format(),
       closedAt: debt.closedAt ? moment(debt.createdAt).tz(SERVER_TIMEZONE).format() : undefined,
+      transactions: debt.transactions.map((t) => new Transaction(t, account.list, category.list)),
     });
 
     dispatch(Creators.editSuccess(data));

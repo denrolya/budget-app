@@ -88,9 +88,7 @@ const TransactionsTableDesktop = ({
 
         <p className="text-muted text-right text-nowrap small">
           <strong>{pagination.count}</strong>
-          {' '}
-          transactions of total value:
-          {' '}
+          {' transactions of total value: '}
           <span
             className={cn({
               'text-success': totalValue >= 0,
